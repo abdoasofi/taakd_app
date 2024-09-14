@@ -1,0 +1,19 @@
+{
+  "name": "taakd_app",
+  "version": "1.0.0",
+  "description": "Frappe App",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd taakd && yarn install",
+    "dev": "cd taakd && yarn dev",
+    "build": "cd taakd && yarn build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@coreui/icons": "^3.0.1",
+    "@coreui/icons-vue": "^2.2.0"
+  }
+}
