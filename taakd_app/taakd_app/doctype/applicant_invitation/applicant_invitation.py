@@ -45,7 +45,7 @@ class ApplicantInvitation(Document):
 			new_doc.language = self.language
 			new_doc.module_profile = ""
 			new_doc.role_profile_name = "Applicant"
-			new_doc.insert()
+			new_doc.insert(ignore_permissions = True)
 			return new_doc      
 
 	def create_verification_instructions_request(self):
@@ -54,7 +54,7 @@ class ApplicantInvitation(Document):
 		new_doc.user_id = self.email
 		new_doc.company_submitting_application = self.company_email
 		new_doc.language = self.language
-		new_doc.insert()
+		new_doc.insert(ignore_permissions = True)
 		return new_doc  
 
 	def create_sales_invoice(self):
@@ -65,7 +65,7 @@ class ApplicantInvitation(Document):
 				}
 			)
 			self.preparing_the_sales_invoice(self.other_services, sales_invoice)
-			sales_invoice.save()
+			sales_invoice.save(ignore_permissions = True)
 			sales_invoice.submit()
 	
 
