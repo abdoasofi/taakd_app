@@ -11,7 +11,6 @@
   "this_is_my_name_column",
   "first_name",
   "last_name",
-  "check_xxch",
   "column_break_vrit",
   "middle_name",
   "dont_middle_name",
@@ -58,10 +57,12 @@
   "sitteings_tab",
   "payd_from",
   "company_submitting_application",
-  "language",
+  "company_name",
+  "cost_center",
   "column_break_qosw",
   "user_id",
-  "cost_center"
+  "user_name",
+  "language"
  ],
  "fields": [
   {
@@ -84,11 +85,6 @@
    "fieldname": "last_name",
    "fieldtype": "Data",
    "label": "Last Name"
-  },
-  {
-   "default": "0",
-   "fieldname": "check_xxch",
-   "fieldtype": "Check"
   },
   {
    "fieldname": "column_break_vrit",
@@ -145,6 +141,7 @@
    "fieldname": "country",
    "fieldtype": "Link",
    "label": "Country",
+   "no_copy": 1,
    "options": "Location"
   },
   {
@@ -186,7 +183,7 @@
   {
    "description": "HireRight may need to contact you from time to time to clarify certain items contained in the data report submitted through your job application.\nWe will never share your email address with others or sell it",
    "fieldname": "email",
-   "fieldtype": "Date",
+   "fieldtype": "Data",
    "label": "Email",
    "options": "Email"
   },
@@ -339,11 +336,11 @@
    "label": "Sitteings"
   },
   {
-   "default": "Company",
    "fieldname": "payd_from",
    "fieldtype": "Select",
    "label": "Payd From",
-   "options": "Company\nEmployee",
+   "no_copy": 1,
+   "options": "\nCompany\nEmployee",
    "read_only": 1
   },
   {
@@ -367,6 +364,7 @@
    "fieldname": "language",
    "fieldtype": "Link",
    "label": "Language",
+   "no_copy": 1,
    "options": "Language",
    "read_only": 1
   },
@@ -376,12 +374,26 @@
    "label": "User ID",
    "options": "User",
    "read_only": 1
+  },
+  {
+   "fetch_from": "company_submitting_application.full_name",
+   "fieldname": "company_name",
+   "fieldtype": "Data",
+   "label": "Company Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "user_id.full_name",
+   "fieldname": "user_name",
+   "fieldtype": "Data",
+   "label": "User Name",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-14 19:08:45.133609",
+ "modified": "2024-09-16 11:28:25.410428",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
