@@ -20,7 +20,12 @@
   "column_break_wrlb",
   "company_email",
   "column_break_oowb",
-  "company_name"
+  "company_name",
+  "service_package_section",
+  "package",
+  "price",
+  "column_break_ftzf",
+  "other_services"
  ],
  "fields": [
   {
@@ -115,12 +120,40 @@
    "label": "Language",
    "options": "Language",
    "reqd": 1
+  },
+  {
+   "fieldname": "service_package_section",
+   "fieldtype": "Section Break",
+   "label": "Service Package"
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Link",
+   "label": "Package",
+   "options": "Product Bundle",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_ftzf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "other_services",
+   "fieldtype": "Table MultiSelect",
+   "label": "Other Services",
+   "no_copy": 1,
+   "options": "Other Services"
+  },
+  {
+   "fieldname": "price",
+   "fieldtype": "Currency",
+   "label": "Price"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-15 17:49:45.941126",
+ "modified": "2024-09-16 16:06:10.370441",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",

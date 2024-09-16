@@ -11,7 +11,7 @@ frappe.ui.form.on("Verification Instructions Request", {
 				}
 			}
 		};
-		frm.fields_dict['education_information'].grid.get_field('City').get_query = function(doc) {
+		frm.fields_dict['education_information'].grid.get_field('city').get_query = function(doc) {
 			return {
 				"filters": {
                     is_group: 1,
@@ -36,7 +36,7 @@ frappe.ui.form.on("Verification Instructions Request", {
 				}
 			}
 		};
-		frm.fields_dict['employment_history'].grid.get_field('City').get_query = function(doc) {
+		frm.fields_dict['employment_history'].grid.get_field('city').get_query = function(doc) {
 			return {
 				"filters": {
                     is_group: 1,
