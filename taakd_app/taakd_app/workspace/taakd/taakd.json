@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"fekOGaxrYP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Taakd</span>\",\"col\":12}},{\"id\":\"ba1GBCr04C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Verification  Request\",\"col\":3}},{\"id\":\"M4fUrI2sIV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Applicant Invitation\",\"col\":3}},{\"id\":\"nYUKSS1TjX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Applicant Report\",\"col\":3}}]",
+ "content": "[{\"id\":\"fekOGaxrYP\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Taakd</span>\",\"col\":12}},{\"id\":\"ba1GBCr04C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Verification  Request\",\"col\":3}},{\"id\":\"M4fUrI2sIV\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Applicant Invitation\",\"col\":3}},{\"id\":\"nYUKSS1TjX\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Applicant Report\",\"col\":3}},{\"id\":\"W-2flbA4qH\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"MBIIQtCGg3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service\",\"col\":3}},{\"id\":\"sRS8qQ_6LT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Package\",\"col\":3}},{\"id\":\"pVuNkSsW1A\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Service Price\",\"col\":3}},{\"id\":\"33YfMcrihr\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Tp3jgFolXK\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Sales Invoice\",\"col\":3}}]",
  "creation": "2024-09-11 11:00:47.148645",
  "custom_blocks": [],
  "docstatus": 0,
@@ -13,7 +13,7 @@
  "is_hidden": 0,
  "label": "Taakd",
  "links": [],
- "modified": "2024-09-14 16:30:29.743071",
+ "modified": "2024-09-16 20:15:30.657220",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Taakd",
@@ -26,6 +26,30 @@
  "roles": [],
  "sequence_id": 1.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Service",
+   "link_to": "Item",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Sales Invoice",
+   "link_to": "Sales Invoice",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Package",
+   "link_to": "Product Bundle",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Green",
    "doc_view": "List",
@@ -47,6 +71,14 @@
    "doc_view": "List",
    "label": "Applicant Report",
    "link_to": "Applicant Report",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Service Price",
+   "link_to": "Item Price",
    "stats_filter": "[]",
    "type": "DocType"
   }

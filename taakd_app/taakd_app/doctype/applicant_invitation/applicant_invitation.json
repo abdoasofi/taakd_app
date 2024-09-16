@@ -23,9 +23,8 @@
   "company_name",
   "service_package_section",
   "package",
-  "price",
-  "column_break_ftzf",
-  "other_services"
+  "other_services",
+  "price"
  ],
  "fields": [
   {
@@ -134,12 +133,8 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_ftzf",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "other_services",
-   "fieldtype": "Table MultiSelect",
+   "fieldtype": "Table",
    "label": "Other Services",
    "no_copy": 1,
    "options": "Other Services"
@@ -153,7 +148,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-16 16:06:10.370441",
+ "modified": "2024-09-16 22:28:40.785311",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",
