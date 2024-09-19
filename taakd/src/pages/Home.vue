@@ -1,78 +1,149 @@
-<!-- <template>
-  <div class="max-w-3xl py-12 mx-auto">
-    <h2 class="font-bold text-lg text-gray-600 mb-4">
-      Welcome {{ session.user }}!
-    </h2>
-
-    <Button theme="gray" variant="solid" icon-left="code" @click="ping.fetch" :loading="ping.loading">
-      Click to send 'ping' request
-    </Button>
-    <div>
-      {{ ping.data }}
-    </div>
-    <pre>{{ ping }}</pre>
-
-    <div class="flex flex-row space-x-2 mt-4">
-      <Button @click="showDialog = true">Open Dialog</Button>
-      <Button @click="session.logout.submit()">Logout</Button>
-    </div>
-
-    <Dialog title="Title" v-model="showDialog"> Dialog content </Dialog>
+<template> 
+ <div class="container  bg-[#F7F7F7]">
+  <div class="flex flex-row space-x-10 mt-4 mx-auto">
+    <h1>Create New Password</h1>
+    <h3>{{ session.user }}</h3>
+    <!-- <h3>{{ session.login }}</h3> -->
+    <Button @click="updatePassword">Handle Password</Button>
+    <Button @click="createUser">Create User</Button>
+    <Button @click="handlePassword">Test</Button>
+    <router-link to ="Step_1">
+      <Button>Step 1</Button>
+    </router-link>
+    <Button @click="session.logout.submit()">Logout</Button>
   </div>
-</template> -->
-
-<template>
-  <!-- <div class="flex items-center p-4 m-4 ">
-     <div class=" w-28 h-28 text-center py-10 border-2 rounded-full"> ccc </div>
- 
-     <div class=" w-28 h-28 text-center py-10 border-2 rounded-full"> ccc </div>
-     <div class=" w-28 h-28 text-center py-10 border-2 rounded-full"> ccc </div>
-  </div> -->
    
- <div class="h-screen flex items-center justify-center bg-[#F7F7F7]">
- <router-link to ="/Step_1" >
-  <button>sss</button>
+  <div class="  bg-[hsl(72,71%,82%)]">
 
-     <!-- <B_1 class="  "></B_1> -->
-   </router-link> 
-  <div class="flex flex-row space-x-2 mt-4">
-      <Button @click="session.logout.submit()">Logout</Button>
-  </div>   
- </div>
+<div
+  class="p-2"
+  label="Enter password"
+>
+  <FormControl
+    :type="'password'"
+    size="sm"
+    variant="subtle"
+    placeholder="Placeholder"
+    :disabled="false"
+    label="Enter password"
+    v-model="enterPassword"
+  />
+</div>
+<!-- ******** -->
+<div
+  class="p-2"
+  label="Enter Password"
+>
+  <FormControl 
+    :type="'password'"
+    size="sm"
+    variant="subtle"
+    placeholder="Placeholder"
+    :disabled="false"
+    label="Confirm Password"
+    v-model="confirmPassword"
+  />
+  <ErrorMessage  :message="Error('There was an error')" />
+</div>
+<!-- ******** -->
+  <ListView :options = "{
+        selectable: false,
+        resizeColumn: true,
+        emptyState: {
+          title: 'No records found',
+          description: 'Create a new record to get started',
+          button: {
+            label: 'New Record',
+            variant: 'solid',
+            onClick: () => console.log('New Record'),
+          },
+        },
+
+  }"
+  :columns="[
+    { 
+      'label':'Full Name',
+      'key':'full_name',
+    },
+    { 
+      'label':'Name',
+      'key':'username',
+    },
+    { 
+      'label':'Email',
+      'key':'email',
+    }
+  ]" 
+
+  :rows="userList.data"
   
- <Steps></Steps>
-
- <Snackbar></Snackbar>
-
-<Review></Review>
-
-<Modal></Modal>
-
-<Blog></Blog>
-
-<ResetPassword></ResetPassword>
-
-<NewLogin></NewLogin>
-
- </template>
+  />
+  </div> 
+ </div>
+</template>
 <script setup>
-import { ref } from 'vue'
-import { Dialog } from 'frappe-ui'
-import { createResource } from 'frappe-ui'
+import { ref , watch } from 'vue'
+import { Button , FormControl , ListView , ErrorMessage} from 'frappe-ui'
+import { createResource , createListResource} from 'frappe-ui'
 import { session } from '../data/session'
 
-import Steps from '../components/Steps.vue';
-import Snackbar from '../components/Snackbar.vue';
-import Review from '../components/Review.vue';
-import Modal from '../components/Modal.vue';
-import Blog from '../components/Blog.vue';
-import ResetPassword from '../pages/ResetPassword.vue';
-import NewLogin from '../pages/NewLogin.vue';
-
+const confirmPassword = ref('')
+const enterPassword = ref('')
+const new_pass = ref('')
+const err = ref(false)
 const ping = createResource({
   url: 'ping',
   auto: true,
 })
+
+function handlePassword(event) {
+  if (enterPassword.value == confirmPassword.value){
+    err = false
+  }
+  else{
+    err = true
+  }
+  } 
+  
+  const userList = createListResource({
+  doctype: 'User',
+  fields: ['email','username','full_name','new_password','name','first_name'],
+  filters: {
+      email: session.user
+    },
+    auto:true,
+  // pageLength: 1,
+  insert: {
+        onSuccess(d) {
+          console.log('****************************************');
+        },
+        onError() {}
+    }, 
+    setValue: {
+        onSuccess(d) {
+          console.log('*************333***************************');
+        },
+        onError() {}
+    },
+})
+const updatedDescription = ref({
+  // email:session.user,
+  new_password:confirmPassword.value
+
+})
+function updatePassword() {
+  userList.setValue.submit({
+    name:session.user,
+    new_password: confirmPassword.value
+})
+}
+
+function createUser() {
+  userList.insert.submit({
+    email:'test100@gmail.com',
+    first_name: 'Asofi'
+})
+  }
 
 const showDialog = ref(false)
 </script>

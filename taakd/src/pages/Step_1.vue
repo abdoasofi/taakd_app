@@ -1,39 +1,12 @@
-<template>
-    <div class="  m-5">    
-        <!-- <div>
-            <h1>Personal Information</h1>
-            <UL>
-                <Li>All fields marked with an asterisk ( * ) are required. </Li>
-                <Li>Providing your information as completely and accurately as possible will help speed up the completion of your Background Verification. </Li>
-            </UL>
-        </div> -->
-    
-        <div v-if="verificationInstructionsRequestList">
-            
-            <!-- <Button
-                    :variant="'solid'"
-                    theme="blue"
-                    size="sm"
-                    label="Button"
-                    :loading="false"
-                    :loadingText="null"
-                    :disabled="false"
-                    :link="null"
-                    >
-                    Button
-                    </Button> -->
-            <!-- <ListView /> -->
-    
-             <div v-for=" vir in verificationInstructionsRequestList" :key="vir.name ">
-               <P>{{ vir.name }}</P> 
-               <P>{{ vir }}</P> 
-            </div>  
-                
-     
-        </div>
-         <!-- ***************** -->
-    
-        <dev class="flex items-center p-4 m-4 ">  
+<template> 
+    <!-- ******************* -->
+    <div class="container  bg-[#F7F7F7]">
+     <div class="flex flex-row space-x-5 mt-4 mx-auto"> 
+        <h1 class=" text-green-800 m-1" >Step 1</h1>
+        <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Save </Button>
+        <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Alias Name + </Button>
+        <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Phone + </Button>
+
         <router-link to ="/">
                 <div>
                <Button :variant="'outline'" theme="green" size="sm" label="Button" >
@@ -44,49 +17,250 @@
            </div>  
         </router-link>
            
-    
          <router-link to ="/Step_2" >
           <div  class="flex items-center justify-between">
-            <Button @click="verificationInstructionsRequest" :variant="'subtle'" theme="green" size="sm" label="Button"> Step 2 </Button>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.627 8.75001H1.25C1.03717 8.75001 0.859 8.67817 0.7155 8.53451C0.571833 8.39101 0.5 8.21284 0.5 8.00001C0.5 7.78717 0.571833 7.60901 0.7155 7.46551C0.859 7.32184 1.03717 7.25001 1.25 7.25001H12.627L7.45775 2.08076C7.30908 1.93209 7.23567 1.75809 7.2375 1.55876C7.2395 1.35942 7.318 1.18217 7.473 1.02701C7.62817 0.882174 7.80383 0.807174 8 0.802008C8.19617 0.796841 8.37183 0.871841 8.527 1.02701L14.8673 7.36726C14.9609 7.46092 15.0269 7.55967 15.0652 7.66351C15.1038 7.76734 15.123 7.87951 15.123 8.00001C15.123 8.12051 15.1038 8.23267 15.0652 8.33651C15.0269 8.44034 14.9609 8.53909 14.8673 8.63276L8.527 14.973C8.3885 15.1115 8.217 15.1823 8.0125 15.1855C7.808 15.1887 7.62817 15.1178 7.473 14.973C7.318 14.8178 7.2405 14.6397 7.2405 14.4385C7.2405 14.2372 7.318 14.0589 7.473 13.9038L12.627 8.75001Z" fill="white"/>
-            </svg> 
+            <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Step 2 </Button>
           </div>
          </router-link> 
-    
-        </dev>
+         
     </div>
+    </div>
+    <!-- ******************* -->
+    <div class="p-2">
+        <h1 class=" text-lg text-p-2xl">Personal Information</h1>
+        <h3 class="text-p-lg">This is my name</h3>
+        <p class="text-p-2xs">
+            I certify this is my current legal name, exactly as it is displayed on my government-issued identification document  
+        </p>
+    </div>
+    <!-- ******************* -->
+    <div class="grid grid-cols-2 gap-2 p-2">
+        <FormControl
+            :type="'text'"
+            placeholder="First Name"
+            label="First Name"
+            v-model="first_name"
+        />
+        <FormControl
+            :type="'text'"
+            placeholder="Last Name"
+            label="Last Name"
+            v-model="last_name"
+        /> 
+        <FormControl
+            type="checkbox"
+            label="I don't have a middle name"
+            v-model="dont_middle_name"
+        /> 
+        <br>
+        <FormControl
+            :type="'text'"
+            placeholder="Middle Name"
+            label="Middle Name"
+            v-model="middle_name"
+        />     
+        <Select 
+            :options="[
+            {
+                label: 'John Doe',
+                value: 'john-doe',
+            },
+            {
+                label: 'Jane Doe',
+                value: 'jane-doe',
+            },
+            {
+                label: 'John Smith',
+                value: 'john-smith',
+            },
+            {
+                label: 'Jane Smith',
+                value: 'jane-smith',
+                disabled: true,
+            },
+            {
+                label: 'John Wayne',
+                value: 'john-wayne',
+            },
+            {
+                label: 'Jane Wayne',
+                value: 'jane-wayne',
+            },
+            ]"
+            v-model="suffix"
+            
+        />        
+    </div>
+    <!-- ******************* -->
+    <br>
+    <div class="p-2">
+        <h3 class="text-p-lg">Current Mailing Address</h3>
+        <div class="grid grid-cols-2 gap-2 py-2">
+           
+        </div>
+
+    </div>
+
+    <!-- ******************* -->
+    <br>
+    <div class="p-2">
+        <h3 class="text-p-lg">Contact Information</h3>
+        <ListView :options = "{
+                    selectable: false,
+                    resizeColumn: true,
+                    emptyState: {
+                    title: 'No Phone found',
+                    description: 'Create a new Phone to get started',
+                    button: {
+                        label: 'New Phone',
+                        variant: 'solid',
+                        theme:'green',
+                        onClick: () => console.log('New Phone'),
+                    },
+                    },
+
+            }"
+            :columns="[
+                { 
+                'label':'Phone',
+                'key':'phone',
+                },
+            ]" 
+            :rows="requestDoc.phone"
+            
+            />
+    </div>
+    <!-- ******************* -->
+     <br>
+    <div class="p-2">
+        <h3 class="text-p-lg">Aliases</h3>
+        <ListView v-for="alias in requestDoc.alias_name" 
+            :columns="[
+                { 
+                'label':'First Name',
+                'key':'first_name',
+                },
+                { 
+                'label':'Middle Name',
+                'key':'middle_name',
+                },
+                { 
+                'label':'Last Name',
+                'key':'last_name',
+                }
+            ]" 
+              :rows="[
+                        {
+                        id: 1,
+                        first_name: alias.first_name,
+                        middle_name: alias.middle_name,
+                        last_name: alias.last_name,
+                        },
+            ]"
+
+            :options = "{
+                    selectable: tr,
+                    resizeColumn: true,
+                    showTooltip: true,
+                    resizeColumn: true,
+                    emptyState: {
+                    title: 'No Alias Name found',
+                    description: 'Create a new Alias Name to get started',
+                    button: {
+                        label: 'New Alias Name',
+                        variant: 'solid',
+                        theme:'green',
+                        onClick: () => console.log('New Record'),
+                    },
+                    },
+
+            }"
+            row-key="name"
+
+            
+            />
+    </div>
+    <!-- ******************* -->
+    <br>
+    <div class="p-2">
+        <h3 class="text-p-lg">ID Card Information</h3>
+        <p class="text-p-2xs">
+            Most public records are stored using name and date of birth.<br>
+            Therefore, providing this information allows us to search for these sources accurately
+        </p>
+        <div class="grid grid-cols-2 gap-2 py-2">
+            <FormControl
+                :type="'date'"
+                label="Date of Birth"
+                v-model="date_of_birth"
+            />
+            <FormControl
+                :type="'date'"
+                label="Repeat Enter Date of Birth"
+                v-model="repeat_enter_date_of_birth"
+            />            
+        </div>
+
+    </div>
+    <!-- ******************* -->    
+     
+         <!-- ******************* -->
+    <br>
+    <div class="p-2">
+        <h3 class="text-p-lg">ID Card Information</h3>
+        <div class="">
+            {{ requestDoc}}
+            <br>
+            {{ requestListResource.name}}
+        </div>
+        <p>{{ reques.secret }}</p>
+
+    </div>
+    <!-- ******************* -->  
 </template>
       
       
-    <script setup>
-    // import { ListView , Button ,Autocomplete} from 'frappe-ui'
-    import { computed } from 'vue'
-    import { createListResource } from 'frappe-ui'
-    
-    const verificationInstructionsRequest = createListResource ({
+<script setup>
+    import { computed, ref , watch ,inject } from 'vue'
+    import { Button , FormControl , ListView , ErrorMessage ,Select } from 'frappe-ui'
+    import { createResource , createListResource , createDocumentResource} from 'frappe-ui'
+    import { session } from '../data/session'
+    const reques = inject("reques")
+    const requestList = createListResource ({
         doctype : "Verification Instructions Request",
         fields: ['*'], 
         // fielde:["name","first_name","last_name","this_is_my_name","i_dont_have_a_middle_name","country","city","boycott","zip_code","location_text","street_address","email","date_of_birth","repeat_enter_date_of_birth"] ,
-        // filters:{ "userID": "￼Administrator" },
+        filters:{ "user_id": session.user },
         pageLength: 1,
         auto:true,
         onSuccess(data) {
-            console.log("********"+data)
+            console.log("****#########****",requestList.list.data[0].name)
         },
     })
-    
-    const verificationInstructionsRequestList = computed (() => {
-        if(verificationInstructionsRequest.list.data){
-            return verificationInstructionsRequest.list.data
-        }
-        else return []
-        
-        
+    // const aliasesList = createListResource({
+    //     doctype: 'Alias Name',
+    //     fields: ['first_name','middle_name','last_name'],
+    //     auto:true,
+    //     filters: {
+    //         parent: 'VIR-2024-17-09-000001'
+    //         },
+    //     onSuccess(data) {
+    //         console.log("********",data)
+    //     },
+    // })  
+    // const requestName = ref(requestList.data[0].name )
+    // let x = requestListResource.name
+    const requestResource = createDocumentResource({
+        doctype: 'Verification Instructions Request',
+        name:reques.secret,
+
+        auto:true,
+        onSuccess(data) {
+            console.log("********",data)
+        },
     })
-    
-    // function createVerificationInstructionsRequest (){
-    //     verificationInstructionsRequest.insert.submit({
+    // function createrequestList (){
+    //     requestList.insert.submit({
     //         "first_name":"عبد",
     //         "last_name":"الصوفي",
     //         "this_is_my_name":1,
@@ -103,6 +277,22 @@
     //         "repeat_enter_date_of_birth":"2024-09-17"
     //     })
     // }
-    </script>
+    const requestDoc =computed( () => {
+        if (requestResource.doc){
+            return requestResource.doc
+        }
+        else{
+            return []
+        }
+    })
+    const requestListResource  = computed( () => {
+        if (requestList.data[0]){
+            return requestList.data[0]
+        }
+        else{
+            return []
+        }
+    })
+</script>
       
     
