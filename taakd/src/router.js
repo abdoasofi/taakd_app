@@ -57,15 +57,34 @@ let router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   let isLoggedIn = session.isLoggedIn
+  let hasPasswordChanged=true;
+  let state=0;
+  let requestData;
   try {
     await userResource.promise
   } catch (error) {
     isLoggedIn = false
   }
 
-  if (to.name === 'Login' && isLoggedIn) {
-    next({ name: 'Home' })
-  } else if (to.name !== 'Login' && !isLoggedIn) {
+if(to.name === 'Login' && isLoggedIn){
+  if (!hasPasswordChanged){
+
+    next({ name: 'Reset' })
+
+  }
+
+  if(state !==1)
+  {next({ name: 'Home' ,state})}
+
+
+  next({ name: 'steps' ,requestData})
+}
+  
+
+  // if (to.name === 'Login' && isLoggedIn) {
+  //   next({ name: 'Home' })
+  // } 
+  else if (to.name !== 'Login' && !isLoggedIn) {
     next({ name: 'Login' })
   } else {
     next()
