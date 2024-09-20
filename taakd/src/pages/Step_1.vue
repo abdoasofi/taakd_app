@@ -96,9 +96,12 @@
     <div class="p-2">
         <h3 class="text-p-lg">Current Mailing Address</h3>
         <div class="grid grid-cols-2 gap-2 py-2">
-           
-        </div>
+            <Autocomplete
+            placeholder="Assign a user"
+            :options="activeLcation"
 
+          />
+        </div>
     </div>
 
     <!-- ******************* -->
@@ -222,14 +225,29 @@
       
 <script setup>
     import { computed, ref , watch ,inject } from 'vue'
-    import { Button , FormControl , ListView , ErrorMessage ,Select } from 'frappe-ui'
+    import { Button , FormControl , ListView , ErrorMessage ,Select , Autocomplete } from 'frappe-ui'
     import { createResource , createListResource , createDocumentResource} from 'frappe-ui'
     import { session } from '../data/session'
+
+    const location = createListResource({
+            type: 'list',
+            doctype: 'Location',
+            fields:["location_name","parent_location","location_type"],
+            cache: 'location',
+            auto: true,
+            onSuccess() {
+                console.log("********ssss****",location.data )
+            },
+                     
+    })
+    const activeLcation = computed(() => {
+        return location.data 
+    }) 
+  
     const reques = inject("reques")
     const requestList = createListResource ({
         doctype : "Verification Instructions Request",
         fields: ['*'], 
-        // fielde:["name","first_name","last_name","this_is_my_name","i_dont_have_a_middle_name","country","city","boycott","zip_code","location_text","street_address","email","date_of_birth","repeat_enter_date_of_birth"] ,
         filters:{ "user_id": session.user },
         pageLength: 1,
         auto:true,
@@ -237,19 +255,7 @@
             console.log("****#########****",requestList.list.data[0].name)
         },
     })
-    // const aliasesList = createListResource({
-    //     doctype: 'Alias Name',
-    //     fields: ['first_name','middle_name','last_name'],
-    //     auto:true,
-    //     filters: {
-    //         parent: 'VIR-2024-17-09-000001'
-    //         },
-    //     onSuccess(data) {
-    //         console.log("********",data)
-    //     },
-    // })  
-    // const requestName = ref(requestList.data[0].name )
-    // let x = requestListResource.name
+  
     const requestResource = createDocumentResource({
         doctype: 'Verification Instructions Request',
         name:reques.secret,
@@ -259,24 +265,7 @@
             console.log("********",data)
         },
     })
-    // function createrequestList (){
-    //     requestList.insert.submit({
-    //         "first_name":"عبد",
-    //         "last_name":"الصوفي",
-    //         "this_is_my_name":1,
-    //         "middle_name":"فضل",
-    //         "i_dont_have_a_middle_name":0,
-    //         "country":"Algeria",
-    //         "city":"الرياض",
-    //         "boycott":"الرياض",
-    //         "zip_code":"65749",
-    //         "location_text":"جوار ",
-    //         "street_address":"50-Street",
-    //         "email":"asofi@gmail.com",
-    //         "date_of_birth":"2024-09-03",
-    //         "repeat_enter_date_of_birth":"2024-09-17"
-    //     })
-    // }
+
     const requestDoc =computed( () => {
         if (requestResource.doc){
             return requestResource.doc
