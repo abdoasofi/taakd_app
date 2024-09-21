@@ -1,11 +1,18 @@
+
 import { createRouter, createWebHistory } from 'vue-router'
 import { session } from './data/session'
 import { userResource } from '@/data/user'
 
+// let defaultRoute = window.default_route
+// if (!defaultRoute || defaultRoute?.includes('{{')) {
+//   defaultRoute = '/discussions'}
+let step = 1
 const routes = [
   {
     path: '/',
     name: 'Home',
+    // redirect: defaultRoute,
+
     component: () => import('@/pages/Home.vue'),
   },
   {
@@ -46,7 +53,12 @@ const routes = [
   {
     name: 'Hiring',
     path: '/Hiring',
-    component: () => import('@/pages/pagesOld/Hiring.vue'),
+    component: () => import('@/pages/Hiring.vue'),
+  },
+  {
+    name: 'reset',
+    path: '/reset',
+    component: () => import('@/pages/reset.vue'),
   },
 ]
 
@@ -57,34 +69,16 @@ let router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   let isLoggedIn = session.isLoggedIn
-  let hasPasswordChanged=true;
-  let state=0;
-  let requestData;
   try {
     await userResource.promise
   } catch (error) {
     isLoggedIn = false
   }
 
-if(to.name === 'Login' && isLoggedIn){
-  if (!hasPasswordChanged){
-
-    next({ name: 'Reset' })
-
-  }
-
-  if(state !==1)
-  {next({ name: 'Home' ,state})}
-
-
-  next({ name: 'steps' ,requestData})
-}
-  
-
-  // if (to.name === 'Login' && isLoggedIn) {
-  //   next({ name: 'Home' })
-  // } 
-  else if (to.name !== 'Login' && !isLoggedIn) {
+  if (to.name === 'Login' && isLoggedIn) {
+    
+    next({ name: 'Home' })
+  } else if (to.name !== 'Login' && !isLoggedIn) {
     next({ name: 'Login' })
   } else {
     next()

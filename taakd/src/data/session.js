@@ -12,6 +12,7 @@ export function sessionUser() {
   }
   return _sessionUser
 }
+const createNewPassword = false ;
 
 export const session = reactive({
   login: createResource({
@@ -26,7 +27,11 @@ export const session = reactive({
       userResource.reload()
       session.user = sessionUser()
       session.login.reset()
-      router.replace(data.default_route || '/')
+      if (createNewPassword == true )
+      {
+        router.replace( {name: 'reset'})
+      }
+      router.replace('/')
     },
   }),
   logout: createResource({
