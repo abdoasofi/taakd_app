@@ -27,7 +27,7 @@
     </div>
     <!-- ******************* -->
     <div class="p-2">
-        <h1 class=" text-lg text-p-2xl">Personal Information</h1>
+        <h1 class=" text-p-2xl">Personal Information</h1>
         <h3 class="text-p-lg">This is my name</h3>
         <p class="text-p-2xs">
             I certify this is my current legal name, exactly as it is displayed on my government-issued identification document  
