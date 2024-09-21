@@ -16,37 +16,37 @@ const routes = [
   {
     name: 'Step_1',
     path: '/Step_1',
-    component: () => import('@/pages/Step_1.vue'),
+    component: () => import('@/pages/pagesOld/Step_1.vue'),
   },
   {
     name: 'Step_2',
     path: '/Step_2',
-    component: () => import('@/pages/Step_2.vue'),
+    component: () => import('@/pages/pagesOld/Step_2.vue'),
   },
   {
     name: 'Step_3',
     path: '/Step_3',
-    component: () => import('@/pages/Step_3.vue'),
+    component: () => import('@/pages/pagesOld/Step_3.vue'),
   },
   {
     name: 'Step_4',
     path: '/Step_4',
-    component: () => import('@/pages/Step_4.vue'),
+    component: () => import('@/pages/pagesOld/Step_4.vue'),
   },
   {
     name: 'Step_5',
     path: '/Step_5',
-    component: () => import('@/pages/Step_5.vue'),
+    component: () => import('@/pages/pagesOld/Step_5.vue'),
   },
   {
     name: 'Step_6',
     path: '/Step_6',
-    component: () => import('@/pages/Step_6.vue'),
+    component: () => import('@/pages/pagesOld/Step_6.vue'),
   },
   {
     name: 'Hiring',
     path: '/Hiring',
-    component: () => import('@/pages/Hiring.vue'),
+    component: () => import('@/pages/pagesOld/Hiring.vue'),
   },
 ]
 
