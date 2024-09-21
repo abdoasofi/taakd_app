@@ -227,7 +227,7 @@
     import { computed, ref , watch ,inject } from 'vue'
     import { Button , FormControl , ListView , ErrorMessage ,Select , Autocomplete } from 'frappe-ui'
     import { createResource , createListResource , createDocumentResource} from 'frappe-ui'
-    import { session } from '../data/session'
+    import { session } from '../../data/session'
 
     const location = createListResource({
             type: 'list',
