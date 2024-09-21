@@ -1,6 +1,7 @@
 <template>
-  <div class="m-3 flex flex-row items-center justify-center">
-    <Card title="Login to your FrappeUI App!" class="w-full max-w-md mt-4">
+  <div class="m-3 flex items-center justify-center">
+    <Card title="Login Taakd " class="w-full max-w-md mt-4">
+      <Logo class="flex flex-row items-center justify-center h-16 w-50 "></Logo>
       <form class="flex flex-col space-y-2 w-full" @submit.prevent="submit">
         <Input
           required
@@ -17,7 +18,7 @@
           label="Password"
         />
         <Button :loading="session.login.loading" variant="solid"
-          >Login</Button
+        :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >Login</Button
         >
       </form>
     </Card>
@@ -26,6 +27,8 @@
 
 <script lang="ts" setup>
 import { session } from '../data/session'
+import Logo from '../components/Icons/Logo.vue';
+
 
 function submit(e) {
   let formData = new FormData(e.target)
