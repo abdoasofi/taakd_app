@@ -6,6 +6,7 @@
         <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Save </Button>
         <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Alias Name + </Button>
         <Button @click="" :variant="'subtle'" theme="green" size="sm" label="Button"> Phone + </Button>
+        <Button @click="" label="Button" :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white'] "> Test Stayle </Button>
 
         <router-link to ="/">
                 <div>
@@ -228,6 +229,7 @@
     import { Button , FormControl , ListView , ErrorMessage ,Select , Autocomplete } from 'frappe-ui'
     import { createResource , createListResource , createDocumentResource} from 'frappe-ui'
     import { session } from '../../data/session'
+    // import { Button1 } from '../../components/Button1.vue'
 
     const location = createListResource({
             type: 'list',
