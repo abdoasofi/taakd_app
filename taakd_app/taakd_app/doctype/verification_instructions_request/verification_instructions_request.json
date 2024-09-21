@@ -62,7 +62,9 @@
   "column_break_qosw",
   "user_id",
   "user_name",
-  "language"
+  "language",
+  "create_new_password",
+  "subscribe_to_text_messages"
  ],
  "fields": [
   {
@@ -388,12 +390,26 @@
    "fieldtype": "Data",
    "label": "User Name",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "create_new_password",
+   "fieldtype": "Check",
+   "label": "Create New Password",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "subscribe_to_text_messages",
+   "fieldtype": "Check",
+   "label": "Subscribe to Text Messages",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-16 11:28:25.410428",
+ "modified": "2024-09-22 00:27:29.036024",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
