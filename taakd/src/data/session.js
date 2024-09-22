@@ -83,6 +83,6 @@ function redirectAfterLogin(needsNewPassword) {
     // router.replace({ name: 'reset' });
     router.replace({ name: 'reset', query: { fullName: userFullName.value } });
   } else {
-    router.replace('/');
+    router.replace('/home');
   }
 }

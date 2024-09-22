@@ -60,6 +60,11 @@ const routes = [
     path: '/reset',
     component: () => import('@/pages/reset.vue'),
   },
+  {
+    name: 'home',
+    path: '/home',
+    component: () => import('@/pages/home.vue'),
+  },
 ]
 
 let router = createRouter({
