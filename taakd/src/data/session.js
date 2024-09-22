@@ -1,6 +1,6 @@
 import router from '@/router'
-import { computed, reactive } from 'vue'
-import { createResource } from 'frappe-ui'
+import { computed, reactive, ref } from 'vue'
+import { createResource, createListResource } from 'frappe-ui'
 
 import { userResource } from './user'
 
@@ -12,7 +12,8 @@ export function sessionUser() {
   }
   return _sessionUser
 }
-const createNewPassword = false ;
+
+const createNewPassword = ref(false);
 
 export const session = reactive({
   login: createResource({
@@ -24,14 +25,42 @@ export const session = reactive({
       }
     },
     onSuccess(data) {
+
+// =================================
+
+// const requestList = createListResource({
+//   doctype: 'Verification Instructions Request',
+//   fields: ['name', 'user_id', 'create_new_password'],
+//   filters: { user_id: session.user },
+//   auto: true,
+//   pageLength: 1,
+// });
+
+// function updateValueCreateNewPassword() {
+//   if (requestList.data) {
+//     console.error("create_new_password is not defined");
+//     return;
+//   }
+//   // createNewPassword.value = requestList.data[0].create_new_password;
+//   console.log("*******************************",requestList.data);
+
+// }
+
+// updateValueCreateNewPassword()
+
+// =================================
       userResource.reload()
       session.user = sessionUser()
       session.login.reset()
-      if (createNewPassword == true )
-      {
-        router.replace( {name: 'reset'})
+      if (!createNewPassword.value) {
+        router.replace({ name: 'reset' });
+      } else {
+        router.replace('/');
       }
-      router.replace('/')
+    },
+    onError(error) {
+      console.error("Login failed", error);
+      // توفير تعليقات للمستخدم عند فشل تسجيل الدخول إذا لزم الأمر
     },
   }),
   logout: createResource({
@@ -39,9 +68,9 @@ export const session = reactive({
     onSuccess() {
       userResource.reset()
       session.user = sessionUser()
-      router.replace({ name: 'Login' })
+      router.replace({ name: 'Login' });
     },
   }),
   user: sessionUser(),
   isLoggedIn: computed(() => !!session.user),
-})
+});
