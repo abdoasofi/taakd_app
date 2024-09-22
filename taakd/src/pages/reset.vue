@@ -7,7 +7,7 @@
           Let’s set up your account. All fields below are required.
         </Heading>
       </div>
-      <p class="my-5">{{ session.user }}</p>
+      <p class="my-5" :class="{'text-right': isArabic(userFullName), 'text-left': !isArabic(userFullName)}" >{{ userFullName}}</p>
       <form @submit.prevent="confirmData">
         <div class="py-5">
           <Heading class="my-1" tag="h3" level="secondary-2">Create New Password</Heading>
@@ -64,13 +64,21 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch ,inject} from 'vue';
 import { Button, FormControl } from 'frappe-ui';
 import { createListResource } from 'frappe-ui';
 import Heading from "../components/heading.vue";
 import BaseContainer from "../components/baseContainer.vue";
 import BaseLayout from "../layouts/baseLayout.vue";
 import { session } from '../data/session';
+import { useRoute } from 'vue-router'; // استيراد useRoute
+
+const route = useRoute(); // إنشاء مثيل من useRoute
+
+// استقبال fullName من المتغيرات في URL
+const userFullName = route.query.fullName || 'مستخدم';
+
+// باقي المتغيرات
 
 const enterPassword = ref('');
 const confirmPassword = ref('');
@@ -78,7 +86,11 @@ const textNotifications = ref('');
 const disabled = ref(true);
 const passwordError = ref('');
 const subscribeToTextMmessages = ref(false);
-const createNewPassword = ref(false);
+const createNewPassword = ref(true);
+
+const isArabic = (str) => {
+  return /[\u0600-\u06FF]/.test(str); // هذا النمط يتحقق من وجود أحرف عربية
+};
 
 const userList = createListResource({
   doctype: 'User',
@@ -87,11 +99,7 @@ const userList = createListResource({
   auto: true,
   setValue: {
     onSuccess(d) {
-      createNewPassword.value = true;
-      updateCreateNewPassword();
       session.logout.submit();
-      // window.location.reload();
-
     },
     onError(error) {}
   },
@@ -104,7 +112,8 @@ function updatePassword() {
   }
   userList.setValue.submit({
     name: session.user,
-    new_password: confirmPassword.value
+    new_password: confirmPassword.value,
+    create_new_password: createNewPassword.value,
   });
 }
 
@@ -119,19 +128,6 @@ const requestList = createListResource({
     onError(error) {}
   },
 });
-
-function updateCreateNewPassword() {
-  const requestName = requestList.data[0].name;
-  if (!requestName) {
-    console.error("Request document name is not available");
-    return;
-  }
-  requestList.setValue.submit({
-    name: requestName,
-    create_new_password: createNewPassword.value,
-    subscribe_to_text_messages: subscribeToTextMmessages.value
-  });
-}
 
 const validatePasswords = () => {
   passwordError.value = enterPassword.value === confirmPassword.value ? '' : 'Passwords do not match';

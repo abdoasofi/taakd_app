@@ -17,7 +17,8 @@ let app = createApp(App)
 
 const reques = reactive({
   items:[],
-  secret:'VIR-2024-17-09-000001'
+  createNewPassword : false
+
 
 });
 
