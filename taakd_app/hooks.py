@@ -229,7 +229,10 @@ override_doctype_class = {
 # }
 fixtures = [
     {
-        "dt": "User",
+        "doctype": "Custom Field",
+        "filters": [
+            ["dt", "=", "User"]
+        ]
     }
 ]
 
