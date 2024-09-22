@@ -395,8 +395,7 @@
    "default": "0",
    "fieldname": "create_new_password",
    "fieldtype": "Check",
-   "label": "Create New Password",
-   "read_only": 1
+   "label": "Create New Password"
   },
   {
    "default": "0",
@@ -409,7 +408,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-22 00:27:29.036024",
+ "modified": "2024-09-22 02:08:54.790388",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
