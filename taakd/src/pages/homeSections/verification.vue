@@ -17,19 +17,9 @@
   
     
     </template>
-    <script>
+    <script setup>
     import Heading from '../../components/heading.vue';
 import StyledIcon from '../../components/styledIcon.vue';
 
-
-    
-      export default {
-        components: {
-            Heading,
-            StyledIcon,
-      },
-        name: 'Verification',
-      
-      };
     </script>
     

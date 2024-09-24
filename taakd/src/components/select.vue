@@ -55,73 +55,75 @@
     </div>
   </template>
   
-  <script>
+  <script setup>
 import FadeInOut from './fadeInOut.vue';
+import { ref, computed } from 'vue';
 
-  export default {
-    name: "Select",
-    data() {
-    return {
-      selectedOption: 'option1' // Default selected value
-    };
-  },
-  methods: {
-    emitSelected() {
-      this.$emit("input-change",{name:this.name,value:this.selectedOption} );
-    }
-  },
-    props: {
-      id: { type: String, required: true },
-      name: { type: String, required: true },
-      options: {
-        type: Array,
-        required: true,
-      },
-      customClass: {
-        type: String,
-        default: "",
-      },
-      validationMessage: {
-        type: String,
-        default: "",
-      },
-      isValid:{
-        type:Boolean,
-        default: null,
+
+// Data
+const selectedOption = ref('option1');
+
+// Props
+const props = defineProps({
+	id: { type: String,
+		required: true },
+	name: { type: String,
+		required: true },
+	options: {
+		type: Array,
+		required: true,
+	},
+	customClass: {
+		type: String,
+		default: "",
+	},
+	validationMessage: {
+		type: String,
+		default: "",
+	},
+	isValid:{
+		type:Boolean,
+		default: null,
        
-      },
-      labelText: {
-      type: String,
-      default: 'Label'
-    },
-    labelColor: {
-      type: String,
-      default: 'dark_gray'
-    },
-    isMandatory: {
-      type: Boolean,
-      default: false
-    },
-    infoText: {
-      type: String,
-      default: ''
-    },
-    },
-    components:{FadeInOut},
-    computed: {
-      // Binding listeners and attributes to make it more flexible
-      listeners() {
-        return {
-          ...this.$listeners,
-        };
-      },
-      attrs() {
-        return {
-          ...this.$attrs,
-        };
-      },
-    },
-  };
+	},
+	labelText: {
+		type: String,
+		default: 'Label'
+	},
+	labelColor: {
+		type: String,
+		default: 'dark_gray'
+	},
+	isMandatory: {
+		type: Boolean,
+		default: false
+	},
+	infoText: {
+		type: String,
+		default: ''
+	},
+});
+
+// Computed
+const listeners = computed(() => {
+	return {
+		// ...this.$listeners,
+	};
+})
+
+const attrs = computed(() => {
+	return {
+		// ...this.$attrs,
+	};
+})
+
+
+// Methods
+const emitSelected = function() {
+	this.$emit("input-change",{name:props.name,
+		value:selectedOption.value} );
+}
+
   </script>
   <style scoped>
   /* Custom border-width utility for Tailwind */

@@ -12,7 +12,13 @@
               <ProcessItem  label="Verification of Basic Information" />
               <ProcessItem  label="Review and Report Writing" />
           </div>      
-          <div  class="flex justify-center"><Button type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >Fill the Form Now<span class="mx-2">-></span></Button></div>
+          <div  class="flex justify-center">
+            <router-link to ="/steps"> 
+                <Button type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >
+                    Fill the Form Now<span class="mx-2">-></span>
+                </Button>
+            </router-link>
+        </div>
 
           <!-- <div   class="gap-3 w-full flex flex-col justify-center items-center">
               <span class="text-primary font-bold text-lg block" >Thanks for your information</span>
@@ -22,10 +28,10 @@
           </div> -->
         </BaseContainer>
       </div>
-      <JobRequest />
+      <!-- <JobRequest />
       <Review />
-      <Verification />
-      <!-- <Contact  /> -->
+      <Verification /> -->
+      <Contact  :location="location"/>
     </BaseLayout>
 
     <!-- <button class="fixed z-30 bottom-0 bg-red-700 rounded-xl text-white p-2 " @click="triggerAlert('Your Contact details has been saved!')">زر تجربة الالرت</button> -->
@@ -55,36 +61,7 @@ import SnackBar from '../components/snackBar.vue';
 import JobRequest from './homeSections/jobRequest.vue';
 import Review from './homeSections/review.vue';
 import Verification from './homeSections/verification.vue';
-
-
-// State variables
-// const processed = ref(4);
-// const alerts = ref([]);
-
-// // Computed properties
-// const statusJobRequest = computed(() => {
-//   return processed.value < 1 ? 'init' : (processed.value === 1 ? 'process' : 'done');
-// });
-
-// const statusVerification = computed(() => {
-//   return processed.value < 2 ? 'init' : (processed.value === 2 ? 'process' : 'done');
-// });
-
-// const statusReview = computed(() => {
-//   return processed.value < 3 ? 'init' : (processed.value === 3 ? 'process' : 'done');
-// });
-
-// // Methods
-// function triggerAlert(message) {
-//   alerts.value.push({ message });
-//   setTimeout(() => {
-//     alerts.value.shift(); // Automatically remove the alert after some time
-//   }, 3000);
-// }
-
-// function removeAlert(index) {
-//   alerts.value.splice(index, 1);
-// }
+import {location} from '../data/useAddressLogic';
 
 </script>
 

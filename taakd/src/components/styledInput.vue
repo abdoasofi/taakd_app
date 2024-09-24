@@ -75,67 +75,69 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import FadeInOut from "./fadeInOut.vue";
 
-export default {
-  name: "StyledInput",
-  components: { FadeInOut },
-  props: {
-    id: { type: String, required: true },
-    name: { type: String, required: true },
-    labelText: {
-      type: String,
-      default: "Label",
-    },
-    labelColor: {
-      type: String,
-      default: "dark_gray",
-    },
-    isMandatory: {
-      type: Boolean,
-      default: false,
-    },
-    infoText: {
-      type: String,
-      default: "",
-    },
-    inputType: {
-      type: String,
-      default: "text",
-    },
-    isValid:  {
-      type: Boolean,
+import { ref } from 'vue';
+
+
+// Data
+const inputValue = ref("");
+const showInfo = ref(false);
+
+// Props
+const props = defineProps({
+	id: { type: String,
+		required: true },
+	name: { type: String,
+		required: true },
+	labelText: {
+		type: String,
+		default: "Label",
+	},
+	labelColor: {
+		type: String,
+		default: "dark_gray",
+	},
+	isMandatory: {
+		type: Boolean,
+		default: false,
+	},
+	infoText: {
+		type: String,
+		default: "",
+	},
+	inputType: {
+		type: String,
+		default: "text",
+	},
+	isValid:  {
+		type: Boolean,
      
-    }, // The validity state of the input (true, false, or null)
-      validationMessage: {
-      type: String,
-      default: "text",
-    },
-  },
-  data() {
-    return {
-      inputValue: "", // The value of the input field
-       // Custom validation message for invalid input
-      showInfo: false, // Controls the visibility of the info tooltip
-    };
-  },
-  methods: {
-    sendValueToParent() {
-      this.$emit("input-change",{name:this.name,value:this.inputValue} ); // Emit event to parent
-    },
-    validateInput() {
-      // Example validation logic: Input must be at least 3 characters long
-      if (this.inputValue.length < 3) {
-        this.isValid = false;
-        this.validationMessage = "Input must be at least 3 characters long";
-      } else {
-        this.isValid = true;
-      }
-      sendValueToParent();
-    },
-  },
-};
+	}, // The validity state of the input (true, false, or null)
+	validationMessage: {
+		type: String,
+		default: "text",
+	},
+});
+
+// Methods
+const sendValueToParent = function() {
+	this.$emit("input-change",{name:props.name,
+		value:inputValue.value} ); // Emit event to parent
+}
+
+const validateInput = function() {
+	// Example validation logic: Input must be at least 3 characters long
+	if (inputValue.value.length < 3) {
+		props.isValid = false;
+		props.validationMessage = "Input must be at least 3 characters long";
+	} else {
+		props.isValid = true;
+	}
+	sendValueToParent();
+}
+
 </script>
 
 <style scoped>

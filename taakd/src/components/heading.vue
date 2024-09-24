@@ -4,29 +4,31 @@
     </component>
   </template>
   
-  <script>
-  export default {
-    name:"Heading",
-    props: {
-      tag: {
-        type: String,
-        default: 'h1',
-      },
-      level: {
-        type: String,
-        default: 'primary',
-      },
-    },
-    computed: {
-      headingClass() {
-        return {
-          'text-2xl font-bold leading-10': this.level === 'primary',
-          'text-xl font-bold  leading-8': this.level === 'secondary',
-          'text-[16px] font-semibold leading-7': this.level === 'secondary-2',
-        };
-      },
-    },
-  };
+  <script setup>
+  import { computed } from 'vue';
+
+
+// Props
+const props = defineProps({
+	tag: {
+		type: String,
+		default: 'h1',
+	},
+	level: {
+		type: String,
+		default: 'primary',
+	},
+});
+
+// Computed
+const headingClass = computed(() => {
+	return {
+		'text-2xl font-bold leading-10': props.level === 'primary',
+		'text-xl font-bold  leading-8': props.level === 'secondary',
+		'text-[16px] font-semibold leading-7': props.level === 'secondary-2',
+	};
+})
+
   </script>
   
   <style scoped>

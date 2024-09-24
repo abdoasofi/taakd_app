@@ -9,32 +9,31 @@
     </transition>
   </template>
   
-  <script>
-  export default {
-    name: 'FadeInOut',
-    data() {
-      return {
-        show: false, // Controls visibility
-      };
-    },
-    methods: {
-      // Optional hooks for additional logic during transitions
-      beforeEnter(el) {
-        el.style.opacity = 0;
-      },
-      enter(el, done) {
-        el.offsetHeight; // trigger reflow
-        el.style.transition = 'opacity 0.5s ease-in-out';
-        el.style.opacity = 1;
-        done();
-      },
-      leave(el, done) {
-        el.style.transition = 'opacity 0.5s ease-in-out';
-        el.style.opacity = 0;
-        done();
-      }
-    }
-  }
+  <script setup>
+ import { ref } from 'vue';
+
+
+// Data
+const show = ref(false);
+
+// Methods
+const beforeEnter = function(el) {
+	el.style.opacity = 0;
+}
+
+const enter = function(el, done) {
+	el.offsetHeight; // trigger reflow
+	el.style.transition = 'opacity 0.5s ease-in-out';
+	el.style.opacity = 1;
+	done();
+}
+
+const leave = function(el, done) {
+	el.style.transition = 'opacity 0.5s ease-in-out';
+	el.style.opacity = 0;
+	done();
+}
+
   </script>
   
   <style scoped>

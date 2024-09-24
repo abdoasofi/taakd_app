@@ -7,22 +7,21 @@
     </div>
 </FadeInOut>
 </template>
-<script>
+<script setup>
 import FadeInOut from './fadeInOut.vue';
 
-export default{
-    components:{FadeInOut},
-    name:"SnackBar",
-    props:{
-        message:{
-            type:String,
-            Required:true
-        },isDanger:{
-            type:Boolean,
-            default:false
-        }
-    }
-}
+
+// Props
+const props = defineProps({
+	message:{
+		type:String,
+		Required:true
+	},
+	isDanger:{
+		type:Boolean,
+		default:false
+	}
+});
 </script>
 <style scoped>
 .snack-shadow{

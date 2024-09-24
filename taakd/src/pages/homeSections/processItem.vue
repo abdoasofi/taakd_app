@@ -13,22 +13,19 @@
                 </div>
             </div>
 </template>
-<script>
+<script setup>
 import StyledIcon from "../../components/styledIcon.vue";
-export default{
-    name:"ProcessItem",
-    props:{
-        status: {
-        type: String,
-        default: 'init',
-      },
-      label:{
-        type:String,
-        default:"empty"
-      },
+
+// Props
+const props = defineProps({
+	status: {
+		type: String,
+		default: 'init',
+	},
+	label:{
+		type:String,
+		default:"empty"
+	},
       
-    },components:{
-        StyledIcon
-      }
-};
+});
 </script>

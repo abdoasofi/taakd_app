@@ -1,11 +1,7 @@
 <script >
 import Button from './button.vue';
 
-export default{
-    components:{
-        Button
-    }
-};
+
 </script>
 
 <template>

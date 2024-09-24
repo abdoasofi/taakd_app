@@ -20,13 +20,8 @@
     </header>
   </template>
   
-  <script>
+  <script setup>
 import Button from './button.vue';
-
-  export default {
-    name: 'Header',
-    components:{Button}
-  };
   </script>
   
   <style scoped>

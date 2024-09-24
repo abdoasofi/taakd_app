@@ -6,14 +6,7 @@
     </div>
   </template>
   
-  <script>
-
-
-  export default {
-   
-    name: 'BaseContainer',
-  };
-  </script>
+ 
   
   <style scoped>
   .con-border{border: 1px solid #969696}

@@ -7,15 +7,9 @@
     </div>
   </template>
   
-  <script>
+  <script setup>
   import Header from '../components/header.vue';
 
-  export default {
-    components: {
-    Header,
-  },
-    name: 'BaseLayout',
-  };
   </script>
   
   <style scoped>

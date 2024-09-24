@@ -28,7 +28,7 @@
 <script lang="ts" setup>
     import { computed ,ref} from 'vue'
     import { Autocomplete } from 'frappe-ui'
-    import {createListResource } from 'frappe-ui'
+    import {location} from '../../data/useAddressLogic';
 
     const valueCountry = ref('')
     const valueCity = ref('')
@@ -36,14 +36,7 @@
 
     const selectedCountry = ref('')
     const selectedCity= ref('')
-    const location = createListResource({
-            type: 'list',
-            doctype: 'Location',
-            fields:["location_name","parent_location","location_type"],
-            cache: 'location',
-            auto: true,
-                     
-    })
+
     const optionCountry = computed(() => {
         return location.data.filter(loc => loc.location_type === 'Country').map(loc => ({
             label: loc.location_name,
