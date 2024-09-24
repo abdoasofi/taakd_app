@@ -65,6 +65,11 @@ const routes = [
     path: '/home',
     component: () => import('@/pages/home.vue'),
   },
+  {
+    name: 'steps',
+    path: '/steps',
+    component: () => import('@/pages/steps.vue'),
+  },
 ]
 
 let router = createRouter({
