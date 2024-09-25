@@ -6,20 +6,35 @@ from frappe.model.document import Document
 from frappe import _
 
 class ApplicantInvitation(Document):
-	sales_invoice_name =""
 	def before_save(self):
 		self.add_company_information()
 		self.add_full_name()
 		
 	def on_submit(self):
 		self.create_user()
+		
 		if self.payd_from == "Employee":
-			self.create_customer()
-			self.create_sales_invoice(self._full_name)
+			# Create or retrieve the individual Customer
+			customer_doc = self.create_customer(
+				customer_name=self._full_name, 
+				customer_type="Individual",
+				email=self.email, 
+				customer_group="Applicants"
+			)
 		else:
-			print("#"*40,self.company_name)
-			self.create_sales_invoice(self.company_name)
-		self.create_verification_instructions_request()	
+			# Create or retrieve the company Customer
+			customer_doc = self.create_customer(
+				customer_name=self.company_name, 
+				customer_type="Company",
+				email=self.company_email, 
+				customer_group="Companies"
+			)
+		customer_name = customer_doc.name			
+		# Now create the Sales Invoice with the correct Customer identifier
+		sales_invoice_name = self.create_sales_invoice(customer_name)
+		
+		# Proceed to create Verification Instructions Request
+		self.create_verification_instructions_request(sales_invoice_name)
 
 	def on_cancel(self):
 		pass	
@@ -54,25 +69,76 @@ class ApplicantInvitation(Document):
 			new_doc.insert(ignore_permissions = True)
 			return new_doc   
 
-	def create_customer(self):
-		if frappe.db.exists("Customer", {"customer_name":self._full_name}):
-			return True 
+	# def create_employee_customer(self):
+	# 	if frappe.db.exists("Customer", {"customer_name":self._full_name}):
+	# 		frappe.logger().debug(f"Company Customer '{self._full_name}' already exists.")
+	# 		customer_doc = frappe.get_doc("Customer", {"customer_name": self._full_name}) 
+	# 	else:
+	# 		new_doc = frappe.new_doc("Customer")
+	# 		new_doc.email = self.email
+	# 		new_doc.customer_name = self._full_name
+	# 		new_doc.customer_type = "Individual"
+	# 		new_doc.customer_group = "Applicants"
+	# 		new_doc.insert(ignore_permissions = True)
+	# 		customer_doc = new_doc
+	# 		frappe.logger().debug(f"Company Customer Created: {customer_doc.name}")
+	# 		return customer_doc  
+
+	# def create_company_customer(self):
+	# 	"""Creates a Company Customer if not exists and returns the Customer document."""
+	# 	if frappe.db.exists("Customer", {"customer_name": self.company_name}):
+	# 		frappe.logger().debug(f"Company Customer '{self.company_name}' already exists.")
+	# 		customer_doc = frappe.get_doc("Customer", {"customer_name": self.company_name})
+	# 	else:
+	# 		new_doc = frappe.new_doc("Customer")
+	# 		new_doc.customer_name = self.company_name
+	# 		new_doc.customer_type = "Company"
+	# 		new_doc.customer_group = "Companies"  # Ensure this group exists
+	# 		new_doc.email = self.company_email
+	# 		new_doc.insert(ignore_permissions=True)
+	# 		customer_doc = new_doc
+	# 		frappe.logger().debug(f"Company Customer Created: {customer_doc.name}")
+	# 	return customer_doc  
+	def create_customer(self, customer_name, customer_type, email, customer_group):
+		"""Creates a Customer if not exists and returns the Customer document.
+
+		Args:
+			customer_name (str): The name of the customer.
+			customer_type (str): Type of customer. Accepted values: "Individual", "Company".
+			email (str): The email of the customer.
+			customer_group (str): The customer group. E.g., "Applicants", "Companies".
+			
+		Returns:
+			doc: A Frappe Customer document.
+		"""
+		if frappe.db.exists(
+      						"Customer",
+            				{
+								"customer_name": customer_name,
+								"email": email
+        					}):
+			frappe.logger().debug(f"Customer '{customer_name}' already exists.")
+			customer_doc = frappe.get_doc("Customer", {"customer_name": customer_name})
 		else:
 			new_doc = frappe.new_doc("Customer")
-			new_doc.email = self.email
-			new_doc.customer_name = self._full_name
-			new_doc.customer_type = "Individual"
-			new_doc.customer_group = "Applicants"
-			new_doc.insert(ignore_permissions = True)
-			return new_doc  
+			new_doc.customer_name = customer_name
+			new_doc.customer_type = customer_type
+			new_doc.customer_group = customer_group
+			new_doc.email = email
+			new_doc.insert(ignore_permissions=True)
+			customer_doc = new_doc
+			frappe.logger().debug(f"Customer Created: {customer_doc.name}")
 		
-	def create_verification_instructions_request(self):
+		return customer_doc
+			
+	def create_verification_instructions_request(self,sales_invoice_name):
 		new_doc = frappe.new_doc("Verification Instructions Request")
 		new_doc.payd_from = self.payd_from
 		new_doc.user_id = self.email
 		new_doc.company_submitting_application = self.company_email
 		new_doc.language = self.language
 		new_doc.application_status = "Job Request"
+		new_doc.sales_invoice = sales_invoice_name
 		# new_doc.sales_invoice = sales_invoice_name
 		new_doc.insert(ignore_permissions = True)
 		return new_doc  
@@ -88,7 +154,9 @@ class ApplicantInvitation(Document):
 			)
 			self.preparing_the_sales_invoice(self.other_services, sales_invoice)
 			sales_invoice.save(ignore_permissions = True)
-			sales_invoice_name = sales_invoice.name
+
+			return sales_invoice
+			
 			
 	
 
@@ -120,7 +188,7 @@ class ApplicantInvitation(Document):
 					"uom":"Nos",
 				},
 			)
-   
+
 	def get_sales_invoice_name (sales_invoice):
 		sales_invoice_name = sales_invoice._full_name
 		return sales_invoice_name
