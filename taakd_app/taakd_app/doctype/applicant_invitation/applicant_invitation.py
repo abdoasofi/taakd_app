@@ -14,12 +14,12 @@ class ApplicantInvitation(Document):
 	def on_submit(self):
 		self.create_user()
 		if self.payd_from == "Employee":
-			self.create_sales_invoice(self._full_name)
 			self.create_customer()
+			self.create_sales_invoice(self._full_name)
 		else:
 			print("#"*40,self.company_name)
 			self.create_sales_invoice(self.company_name)
-			
+		self.create_verification_instructions_request()	
 
 	def on_cancel(self):
 		pass	
