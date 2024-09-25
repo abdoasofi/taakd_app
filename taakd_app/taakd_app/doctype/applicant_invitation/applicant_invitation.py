@@ -3,17 +3,23 @@
 
 import frappe
 from frappe.model.document import Document
-
+from frappe import _
 
 class ApplicantInvitation(Document):
-	
+	sales_invoice_name =""
 	def before_save(self):
 		self.add_company_information()
-	
+		self.add_full_name()
+		
 	def on_submit(self):
 		self.create_user()
-		self.create_verification_instructions_request()
-		self.create_sales_invoice()
+		if self.payd_from == "Employee":
+			self.create_sales_invoice(self._full_name)
+			self.create_customer()
+		else:
+			print("#"*40,self.company_name)
+			self.create_sales_invoice(self.company_name)
+			
 
 	def on_cancel(self):
 		pass	
@@ -22,7 +28,7 @@ class ApplicantInvitation(Document):
 		middle_name = self.middle_name
 		if self.middle_name == None: 
 			middle_name = ""
-		self.full_name = f"{self.first_name} {middle_name} {self.last_name}"  
+		self._full_name = f"{self.first_name} {middle_name} {self.last_name}"  
 
 	def add_company_information(self):
 		user = frappe.get_doc("User", frappe.session.user)
@@ -46,27 +52,44 @@ class ApplicantInvitation(Document):
 			new_doc.module_profile = ""
 			new_doc.role_profile_name = "Applicant"
 			new_doc.insert(ignore_permissions = True)
-			return new_doc      
+			return new_doc   
 
+	def create_customer(self):
+		if frappe.db.exists("Customer", {"customer_name":self._full_name}):
+			return True 
+		else:
+			new_doc = frappe.new_doc("Customer")
+			new_doc.email = self.email
+			new_doc.customer_name = self._full_name
+			new_doc.customer_type = "Individual"
+			new_doc.customer_group = "Applicants"
+			new_doc.insert(ignore_permissions = True)
+			return new_doc  
+		
 	def create_verification_instructions_request(self):
 		new_doc = frappe.new_doc("Verification Instructions Request")
 		new_doc.payd_from = self.payd_from
 		new_doc.user_id = self.email
 		new_doc.company_submitting_application = self.company_email
 		new_doc.language = self.language
+		new_doc.application_status = "Job Request"
+		# new_doc.sales_invoice = sales_invoice_name
 		new_doc.insert(ignore_permissions = True)
 		return new_doc  
 
-	def create_sales_invoice(self):
+	def create_sales_invoice(self,customer):
+			if not customer:
+				frappe.throw(_("Customer is not set. Cannot create Sales Invoice.") )   
 			sales_invoice = frappe.get_doc(
 				{
 					"doctype": "Sales Invoice",
-					"customer": "Asofi Company",
+					"customer": customer,
 				}
 			)
 			self.preparing_the_sales_invoice(self.other_services, sales_invoice)
 			sales_invoice.save(ignore_permissions = True)
-			sales_invoice.submit()
+			sales_invoice_name = sales_invoice.name
+			
 	
 
 	def preparing_the_sales_invoice(self, list_items, sales_invoice):
@@ -97,3 +120,7 @@ class ApplicantInvitation(Document):
 					"uom":"Nos",
 				},
 			)
+   
+	def get_sales_invoice_name (sales_invoice):
+		sales_invoice_name = sales_invoice._full_name
+		return sales_invoice_name
