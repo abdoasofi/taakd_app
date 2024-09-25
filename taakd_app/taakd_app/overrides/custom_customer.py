@@ -4,8 +4,8 @@ from frappe import _, msgprint
 
 class CustomCustomer(Customer):
     def after_insert(self):
-        self.create_customer()
-    def create_customer(self):
+        self.create_user()
+    def create_user(self):
         if frappe.db.exists("User", {"email":self.email}):
             return True 
         else:
