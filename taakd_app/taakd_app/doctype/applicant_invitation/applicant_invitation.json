@@ -24,7 +24,12 @@
   "service_package_section",
   "package",
   "other_services",
-  "price"
+  "section_break_ovyy",
+  "package_price",
+  "column_break_jqxw",
+  "other_services_price",
+  "column_break_pcak",
+  "total_price"
  ],
  "fields": [
   {
@@ -133,21 +138,44 @@
    "options": "Other Services"
   },
   {
-   "fieldname": "price",
-   "fieldtype": "Currency",
-   "label": "Price"
-  },
-  {
    "fieldname": "_full_name",
    "fieldtype": "Data",
    "label": "Full Name",
    "read_only": 1
+  },
+  {
+   "fieldname": "package_price",
+   "fieldtype": "Currency",
+   "label": "Package Price"
+  },
+  {
+   "fieldname": "section_break_ovyy",
+   "fieldtype": "Section Break",
+   "label": "Price Details"
+  },
+  {
+   "fieldname": "column_break_jqxw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "other_services_price",
+   "fieldtype": "Currency",
+   "label": "Other Services Price"
+  },
+  {
+   "fieldname": "column_break_pcak",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_price",
+   "fieldtype": "Currency",
+   "label": "Total Price"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-25 21:52:32.804602",
+ "modified": "2024-09-26 03:11:42.075988",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",

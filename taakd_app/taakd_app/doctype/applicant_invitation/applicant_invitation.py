@@ -9,7 +9,9 @@ class ApplicantInvitation(Document):
 	def before_save(self):
 		self.add_company_information()
 		self.add_full_name()
-		
+		self.package_price = self.get_item_price(self.package)
+		self.other_services_price  =  self.sum_other_services_price()
+		self.sum_total_price()
 	def on_submit(self):
 		self.create_user()
 		
@@ -69,36 +71,6 @@ class ApplicantInvitation(Document):
 			new_doc.insert(ignore_permissions = True)
 			return new_doc   
 
-	# def create_employee_customer(self):
-	# 	if frappe.db.exists("Customer", {"customer_name":self._full_name}):
-	# 		frappe.logger().debug(f"Company Customer '{self._full_name}' already exists.")
-	# 		customer_doc = frappe.get_doc("Customer", {"customer_name": self._full_name}) 
-	# 	else:
-	# 		new_doc = frappe.new_doc("Customer")
-	# 		new_doc.email = self.email
-	# 		new_doc.customer_name = self._full_name
-	# 		new_doc.customer_type = "Individual"
-	# 		new_doc.customer_group = "Applicants"
-	# 		new_doc.insert(ignore_permissions = True)
-	# 		customer_doc = new_doc
-	# 		frappe.logger().debug(f"Company Customer Created: {customer_doc.name}")
-	# 		return customer_doc  
-
-	# def create_company_customer(self):
-	# 	"""Creates a Company Customer if not exists and returns the Customer document."""
-	# 	if frappe.db.exists("Customer", {"customer_name": self.company_name}):
-	# 		frappe.logger().debug(f"Company Customer '{self.company_name}' already exists.")
-	# 		customer_doc = frappe.get_doc("Customer", {"customer_name": self.company_name})
-	# 	else:
-	# 		new_doc = frappe.new_doc("Customer")
-	# 		new_doc.customer_name = self.company_name
-	# 		new_doc.customer_type = "Company"
-	# 		new_doc.customer_group = "Companies"  # Ensure this group exists
-	# 		new_doc.email = self.company_email
-	# 		new_doc.insert(ignore_permissions=True)
-	# 		customer_doc = new_doc
-	# 		frappe.logger().debug(f"Company Customer Created: {customer_doc.name}")
-	# 	return customer_doc  
 	def create_customer(self, customer_name, customer_type, email, customer_group):
 		"""Creates a Customer if not exists and returns the Customer document.
 
@@ -112,11 +84,11 @@ class ApplicantInvitation(Document):
 			doc: A Frappe Customer document.
 		"""
 		if frappe.db.exists(
-      						"Customer",
-            				{
+							"Customer",
+							{
 								"customer_name": customer_name,
 								"email": email
-        					}):
+							}):
 			frappe.logger().debug(f"Customer '{customer_name}' already exists.")
 			customer_doc = frappe.get_doc("Customer", {"customer_name": customer_name})
 		else:
@@ -157,9 +129,6 @@ class ApplicantInvitation(Document):
 
 			return sales_invoice
 			
-			
-	
-
 	def preparing_the_sales_invoice(self, list_items, sales_invoice):
 		for i in list_items:
 			is_stock_item = frappe.get_value("Item", i.service, "is_stock_item")
@@ -189,6 +158,44 @@ class ApplicantInvitation(Document):
 				},
 			)
 
-	def get_sales_invoice_name (sales_invoice):
-		sales_invoice_name = sales_invoice._full_name
-		return sales_invoice_name
+	def get_item_price(self,item):
+		try:
+			price_data = frappe.db.get_list(
+				"Item Price",
+				fields=['price_list_rate'],
+				filters={'item_code': item},
+				limit=1
+			)
+			# Check if we got any results
+			if price_data:
+				return price_data[0].price_list_rate  # Extracting the price
+			else:
+				return 0  # Handle the case where no price was found
+		except Exception as e:
+			print("An error occurred while fetching item price:", str(e))
+
+	def sum_other_services_price (self):
+		sum_other_services_price = 0
+		if self.other_services:
+			for i in self.other_services:
+				sum_other_services_price += self.get_item_price(i.service)
+			return sum_other_services_price
+
+	def sum_total_price (self):
+		self.total_price  =  self.sum_other_services_price() + self.get_item_price(self.package)
+
+	@frappe.whitelist()
+	def get_filtered_item_codes(self):
+		try:
+			parent = self.package 
+			item_codes = frappe.db.sql_list(
+				"""
+				SELECT item_code
+				FROM `tabProduct Bundle Item`
+				WHERE parent = %s
+				""", (parent)  # Ensure the parameter is a tuple
+			)
+			return item_codes
+		except Exception as e:
+			frappe.log_error(frappe.get_traceback(), "Error in get_filtered_item_codes")
+			return []  # Return an empty list on error

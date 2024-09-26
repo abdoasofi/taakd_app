@@ -6,39 +6,20 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "first_name",
-  "middle_name",
-  "column_break_ikkt",
-  "last_name"
+  "first_name"
  ],
  "fields": [
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "First Name"
-  },
-  {
-   "fieldname": "middle_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Middle Name"
-  },
-  {
-   "fieldname": "column_break_ikkt",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "last_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Last Name"
+   "label": "Full Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-12 09:33:55.561093",
+ "modified": "2024-09-26 03:20:00.419757",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Alias Name",
