@@ -23,3 +23,21 @@ export function createRequestList(fields) {
       },
     });
   }
+
+  export function updateFieldsInRequestList(requestList, updatedFields) {
+    if (!requestList || !requestList.data || !requestList.data[0]) {
+      console.error("Request list data is not available");
+      return;
+    }
+  
+    const documentName = requestList.data[0].name;
+  
+    requestList.setValue.submit({
+      name: documentName,
+      ...updatedFields, // تمرير الحقول المحدثة
+    }).then(response => {
+      console.log("Data updated successfully:", response);
+    }).catch(error => {
+      console.error("Error updating data:", error);
+    });
+  }

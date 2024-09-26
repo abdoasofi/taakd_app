@@ -73,10 +73,10 @@ import BaseLayout from "../layouts/baseLayout.vue";
 import { session } from '../data/session';
 import { useRoute } from 'vue-router'; // استيراد useRoute
 
-import {createRequestList} from '../data/request';
-// import { createRequestList } from './request';
+import {createRequestList , updateFieldsInRequestList} from '../data/request';
 const fields = ['name', 'user_id', 'subscribe_to_text_messages'];
 const requestList = createRequestList(fields);
+
 
 const route = useRoute(); // إنشاء مثيل من useRoute
 
@@ -92,8 +92,9 @@ const disabled = ref(true);
 const passwordError = ref('');
 const subscribeToTextMmessages = ref(true);
 const createNewPassword = ref(true);
-
-// const subscribeToTextMessages = ref(0); 
+const updatedFields = {
+  subscribe_to_text_messages: subscribeToTextMmessages.value,
+}
 
 const isArabic = (str) => {
   return /[\u0600-\u06FF]/.test(str); // هذا النمط يتحقق من وجود أحرف عربية
@@ -106,7 +107,7 @@ const userList = createListResource({
   filters: { email: session.user },
   auto: true,
   onSuccess(d) {
-    updateRequestList() },
+    updateFieldsInRequestList(requestList, updatedFields); },
   setValue: {
     onSuccess(d) {
       session.logout.submit();
@@ -142,20 +143,6 @@ const confirmData = () => {
   }
 };
 
-
-// ==========================
-
-function updateRequestList() {
-  if (!requestList) {
-    console.error("Reques tList is not defined");
-    return;
-  }
-    requestList.setValue.submit({
-    name: requestList.data[0].name,
-    subscribe_to_text_messages: subscribeToTextMmessages.value,
-
-  });
-}
 function handleTextNotificationChange() {
   subscribeToTextMmessages.value = (textNotifications.value === 'yes'); // تعيينه بـ true او false مباشر
 }
