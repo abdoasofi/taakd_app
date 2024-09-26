@@ -414,8 +414,7 @@
    "default": "0",
    "fieldname": "subscribe_to_text_messages",
    "fieldtype": "Check",
-   "label": "Subscribe to Text Messages",
-   "read_only": 1
+   "label": "Subscribe to Text Messages"
   },
   {
    "default": "Job Request",
@@ -487,7 +486,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-25 17:22:14.007681",
+ "modified": "2024-09-26 23:53:06.397502",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",

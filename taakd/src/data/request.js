@@ -1,14 +1,25 @@
 // import router from '@/router'
-// import { createResource } from 'frappe-ui'
+import { createListResource } from 'frappe-ui'
+import { session } from './session';
 
-// export const userResource = createResource({
-//   url: 'frappe.auth.get_logged_usr',
-//   cache: 'User',
-//   onError(error) {
-//     if (error && error.exc_type === 'AuthenticationError') {
-//       router.push({ name: 'LoginPage' })
-//     }
-//   },
-// })
-
-
+// دالة لإنشاء مورد الطلبات مع الحقول المطلوبة
+export function createRequestList(fields) {
+    return createListResource({
+      doctype: 'Verification Instructions Request',
+      fields, // استخدم الحقول الممررة من المعامل
+      filters: { user_id: session.user },
+      auto: true,
+      pageLength: 1,
+      onSuccess(data) {
+        console.log("Data retrieved successfully:", data);
+      },
+      setValue: {
+        onSuccess(data) {
+          console.log("Data update successful.");
+        },
+        onError(error) {
+          console.error("Error updating data:", error);
+        }
+      },
+    });
+  }

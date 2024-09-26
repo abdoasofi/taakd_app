@@ -15,14 +15,24 @@ import {
 
 let app = createApp(App)
 
-const reques = reactive({
-  items:[],
-  createNewPassword : false
+let requesData = localStorage.getItem("reques")
+if (!requesData) {
+	const requesJSON = JSON.stringify({
+		items: []
+	})
+
+	localStorage.setItem("reques", requesJSON)
+	requesData = {
+		items: []
+	}
+} else {
+	requesData = JSON.parse(requesData);
+}
 
 
-});
+const reques = reactive(requesData);
 
-app.provide("reques",reques)
+app.provide("reques", reques);
 
 setConfig('resourceFetcher', frappeRequest)
 
