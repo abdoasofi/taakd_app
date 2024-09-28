@@ -16,36 +16,30 @@
           <div class="py-3">
             <StyledInput
               id="mobile"
-              name="mobile"
+              name="mobile_number"
               labelText="Mobile Number"
               infoText="mobile number"
-              inputType="text"
+              inputType="phone"
+              @input-change="handleInput"
+                @isValid="data['mobile_number']['isValid']"
+                @validationMessage="data['mobile_number']['validationMessage']"
+                         
             />
             <small class="block text-[10px] font-normal">Supporting text</small>
           </div>
           <FieldContainer>
-            <!-- <div class=  'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-none'>
-              <Autocomplete
-                placeholder="Country"
-                :options="optionCountry"
-                v-model="valueCountry"
-                @change="handleCountryChange"
-                @update:modelValue="handleCountryChange"
-                :class="['w-full focus:ring-0 focus:outline-none focus:border-none bg-transparent']"
-              />
-            </div> -->
             <Autocomp
-          labelText="country"
-          :isMandatory="true"
-          infoText="country"
-          inputType="text"
-          name="country"
-          id="country"
-          :options="optionCountry"
-          :isValid="false"
-          :validationMessage="'you can edit message'"
-        />
-
+              labelText="country"
+              :isMandatory="true"
+              infoText="country"
+              inputType="text"
+              name="country"
+              id="country"
+              @input-change="handleCountryChange"
+              :options="optionCountry"
+              :isValid="false"
+              :validationMessage="'you can edit message'"
+            />
           </FieldContainer>
         </div>
         <div class="py-3 text-sm">
@@ -69,35 +63,45 @@
             <div class="w-full">
               <StyledInput
                 id="from"
-                name="from"
-                labelText="From"
-                infoText="from"
-                inputType="date"
-                @input-change=""
+                name="from_time"
+                labelText="From Time"
+                infoText="From Time"
+                inputType="time"
+                @input-change="handleInput"
+                @isValid="data['from_time']['isValid']"
+                @validationMessage="data['from_time']['validationMessage']"
               />
             </div>
             <div class="w-full">
               <StyledInput
                 id="to"
-                name="to"
-                labelText="To"
-                infoText="To"
-                inputType="date"
-                @input-change=""
+                name="to_time"
+                labelText="To Time"
+                infoText="To Time"
+                inputType="time"
+                @input-change="handleInput"
+                @isValid="data['to_time']['isValid']"
+                @validationMessage="data['to_time']['validationMessage']"                
               />
             </div>
           </div>
         </div>
         <div class="pt-5 flex w-full justify-center">
-          <Button level="other">save -></Button>
+          <Button level="other"  @click="save" >save -></Button>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- <div class=" fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
+      <div v-for="(alert, index) in alerts" :key="index">
+        <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
+      </div>
+  </div>    -->
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, defineProps } from 'vue'
+import { computed, ref, defineProps, reactive } from 'vue'
 import { Autocomplete } from 'frappe-ui'
 import Button from '../../components/button.vue'
 import Heading from '../../components/heading.vue'
@@ -105,6 +109,10 @@ import StyledIcon from '../../components/styledIcon.vue'
 import StyledInput from '../../components/styledInput.vue'
 import FieldContainer from '../../components/fieldContainer.vue'
 import Autocomp from '../../components/autocomp.vue'
+import validateInputContact from '../../data/validate/validateInputContact'
+import objectConvertor from '../../data/validate/convertor'
+import { createRequestList, updateFieldsInRequestList } from '../../data/request'
+
 
 // Props
 const props = defineProps({
@@ -116,6 +124,43 @@ const props = defineProps({
     type: Object,
   },
 })
+// ===== 1 =====
+const fieldsContact = ['name', 'mobile_number','country', 'from_time', 'to_time' ,'is_degree_or_diploma']
+const requestListContact = createRequestList(fieldsContact)
+
+// ===== 2 =====
+const data = reactive({
+  mobile_number: {
+    value: true,
+    isValid: null,
+    validationMessage: null,
+  },
+  country: {
+    value: '',
+    isValid: null,
+    validationMessage: null,
+  },
+  from_time: {
+    value: '',
+    isValid: null,
+    validationMessage: null,
+  },
+  to_time: {
+    value: '',
+    isValid: null,
+    validationMessage: null,
+  },
+  is_degree_or_diploma: {
+    value: true,
+    isValid: null,
+    validationMessage: null,
+  },
+
+})
+const handleInput = function (value) {
+  // props.data["country"]['value']=value.value
+  data[value.name]['value'] = value.value
+}
 const valueCountry = ref('')
 // const selectedCountry = ref('')
 
@@ -134,9 +179,43 @@ const optionCountry = computed(() => {
 
 // معالجة تغيير اختيار الدولة
 const handleCountryChange = (value) => {
-//   selectedCountry.value = value.value
-  props.data["country"]['value']=value.value
+  data["country"]['value']=value.value
 }
+// ====== alerts =========
+// const alerts = reactive([]);
+// Methods
+// const triggerAlert = function(message) {
+// 	alerts.push({ message });
+// 	setTimeout(() => {
+// 		alerts.shift(); // Automatically remove the alert after some time
+// 	}, 3000);
+// }
+
+// const removeAlert = function(index) {
+// 	alerts.splice(index, 1);
+// }
+// =============== ============
+
+function save() {
+  console.log('***** updateFieldsInRequestList ****')
+  // اذا حفظت بنجاح
+  // data["اسم الحقل"]["value"]
+  // مالم اعرض الرت او عالج الفاليديشن
+  console.log(" ******* data  ********** ",data)
+  let validateRes = validateInputContact(data)
+
+  if (validateRes===true) {
+    console.log("aaaaaaaaaaaaaaaaaaaaa")
+	// triggerAlert("aaaaaaaaaaaaaaaaaaaaa")
+  } else {
+    let converted = objectConvertor(data)
+
+    updateFieldsInRequestList(requestListContact, converted)
+  }
+}
+
+// =============== ============
+
 </script>
 
 <style scoped>
