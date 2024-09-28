@@ -11,6 +11,7 @@
   "this_is_my_name_column",
   "first_name",
   "last_name",
+  "employer_name",
   "column_break_vrit",
   "middle_name",
   "dont_middle_name",
@@ -481,12 +482,17 @@
    "fieldname": "sitteings_section",
    "fieldtype": "Section Break",
    "label": "Sitteings"
+  },
+  {
+   "fieldname": "employer_name",
+   "fieldtype": "Data",
+   "label": "Employer Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-26 23:53:06.397502",
+ "modified": "2024-09-27 19:00:22.740599",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
