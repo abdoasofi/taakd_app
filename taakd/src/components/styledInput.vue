@@ -12,7 +12,7 @@
     >
       {{ labelText }}
       <!-- Mandatory indicator -->
-      <span v-if="isMandatory" class="ml-1 text-red-500">*</span>
+      <span :v-if="isMandatory" class="ml-1 text-red-500">*</span>
       <!-- Info icon -->
       <span
         v-if="infoText"
@@ -58,7 +58,7 @@
         },
       ]"
       v-model="inputValue"
-      @input="validateInput"
+      @input="sendValueToParent"
       placeholder="Enter at least 3 characters"
     />
 
@@ -69,7 +69,9 @@
     </FadeInOut>
     <FadeInOut>
       <p v-if="isValid === true" class="text-secondary text-[10px]"
-        >Input is valid!</p
+        >{{
+        validationMessage
+      }}</p
       >
     </FadeInOut>
   </div>
@@ -77,6 +79,13 @@
 
 <script setup>
 import FadeInOut from "./fadeInOut.vue";
+import { defineEmits } from 'vue';
+const emit = defineEmits(['input-change']); // Declare the emitted event
+
+const sendValueToParent = () => {
+  emit('input-change', {name:props.name,
+		value:inputValue.value}); // Emit the event with a message
+};
 
 import { ref } from 'vue';
 
@@ -101,7 +110,6 @@ const props = defineProps({
 	},
 	isMandatory: {
 		type: Boolean,
-		default: false,
 	},
 	infoText: {
 		type: String,
@@ -122,21 +130,26 @@ const props = defineProps({
 });
 
 // Methods
-const sendValueToParent = function() {
-	this.$emit("input-change",{name:props.name,
-		value:inputValue.value} ); // Emit event to parent
-}
+// const sendValueToParent = function() {
+// 	this.$emit("input-change",{name:props.name,
+// 		value:inputValue.value} ); // Emit event to parent
+// }
 
-const validateInput = function() {
-	// Example validation logic: Input must be at least 3 characters long
-	if (inputValue.value.length < 3) {
-		props.isValid = false;
-		props.validationMessage = "Input must be at least 3 characters long";
-	} else {
-		props.isValid = true;
-	}
-	sendValueToParent();
-}
+// const validateInput = function() {
+// 	// Example validation logic: Input must be at least 3 characters long
+// 	if (inputValue.value.length < 3) {
+// 		props.isValid = false;
+// 		props.validationMessage = "Input must be at least 3 characters long";
+// 	} else {
+// 		props.isValid = true;
+// 	}
+// 	sendValueToParent();
+// }
+
+
+
+
+
 
 </script>
 

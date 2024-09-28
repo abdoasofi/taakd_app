@@ -50,7 +50,7 @@
           <p v-if="isValid === false" class="text-warn  text-[10px]">{{ validationMessage }}</p>
           </FadeInOut>
           <FadeInOut>
-          <p v-if="isValid === true" class="text-secondary  text-[10px]">Input is valid!</p>
+          <p v-if="isValid === true" class="text-secondary  text-[10px]">{{ validationMessage }}</p>
           </FadeInOut>
     </div>
   </template>
@@ -58,11 +58,17 @@
   <script setup>
 import FadeInOut from './fadeInOut.vue';
 import { ref, computed } from 'vue';
+import { defineEmits } from 'vue';
+const emit = defineEmits(['input-change']); // Declare the emitted event
 
+const emitSelected = () => {
+  emit('input-change', {name:props.name,
+		value:selectedOption.value}); // Emit the event with a message
+};
 
 // Data
 const selectedOption = ref('option1');
-
+const showInfo = ref(false);
 // Props
 const props = defineProps({
 	id: { type: String,
@@ -119,10 +125,10 @@ const attrs = computed(() => {
 
 
 // Methods
-const emitSelected = function() {
-	this.$emit("input-change",{name:props.name,
-		value:selectedOption.value} );
-}
+// const emitSelected = function() {
+// 	this.$emit("input-change",{name:props.name,
+// 		value:selectedOption.value} );
+// }
 
   </script>
   <style scoped>

@@ -39,7 +39,7 @@
           }
         ]"
         v-model="inputValue"
-        @input="validateInput"
+        @input="sendValueToParent"
         placeholder="Enter at least 3 characters"
       />
   
@@ -47,7 +47,7 @@
         <p v-if="isValid === false" class="text-warn  text-[10px]">{{ validationMessage }}</p>
     </FadeInOut>
     <FadeInOut>  
-        <p v-if="isValid === true" class="text-secondary  text-[10px]">Input is valid!</p>
+        <p v-if="isValid === true" class="text-secondary  text-[10px]">{{ validationMessage }}</p>
     </FadeInOut>
     </div>
   </template>
@@ -56,6 +56,13 @@
   import FadeInOut from './fadeInOut.vue';
   
   import { ref } from 'vue';
+  import { defineEmits } from 'vue';
+const emit = defineEmits(['input-change']); // Declare the emitted event
+
+const sendValueToParent = () => {
+  emit('input-change', {name:props.name,
+		value:inputValue.value}); // Emit the event with a message
+};
 
 
 // Data
@@ -95,23 +102,9 @@ const props = defineProps({
 	}
 });
 
-// Methods
-const sendValueToParent = function() {
-	this.$emit("input-change",{name:props.name,
-		value:inputValue.value} );// Emit event to parent
-}
 
-const validateInput = function() {
-	// Example validation logic: Input must be at least 3 characters long
-	if (inputValue.value.length < 3) {
-		props.isValid = false;
-		validationMessage.value = 'Input must be at least 3 characters long';
-	} else {
-		props.isValid = true;
-        
-	}
-	sendValueToParent();
-}
+
+
 
   </script>
   
