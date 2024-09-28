@@ -67,7 +67,7 @@
       <div class="text-xs text-[#1D1B20]">auto saving</div>
 
       <div class="flex gap-2">
-		<button  @click="previousStep" v-if="processed !== 0"><</button>
+		<button class="text-secondary" @click="previousStep" v-if="processed !== 0"><</button>
 		<Button v-if="processed !== 5" level="primary" @clicked="nextStep()">
 		  step {{ stepN }} ->
 		</Button>
