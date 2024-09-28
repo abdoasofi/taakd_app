@@ -111,8 +111,8 @@ import Step6 from './stepsSections/step6.vue'
 import { computed, reactive, ref } from 'vue'
 
 import { createRequestList, updateFieldsInRequestList } from '../data/request'
-import validateInput from '../data/validateInput'
-import objectConvertor from '../data/convertor'
+import validateInputStep1 from '../data/validate/validateInputStep1'
+import objectConvertor from '../data/validate/convertor'
 import SnackBar from '../components/snackBar.vue'
 
 // Data
@@ -233,7 +233,7 @@ const step1Save = function () {
   // اذا حفظت بنجاح
   // step1Data["اسم الحقل"]["value"]
   // مالم اعرض الرت او عالج الفاليديشن
-  let validateRes = validateInput(step1Data)
+  let validateRes = validateInputStep1(step1Data)
 
   if (validateRes===true) {
 	triggerAlert("aaaaaaaaaaaaaaaaaaaaa")
