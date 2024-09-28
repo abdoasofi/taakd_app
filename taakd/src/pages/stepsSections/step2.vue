@@ -63,17 +63,17 @@ const addCompany = function(){
 
 <template>
   <div class="pt-3 container">
-    <h3 class="text-lg font-medium mb-3 text-black">1 Basic Information</h3>
-    <List>
+    <h3 class="text-lg font-medium mb-3 text-black">2 Basic Information</h3>
+    <!-- <List>
       <li>Instructions for Verifying Basic Information.</li>
       <li>Instructions for Verifying Basic Information.</li>
       <li>Instructions for Verifying Basic Information.</li>
-    </List>
+    </List> -->
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
           labelText="Employer Name"
-          isMandatory="true"
+          :isMandatory="true"
           infoText="Employer Name"
           inputType="number"
           @input-change="handleInput"
@@ -87,7 +87,7 @@ const addCompany = function(){
       <FieldContainer>
         <StyledInput
           labelText="First Name"
-          isMandatory="true"
+          :isMandatory="true"
           infoText="First Name"
           inputType="text"
           name="firstName"
@@ -110,7 +110,7 @@ const addCompany = function(){
       <FieldContainer>
         <StyledInput
           labelText="Middle Name"
-          isMandatory="false"
+          :isMandatory="false"
           inputType="text"
           name="MiddleName"
           id="MiddleName"
@@ -123,7 +123,7 @@ const addCompany = function(){
       <FieldContainer>
         <StyledInput
           labelText="Last Name"
-          isMandatory="true"
+          :isMandatory="true"
           infoText="Last Name"
           inputType="text"
           name="LastName"
@@ -134,7 +134,7 @@ const addCompany = function(){
       <FieldContainer>
         <StyledInput
           labelText="Suffix"
-          isMandatory="true"
+          :isMandatory="true"
           infoText="Suffix"
           inputType="text"
           name="Suffix"
@@ -148,7 +148,7 @@ const addCompany = function(){
     <FieldContainer>
       <StyledInput
         labelText="Alias Name"
-        isMandatory="true"
+        :isMandatory="true"
         infoText="Alias Name"
         inputType="text"
         name="AliasName"
@@ -160,8 +160,8 @@ const addCompany = function(){
     <Toggle>
       <FieldContainer>
         <StyledInput
-          labelText="Alias Name"
-          isMandatory="true"
+          labelText="hfgh"
+          :isMandatory="true"
           infoText="Alias Name"
           inputType="text"
           name="AliasName2"
@@ -172,7 +172,7 @@ const addCompany = function(){
       <FieldContainer>
         <StyledInput
           labelText="Alias Name"
-          isMandatory="true"
+          :isMandatory="true"
           infoText="Alias Name"
           inputType="text"
           name="AliasName3"
@@ -190,7 +190,7 @@ const addCompany = function(){
       <FieldContainer>
         <StyledInput
           labelText="Alias Name"
-          isMandatory="true"
+          :isMandatory="true"
           infoText="Alias Name"
           inputType="text"
           name="AliasName4"
@@ -203,7 +203,7 @@ const addCompany = function(){
         <FieldContainer>
           <StyledInput
             labelText="Alias Name"
-            isMandatory="true"
+            :isMandatory="true"
             infoText="Alias Name"
             inputType="text"
             name="AliasName5"
@@ -214,7 +214,7 @@ const addCompany = function(){
         <FieldContainer>
           <StyledInput
             labelText="Alias Name"
-            isMandatory="true"
+            :isMandatory="true"
             infoText="Alias Name"
             inputType="text"
             name="AliasName6"
@@ -226,7 +226,7 @@ const addCompany = function(){
 
       <StyledtextArea
         labelText="Alias Name"
-        isMandatory="true"
+        :isMandatory="true"
         infoText="Alias Name"
         inputType="text"
         name="AliasName7"
@@ -240,7 +240,7 @@ const addCompany = function(){
         <FieldContainer >
             <StyledInput
               labelText="Alias Name"
-              isMandatory="true"
+              :isMandatory="true"
               infoText="Alias Name"
               inputType="text"
               :name="`AliasName-${n}`"
