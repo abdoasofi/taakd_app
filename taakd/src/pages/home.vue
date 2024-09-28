@@ -14,10 +14,13 @@
           </div>      
           <div  class="flex justify-center">
             <router-link to ="/steps"> 
-                <Button type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >
-                    Fill the Form Now<span class="mx-2">-></span>
+                <Button @click="save" type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >
+                  Fill the Form Now <span class="mx-2">-></span>
                 </Button>
             </router-link>
+            <Button @click="updateDocumentData" type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >
+              Test<span class="mx-2">-></span>
+            </Button>
         </div>
 
           <!-- <div   class="gap-3 w-full flex flex-col justify-center items-center">
@@ -31,7 +34,7 @@
       <!-- <JobRequest />
       <Review />
       <Verification /> -->
-      <Contact  :location="location"/>
+      <Contact  :location="location" :data="data"/>
     </BaseLayout>
 
     <!-- <button class="fixed z-30 bottom-0 bg-red-700 rounded-xl text-white p-2 " @click="triggerAlert('Your Contact details has been saved!')">زر تجربة الالرت</button> -->
@@ -46,11 +49,12 @@
       </div>
     </div> -->
     <Cookies />
+    <!-- @click="showDocumentName"  -->
 </template>
 
 <script setup>
-
-import { Button } from 'frappe-ui';
+import { ref, watch ,onMounted, reactive} from 'vue';
+import { Button , createDocumentResource } from 'frappe-ui';
 
 import BaseContainer from '../components/baseContainer.vue';
 import BaseLayout from '../layouts/baseLayout.vue';
@@ -62,7 +66,69 @@ import JobRequest from './homeSections/jobRequest.vue';
 import Review from './homeSections/review.vue';
 import Verification from './homeSections/verification.vue';
 import {location} from '../data/useAddressLogic';
+// import { createRequestList, useDocumentResource } from '../data/request';
 
+// const requestList = createRequestList(['name', 'user_id', 'subscribe_to_text_messages']);
+const documentName = ref('');
+const data = reactive({
+  country: {
+    value: '',
+    isValid: null,
+    validationMessage: null,
+  },})
+const requestList = createDocumentResource({
+  doctype: 'Verification Instructions Request',
+  name: documentName.value,
+  onSuccess(data) {
+    console.log('Document fetched successfully:', data);
+  },
+  onError(error) {
+    console.error('Error fetching document:', error);
+  },
+});
+
+async function fetchDocument() {
+  try {
+    await requestList.get();
+    if (requestList.doc) {
+      documentName.value = requestList.doc.name || 'No Name Available';
+      console.log("Fetched Document Name:", documentName.value);
+    } else {
+      console.warn('Document is not available after fetching');
+    }
+  } catch (error) {
+    console.error('Error while fetching document:', error);
+  }
+}
+
+onMounted(() => {
+  fetchDocument();
+});
+
+watch(() => documentName.value, (newName) => {
+  console.log("Current Document Name:", newName);
+});
+
+function updateDocumentData() {
+  if (documentName.value && documentName.value !== 'No Name Available') {
+    requestList.setValue.submit({
+      first_name: 'Asofi',
+      // Add other fields as necessary
+    })
+    .then(response => {
+      console.log('Data updated successfully:', response);
+    })
+    .catch(error => {
+      console.error('Update Error:', error);
+    });
+  } else {
+    console.warn("Document name is not available for update");
+  }
+}
+
+function save() {
+  
+}
 </script>
 
 <style scoped>
