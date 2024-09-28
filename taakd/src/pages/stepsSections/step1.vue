@@ -85,7 +85,7 @@
     <FieldContainer>
       <StyledInput
         labelText="Alias Name"
-        ::isMandatory="true"
+        :isMandatory="true"
         infoText="Alias Name"
         inputType="text"
         name="AliasName"
@@ -140,7 +140,7 @@
         <FieldContainer>
           <StyledInput
             labelText="Alias Name"
-            ::isMandatory="true"
+            :isMandatory="true"
             infoText="Alias Name"
             inputType="text"
             name="AliasName5"
@@ -181,7 +181,7 @@
       <FieldContainer>
         <StyledInput
           labelText="Alias Name"
-          ::isMandatory="true"
+          :isMandatory="true"
           infoText="Alias Name"
           inputType="text"
           :name="`AliasName-${n}`"
