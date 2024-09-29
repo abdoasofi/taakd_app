@@ -43,45 +43,15 @@ import { session } from './session';
   }
 
 // General function for document operations
-export function useDocumentResource(doctype) {
-  const documentResource = createDocumentResource({
-    doctype,
-    onError(error) {
-      console.error('Error interacting with document:', error);
-    }
+export function useDocumentResource(name = '') {
+  if (!name) {
+    console.warn("Document name is not provided.");
+  }
+  return createDocumentResource({
+    doctype: "Verification Instructions Request",
+    name: name,
+    // auto: true
   });
-
-  // دالة لجلب البيانات الكاملة للمستند مع الجداول الفرعية
-  const fetchDocument = async (name) => {
-    try {
-      const documentData = await documentResource.fetch(name);
-      console.log('Document fetched successfully:', documentData);
-      return documentData;
-    } catch (error) {
-      console.error('Error fetching document:', error);
-      throw error;
-    }
-  };
-
-  // دالة لتحديث المستندات وجداولها الفرعية
-  const updateDocument = async (name, updatedFields) => {
-    try {
-      const response = await documentResource.setValue.submit({
-        name,
-        ...updatedFields,
-      });
-      console.log('Document updated successfully:', response);
-      return response;
-    } catch (error) {
-      console.error('Error updating document:', error);
-      throw error;
-    }
-  };
-
-  return {
-    fetchDocument,
-    updateDocument,
-  };
 }
 
 
