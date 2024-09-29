@@ -139,7 +139,8 @@
   {
    "fieldname": "type_of_employment",
    "fieldtype": "Select",
-   "label": "Type of Employment"
+   "label": "Type of Employment",
+   "options": "Full-Time\nPart-Time\nContract"
   },
   {
    "default": "0",
@@ -184,7 +185,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-12 09:35:08.430395",
+ "modified": "2024-09-29 11:19:55.918410",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Employment History",
