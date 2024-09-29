@@ -70,6 +70,11 @@ const routes = [
     path: '/steps',
     component: () => import('@/pages/steps.vue'),
   },
+  {
+    name: 'test',
+    path: '/test',
+    component: () => import('@/pages/VerificationInstructionsRequest.vue'),
+  },
 ]
 
 let router = createRouter({
