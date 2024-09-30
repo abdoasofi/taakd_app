@@ -461,24 +461,24 @@ watch(() => request.doc, (newDoc) => {
       // التأكد من تهيئة جميع الحقول في الإدخالات الحالية
       newDoc.employment_history.forEach(employment => {
         employment.company = employment.company || ''
-        employment.contact_the_employer = employment.contact_the_employer || ''
-        employment.issuing_salary = employment.issuing_salary || ''
+        employment.contact_the_employer = employment.contact_the_employer || false
+        employment.issuing_salary = employment.issuing_salary || false
         employment.name_of_your_employer = employment.name_of_your_employer || ''
         employment.country = employment.country || ''
         employment.city = employment.city || ''
         employment.governorate = employment.governorate || ''
         employment.location_text = employment.location_text || ''
-        employment.continuous = employment.continuous || ''
-        employment.activity_has_stopped = employment.activity_has_stopped || ''
+        employment.continuous = employment.continuous || false
+        employment.activity_has_stopped = employment.activity_has_stopped || false
         employment.from_date = employment.from_date || ''
         employment.end_date = employment.end_date || ''
         employment.phone = employment.phone || ''
         employment.ext = employment.ext || ''
         employment.official_job_title_held_currently = employment.official_job_title_held_currently || ''
-        // employment.type_of_employment = employment.type_of_employment || ''
-        employment.the_company_has_different_names = employment.the_company_has_different_names || ''
+        employment.type_of_employment = employment.type_of_employment || ''
+        employment.the_company_has_different_names = employment.the_company_has_different_names || false
         employment.different_company_names = employment.different_company_names || ''
-        employment.you_have_a_nicknamecx = employment.you_have_a_nicknamecx || ''
+        employment.you_have_a_nicknamecx = employment.you_have_a_nicknamecx || false
       })
     }
   }
@@ -501,22 +501,22 @@ const addEmployment = () => {
   const newEmployment = {
     id: uuidv4(), // Unique identifier
     company: '',
-    contact_the_employer: '',
-    issuing_salary: '',
+    contact_the_employer: false,
+    issuing_salary: false,
     name_of_your_employer: '',
     country: '',
     city: '',
     governorate: '',
     location_text: '',
-    continuous: '',
-    activity_has_stopped: '',
+    continuous: false,
+    activity_has_stopped: false,
     from_date: '',
     end_date: '',
     phone: '',
     ext: '',
     official_job_title_held_currently: '',
-    // type_of_employment: '',
-    the_company_has_different_names: '',
+    type_of_employment: '',
+    the_company_has_different_names: false,
     different_company_names: '',
     you_have_a_nicknamecx: '',
   }
