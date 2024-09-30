@@ -239,19 +239,21 @@
           </FieldContainer> 
 
           <!-- Type of Employment Select -->
-          <!-- <FieldContainer>
-            <Select 
-              id="type_of_employment" 
-              name="type_of_employment"  
-              labelText="Type of Employment" 
-              isMandatory="true" 
-              infoText="Type of Employment"   
-              :options="optionsTypeEmployment"
-              v-model="employment.type_of_employment"
-              :isValid="validateTypeOfEmployment(employment.type_of_employment)" 
-              @input-change="handleInput(employment.id, 'type_of_employment', $event)"
-            />
-          </FieldContainer> -->
+          <FieldContainer>
+          <Autocomp
+            labelText="Type of Employment"
+            :isMandatory="true"
+            infoText="Type of Employment"
+            inputType="text"
+            name="type_of_employment"
+            :id="`type_of_employment-${employment.id}`"
+            :options="optionsTypeEmployment"
+            v-model="employment.type_of_employment"
+            @input-change="(value) => handleTypeOfEmployment(index, value)"
+            :isValid="validateCountry(employment.type_of_employment)"
+            validationMessage="Type of Employment is required."
+          />
+        </FieldContainer>  
       </div>
 
       <div class="lg:grid grid-cols-2 lg:gap-2">
@@ -443,6 +445,11 @@ const handleGovernorateChange = (index, value) => {
   // إذا كان هناك حقول تعتمد على المحافظات، يمكنك إعادة تعيينها هنا
 }
 
+// Handle Country Change for specific employment
+const handleTypeOfEmployment = (index, value) => {
+  const employment = request.doc.employment_history[index]
+  employment.type_of_employment = value.value
+}
 // Initialize employment_history
 // تهيئة employment_history والتأكد من تعيين جميع الحقول بشكل صحيح
 watch(() => request.doc, (newDoc) => {
