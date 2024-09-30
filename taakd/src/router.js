@@ -75,6 +75,12 @@ const routes = [
     path: '/test',
     component: () => import('@/pages/VerificationInstructionsRequest.vue'),
   },
+  {
+    name: 'step3test',
+    path: '/step3test',
+    component: () => import('@/pages/stepsSections/step3test.vue'),
+  },  
+
 ]
 
 let router = createRouter({
