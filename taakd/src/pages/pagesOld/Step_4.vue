@@ -1,40 +1,171 @@
 <template>
-    <div class="bg-[#F7F7F7]">
-        <div>
-            <h1>Review your information</h1> 
-            <!-- <UL>
-                <Li>All fields marked with an asterisk ( * ) are required. </Li>
-                <Li>Please provide your education and training information beginning with the most recent </Li>
-            </UL> -->
+   
+
+    <!-- <List>
+      <li>Instructions for Verifying Basic Information.</li>
+      <li>Instructions for Verifying Basic Information.</li>
+      <li>Instructions for Verifying Basic Information.</li>
+    </List> -->
+    <div class="lg:grid grid-cols-2 lg:gap-2">
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="Employer Name"
+          :isMandatory="true"
+          infoText="Employer Name"
+          inputType="text"
+          @input-change="handleInput"
+          name="employer_name"
+          id="EmployerName"
+
+        />
+        <SupportingText>Supporting text</SupportingText>
+      </FieldContainer> -->
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="First Name"
+          :isMandatory="true"
+          infoText="First Name"
+          inputType="text"
+          name="first_name"
+          id="firstName"
+          @input-change="handleInput"
+        />
+      </FieldContainer> -->
+    </div>
+    <!-- <FieldContainer>
+      <CheckBox name="certify" id="certify" @input-change="handleInput">
+        I certify that I do not have a Middle Name on my official identification
+        document
+      </CheckBox>
+    </FieldContainer> -->
+    <div class="lg:grid grid-cols-2 lg:gap-2">
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="Middle Name"
+          :isMandatory="false"
+          inputType="text"
+          name="middle_name"
+          id="MiddleName"
+          @input-change="handleInput"
+        />
+      </FieldContainer> -->
+    </div>
+
+    <div class="lg:grid grid-cols-2 lg:gap-2">
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="Last Name"
+          :isMandatory="true"
+          infoText="Last Name"
+          inputType="text"
+          name="LastName"
+          id="LastName"
+          
+        />
+      </FieldContainer> -->
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="Suffix"
+          :isMandatory="true"
+          infoText="Suffix"
+          inputType="text"
+          name="Suffix"
+          id="Suffix"
+          
+        />
+        <SupportingText>Supporting text</SupportingText>
+      </FieldContainer> -->
+    </div>
+
+    <!-- <FieldContainer>
+      <StyledInput
+        labelText="Alias Name"
+        :isMandatory="true"
+        infoText="Alias Name"
+        inputType="text"
+        name="AliasName"
+        id="AliasName"
+        
+      />
+    </FieldContainer> -->
+
+    <Toggle>
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="Alias Name"
+          :isMandatory="true"
+          infoText="Alias Name"
+          inputType="text"
+          name="AliasName2"
+          id="AliasName2"
+          
+        />
+      </FieldContainer> -->
+      <!-- <FieldContainer>
+        <StyledInput
+          labelText="Alias Name"
+          :isMandatory="true"
+          infoText="Alias Name"
+          inputType="text"
+          name="AliasName3"
+          id="AliasName3"
+          
+        />
+      </FieldContainer> -->
+    </Toggle>
+
+    <!-- <Info
+      text="Instructions for Verifying Basic Information Instructions for Verifying Basic Information."
+    /> -->
+
+    <!-- <FieldsGroup title="Current mailing address">
+      <FieldContainer>
+        <StyledInput
+          labelText="Alias Name"
+          :isMandatory="true"
+          infoText="Alias Name"
+          inputType="text"
+          name="AliasName4"
+          id="AliasName4"
+          
+        />
+      </FieldContainer>
+
+      <Toggle>
+        <FieldContainer>
+          <StyledInput
+            labelText="Alias Name"
+            :isMandatory="true"
+            infoText="Alias Name"
+            inputType="text"
+            name="AliasName5"
+            id="AliasName5"
             
-        </div>
-        <dev class="flex items-center p-4 m-4 ">  
-            <router-link to ="/Step_3">
-                <div>
-                <Button :variant="'outline'" theme="green" size="sm" label="Button" >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7.373 12.75H18.75C18.9628 12.75 19.141 12.6782 19.2845 12.5345C19.4282 12.391 19.5 12.2128 19.5 12C19.5 11.7872 19.4282 11.609 19.2845 11.4655C19.141 11.3218 18.9628 11.25 18.75 11.25H7.373L12.5423 6.08076C12.6909 5.93209 12.7643 5.75809 12.7625 5.55876C12.7605 5.35942 12.682 5.18217 12.527 5.02701C12.3718 4.88217 12.1962 4.80717 12 4.80201C11.8038 4.79684 11.6282 4.87184 11.473 5.02701L5.13275 11.3673C5.03908 11.4609 4.97308 11.5597 4.93475 11.6635C4.89625 11.7673 4.877 11.8795 4.877 12C4.877 12.1205 4.89625 12.2327 4.93475 12.3365C4.97308 12.4403 5.03908 12.5391 5.13275 12.6328L11.473 18.973C11.6115 19.1115 11.783 19.1823 11.9875 19.1855C12.192 19.1887 12.3718 19.1178 12.527 18.973C12.682 18.8178 12.7595 18.6397 12.7595 18.4385C12.7595 18.2372 12.682 18.0589 12.527 17.9038L7.373 12.75Z" fill="#969696"/>
-                        </svg>
-                </Button>
-                </div>
-            </router-link>  
+          />
+        </FieldContainer>
+        <FieldContainer>
+          <StyledInput
+            labelText="Alias Name"
+            ::isMandatory="true"
+            infoText="Alias Name"
+            inputType="text"
+            name="AliasName6"
+            id="AliasName6"
+            
+          />
+        </FieldContainer>
+      </Toggle>
 
-            <router-link to ="/Step_5">
-                <div  class="flex items-center justify-between">
-                        <Button :variant="'subtle'" theme="green" size="sm" label="Button"> Step 5 </Button>
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12.627 8.75001H1.25C1.03717 8.75001 0.859 8.67817 0.7155 8.53451C0.571833 8.39101 0.5 8.21284 0.5 8.00001C0.5 7.78717 0.571833 7.60901 0.7155 7.46551C0.859 7.32184 1.03717 7.25001 1.25 7.25001H12.627L7.45775 2.08076C7.30908 1.93209 7.23567 1.75809 7.2375 1.55876C7.2395 1.35942 7.318 1.18217 7.473 1.02701C7.62817 0.882174 7.80383 0.807174 8 0.802008C8.19617 0.796841 8.37183 0.871841 8.527 1.02701L14.8673 7.36726C14.9609 7.46092 15.0269 7.55967 15.0652 7.66351C15.1038 7.76734 15.123 7.87951 15.123 8.00001C15.123 8.12051 15.1038 8.23267 15.0652 8.33651C15.0269 8.44034 14.9609 8.53909 14.8673 8.63276L8.527 14.973C8.3885 15.1115 8.217 15.1823 8.0125 15.1855C7.808 15.1887 7.62817 15.1178 7.473 14.973C7.318 14.8178 7.2405 14.6397 7.2405 14.4385C7.2405 14.2372 7.318 14.0589 7.473 13.9038L12.627 8.75001Z" fill="white"/>
-                        </svg> 
-                </div>
-            </router-link>
-
-
-
-
-        </dev>
-
-    </div>    
-
+      <StyledtextArea
+        labelText="Alias Name"
+        ::isMandatory="true"
+        infoText="Alias Name"
+        inputType="text"
+        name="AliasName7"
+        id="AliasName7"
+        
+      />
+    </FieldsGroup> -->
 
 </template>
   
