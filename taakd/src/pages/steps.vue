@@ -116,7 +116,7 @@ import objectConvertor from '../data/validate/convertor'
 import SnackBar from '../components/snackBar.vue'
 
 // Data
-const processed = ref(2)
+const processed = ref(1)
 const stepN = ref(2)
 
 const fieldsStep1 = ['name', 'first_name', 'last_name']

@@ -1,471 +1,485 @@
 <template>
   <div class="pt-3 container">
-    <h3 class="text-lg font-medium mb-3 text-black">2 Basic Information</h3>
+    <h3 class="text-lg font-medium mb-3 text-black">Education Information</h3>
+  </div>
   
+  <div class="space-y-2">
+    <!-- Iterate Over Education Information -->
+    <FieldsToggleContainer
+      v-for="(education, index) in request.doc.education_information"
+      :key="education.id"
+      :title="education.name_of_school_or_college_university || `Education ${index + 1}`"
+    >
+      <div class="lg:grid grid-cols-2 lg:gap-2">
 
-    </div>
-    <div dir="ltr" class="p-6 bg-bg min-h-screen">
-    <div v-if="request.doc" class="max-w-7xl mx-auto bg-bg shadow-md rounded-lg p-6">
-      
-      <!-- Error Messages -->
-      <div v-if="errors.length > 0" class="mb-4 space-y-2">
-        <ErrorMessage 
-          v-for="(error, index) in errors" 
-          :key="index" 
-          :message="error" 
-        />
+        <!-- Name of School/College/University Field -->
+        <FieldContainer>
+          <StyledInput
+            labelText="Name of School/College/University"
+            :isMandatory="true"
+            infoText="Enter the name of your educational institution."
+            inputType="text"
+            name="name_of_school_or_college_university"
+            :id="`name_of_school_or_college_university-${education.id}`"
+            v-model="education.name_of_school_or_college_university"
+            :isValid="validateNameOfSchool(education.name_of_school_or_college_university)"
+            validationMessage="Name of School/College/University is required."
+          />
+        </FieldContainer> 
+
+        <!-- Field of Study/Major Field -->
+        <FieldContainer>
+          <StyledInput
+            labelText="Field of Study/Major"
+            :isMandatory="true"
+            infoText="Enter your field of study or major."
+            inputType="text"
+            name="field_of_study_or_major"
+            :id="`field_of_study_or_major-${education.id}`"
+            v-model="education.field_of_study_or_major"
+            :isValid="validateFieldOfStudy(education.field_of_study_or_major)"
+            validationMessage="Field of Study/Major is required."
+          />
+        </FieldContainer> 
       </div>
 
-      <!-- Education Information Sections -->
-      <div class="space-y-4">
-        <div 
-          v-for="(education, index) in request.doc.education_information" 
-          :key="education.id" 
-          class="border border-light_gray rounded-md"
-        >
-          <!-- Toggle and Delete Buttons Container -->
-          <div class="flex justify-between items-center px-4 py-2 bg-more_lighter_gray hover:bg-bg rounded-t-md">
-            <!-- Toggle Button -->
-            <button 
-              :id="'section-button-' + education.id"
-              @click="toggleSection(education.id)" 
-              :aria-expanded="isOpen(education.id)"
-              :aria-controls="'section-content-' + education.id"
-              class="flex items-center space-x-2 focus:outline-none"
-            >
-              <span class="text-dark_gray">{{ education.name_of_school_or_college_university || 'New Education Record' }}</span>
-              <svg 
-                :class="{'transform rotate-180': isOpen(education.id)}" 
-                class="w-5 h-5 transition-transform duration-200" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24" 
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            
-            <!-- Delete Button -->
-            <button 
-              @click="confirmRemove(education.id)" 
-              class="bg-warn hover:bg-warn_hover text-white px-2 py-1 rounded-md"
-              title="Delete Record"
-            >
-              Delete
-            </button>
-          </div>
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <!-- Country Autocomplete -->
+        <FieldContainer>
+          <Autocomp
+            labelText="Country"
+            :isMandatory="true"
+            infoText="Select your country."
+            inputType="text"
+            name="country"
+            :id="`country-${education.id}`"
+            :options="getOptionCountry(education)"
+            v-model="education.country"
+            @input-change="(value) => handleCountryChange(index, value)"
+            :isValid="validateCountry(education.country)"
+            validationMessage="Country is required."
+          />
+        </FieldContainer>  
 
-          <!-- Toggleable Content -->
-          <transition name="accordion">
-            <div 
-              v-show="isOpen(education.id)" 
-              class="p-4 space-y-4"
-              :id="'section-content-' + education.id"
-              role="region"
-              :aria-labelledby="'section-button-' + education.id"
-            >
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- School Name -->
-                <div>
-                  <label class="block text-dark_gray">Name of School or College/University</label>
-                  <input 
-                    v-model="education.name_of_school_or_college_university" 
-                    placeholder="Name of School or College/University"  
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
+        <!-- City Autocomplete -->
+        <FieldContainer>
+          <Autocomp
+            labelText="City"
+            :isMandatory="true"
+            infoText="Select your city."
+            inputType="text"
+            name="city"
+            :id="`city-${education.id}`"
+            :options="getOptionCity(education)"
+            v-model="education.city"
+            @input-change="(value) => handleCityChange(index, value)"
+            :isValid="validateCity(education.city)"
+            validationMessage="City is required."
+          />
+        </FieldContainer>
 
-                <!-- Field of Study -->
-                <div>
-                  <label class="block text-dark_gray">Field of Study or Major</label>
-                  <input 
-                    v-model="education.field_of_study_or_major" 
-                    placeholder="Field of Study or Major"  
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
+        <!-- Governorate Autocomplete -->
+        <FieldContainer>
+          <Autocomp
+            labelText="Governorate"
+            :isMandatory="true"
+            infoText="Select your governorate."
+            inputType="text"
+            name="governorate"
+            :id="`governorate-${education.id}`"
+            :options="getOptionGovernorate(education)"
+            v-model="education.governorate"
+            @input-change="(value) => handleGovernorateChange(index, value)"
+            :isValid="validateGovernorate(education.governorate)"
+            validationMessage="Governorate is required."
+          />
+        </FieldContainer>
 
-                <!-- Date Enrolled From -->
-                <div>
-                  <label class="block text-dark_gray">Date Enrolled From</label>
-                  <input 
-                    type="date" 
-                    v-model="education.date_enrolled_from" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <!-- Date Enrolled To -->
-                <div>
-                  <label class="block text-dark_gray">Date Enrolled To</label>
-                  <input 
-                    type="date" 
-                    v-model="education.date_enrolled_to" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <!-- Country -->
-                <div>
-                  <label class="block text-dark_gray">Country</label>
-                  <select 
-                    v-model="education.country" 
-                    @change="education.selectedCity = ''" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select Country</option>
-                    <option 
-                      v-for="country in optionCountry" 
-                      :key="country.value" 
-                      :value="country.value"
-                    >
-                      {{ country.label }}
-                    </option>
-                  </select>
-                </div>
-
-                <!-- City -->
-                <div>
-                  <label class="block text-dark_gray">City</label>
-                  <select 
-                    v-model="education.city" 
-                    @change="education.governorate = ''" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select City</option>
-                    <option 
-                      v-for="city in getOptionCity(education.country)" 
-                      :key="city.value" 
-                      :value="city.value"
-                    >
-                      {{ city.label }}
-                    </option>
-                  </select>
-                </div>
-
-                <!-- Governorate -->
-                <div>
-                  <label class="block text-dark_gray">Governorate</label>
-                  <select 
-                    v-model="education.governorate" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select Governorate</option>
-                    <option 
-                      v-for="governorate in getOptionGovernorate(education.city)" 
-                      :key="governorate.value" 
-                      :value="governorate.value"
-                    >
-                      {{ governorate.label }}
-                    </option>
-                  </select>
-                </div>
-
-                <!-- Phone -->
-                <div>
-                  <label class="block text-dark_gray">Phone:</label>
-                  <input 
-                    type="tel" 
-                    v-model="education.phone" 
-                    placeholder="Phone" 
-                    pattern="[0-9]{10,15}"
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <!-- Extension -->
-                <div>
-                  <label class="block text-dark_gray">Extension</label>
-                  <input 
-                    v-model="education.ext" 
-                    placeholder="Extension"  
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                </div>
-
-                <!-- Diploma Completion -->
-                <div>
-                  <label class="block text-dark_gray">Have you completed the degree/diploma?</label>
-                  <select 
-                    v-model="education.diploma" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-
-                <!-- Another Name Used -->
-                <div>
-                  <label class="block text-dark_gray">Have you used any other name besides the one on your current government ID card?</label>
-                  <select 
-                    v-model="education.another_name" 
-                    class="w-full px-3 py-2 border-light_gray rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
-                  >
-                    <option value="">Select</option>
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                  </select>
-                </div>
-                
-              </div>
-
-              <!-- Remove Button (Removed from here as it's now moved next to toggle) -->
-              <!--
-              <div class="flex justify-end">
-                <button 
-                  @click="confirmRemove(education.id)" 
-                  class="bg-warn hover:bg-warn_hover text-white px-4 py-2 rounded-md"
-                >
-                  Delete Record
-                </button>
-              </div>
-              -->
-            </div>
-          </transition>
-        </div>
+        <!-- Location Text Field -->
+        <FieldContainer>
+          <StyledInput
+            labelText="Location Text"
+            :isMandatory="false"
+            infoText="Additional location details (optional)."
+            inputType="text"
+            name="location_text"
+            :id="`location_text-${education.id}`"
+            v-model="education.location_text"
+            validationMessage="You can edit the message."
+          />
+        </FieldContainer> 
       </div>
 
-      <!-- Add and Save Buttons -->
-      <div class="flex justify-center items-center mt-6 space-x-4">
-        <button 
-          @click="addEducation" 
-          class="bg-primary hover:bg-primary_hover text-white px-4 py-2 rounded-md"
-        >
-          Add Education Record
-        </button>
-        <button 
-          @click="saveRequest" 
-          :disabled="isSaving"
-          class="bg-secondary hover:bg-secondary_hover text-white px-4 py-2 rounded-md"
-        >
-          <span v-if="!isSaving">Save Request</span>
-          <span v-else>Saving...</span>
-        </button>
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <!-- From Date -->
+        <FieldContainer>
+          <StyledInput 
+            id="from_date" 
+            name="from_date" 
+            labelText="From Date" 
+            isMandatory="true" 
+            infoText="Start date of your education." 
+            inputType="date" 
+            v-model="education.from_date" 
+            :isValid="validateFromDate(education.from_date)"
+          />
+        </FieldContainer>
+
+        <!-- To Date -->
+        <FieldContainer>
+          <StyledInput 
+            id="to_date" 
+            name="to_date" 
+            labelText="To Date" 
+            isMandatory="true" 
+            infoText="End date of your education." 
+            inputType="date" 
+            v-model="education.to_date"
+            :isValid="validateToDate(education.to_date)" 
+            validationMessage="To Date is required."
+          />
+        </FieldContainer>
       </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <!-- Phone Field -->
+        <FieldContainer>
+          <StyledInput
+            labelText="Phone"
+            :isMandatory="true"
+            infoText="+999-77885951"
+            inputType="phone"
+            name="phone"
+            :id="`phone-${education.id}`"
+            v-model="education.phone"
+            :isValid="validatePhone(education.phone)" 
+            validationMessage="Valid phone number is required."
+          />
+        </FieldContainer>
+        
+        <!-- Ext Field -->
+        <FieldContainer>
+          <StyledInput
+            labelText="Ext"
+            :isMandatory="false"
+            infoText="Extension (optional)"
+            inputType="text"
+            name="ext"
+            :id="`ext-${education.id}`"
+            v-model="education.ext"
+            validationMessage="You can edit the message."
+          />
+        </FieldContainer>      
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <!-- Diploma Select -->
+        <FieldContainer>
+          <Select
+            labelText="Diploma"
+            :isMandatory="true"
+            infoText="Select your highest diploma."
+            name="diploma"
+            :id="`diploma-${education.id}`"
+            :options="optionsDiploma"
+            v-model="education.diploma"
+            :isValid="validateDiploma(education.diploma)"
+            validationMessage="Diploma is required."
+          />
+        </FieldContainer>
+
+        <!-- Another Name Select -->
+        <FieldContainer>
+          <Select
+            labelText="Another Name"
+            :isMandatory="false"
+            infoText="Do you have another name used during your education?"
+            name="another_name"
+            :id="`another_name-${education.id}`"
+            :options="optionsAnotherName"
+            v-model="education.another_name"
+            :isValid="validateAnotherName(education.another_name)"
+            validationMessage="You can edit the message."
+          />
+        </FieldContainer>
+      </div>
+
+      <!-- Save Education Button -->
+      <div class="flex justify-end py-2">
+        <Button level="primary" @clicked="saveEducation(index)">Save</Button>
+      </div>
+    </FieldsToggleContainer>
+
+    <!-- Add Education Button -->
+    <div class="flex justify-center py-3">
+      <Button level="secondary" @clicked="addEducation">+ Add Education Information</Button>
     </div>
-    
-    <div v-else class="flex justify-center items-center h-full">
-      <p class="text-dark_gray">Loading...</p>
-    </div>
-    </div>    
-   <!-- <div class="flex justify-center py-3"><Button level="secondary" @clicked="addCompany">+ add company</Button></div>
-    </div> -->
+  </div>
 </template>
 <script setup>
-// ========================
-// Data
-const companies = ref(1);
-// Props
-const props = defineProps({
-	stepData :{
-		type: Object,
-		required:true
-	}
-});
+import { ref, computed, watch, reactive, nextTick } from 'vue'
+import { createDocumentResource } from 'frappe-ui'
+import { useToast } from 'vue-toastification'
+import { v4 as uuidv4 } from 'uuid'
 
-// Methods
-const handleInput = function(value) {
-	props.stepData[value.name]["value"] = value.value; 
-	props.stepData[value.name]["isValid"] = true; 
-	props.stepData[value.name]["validationMessage"] = null;
-}
-// ========================
+// المكونات
+import Button from '../../components/button.vue'
+import FieldContainer from '../../components/fieldContainer.vue'
+import FieldsToggleContainer from '../../components/fieldsToggleContainer.vue'
+import StyledInput from '../../components/styledInput.vue'
+import Autocomp from '../../components/autocomp.vue'
+import Select from '../../components/select.vue'
 
-// ========Start new================
-import { createDocumentResource, ErrorMessage } from 'frappe-ui'
-import { ref, watch, reactive, nextTick, computed } from 'vue'
-// import { v4 as uuidv4 } from 'uuid' // For unique IDs
 import { location } from '../../data/useAddressLogic'
-import { useToast } from "vue-toastification" // Optional: Toast Notifications
 
-// Initialize toast
+// تهيئة Toast
 const toast = useToast()
 
-// Create the document resource
+// مورد المستند
 const request = createDocumentResource({
   doctype: 'Verification Instructions Request',
-  name: 'VIR-2024-26-09-000007', // Uncomment to create a new request
+  name: 'VIR-2024-26-09-000007', // يمكنك تغيير الاسم حسب الحاجة
+  // auto: true,
 })
 
-// Computed properties for dropdown options
-const optionCountry = computed(() => {
-  return location.data
+// خيارات Diploma
+const optionsDiploma = reactive([
+  { value: "High School", label: "High School" },
+  { value: "Associate Degree", label: "Associate Degree" },
+  { value: "Bachelor's Degree", label: "Bachelor's Degree" },
+  { value: "Master's Degree", label: "Master's Degree" },
+  { value: "Doctorate", label: "Doctorate" },
+  { value: "Other", label: "Other" },
+])
+
+// خيارات Another Name
+const optionsAnotherName = reactive([
+  { value: "Yes", label: "Yes" },
+  { value: "No", label: "No" },
+])
+
+// الحصول على خيارات الدولة
+const getOptionCountry = (education) => {
+  const options = location.data
     .filter(loc => loc.location_type === 'Country')
     .map(loc => ({
       label: loc.location_name,
       value: loc.location_name
     }))
-})
 
-const getOptionCity = (country) => {
-  if (!country) return []
-  return location.data
-    .filter(loc => loc.location_type === 'City' && loc.parent_location === country)
+  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
+  if (education.country && !options.some(opt => opt.value === education.country)) {
+    options.push({
+      label: education.country,
+      value: education.country
+    })
+  }
+
+  return options
+}
+
+// الحصول على خيارات المدينة
+const getOptionCity = (education) => {
+  if (!education.country) return []
+
+  const options = location.data
+    .filter(loc => loc.location_type === 'City' && loc.parent_location === education.country)
     .map(loc => ({
       label: loc.location_name,
       value: loc.location_name
     }))
+
+  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
+  if (education.city && !options.some(opt => opt.value === education.city)) {
+    options.push({
+      label: education.city,
+      value: education.city
+    })
+  }
+
+  return options
 }
 
-const getOptionGovernorate = (city) => {
-  if (!city) return []
-  return location.data
-    .filter(loc => loc.location_type === 'Governorate' && loc.parent_location === city)
+// الحصول على خيارات المحافظة
+const getOptionGovernorate = (education) => {
+  if (!education.city) return []
+
+  const options = location.data
+    .filter(loc => loc.location_type === 'Governorate' && loc.parent_location === education.city)
     .map(loc => ({
       label: loc.location_name,
       value: loc.location_name
     }))
+
+  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
+  if (education.governorate && !options.some(opt => opt.value === education.governorate)) {
+    options.push({
+      label: education.governorate,
+      value: education.governorate
+    })
+  }
+
+  return options
 }
 
-// Initialize education_information as an array if not present
+// التعامل مع تغيير الدولة
+const handleCountryChange = (index, value) => {
+  const education = request.doc.education_information[index]
+  education.country = value.value
+  education.city = '' // إعادة تعيين المدينة عند تغيير الدولة
+  education.governorate = '' // إعادة تعيين المحافظة عند تغيير الدولة
+}
+
+// التعامل مع تغيير المدينة
+const handleCityChange = (index, value) => {
+  const education = request.doc.education_information[index]
+  education.city = value.value
+  education.governorate = '' // إعادة تعيين المحافظة عند تغيير المدينة
+}
+
+// التعامل مع تغيير المحافظة
+const handleGovernorateChange = (index, value) => {
+  const education = request.doc.education_information[index]
+  education.governorate = value.value
+}
+
+// التعامل مع تغيير نوع الدبلوم
+const handleDiplomaChange = (index, value) => {
+  const education = request.doc.education_information[index]
+  education.diploma = value.value
+}
+
+// التعامل مع تغيير Another Name
+const handleAnotherNameChange = (index, value) => {
+  const education = request.doc.education_information[index]
+  education.another_name = value.value
+}
+
+// تهيئة education_information
 watch(() => request.doc, (newDoc) => {
-  if (newDoc && !newDoc.education_information) {
-    newDoc.education_information = []
+  if (newDoc) {
+    if (!newDoc.education_information) {
+      // تهيئة education_information كمصفوفة فارغة إذا لم تكن موجودة
+      newDoc.education_information = []
+    } else {
+      // التأكد من تهيئة جميع الحقول في الإدخالات الحالية
+      newDoc.education_information.forEach(education => {
+        education.name_of_school_or_college_university = education.name_of_school_or_college_university || ''
+        education.country = education.country || ''
+        education.city = education.city || ''
+        education.governorate = education.governorate || ''
+        education.location_text = education.location_text || ''
+        education.from_date = education.from_date || ''
+        education.to_date = education.to_date || ''
+        education.field_of_study_or_major = education.field_of_study_or_major || ''
+        education.phone = education.phone || ''
+        education.ext = education.ext || ''
+        education.diploma = education.diploma || ''
+        education.another_name = education.another_name || ''
+      })
+    }
   }
 }, { immediate: true })
 
-// Manage open sections
-const openSections = reactive({})
-
-const toggleSection = (id) => {
-  openSections[id] = !openSections[id]
+// تهيئة افتراضية
+if (!request.doc || !request.doc.education_information) {
+  if (request.doc) {
+    request.doc.education_information = []
+  } else {
+    // التعامل مع الحالة التي يكون فيها request.doc في البداية null
+    request.doc = {
+      education_information: []
+    }
+  }
 }
 
-const isOpen = (id) => {
-  return openSections[id]
-}
-
-// Manage errors
-const errors = ref([])
-
-// Add a new education record
+// إضافة سجل تعليمي جديد
 const addEducation = () => {
   const newEducation = {
-    // id: uuidv4(), // Use UUID for unique ID
+    id: uuidv4(), // معرف فريد
+    name_of_school_or_college_university: '',
     country: '',
     city: '',
     governorate: '',
-    continuous: false,
-    name_of_school_or_college_university: '',
+    location_text: '',
+    from_date: '',
+    to_date: '',
     field_of_study_or_major: '',
     phone: '',
     ext: '',
     diploma: '',
-    date_enrolled_from: '',
-    date_enrolled_to: '',
     another_name: '',
-    selectedCountry: '',
-    selectedCity: ''
   }
   request.doc.education_information.push(newEducation)
   nextTick(() => {
+    // إذا كنت تستخدم مكون FieldsToggleContainer مع إمكانية فتح الأقسام، يمكنك فتح القسم الجديد هنا
     openSections[newEducation.id] = true
   })
 }
 
-// Confirm before removing an education record
-const confirmRemove = (id) => {
-  if (confirm('Are you sure you want to delete this education record?')) {
-    removeEducation(id)
-  }
-}
-
-// Remove an education record
-// const removeEducation = (id) => {
-//   const index = request.doc.education_information.findIndex(edu => edu.id === id)
-//   if (index !== -1) {
-//     request.doc.education_information.splice(index, 1)
-//     delete openSections[id]
-//   }
-// }
-
- // **4. Function to delete an education record from the sub-table based on the index**
- const removeEducation = (id) => {
-    const index = request.doc.education_information.findIndex(edu => edu.id === id)
-    if (index !== -1) {
-      request.doc.education_information.splice(index, 1)
-      delete openSections[id]
-    }
-  }
-// Save the request
-const isSaving = ref(false)
-
+// حفظ الطلب بالكامل
 const saveRequest = async () => {
-  errors.value = [] // Reset errors before validation
-
-  request.doc.education_information.forEach((education, index) => {
-    if (!education.name_of_school_or_college_university) {
-      errors.value.push(`Name of School or College/University is required in record number ${index + 1}.`)
-    }
-    if (!education.field_of_study_or_major) {
-      errors.value.push(`Field of Study or Major is required in record number ${index + 1}.`)
-    }
-    if (!education.country) {
-      errors.value.push(`Country is required in record number ${index + 1}.`)
-    }
-    if (!education.city) {
-      errors.value.push(`City is required in record number ${index + 1}.`)
-    }
-    if (!education.governorate) {
-      errors.value.push(`Governorate is required in record number ${index + 1}.`)
-    }
-    if (!education.diploma) {
-      errors.value.push(`Diploma completion status is required in record number ${index + 1}.`)
-    }
-    if (!education.date_enrolled_from) {
-      errors.value.push(`Start date is required in record number ${index + 1}.`)
-    }
-    if (!education.date_enrolled_to) {
-      errors.value.push(`End date is required in record number ${index + 1}.`)
-    }
-
-    // Phone pattern validation
-    // const phonePattern = /^[0-9]{10,15}$/
-    // if (education.phone && !phonePattern.test(education.phone)) {
-    //   errors.value.push(`Invalid phone number in record number ${index + 1}.`)
-    // }
-  })
-
-  if (errors.value.length > 0) {
-    return
-  }
-
-  isSaving.value = true
   try {
-    await request.setValue.submit({
-      education_information: request.doc.education_information,
-      // You can add other fields if necessary
-    })
-    toast.success('Request has been successfully saved!')
+    await request.setValue.submit(request.doc)
+    toast.success('تم حفظ الطلب بنجاح!')
   } catch (error) {
-    errors.value.push(`An error occurred while saving the request: ${error.message}`)
-  } finally {
-    isSaving.value = false
+    console.error('فشل في حفظ الطلب:', error)
+    toast.error('فشل في حفظ الطلب.')
   }
 }
 
-// Format date (if needed elsewhere)
-const formatDate = (dateStr) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US')
+// حفظ سجل تعليمي فردي
+const saveEducation = async (index) => {
+  try {
+    // يمكنك تعديل هذا الجزء لحفظ السجل التعليمي الفردي حسب إعدادات الـ Backend الخاص بك
+    await request.setValue.submit(request.doc)
+    toast.success(`تم حفظ التعليم ${index + 1} بنجاح!`)
+  } catch (error) {
+    console.error(`فشل في حفظ التعليم ${index + 1}:`, error)
+    toast.error(`فشل في حفظ التعليم ${index + 1}.`)
+  }
 }
-// ===========End new=============
 
+// دوال التحقق من الصحة
+const validateNameOfSchool = (name) => {
+  return typeof name === 'string' && name.trim() !== ''
+}
 
+const validateFieldOfStudy = (field) => {
+  return typeof field === 'string' && field.trim() !== ''
+}
 
+const validateCountry = (country) => {
+  return typeof country === 'string' && country.trim() !== ''
+}
+
+const validateCity = (city) => {
+  return typeof city === 'string' && city.trim() !== ''
+}
+
+const validateGovernorate = (governorate) => {
+  return typeof governorate === 'string' && governorate.trim() !== ''
+}
+
+const validateFromDate = (from_date) => {
+  return typeof from_date === 'string' && from_date.trim() !== ''
+}
+
+const validateToDate = (to_date) => {
+  return typeof to_date === 'string' && to_date.trim() !== ''
+}
+
+const validatePhone = (phone) => {
+  const phoneRegex = /^\+?[0-9\-]{7,15}$/
+  return phoneRegex.test(phone)
+}
+
+const validateDiploma = (diploma) => {
+  return typeof diploma === 'string' && diploma.trim() !== ''
+}
+
+const validateAnotherName = (another_name) => {
+  // بما أن هذا الحقل اختياري، يمكن اعتباره صالحًا دائمًا أو إضافة تحقق إضافي إذا لزم الأمر
+  return true
+}
 </script>
-
-<style scoped>
-.accordion-enter-active, .accordion-leave-active {
-  transition: max-height 0.3s ease;
-}
-.accordion-enter-from, .accordion-leave-to {
-  max-height: 0;
-  overflow: hidden;
-}
-/* Optional: Add more styles as needed */
-</style>
