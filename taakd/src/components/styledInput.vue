@@ -12,7 +12,7 @@
     >
       {{ labelText }}
       <!-- Mandatory indicator -->
-      <span :v-if="isMandatory" class="ml-1 text-red-500">*</span>
+      <span v-if="isMandatory" class="ml-1 text-red-500">*</span>
       <!-- Info icon -->
       <span
         v-if="infoText"
@@ -51,14 +51,13 @@
       :class="[
         'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-none',
         {
-          'border-1 border-mid_gray focus:border-black focus:ring-0':
-            isValid === null,
+          'border-1 border-mid_gray focus:border-black focus:ring-0': isValid === null,
           'border-1 border-warn focus:ring-warn': isValid === false,
           'border-3 border-secondary focus:ring-secondary': isValid === true,
         },
       ]"
-      v-model="inputValue"
-      @input="sendValueToParent"
+      :value="modelValue"
+      @input="onInput"
       placeholder="Enter at least 3 characters"
     />
 
@@ -78,79 +77,57 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue';
 import FadeInOut from "./fadeInOut.vue";
-import { defineEmits } from 'vue';
-const emit = defineEmits(['input-change']); // Declare the emitted event
 
-const sendValueToParent = () => {
-  emit('input-change', {name:props.name,
-		value:inputValue.value}); // Emit the event with a message
-};
-
-import { ref } from 'vue';
-
-
-// Data
-const inputValue = ref("");
-const showInfo = ref(false);
-
-// Props
+// تعريف props لدعم v-model
 const props = defineProps({
-	id: { type: String,
-		required: true },
-	name: { type: String,
-		required: true },
-	labelText: {
-		type: String,
-		default: "Label",
-	},
-	labelColor: {
-		type: String,
-		default: "dark_gray",
-	},
-	isMandatory: {
-		type: Boolean,
-	},
-	infoText: {
-		type: String,
-		default: "",
-	},
-	inputType: {
-		type: String,
-		default: "text",
-	},
-	isValid:  {
-		type: Boolean,
-     
-	}, // The validity state of the input (true, false, or null)
-	validationMessage: {
-		type: String,
-		default: "text",
-	},
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+  labelText: {
+    type: String,
+    default: "Label",
+  },
+  labelColor: {
+    type: String,
+    default: "dark_gray",
+  },
+  isMandatory: {
+    type: Boolean,
+    default: false,
+  },
+  infoText: {
+    type: String,
+    default: "",
+  },
+  inputType: {
+    type: String,
+    default: "text",
+  },
+  isValid: {
+    type: [Boolean, null],
+    default: null,
+  }, // The validity state of the input (true, false, or null)
+  validationMessage: {
+    type: String,
+    default: "",
+  },
+  modelValue: {
+    type: String,
+    default: "",
+  },
 });
 
-// Methods
-// const sendValueToParent = function() {
-// 	this.$emit("input-change",{name:props.name,
-// 		value:inputValue.value} ); // Emit event to parent
-// }
+// تعريف emit لدعم v-model
+const emit = defineEmits(['update:modelValue']);
 
-// const validateInput = function() {
-// 	// Example validation logic: Input must be at least 3 characters long
-// 	if (inputValue.value.length < 3) {
-// 		props.isValid = false;
-// 		props.validationMessage = "Input must be at least 3 characters long";
-// 	} else {
-// 		props.isValid = true;
-// 	}
-// 	sendValueToParent();
-// }
+// إدارة حالة عرض المعلومات
+const showInfo = ref(false);
 
-
-
-
-
-
+// دالة معالجة الإدخال وإصدار الحدث لتحديث القيمة في المكون الأب
+const onInput = (event) => {
+  emit('update:modelValue', event.target.value);
+};
 </script>
 
 <style scoped>
