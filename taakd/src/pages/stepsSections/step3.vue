@@ -11,6 +11,7 @@
       :title="employment.company || `Employment ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
+
         <!-- Company Field -->
         <FieldContainer>
           <StyledInput
@@ -27,20 +28,47 @@
         </FieldContainer> 
 
      <!-- Name of Employer Field -->
-     <FieldContainer>
-            <StyledInput
-              labelText="Name of Your Employer"
-              :isMandatory="true"
-              infoText="Name of Your Employer"
-              inputType="text"
-              name="name_of_your_employer"
-              :id="`name_of_your_employer-${employment.id}`"
-              v-model="employment.name_of_your_employer"
-              :isValid="validateNameOfYourEmployer(employment.name_of_your_employer)"
-              validationMessage="You can edit the message."
-            />
-          </FieldContainer> 
+        <FieldContainer>
+                <StyledInput
+                  labelText="Name of Your Employer"
+                  :isMandatory="true"
+                  infoText="Name of Your Employer"
+                  inputType="text"
+                  name="name_of_your_employer"
+                  :id="`name_of_your_employer-${employment.id}`"
+                  v-model="employment.name_of_your_employer"
+                  :isValid="validateNameOfYourEmployer(employment.name_of_your_employer)"
+                  validationMessage="You can edit the message."
+                />
+        </FieldContainer> 
+      </div>
 
+   
+
+        <FieldContainer>
+          <CheckBox 
+            :name="`permission-${employment.id}`" 
+            :id="`permission-${employment.id}`" 
+            v-model="employment.contact_the_employer"
+          >
+          Do we have permission to contact this current employer?
+          </CheckBox>
+        </FieldContainer>
+
+        
+        <FieldContainer>
+          <CheckBox 
+            :name="`permission-${employment.id}`" 
+            :id="`permission-${employment.id}`" 
+            v-model="employment.issuing_salary"
+          >
+          Does this employer issue your paycheck? 
+
+          </CheckBox>
+        </FieldContainer>
+
+      <!-- ******** Start Company Location ******** -->
+      <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Country Autocomplete -->
         <FieldContainer>
           <Autocomp
@@ -91,8 +119,201 @@
             validationMessage="Governorate is required."
           />
         </FieldContainer>
+     <!-- Location Text of Employer Field -->
+        <FieldContainer>
+            <StyledInput
+              labelText="Location Text"
+              :isMandatory="false"
+              infoText="Location Text"
+              inputType="text"
+              name="location_text"
+              :id="`location_text-${employment.id}`"
+              v-model="employment.location_text"
+              validationMessage="You can edit the message."
+            />
+        </FieldContainer> 
       </div>
-   
+      <!-- ******** Ende Company Location ******** -->
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+      <!-- Permission Checkbox -->
+      <FieldContainer>
+          <CheckBox 
+            :name="`permission-${employment.id}`" 
+            :id="`permission-${employment.id}`" 
+            v-model="employment.continuous"
+          >
+          Continuous
+          </CheckBox>
+        </FieldContainer>   
+              
+        
+        <!-- Activity Has Stopped Checkbox -->
+      <FieldContainer>
+          <CheckBox 
+            :name="`permission-${employment.id}`" 
+            :id="`permission-${employment.id}`" 
+            v-model="employment.activity_has_stopped"
+          >
+          Activity Has Stopped
+          </CheckBox>
+        </FieldContainer>
+        
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+          <!-- From Date -->
+          <FieldContainer>
+            <StyledInput 
+              id="from_date" 
+              name="from_date" 
+              labelText="From" 
+              isMandatory="true" 
+              infoText="From Date" 
+              inputType="date" 
+              v-model="employment.from_date" 
+              :isValid="validateFromDate(employment.from_date)"
+            />
+          </FieldContainer>
+  
+          <!-- To Date -->
+          <FieldContainer>
+            <StyledInput 
+              id="end_date" 
+              name="end_date" 
+              labelText="End" 
+              isMandatory="true" 
+              infoText="End Date" 
+              inputType="date" 
+              v-model="employment.end_date"
+              :isValid="validateEndDate(employment.end_date)" 
+            />
+          </FieldContainer>
+
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+                  <!-- Phone Field -->
+          <FieldContainer>
+            <StyledInput
+              labelText="Phone"
+              :isMandatory="true"
+              infoText="+999-77885951"
+              inputType="text"
+              name="phone"
+              :id="`phone-${employment.id}`"
+              v-model="employment.phone"
+              :isValid="validatePhone(employment.phone)" 
+              validationMessage="You can edit the message."
+            />
+          </FieldContainer>
+          
+            <!-- Ext Field -->
+          <FieldContainer>
+            <StyledInput
+              labelText="Ext"
+              :isMandatory="false"
+              infoText="Ext"
+              inputType="text"
+              name="ext"
+              :id="`ext-${employment.id}`"
+              v-model="employment.ext"
+              validationMessage="You can edit the message."
+            />
+          </FieldContainer>      
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+          <!-- Last Position Held -->
+          <FieldContainer>
+            <StyledInput
+              labelText="Official Job Title Held Currently"
+              :isMandatory="true"
+              infoText="Official Job Title Held Currently"
+              inputType="text"
+              name="official_job_title_held_currently"
+              :id="`official_job_title_held_currently-${employment.id}`"
+              v-model="employment.official_job_title_held_currently"
+              :isValid="validateOfficialJobTitleHeldCurrently(employment.official_job_title_held_currently)" 
+              validationMessage="You can edit the message."
+            />
+          </FieldContainer> 
+
+          <!-- Type of Employment Select -->
+          <!-- <FieldContainer>
+            <Select 
+              id="type_of_employment" 
+              name="type_of_employment"  
+              labelText="Type of Employment" 
+              isMandatory="true" 
+              infoText="Type of Employment"   
+              :options="optionsTypeEmployment"
+              v-model="employment.type_of_employment"
+              :isValid="validateTypeOfEmployment(employment.type_of_employment)" 
+              @input-change="handleInput(employment.id, 'type_of_employment', $event)"
+            />
+          </FieldContainer> -->
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+      <!-- The Company has Different Names Checkbox -->
+      <FieldContainer>
+          <CheckBox 
+            :name="`permission-${employment.id}`" 
+            :id="`permission-${employment.id}`" 
+            v-model="employment.the_company_has_different_names"
+          >
+          The Company has Different Names
+          </CheckBox>
+        </FieldContainer> 
+
+         <!-- Nickname Checkbox -->
+          <FieldContainer>
+            <CheckBox 
+              :name="`nickname_checkbox-${employment.id}`" 
+              :id="`nickname_checkbox-${employment.id}`" 
+              v-model="employment.you_have_a_nicknamecx"
+            >
+            You Have a Nickname?
+            </CheckBox>
+          </FieldContainer> 
+
+        <!-- Different Company Names Field -->
+        <FieldContainer >
+          <StyledInput
+            labelText="Different Company Names"
+            :isMandatory="false"
+            infoText="Different Company Names"
+            inputType="text"
+            name="different_company_names"
+            :id="`different_company_names-${employment.id}`"
+            v-model="employment.different_company_names"
+            :isValid="false"
+            validationMessage="You can edit the message."
+          />
+        </FieldContainer>  
+
+          <!-- Nickname Field -->
+          <FieldContainer >
+            <StyledInput
+              labelText="Nickname"
+              :isMandatory="false" 
+              infoText="Nickname"
+              inputType="text"
+              name="nickname"
+              :id="`nickname-${employment.id}`"
+              v-model="employment.nickname"
+              :isValid="false"
+              validationMessage="You can edit the message."
+            />
+          </FieldContainer>         
+      </div>
+          <!-- File Upload -->
+        <FileUpload
+          :name="`file-${employment.id}`"
+          :id="`file-${employment.id}`"
+          v-model="employment.file"
+        />
+        
       <!-- Save Employment Button -->
       <div class="flex justify-end py-2">
         <Button level="primary" @clicked="saveEmployment(index)">Save</Button>
@@ -119,6 +340,9 @@ import FieldsToggleContainer from '../../components/fieldsToggleContainer.vue'
 import StyledInput from '../../components/styledInput.vue'
 import Autocomp from '../../components/autocomp.vue'
 import { location } from '../../data/useAddressLogic'
+import CheckBox from '../../components/checkBox.vue'
+import Select from '../../components/select.vue'
+import FileUpload from '../../components/fileUpload.vue'
 
 // Initialize Toast
 const toast = useToast()
@@ -127,8 +351,16 @@ const toast = useToast()
 const request = createDocumentResource({
   doctype: 'Verification Instructions Request',
   name: 'VIR-2024-26-09-000007',
+  // auto: true,
 })
 
+ // Employment Type Options
+  const optionsTypeEmployment = reactive([
+    { value: "Full-Time", label: "Full-Time" },
+    { value: "Part-Time", label: "Part-Time" },
+    { value: "Contract", label: "Contract" },
+    { value: "Internship", label: "Internship" },
+  ])
 const getOptionCountry = (employment) => {
   const options = location.data
     .filter(loc => loc.location_type === 'Country')
@@ -222,11 +454,24 @@ watch(() => request.doc, (newDoc) => {
       // التأكد من تهيئة جميع الحقول في الإدخالات الحالية
       newDoc.employment_history.forEach(employment => {
         employment.company = employment.company || ''
+        employment.contact_the_employer = employment.contact_the_employer || ''
+        employment.issuing_salary = employment.issuing_salary || ''
         employment.name_of_your_employer = employment.name_of_your_employer || ''
         employment.country = employment.country || ''
         employment.city = employment.city || ''
         employment.governorate = employment.governorate || ''
-        
+        employment.location_text = employment.location_text || ''
+        employment.continuous = employment.continuous || ''
+        employment.activity_has_stopped = employment.activity_has_stopped || ''
+        employment.from_date = employment.from_date || ''
+        employment.end_date = employment.end_date || ''
+        employment.phone = employment.phone || ''
+        employment.ext = employment.ext || ''
+        employment.official_job_title_held_currently = employment.official_job_title_held_currently || ''
+        // employment.type_of_employment = employment.type_of_employment || ''
+        employment.the_company_has_different_names = employment.the_company_has_different_names || ''
+        employment.different_company_names = employment.different_company_names || ''
+        employment.you_have_a_nicknamecx = employment.you_have_a_nicknamecx || ''
       })
     }
   }
@@ -249,10 +494,24 @@ const addEmployment = () => {
   const newEmployment = {
     id: uuidv4(), // Unique identifier
     company: '',
+    contact_the_employer: '',
+    issuing_salary: '',
     name_of_your_employer: '',
     country: '',
     city: '',
     governorate: '',
+    location_text: '',
+    continuous: '',
+    activity_has_stopped: '',
+    from_date: '',
+    end_date: '',
+    phone: '',
+    ext: '',
+    official_job_title_held_currently: '',
+    // type_of_employment: '',
+    the_company_has_different_names: '',
+    different_company_names: '',
+    you_have_a_nicknamecx: '',
   }
   request.doc.employment_history.push(newEmployment)
   nextTick(() => {
@@ -303,6 +562,26 @@ const validateCity = (city) => {
 
 const validateGovernorate = (governorate) => {
   return typeof governorate === 'string' && governorate.trim() !== ''
+}
+
+const validateFromDate = (from_date) => {
+  return typeof from_date === 'string' && from_date.trim() !== ''
+}
+
+const validateEndDate = (end_date) => {
+  return typeof end_date === 'string' && end_date.trim() !== ''
+}
+
+const validatePhone = (phone) => {
+  return typeof phone === 'string' && phone.trim() !== ''
+}
+
+// const validateTypeOfEmployment= (type_of_employment) => {
+//   return typeof type_of_employment === 'string' && type_of_employment.trim() !== ''
+// }
+
+const validateOfficialJobTitleHeldCurrently= (official_job_title_held_currently) => {
+  return typeof official_job_title_held_currently === 'string' && official_job_title_held_currently.trim() !== ''
 }
 </script>
 

@@ -150,7 +150,22 @@
               validationMessage="You can edit the message."
             />
           </FieldContainer> -->
-  
+          
+            <!-- Extension Field -->
+          <!-- <FieldContainer>
+            <StyledInput
+              labelText="Extension"
+              :isMandatory="true"
+              infoText="Extension"
+              inputType="text"
+              name="ext"
+              :id="`ext-${employment.id}`"
+              v-model="employment.ext"
+              :isValid="false"
+              validationMessage="You can edit the message."
+            />
+          </FieldContainer>       -->
+
           <!-- Type of Employment Select -->
           <!-- <FieldContainer>
             <Select 
@@ -165,20 +180,7 @@
             />
           </FieldContainer> -->
   
-          <!-- Extension Field -->
-          <!-- <FieldContainer>
-            <StyledInput
-              labelText="Extension"
-              :isMandatory="true"
-              infoText="Extension"
-              inputType="text"
-              name="ext"
-              :id="`ext-${employment.id}`"
-              v-model="employment.ext"
-              :isValid="false"
-              validationMessage="You can edit the message."
-            />
-          </FieldContainer>       -->
+
   
           <!-- Permission Checkbox -->
           <!-- <FieldContainer>
