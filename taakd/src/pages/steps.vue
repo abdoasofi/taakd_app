@@ -116,7 +116,7 @@ import objectConvertor from '../data/validate/convertor'
 import SnackBar from '../components/snackBar.vue'
 
 // Data
-const processed = ref(3)
+const processed = ref(0)
 const stepN = ref(2)
 
 const fieldsStep1 = ['name', 'first_name', 'last_name']
@@ -206,9 +206,9 @@ const nextStep = function () {
 
   // حسب فرابي شوف اذا تحتاج تستخدم متغيرات ترسلها للكمبوننت حق الستيب ومنها تتعبي اذا الفاليديشن حق الابناء الحقول بارسال القيم الي فوق
 
-  if (processed.value === 0) {
-    step1Save()
-  }
+  // if (processed.value === 0) {
+  //   step1Save()
+  // }
   // if(processed.value===1){
   // 	step2Save()
   // }
@@ -224,8 +224,8 @@ const nextStep = function () {
   // if(processed.value===5){
   // 	step6Save()
   // }
-
- 
+  processed.value++
+  stepN.value++
 }
 
 const step1Save = function () {
@@ -278,6 +278,6 @@ const step6Save = function () {
   // مالم اعرض الرت او عالج الفاليديشن
 }
 const nextNum = computed(() => {
-  return processed.value
+  return processed.value++
 })
 </script>

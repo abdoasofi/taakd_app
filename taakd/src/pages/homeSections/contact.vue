@@ -2,7 +2,8 @@
   <div class="pt-6">
     <div class="flex gap-2 mb-2">
       <div class="w-7 lg:w-9 shrink-0">
-        <StyledIcon />
+        <!-- <StyledIcon /> -->
+       <VerificationInformation />
       </div>
       <Heading level="secondary" class="text-black" tag="h2"
         >Here you can follow the progress of your report and communicate with
@@ -112,7 +113,7 @@ import Autocomp from '../../components/autocomp.vue'
 import validateInputContact from '../../data/validate/validateInputContact'
 import objectConvertor from '../../data/validate/convertor'
 import { createRequestList, updateFieldsInRequestList } from '../../data/request'
-
+import VerificationInformation from '../../components/Icons/verificationInformation.vue'
 
 // Props
 const props = defineProps({

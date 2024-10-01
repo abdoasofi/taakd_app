@@ -1,11 +1,6 @@
 <template>
   <div class="pt-3 container">
     <h3 class="text-lg font-medium mb-3 text-black">1 Basic Information</h3>
-    <!-- <List>
-      <li>Instructions for Verifying Basic Information.</li>
-      <li>Instructions for Verifying Basic Information.</li>
-      <li>Instructions for Verifying Basic Information.</li>
-    </List> -->
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
@@ -93,114 +88,8 @@
         
       />
     </FieldContainer>
-
-    <Toggle>
-      <FieldContainer>
-        <StyledInput
-          labelText="Alias Name"
-          :isMandatory="true"
-          infoText="Alias Name"
-          inputType="text"
-          name="AliasName2"
-          id="AliasName2"
-          
-        />
-      </FieldContainer>
-      <FieldContainer>
-        <StyledInput
-          labelText="Alias Name"
-          :isMandatory="true"
-          infoText="Alias Name"
-          inputType="text"
-          name="AliasName3"
-          id="AliasName3"
-          
-        />
-      </FieldContainer>
-    </Toggle>
-
-    <Info
-      text="Instructions for Verifying Basic Information Instructions for Verifying Basic Information."
-    />
-
-    <FieldsGroup title="Current mailing address">
-      <FieldContainer>
-        <StyledInput
-          labelText="Alias Name"
-          :isMandatory="true"
-          infoText="Alias Name"
-          inputType="text"
-          name="AliasName4"
-          id="AliasName4"
-          
-        />
-      </FieldContainer>
-
-      <Toggle>
-        <FieldContainer>
-          <StyledInput
-            labelText="Alias Name"
-            :isMandatory="true"
-            infoText="Alias Name"
-            inputType="text"
-            name="AliasName5"
-            id="AliasName5"
-            
-          />
-        </FieldContainer>
-        <FieldContainer>
-          <StyledInput
-            labelText="Alias Name"
-            ::isMandatory="true"
-            infoText="Alias Name"
-            inputType="text"
-            name="AliasName6"
-            id="AliasName6"
-            
-          />
-        </FieldContainer>
-      </Toggle>
-
-      <StyledtextArea
-        labelText="Alias Name"
-        ::isMandatory="true"
-        infoText="Alias Name"
-        inputType="text"
-        name="AliasName7"
-        id="AliasName7"
-        
-      />
-    </FieldsGroup>
   </div>
-  <div class="space-y-2">
-    <FieldsToggleContainer
-      v-for="n in companies"
-      :key="n"
-      :title="n === 1 ? 'Current Company' : `Company ${n}`"
-    >
-      <FieldContainer>
-        <StyledInput
-          labelText="Alias Name"
-          :isMandatory="true"
-          infoText="Alias Name"
-          inputType="text"
-          :name="`AliasName-${n}`"
-          :id="`AliasName-${n}`"
-          
-          :isValid="false"
-          :validationMessage="'you can edit message'"
-        />
-      </FieldContainer>
-      <FileUpload
-        :name="`file-${n}`"
-        :id="`file-${n}`"
-        
-      />
-    </FieldsToggleContainer>
-    <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addCompany">+ add company</Button>
-    </div>
-  </div>
+
 </template>
 
 <script setup>
