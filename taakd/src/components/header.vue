@@ -39,7 +39,7 @@
         </div>
        
           <div class="flex justify-around items-center gap-7 ">
-          <Button class="hidden lg:block flex"  level="secondary">
+          <Button class="hidden lg:block "  level="secondary">
             Contact Us
           </Button>
             <div class="min-h-4 max-h-7 aspect-square bg-dark_gray lg:hidden"></div>
