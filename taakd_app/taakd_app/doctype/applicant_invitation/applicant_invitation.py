@@ -109,7 +109,6 @@ class ApplicantInvitation(Document):
 		new_doc.user_id = self.email
 		new_doc.company_submitting_application = self.company_email
 		new_doc.language = self.language
-		new_doc.application_status = "Job Request"
 		new_doc.sales_invoice = sales_invoice_name
 		# new_doc.sales_invoice = sales_invoice_name
 		new_doc.insert(ignore_permissions = True)

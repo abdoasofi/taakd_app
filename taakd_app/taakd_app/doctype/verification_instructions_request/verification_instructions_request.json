@@ -422,11 +422,11 @@
    "label": "Subscribe to Text Messages"
   },
   {
-   "default": "Job Request",
+   "default": "New Request",
    "fieldname": "application_status",
    "fieldtype": "Select",
    "label": "Application Status",
-   "options": "Job Request\nVerification of Basic Information\nReview and Report Writing",
+   "options": "New Request\nIn Progress\nSubmitted\nVerification Started\nMore Info Needed\nWriting report\nReport is ready",
    "read_only": 1
   },
   {
@@ -515,7 +515,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-28 10:12:53.248290",
+ "modified": "2024-10-01 20:32:54.064689",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
