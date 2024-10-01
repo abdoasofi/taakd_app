@@ -50,11 +50,11 @@ const routes = [
     path: '/Step_6',
     component: () => import('@/pages/pagesOld/Step_6.vue'),
   },
-  {
-    name: 'Hiring',
-    path: '/Hiring',
-    component: () => import('@/pages/Hiring.vue'),
-  },
+  // {
+  //   name: 'Hiring',
+  //   path: '/Hiring',
+  //   component: () => import('@/pages/Hiring.vue'),
+  // },
   {
     name: 'reset',
     path: '/reset',

@@ -6,7 +6,7 @@
     <!-- <h3>{{ session.login }}</h3> -->
     <Button @click="updatePassword">Handle Password</Button>
     <Button @click="createUser">Create User</Button>
-    <Button @click="handlePassword">Test</Button>
+    <!-- <Button @click="handlePassword">Test</Button> -->
     <router-link to ="Step_1">
       <Button>Step 1</Button>
     </router-link>
@@ -96,14 +96,14 @@ const ping = createResource({
   auto: true,
 })
 
-function handlePassword(event) {
-  if (enterPassword.value == confirmPassword.value){
-    err = false
-  }
-  else{
-    err = true
-  }
-  } 
+// function handlePassword(event) {
+//   if (enterPassword.value == confirmPassword.value){
+//     err = false
+//   }
+//   else{
+//     err = true
+//   }
+//   } 
   
   const userList = createListResource({
   doctype: 'User',

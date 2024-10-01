@@ -279,8 +279,6 @@ const showDialog = ref(false);
   <script setup>
       import { createDocumentResource ,ErrorMessage} from 'frappe-ui'
       import { ref, watch, reactive, nextTick } from 'vue'
-      import FieldContainer from '../components/fieldContainer.vue';
-      import Autocomp from '../components/autocomp.vue';
       
       import {location} from '../data/useAddressLogic';
       import { computed } from 'vue';
