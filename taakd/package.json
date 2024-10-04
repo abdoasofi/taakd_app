@@ -16,7 +16,8 @@
     "vue-toastification": "2.0.0-rc.5",
     "uuid": "^9.0.0",
     "@tiptap/core": "^2.0.0",
-    "vue-signature-pad": "^1.0.0"
+    "vue-signature-pad": "^1.0.0",
+    "pinia": "^2.0.0"
 
   },
   "devDependencies": {
