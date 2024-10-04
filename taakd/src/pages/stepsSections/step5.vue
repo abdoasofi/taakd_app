@@ -1,3 +1,5 @@
+<!-- step5.vue -->
+
 <template>
   <div class="min-h-screen bg-background p-6">
     <div class="max-w-7xl mx-auto">
@@ -6,7 +8,7 @@
         <h1 class="text-4xl font-bold text-custom-green">Review your information</h1>
         <!-- <p class="text-mutedText mt-2">عرض شامل للبيانات المدخلة بطريقة احترافية وتفاعلية</p> -->
         <div class="mt-6">
-          <button @click="printReport" class="flex items-center justify-center px-6 py-3 bg-info/15 text-black srounded-md hover:bg-accent transition">
+          <button @click="printReport" class="flex items-center justify-center px-6 py-3 bg-info/15 text-black rounded-md hover:bg-accent transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17l4-4 4 4M6 13h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2z" />
             </svg>
@@ -15,13 +17,13 @@
         </div>
       </header>
 
-      <!-- الأقسام -->
+      <!-- Step 1: Personal Information -->
       <section class="mb-12">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
           <div class="bg-info/15 shadow-sm hover:bg-hover text-black px-2 py-1 text-sm font-medium rounded-lg">
             <h2 class="text-2xl font-semibold text-black flex items-center">
               Step 1: Personal Information
-              <svg  width="32" height="32" class="ml-2 font-black" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="32" height="32" class="ml-2 font-black" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.66699 25.3337H8.34899L21.9977 11.685L20.3157 10.003L6.66699 23.6517V25.3337ZM5.87233 27.3337C5.53077 27.3337 5.24455 27.2181 5.01366 26.987C4.78255 26.7561 4.66699 26.4699 4.66699 26.1283V23.8183C4.66699 23.4932 4.72944 23.1833 4.85433 22.8887C4.97899 22.594 5.15077 22.3372 5.36966 22.1183L22.2543 5.24132C22.4559 5.05821 22.6784 4.91677 22.922 4.81699C23.1658 4.71699 23.4213 4.66699 23.6887 4.66699C23.956 4.66699 24.2149 4.71444 24.4653 4.80933C24.716 4.90422 24.9379 5.0551 25.131 5.26199L26.7593 6.91066C26.9662 7.10377 27.1137 7.32599 27.2017 7.57733C27.2897 7.82866 27.3337 8.07999 27.3337 8.33133C27.3337 8.59955 27.2879 8.85544 27.1963 9.09899C27.1048 9.34277 26.9591 9.56544 26.7593 9.76699L9.88232 26.631C9.66344 26.8499 9.40666 27.0217 9.11199 27.1463C8.81733 27.2712 8.50744 27.3337 8.18233 27.3337H5.87233ZM21.142 10.8587L20.3157 10.003L21.9977 11.685L21.142 10.8587Z" fill="#FFFFFF"/>
               </svg>            
             </h2>
@@ -30,9 +32,12 @@
             <!-- محتوى القسم -->
             <div v-if="request.doc">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <InfoRow label="الاسم الكامل" :value="request.doc.employer_name" />
-                <InfoRow label="الاسم الكامل" :value="request.doc.full_name" />
-
+                <InfoRow label="اسم صاحب العمل" :value="request.doc.employer_name" />
+                <InfoRow label="الاسم الأول" :value="request.doc.first_name" />
+                <InfoRow label="اسم العائلة" :value="request.doc.last_name" />
+                <InfoRow label="اسم الأوسط" :value="request.doc.middle_name || 'N/A'" />
+                <InfoRow label="اللاحقة" :value="request.doc.suffix || 'N/A'" />
+                <InfoRow label="اسم المستعار" :value="request.doc.alias_name || 'N/A'" />
                 <!-- أضف المزيد من الحقول حسب الحاجة -->
               </div>
             </div>
@@ -43,7 +48,7 @@
         </div>
       </section>
 
-      <!-- قسم معلومات التعليم -->
+      <!-- Step 2: Education Information -->
       <section class="mb-12">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
           <div class="bg-info/15 shadow-sm hover:bg-hover text-black px-2 py-1 text-sm font-medium rounded-lg">
@@ -51,7 +56,7 @@
               Step 2: Education Information
               <svg width="32" height="32" class="ml-2" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M6.66699 25.3337H8.34899L21.9977 11.685L20.3157 10.003L6.66699 23.6517V25.3337ZM5.87233 27.3337C5.53077 27.3337 5.24455 27.2181 5.01366 26.987C4.78255 26.7561 4.66699 26.4699 4.66699 26.1283V23.8183C4.66699 23.4932 4.72944 23.1833 4.85433 22.8887C4.97899 22.594 5.15077 22.3372 5.36966 22.1183L22.2543 5.24132C22.4559 5.05821 22.6784 4.91677 22.922 4.81699C23.1658 4.71699 23.4213 4.66699 23.6887 4.66699C23.956 4.66699 24.2149 4.71444 24.4653 4.80933C24.716 4.90422 24.9379 5.0551 25.131 5.26199L26.7593 6.91066C26.9662 7.10377 27.1137 7.32599 27.2017 7.57733C27.2897 7.82866 27.3337 8.07999 27.3337 8.33133C27.3337 8.59955 27.2879 8.85544 27.1963 9.09899C27.1048 9.34277 26.9591 9.56544 26.7593 9.76699L9.88232 26.631C9.66344 26.8499 9.40666 27.0217 9.11199 27.1463C8.81733 27.2712 8.50744 27.3337 8.18233 27.3337H5.87233ZM21.142 10.8587L20.3157 10.003L21.9977 11.685L21.142 10.8587Z" fill="#FFFFFF"/>
-              </svg>            
+              </svg>
             </h2>
           </div>
           <div class="px-6 py-6">
@@ -90,7 +95,7 @@
         </div>
       </section>
 
-      <!-- قسم تاريخ التوظيف -->
+      <!-- Step 3: Employment History -->
       <section class="mb-12">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
           <div class="bg-info/15 shadow-sm hover:bg-hover text-black px-2 py-1 text-sm font-medium rounded-lg">
@@ -128,6 +133,17 @@
                     <InfoRow label="تفاصيل الموقع" :value="employment.location_text || 'N/A'" />
                   </div>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                  <div class="space-y-2">
+                    <InfoRow label="تاريخ البدء" :value="formatDate(employment.from_date)" />
+                    <InfoRow label="تاريخ الانتهاء" :value="formatDate(employment.end_date)" />
+                  </div>
+                  <div class="space-y-2">
+                    <InfoRow label="رقم الهاتف" :value="employment.phone" />
+                    <InfoRow label="الامتداد" :value="employment.ext || 'N/A'" />
+                  </div>
+                </div>
+                <!-- أضف المزيد من الحقول حسب الحاجة -->
               </div>
             </div>
             <div v-else>
@@ -137,7 +153,7 @@
         </div>
       </section>
 
-      <!-- قسم المؤهلات المهنية -->
+      <!-- Step 4: Professional Qualifications Verification -->
       <section class="mb-12">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
           <div class="bg-info/15 shadow-sm hover:bg-hover text-black px-2 py-1 text-sm font-medium rounded-lg">
@@ -203,11 +219,11 @@ import { ref, watch } from 'vue'
 import { createDocumentResource } from 'frappe-ui'
 import { useToast } from 'vue-toastification'
 import InfoRow from '../../components/InfoRow.vue' // تأكد من مسار المكون الفرعي
- 
+
 // استخدام Vue Router لجلب معرّف المستند ديناميكيًا (إذا كنت تستخدم)
 import { useRoute } from 'vue-router' 
 const route = useRoute()
-const docName = route.params.docName || 'VIR-2024-26-09-000007' // مثال: يمكن تغيير حسب تطبيقك
+const docName = route.params.docName || 'VIR-2024-26-09-000007' // مثال: يمكن تغيير الاسم حسب تطبيقك
 
 // مورد المستند
 const request = createDocumentResource({
@@ -285,8 +301,12 @@ watch(() => request.doc, (newDoc) => {
 }
 
 /* تحسين تصميم العناوين */
-.text-black s{
-  color: #ffffff;
+.text-black {
+  color: #000000;
+}
+
+.rounded-md {
+  border-radius: 0.375rem;
 }
 
 .font-bold {
@@ -403,8 +423,6 @@ watch(() => request.doc, (newDoc) => {
   border-radius: 0.375rem;
 }
 
-
-
 .transition {
   transition: all 0.3s ease;
 }
@@ -419,4 +437,3 @@ watch(() => request.doc, (newDoc) => {
   justify-content: center;
 }
 </style>
-
