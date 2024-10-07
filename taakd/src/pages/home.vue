@@ -1,10 +1,19 @@
 <template>
- 
-    <BaseLayout>
-      <div class="pb-6">
-        <BaseContainer>
-          <div class=" w-full py-3 pb-20">
-                    <div class="aspect-[1.376] h-10  mb-2 m-auto">
+  <BaseLayout class="relative">
+    <!-- SVG في الزاوية العلوية اليمنى -->
+    <div class="absolute top-20 right-72 m-4 z-80">
+      <svg width="250" height="304" viewBox="0 0 246 304" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.4">
+          <path opacity="0.5" d="M145.183 56.5759L118.636 115.644L326.514 134.956L287.685 221.354L0.000115452 190.836L63.5127 49.5171L145.183 56.5759Z" fill="#81C045"/>
+          <path opacity="0.3" d="M222.137 -13.6848L195.59 45.3832L403.468 64.6949L364.638 151.093L76.954 120.575L140.467 -20.7436L222.137 -13.6848Z" fill="#81C045"/>
+        </g>
+      </svg>
+    </div>
+
+    <div class="pb-6">
+      <BaseContainer>
+        <div class="w-full py-3 pb-20">
+          <div class="aspect-[1.376] h-10  mb-2 m-auto">
                       <svg width="150" height="150" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clip-path="url(#clip0_944_13802)">
                         <path d="M55.9662 21.9149V24.1236L62.7031 21.8174V25.0489L53.3271 28.1221V22.8374L55.9662 21.9149Z" fill="#81C045"/>
@@ -28,82 +37,88 @@
                         </clipPath>
                         </defs>
                         </svg>
-
-                    </div>
           </div>
-          <h1 class="text-sm text-secondary font-bold my-2 text-center w-full pt-5">Trust. Verify. Succeed</h1>
-          <div class="my-8 grid grid-cols-3 lg:py-10 lg:px-40">
-              <ProcessItem label="Job Request" />
-              <ProcessItem  label="Verification of Basic Information" />
-              <ProcessItem  label="Review and Report Writing" />
-          </div>      
-          <div  class="flex justify-center">
-            <!-- <router-link to ="/steps">  -->
-                <Button @click="fill_the_form_now" type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >
-                  Fill the Form Now <span class="mx-2">-></span>
-                </Button>
-            <!-- </router-link> -->
-            <!-- <Button type="submit"  :class="['bg-secondary hover:bg-secondary_hover px-4 py-2 text-white']" >
-              Test<span class="mx-2">-></span>
-            </Button> -->
         </div>
+        <h1 class="text-sm text-secondary font-bold my-2 text-center w-full pt-5">Trust. Verify. Succeed</h1>
+        <div class="my-8 grid grid-cols-3 lg:py-10 lg:px-40">
+          <ProcessItem label="Job Request" />
+          <ProcessItem label="Verification of Basic Information" />
+          <ProcessItem label="Review and Report Writing" />
+        </div>      
+        <div class="flex justify-center">
+          <!-- <router-link to="/steps">  -->
+          <Button @click="fill_the_form_now" type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
+            Fill the Form Now <span class="mx-2">-&gt;</span>
+          </Button>
+          <!-- </router-link> -->
+          <!--
+          <Button type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
+            Test<span class="mx-2">-&gt;</span>
+          </Button>
+          -->
+        </div>
+        <!--
+        <div class="gap-3 w-full flex flex-col justify-center items-center">
+          <span class="text-primary font-bold text-lg block">Thanks for your information</span>
+          <span class="text-sm font-medium block">Thanks for your information</span>
+          <span class="text-xs font-medium block">Your order ID: GA-06564-gh71</span>
+          <Button class="w-fit" type="submit">
+            <i class="inline-block w-4 h-4 rounded-full bg-mid_gray"></i> Rate
+          </Button>
+        </div>
+        -->
+      </BaseContainer>
+    </div>
 
-          <!-- <div   class="gap-3 w-full flex flex-col justify-center items-center">
-              <span class="text-primary font-bold text-lg block" >Thanks for your information</span>
-              <span class="text-sm font-medium block" >Thanks for your information</span>
-              <span class="text-xs font-medium block" >Your order ID: GA-06564-gh71</span>
-              <Button class="w-fit" type="submit" ><i class="inline-block w-4 h-4 rounded-full bg-mid_gray" /> Rate</Button>
-          </div> -->
-        </BaseContainer>
-      </div>
-      <!-- <JobRequest />
-      <Review />
-      <Verification /> -->
-      <Contact  :location="location" :data="data"/>
-    </BaseLayout>
+    <!-- <JobRequest />
+    <Review />
+    <Verification /> -->
+    <Contact :location="location" :data="data"/>
+  </BaseLayout>
 
-    <!-- <button class="fixed z-30 bottom-0 bg-red-700 rounded-xl text-white p-2 " @click="triggerAlert('Your Contact details has been saved!')">زر تجربة الالرت</button> -->
- <!-- // انسخ الدفة مع الكمبونتت مع دوال الالرت والمتغير من تحت في اي مكان تريد عرض الرت -->
-    <!-- <div class=" fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
-
-      <div  v-for="(alert, index) in alerts" :key="index">
+  <!--
+  <button class="fixed z-30 bottom-0 bg-red-700 rounded-xl text-white p-2" @click="triggerAlert('Your Contact details has been saved!')">
+    زر تجربة الألرت
+  </button>
+  -->
+  <!--
+  انسخ الدفة مع الكمبونتت مع دوال الألرت والمتغير من تحت في أي مكان تريد عرض الرت
+  -->
+  <!--
+  <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
+    <div v-for="(alert, index) in alerts" :key="index">
       <SnackBar :message="alert.message" @close="removeAlert(index)" />
-      </div>
-      <div  v-for="(alert, index) in alerts" :key="index">
+    </div>
+    <div v-for="(alert, index) in alerts" :key="index">
       <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
-      </div>
-    </div> -->    
-    <!-- <Cookies /> -->
-    <!-- @click="showDocumentName"  -->
-    <div class=" fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
-      <div v-for="(alert, index) in alerts" :key="index">
-        <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
-      </div>
-    </div> 
+    </div>
+  </div>
+  -->
+  <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
+    <div v-for="(alert, index) in alerts" :key="index">
+      <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
+    </div>
+  </div> 
 </template>
 
 <script setup>
 import router from '@/router';
-
-import { ref, watch ,onMounted, reactive} from 'vue';
-import { Button , createDocumentResource } from 'frappe-ui';
-
+import { ref, watch, onMounted, reactive } from 'vue';
+import { Button, createDocumentResource } from 'frappe-ui';
 import BaseContainer from '../components/baseContainer.vue';
 import BaseLayout from '../layouts/baseLayout.vue';
 import ProcessItem from './homeSections/processItem.vue';
 import Contact from './homeSections/contact.vue';
 import SnackBar from '../components/snackBar.vue';
-
 import JobRequest from './homeSections/jobRequest.vue';
 import Review from './homeSections/review.vue';
 import Verification from './homeSections/verification.vue';
-import {location} from '../data/useAddressLogic';
+import { location } from '../data/useAddressLogic';
 import validateInputContact from '../data/validate/validateInputContact';
 import { createRequestList } from '../data/request';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 
 const documentName = ref('');
-// ===== 1 =====
 
 // ===== 2 =====
 const data = reactive({
@@ -132,20 +147,21 @@ const data = reactive({
     isValid: null,
     validationMessage: null,
   },
+});
 
-})
 // ===============
 const alerts = reactive([]);
+
 // Methods
 const triggerAlert = function(message) {
-	alerts.push({ message });
-	setTimeout(() => {
-		alerts.shift(); // Automatically remove the alert after some time
-	}, 3000);
+  alerts.push({ message });
+  setTimeout(() => {
+    alerts.shift(); // Automatically remove the alert after some time
+  }, 3000);
 }
 
 const removeAlert = function(index) {
-	alerts.splice(index, 1);
+  alerts.splice(index, 1);
 }
 
 watch(() => documentName.value, (newName) => {
@@ -161,16 +177,14 @@ function fill_the_form_now() {
   // console.log(" ******* data  ********** ",data)
 
   let validateRes = validateInputContact(data)
-  console.log('***** validateRes ****',validateRes)
-  if (!validateRes===true) {
-	triggerAlert("aaaaaaaaaaaaaaaaaaaaa")
-  return;
-  } 
-  else {
+  console.log('***** validateRes ****', validateRes)
+  if (validateRes !== true) {
+    triggerAlert("يرجى تصحيح الأخطاء في النموذج.");
+    return;
+  } else {
     // router.replace({ name: 'steps', query: { fullName: userFullName.value } });
     router.replace({ name: 'steps' });
   }
-
 }
 
 const requestList = createRequestList(['name', 'user_id']); 
@@ -179,37 +193,31 @@ const verificationStore = useVerificationRequestStore();
 const documentNameValue = ref('');
 
 const updateDocumentName = (newName) => {
-      documentNameValue.value = newName;
-    };
+  documentNameValue.value = newName;
+};
 
-    // استخدام watch لمراقبة تغيير قيمة name في requestList
-    watch(
-      () => {
-        // افترض أن البيانات موجودة في requestList.value.data[0].name
-        // تحقق من وجود البيانات قبل الوصول إليها لتجنب الأخطاء
-        return requestList && requestList.data && requestList.data.length > 0
-          ? requestList.data[0].name
-          : '';
-      },
-      (newName) => {
-        console.log("C*******************", newName);
-        updateDocumentName(newName);
-        verificationStore.setDocumentName(newName);
-      },
-      { immediate: true } // تنفيذ المراقبة فور التهيئة
-    );
-        
+// استخدام watch لمراقبة تغيير قيمة name في requestList
+watch(
+  () => {
+    // افترض أن البيانات موجودة في requestList.value.data[0].name
+    // تحقق من وجود البيانات قبل الوصول إليها لتجنب الأخطاء
+    return requestList && requestList.data && requestList.data.length > 0
+      ? requestList.data[0].name
+      : '';
+  },
+  (newName) => {
+    console.log("C*******************", newName);
+    updateDocumentName(newName);
+    verificationStore.setDocumentName(newName);
+  },
+  { immediate: true } // تنفيذ المراقبة فور التهيئة
+);
 
 watch(() => documentNameValue.value, (newName) => {
   console.log("C*******************", newName);
 });
-
-
-
-
-
 </script>
 
 <style scoped>
-/* Custom styles if needed */
+/* أي أنماط إضافية إذا لزم الأمر */
 </style>
