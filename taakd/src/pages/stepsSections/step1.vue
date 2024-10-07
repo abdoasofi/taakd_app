@@ -1,6 +1,8 @@
+<!-- المكون الفرعي: -->
+<!-- stepsSections/step1.vue -->
 <template>
   <div class="pt-3 container">
-    <h3 class="text-lg font-medium mb-3 text-black">1 Basic Information</h3>
+    <h3 class="text-lg font-medium mb-3 text-black">1. Basic Information</h3>
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
@@ -8,11 +10,10 @@
           :isMandatory="true"
           infoText="Employer Name"
           inputType="text"
-          @input-change="handleInput"
+          v-model="step1.employer_name.value"
+          @input="handleInput('employer_name', step1.employer_name.value)"
           name="employer_name"
           id="EmployerName"
-          :isValid="stepData['employer_name']['isValid']"
-          :validationMessage="stepData['employer_name']['validationMessage']"
         />
         <SupportingText>Supporting text</SupportingText>
       </FieldContainer>
@@ -22,33 +23,43 @@
           :isMandatory="true"
           infoText="First Name"
           inputType="text"
+          v-model="step1.first_name.value"
+          @input="handleInput('first_name', step1.first_name.value)"
           name="first_name"
           id="firstName"
-          @input-change="handleInput"
-          :isValid="stepData['first_name']['isValid']"
-          :validationMessage="stepData['first_name']['validationMessage']"
+    
         />
       </FieldContainer>
     </div>
-    <FieldContainer>
-      <CheckBox name="certify" id="certify" @input-change="handleInput">
-        I certify that I do not have a Middle Name on my official identification
-        document
+
+    <!-- <FieldContainer>
+      <CheckBox 
+        name="certify" 
+        id="certify" 
+        v-model="certify"
+        @change="handleCheckboxChange"
+        :isValid="validationFields.middle_name?.isValid"
+        :validationMessage="validationFields.middle_name?.validationMessage"
+      >
+        I certify that I do not have a Middle Name on my official identification document
       </CheckBox>
-    </FieldContainer>
+    </FieldContainer> -->
+
     <div class="lg:grid grid-cols-2 lg:gap-2">
-      <FieldContainer>
+      <!-- <FieldContainer>
         <StyledInput
           labelText="Middle Name"
-          :isMandatory="false"
+          :isMandatory="!certify"
           inputType="text"
+          v-model="step1.middle_name.value"
+          @input="handleInput('middle_name', step1.middle_name.value)"
           name="middle_name"
           id="MiddleName"
-          @input-change="handleInput"
-          :isValid="stepData['middle_name']['isValid']"
-          :validationMessage="stepData['middle_name']['validationMessage']"
+          :isValid="validationFields.middle_name?.isValid"
+          :validationMessage="validationFields.middle_name?.validationMessage"
+          :disabled="certify"
         />
-      </FieldContainer>
+      </FieldContainer> -->
     </div>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
@@ -58,95 +69,104 @@
           :isMandatory="true"
           infoText="Last Name"
           inputType="text"
-          name="LastName"
-          id="LastName"
-          
+          v-model="step1.last_name.value"
+          @input="handleInput('last_name', step1.last_name.value)"
+          name="last_name"
+          id="lastName"
+
         />
       </FieldContainer>
-      <FieldContainer>
+      <!-- <FieldContainer>
         <StyledInput
           labelText="Suffix"
-          :isMandatory="true"
+          :isMandatory="false"
           infoText="Suffix"
           inputType="text"
-          name="Suffix"
+          v-model="step1.suffix.value"
+          @input="handleInput('suffix', step1.suffix.value)"
+          name="suffix"
           id="Suffix"
-          
+          :isValid="validationFields.suffix?.isValid"
+          :validationMessage="validationFields.suffix?.validationMessage"
         />
         <SupportingText>Supporting text</SupportingText>
-      </FieldContainer>
+      </FieldContainer> -->
     </div>
 
-    <FieldContainer>
+    <!-- <FieldContainer>
       <StyledInput
         labelText="Alias Name"
-        :isMandatory="true"
+        :isMandatory="false"
         infoText="Alias Name"
         inputType="text"
-        name="AliasName"
+        v-model="step1.alias_name.value"
+        @input="handleInput('alias_name', step1.alias_name.value)"
+        name="alias_name"
         id="AliasName"
-        
+        :isValid="validationFields.alias_name?.isValid"
+        :validationMessage="validationFields.alias_name?.validationMessage"
       />
-    </FieldContainer>
+    </FieldContainer> -->
   </div>
-
 </template>
 
-<script setup>
-import Button from '../../components/button.vue'
-import CheckBox from '../../components/checkBox.vue'
-import FieldContainer from '../../components/fieldContainer.vue'
-import FieldsGroup from '../../components/fieldsGroup.vue'
-import FieldsToggleContainer from '../../components/fieldsToggleContainer.vue'
-import FileUpload from '../../components/fileUpload.vue'
-import List from '../../components/list.vue'
-import Select from '../../components/select.vue'
-import StyledInput from '../../components/styledInput.vue'
-import StyledtextArea from '../../components/styledtextArea.vue'
-import SupportingText from '../../components/supportingText.vue'
-import Toggle from '../../components/toggle.vue'
-import Info from './components/info.vue'
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useVerificationRequestStore } from '../../stores/verificationRequest';
+import CheckBox from '../../components/checkBox.vue';
+import FieldContainer from '../../components/fieldContainer.vue';
+import StyledInput from '../../components/styledInput.vue';
+import SupportingText from '../../components/supportingText.vue';
+import { Step1Data, ValidationResult } from '../../data/types';
 
-import { ref } from 'vue'
+const store = useVerificationRequestStore();
 
-// Data
-const companies = ref(1)
+// بيانات الخطوة 1 من المتجر
+const step1 = computed({
+  get: () => store.step1,
+  set: (val: Partial<Step1Data>) => store.updateStep('step1', val),
+});
 
-// Props
-const props = defineProps({
-  stepData: {
-    type: Object,
-    required: true,
-  },
-})
+// حالة checkbox
+// const certify = computed({
+//   get: () => store.step1.middle_name.value === '',
+//   set: (value: boolean) => {
+//     if (value) {
+//       store.updateStep('step1', { middle_name: { value: '', isValid: true, validationMessage: '' } });
+//     }
+//   },
+// });
 
-// Methods
-const handleInput = function (value) {
-  props.stepData[value.name]['value'] = value.value
-  // console.log("*****",value)
-  // if (value.name === 'employer_name') {
+// الحصول على نتائج التحقق من صحة الخطوة من المتجر
+const currentValidation = computed(() => {
+  return store.validations[0]?.validation || {};
+});
 
-  //   console.log("***5**",value)
-  //   if (value.value === "" ) {
-  //     props.stepData[value.name]['isValid'] = false
+// تحويل نتائج التحقق إلى خصائص مفصلة
+const validationFields = computed(() => {
+  const result: { [key: string]: { isValid: boolean; validationMessage?: string } } = {};
+  Object.entries(currentValidation.value).forEach(([key, value]) => {
+    result[key] = {
+      isValid: value.isValid,
+      validationMessage: value.validationMessage || '',
+    };
+  });
+  return result;
+});
 
-  //     props.stepData[value.name]['validationMessage'] = 'هذا الحقل فارغ'
-  //   } else {
-  //     props.stepData[value.name]['value'] = value.value
-  //     props.stepData[value.name]['isValid'] = true
-  //     props.stepData[value.name]['validationMessage'] = null
-  //   }
-  // }
-  // else{
-  // if(value.value !== null||""){  
-  //   props.stepData[value.name]['value'] = value.value;
-  //   props.stepData[value.name]['isValid'] = true
+// دالة تحديث بيانات الخطوة الحالية
+const handleInput = (field: keyof Step1Data, value: any) => {
+  store.updateStep('step1', { [field]: { value, isValid: true, validationMessage: '' } });
+};
 
-  // }
-  // }
-}
-
-const addCompany = function () {
-  companies.value++
-}
+// دالة التعامل مع تغيير checkbox
+// const handleCheckboxChange = () => {
+//   if (certify.value) {
+//     store.updateStep('step1', { middle_name: { value: '', isValid: true, validationMessage: '' } });
+//   }
+// };
 </script>
+
+<style scoped>
+/* أضف تنسيقات إضافية إذا لزم الأمر */
+</style>
