@@ -5,7 +5,7 @@
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <header class="mb-12 text-center">
-        <h1 class="text-4xl font-bold text-custom-green">Review your information</h1>
+        <h1 class="text-4xl font-bold text-custom-green">Review your information {{ requesList.requesName }}</h1>
         <!-- <p class="text-mutedText mt-2">عرض شامل للبيانات المدخلة بطريقة احترافية وتفاعلية</p> -->
         <div class="mt-6">
           <button @click="printReport" class="flex items-center justify-center px-6 py-3 bg-info/15 text-black rounded-md hover:bg-accent transition">
@@ -215,7 +215,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue' 
+import { ref, watch , inject} from 'vue' 
 import { createDocumentResource } from 'frappe-ui'
 import { useToast } from 'vue-toastification'
 import InfoRow from '../../components/InfoRow.vue' // تأكد من مسار المكون الفرعي
@@ -223,8 +223,10 @@ import InfoRow from '../../components/InfoRow.vue' // تأكد من مسار ا�
 // استخدام Vue Router لجلب معرّف المستند ديناميكيًا (إذا كنت تستخدم)
 import { useRoute } from 'vue-router' 
 const route = useRoute()
-const docName = route.params.docName || 'VIR-2024-26-09-000007' // مثال: يمكن تغيير الاسم حسب تطبيقك
+// const docName = route.params.docName || 'VIR-2024-26-09-000007' // مثال: يمكن تغيير الاسم حسب تطبيقك
 
+const requesList = inject("requesList")
+const docName = requesList.requesName
 // مورد المستند
 const request = createDocumentResource({
   doctype: 'Verification Instructions Request',
