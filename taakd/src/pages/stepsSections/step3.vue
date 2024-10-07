@@ -47,8 +47,8 @@
 
         <FieldContainer>
           <CheckBox 
-            :name="`permission-${employment.id}`" 
-            :id="`permission-${employment.id}`" 
+            :name="`contact_the_employer-${employment.id}`" 
+            :id="`contact_the_employer-${employment.id}`" 
             v-model="employment.contact_the_employer"
           >
           Do we have permission to contact this current employer?
@@ -58,8 +58,8 @@
         
         <FieldContainer>
           <CheckBox 
-            :name="`permission-${employment.id}`" 
-            :id="`permission-${employment.id}`" 
+            :name="`issuing_salary-${employment.id}`" 
+            :id="`issuing_salary-${employment.id}`" 
             v-model="employment.issuing_salary"
           >
           Does this employer issue your paycheck? 
@@ -138,8 +138,8 @@
       <!-- Permission Checkbox -->
       <FieldContainer>
           <CheckBox 
-            :name="`permission-${employment.id}`" 
-            :id="`permission-${employment.id}`" 
+            :name="`continuous-${employment.id}`" 
+            :id="`continuous-${employment.id}`" 
             v-model="employment.continuous"
           >
           Continuous
@@ -150,8 +150,8 @@
         <!-- Activity Has Stopped Checkbox -->
       <FieldContainer>
           <CheckBox 
-            :name="`permission-${employment.id}`" 
-            :id="`permission-${employment.id}`" 
+            :name="`activity_has_stopped-${employment.id}`" 
+            :id="`activity_has_stopped-${employment.id}`" 
             v-model="employment.activity_has_stopped"
           >
           Activity Has Stopped
@@ -260,8 +260,8 @@
       <!-- The Company has Different Names Checkbox -->
       <FieldContainer>
           <CheckBox 
-            :name="`permission-${employment.id}`" 
-            :id="`permission-${employment.id}`" 
+            :name="`the_company_has_different_names-${employment.id}`" 
+            :id="`the_company_has_different_names-${employment.id}`" 
             v-model="employment.the_company_has_different_names"
           >
           The Company has Different Names
