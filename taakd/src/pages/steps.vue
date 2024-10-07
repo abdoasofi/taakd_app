@@ -52,7 +52,7 @@
 
       
       <div class="flex gap-2">
-        <button class="text-secondary" @click="previousStep" :disabled="currentStepIndex === 0" v-if="currentStepIndex != 0">
+        <button class="text-secondary" @click="previousStep" :disabled="currentStepIndex === 0" v-if="currentStepIndex !=0">
           <svg width="86" height="62" viewBox="0 0 86 62" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g filter="url(#filter0_d_478_20124)">
             <g clip-path="url(#clip0_478_20124)">
@@ -240,6 +240,13 @@ const nextStep = () => {
   // console.log("******************************",isCurrentStepValid.value)
   console.log("******************************",store.step1)
   currentStepIndex.value++;
+  const finalData = objectConvertor({
+    ...store.step1,
+  });
+  const requestList = createRequestList(['name', 'user_id']); // تأكد من تحديد الحقول المطلوبة
+  console.log("***********finalData*******************",finalData)
+  updateFieldsInRequestList(requestList, { finalData, documentName: store.documentName });
+  toast.success("تم تحديث الوثيقة بنجاح.");
   // if(isCurrentStepValid.value) {
   //   currentStepIndex.value++;
   // } else {
