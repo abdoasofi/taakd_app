@@ -99,13 +99,11 @@ import Review from './homeSections/review.vue';
 import Verification from './homeSections/verification.vue';
 import {location} from '../data/useAddressLogic';
 import validateInputContact from '../data/validate/validateInputContact';
-// import objectConvertor from '../data/validate/convertor';
-// import { createRequestList } from '../data/request';
+import { createRequestList } from '../data/request';
+import { useVerificationRequestStore } from '../stores/verificationRequest';
 
 const documentName = ref('');
 // ===== 1 =====
-// const fieldsContact = ['name', 'mobile_number','country', 'from_time', 'to_time' ,'is_degree_or_diploma']
-// const requestListContact = createRequestList(fieldsContact)
 
 // ===== 2 =====
 const data = reactive({
@@ -174,6 +172,42 @@ function fill_the_form_now() {
   }
 
 }
+
+const requestList = createRequestList(['name', 'user_id']); 
+const verificationStore = useVerificationRequestStore();
+
+const documentNameValue = ref('');
+
+const updateDocumentName = (newName) => {
+      documentNameValue.value = newName;
+    };
+
+    // استخدام watch لمراقبة تغيير قيمة name في requestList
+    watch(
+      () => {
+        // افترض أن البيانات موجودة في requestList.value.data[0].name
+        // تحقق من وجود البيانات قبل الوصول إليها لتجنب الأخطاء
+        return requestList && requestList.data && requestList.data.length > 0
+          ? requestList.data[0].name
+          : '';
+      },
+      (newName) => {
+        console.log("C*******************", newName);
+        updateDocumentName(newName);
+        verificationStore.setDocumentName(newName);
+      },
+      { immediate: true } // تنفيذ المراقبة فور التهيئة
+    );
+        
+
+watch(() => documentNameValue.value, (newName) => {
+  console.log("C*******************", newName);
+});
+
+
+
+
+
 </script>
 
 <style scoped>
