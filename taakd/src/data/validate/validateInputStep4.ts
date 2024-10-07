@@ -1,6 +1,6 @@
 // التحقق من صحة المدخلات: 
 // src/data/validateInputStep1.ts
-import { Step1Data, ValidationResult } from '../types';
+import { Step4Data, ValidationResult } from '../types';
 
 /**
  * دالة للتحقق من صحة مدخلات الخطوة الأولى.
@@ -8,19 +8,18 @@ import { Step1Data, ValidationResult } from '../types';
  * @param data - بيانات الخطوة الأولى من نوع Step1Data.
  * @returns نتيجة التحقق من صحة الحقول على شكل ValidationResult.
  */
-function validateInputStep1(data: Step1Data): ValidationResult {
+function validateInputStep4(data: Step4Data): ValidationResult {
   const validationResult: ValidationResult = {};
 
   // قائمة الحقول المطلوبة للتحقق من الفراغ
-  const requiredFields: (keyof Step1Data)[] = [
-    'employer_name',
-    'first_name',
-    'last_name',
+  const requiredFields: (keyof Step4Data)[] = [
+
+    'professional_qualification'
 
   ];
 
   requiredFields.forEach((field) => {
-    const fieldValue = data[field]?.value;
+    const fieldValue = data['field']?.value;
 
     // التحقق مما إذا كان الحقل فارغاً حسب نوعه
     if (
@@ -62,4 +61,4 @@ function validateInputStep1(data: Step1Data): ValidationResult {
 //   return emailRegex.test(email);
 // }
 
-export default validateInputStep1;
+export default validateInputStep4;
