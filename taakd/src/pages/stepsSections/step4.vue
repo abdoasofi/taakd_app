@@ -1,8 +1,16 @@
 <template>
   <div class="pt-3 container">
-    <h3 class="text-lg font-medium mb-3 text-black">Professional Qualifications</h3>
+    <h1 class="text-3xl  font-bold mb-3 text-black">Professional qualification verification </h1>
+    <ul>
+      <li>
+        All fields marked with an asterisk ( * ) are required.
+      </li>
+      <li>
+        Please provide information regarding Professional qualifications and/or trade memberships beginning with the most recent.
+      </li>
+    </ul>
+
   </div>
-  
   <div class="space-y-2">
     <!-- Iterate Over Professional Qualifications -->
     <FieldsToggleContainer
@@ -61,19 +69,10 @@
           />
         </FieldContainer>  
 
-        <!-- Date Awarded Field -->
-        <FieldContainer>
-          <StyledInput 
-            id="date_awarded" 
-            name="date_awarded" 
-            labelText="Date Awarded" 
-            isMandatory="true" 
-            infoText="Date when the qualification was awarded." 
-            inputType="date" 
-            v-model="qualification.date_awarded" 
-            :isValid="validateDateAwarded(qualification.date_awarded)"
-          />
-        </FieldContainer>
+
+
+      </div>
+      <div class="lg:grid grid-cols-2 lg:gap-2">
 
         <!-- Expiration Date Field -->
         <FieldContainer>
@@ -90,8 +89,20 @@
             validationMessage="Expiration Date is required."
           />
         </FieldContainer>
+        <!-- Date Awarded Field -->
+        <FieldContainer>
+          <StyledInput 
+            id="date_awarded" 
+            name="date_awarded" 
+            labelText="Date Awarded" 
+            isMandatory="true" 
+            infoText="Date when the qualification was awarded." 
+            inputType="date" 
+            v-model="qualification.date_awarded" 
+            :isValid="validateDateAwarded(qualification.date_awarded)"
+          />
+        </FieldContainer>
       </div>
-
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Award Name/Description Field -->
         <FieldContainer>
@@ -107,9 +118,10 @@
             validationMessage="Award Name/Description is required."
           />
         </FieldContainer> 
-
-        <!-- Is Expiration Date Checkbox -->
-        <FieldContainer>
+      </div>
+     <div class="lg:grid grid-rows-2 lg:gap-2">
+           <!-- Is Expiration Date Checkbox -->
+           <FieldContainer>
           <CheckBox 
             :name="`is_an_expiration_date-${qualification.id}`" 
             :id="`is_an_expiration_date-${qualification.id}`" 
@@ -118,9 +130,6 @@
             Does this qualification have an expiration date?
           </CheckBox>
         </FieldContainer>
-      </div>
-
-      <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Your Name Varies Checkbox -->
         <FieldContainer>
           <CheckBox 
@@ -130,8 +139,9 @@
           >
             Does your name vary in this qualification?
           </CheckBox>
-        </FieldContainer>
-      </div>
+        </FieldContainer>        
+     </div>
+     
 
       <!-- Save Qualification Button -->
       <div class="flex justify-end py-2">

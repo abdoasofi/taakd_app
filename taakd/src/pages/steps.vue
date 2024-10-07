@@ -132,16 +132,16 @@ const steps = [
     description: "Professional Qualifications",
     validate: () => validateInputStep4(store.step4),
   },
-  // {
-  //   component: Step5,
-  //   description: "Review Information",
-  //   validate: () => validateInputStep5(store.step5),
-  // },
-  // {
-  //   component: Step6,
-  //   description: "Final Verification",
-  //   validate: () => validateInputStep6(store.step6),
-  // },
+  {
+    component: Step5,
+    description: "Review Information",
+    // validate: () => validateInputStep5(store.step5),
+  },
+  {
+    component: Step6,
+    description: "Final Verification",
+    // validate: () => validateInputStep6(store.step6),
+  },
 ];
 
 const currentStepComponent = computed(() => steps[currentStepIndex.value].component);
@@ -159,12 +159,12 @@ const percentageCompleted = computed(() => {
 const isLastStep = computed(() => currentStepIndex.value === totalSteps - 1);
 
 // دالة التحقق من صحة المرحلة الحالية
-const isCurrentStepValid = computed(() => {
-  const validationResult: ValidationResult = steps[currentStepIndex.value].validate();
-  store.updateValidation(currentStepIndex.value, validationResult);
+// const isCurrentStepValid = computed(() => {
+//   const validationResult: ValidationResult = steps[currentStepIndex.value].validate();
+//   store.updateValidation(currentStepIndex.value, validationResult);
   
-  return Object.values(validationResult).every(field => field.isValid);
-});
+//   return Object.values(validationResult).every(field => field.isValid);
+// });
 
 // دالة التحقق من صحة جميع الخطوات
 // const isAllStepsValid = computed(() => {
@@ -203,13 +203,14 @@ const previousStep = () => {
 
 // دالة التنقل للأمام
 const nextStep = () => {
-  console.log("******************************",isCurrentStepValid.value)
+  // console.log("******************************",isCurrentStepValid.value)
   console.log("******************************",store.step1)
-  if(isCurrentStepValid.value) {
-    currentStepIndex.value++;
-  } else {
-    // alertsStore.addAlert({ isDanger: true, message: "يرجى تصحيح الأخطاء في البيانات المدخلة." });
-  }
+  currentStepIndex.value++;
+  // if(isCurrentStepValid.value) {
+  //   currentStepIndex.value++;
+  // } else {
+  //   // alertsStore.addAlert({ isDanger: true, message: "يرجى تصحيح الأخطاء في البيانات المدخلة." });
+  // }
 };
 
 // دالة قبول الطلب في خطوة 6

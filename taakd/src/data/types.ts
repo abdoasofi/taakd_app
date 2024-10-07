@@ -17,8 +17,8 @@ export interface Step1Data {
   first_name: FormField<string>;
   last_name: FormField<string>;
   middle_name?: FormField<string>;
-  // suffix?: FormField<string>;
-  // alias_name?: FormField<string>;
+  suffix?: FormField<string>;
+  alias_name?: FormField<string>;
   // email_address: FormField<string>;
   // i_agree_to_the_electronic_signature: FormField<boolean>;
   // i_acknowledge_the_above: FormField<boolean>;

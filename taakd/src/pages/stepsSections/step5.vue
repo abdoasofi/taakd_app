@@ -4,16 +4,16 @@
   <div class="min-h-screen bg-background p-6">
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
-      <header class="mb-12 text-center">
-        <h1 class="text-4xl font-bold text-custom-green">Review your information {{ requesList.requesName }}</h1>
+      <header class="mb-12 ">
+        <h1 class="text-4xl font-bold ">Review your information</h1>
         <!-- <p class="text-mutedText mt-2">عرض شامل للبيانات المدخلة بطريقة احترافية وتفاعلية</p> -->
         <div class="mt-6">
-          <button @click="printReport" class="flex items-center justify-center px-6 py-3 bg-info/15 text-black rounded-md hover:bg-accent transition">
+          <!-- <button @click="printReport" class="flex items-center justify-center px-6 py-3 bg-info/15 text-black rounded-md hover:bg-accent transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 17l4-4 4 4M6 13h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v4a2 2 0 002 2z" />
             </svg>
             طباعة التقرير
-          </button>
+          </button> -->
         </div>
       </header>
 
@@ -230,7 +230,7 @@ const docName = requesList.requesName
 // مورد المستند
 const request = createDocumentResource({
   doctype: 'Verification Instructions Request',
-  name: docName,
+  name: "VIR-2024-26-09-000007",
   auto: true,
 })  
 
