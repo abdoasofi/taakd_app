@@ -4,7 +4,7 @@
         <div class="logo py-4 lg:flex lg:gap-6">
           <div class="h-6  lg:h-9 aspect-[1.376] flex justify-center items-center">
 
-            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg width="72" height="68" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clip-path="url(#clip0_944_13802)">
               <path d="M55.9662 21.9149V24.1236L62.7031 21.8174V25.0489L53.3271 28.1221V22.8374L55.9662 21.9149Z" fill="#81C045"/>
               <mask id="mask0_944_13802" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-15" y="-15" width="102" height="102">
