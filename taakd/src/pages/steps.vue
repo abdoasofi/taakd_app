@@ -1,283 +1,269 @@
+<!-- المكون الرئيسي: -->
+<!-- src/components/steps.vue -->
+<!-- src/components/steps.vue -->
 <template>
   <Header />
   <div class="lg:grid lg:grid-cols-12 lg:container py-8 bg-bg">
     <div class="container col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
         <div class="pb-3 font-medium text-primary text-[1rem]">
-          <span class="m-2"><-</span>Model steps instructions of Job Request ({{
-            Math.round((100 / 6) * processed)
-          }}% Completed)
+          <p>اسم المستند: {{ documentName }}</p>
+          <span class="m-2">&larr;</span>Model steps instructions of Job Request ({{ percentageCompleted }}% Completed)
         </div>
         <div class="py-3 grid grid-cols-6 lg:flex lg:flex-col lg:gap-4 w-full">
           <StepIcon
-            :process="Boolean(processed === 0)"
-            :complete="Boolean(processed >= 1)"
-            label="Step 1"
-            desc="Personal Information"
-          />
-          <StepIcon
-            :process="Boolean(processed === 1)"
-            :complete="Boolean(processed >= 2)"
-            label="Step 2"
-            desc="Personal Information"
-          />
-          <StepIcon
-            :process="Boolean(processed === 2)"
-            :complete="Boolean(processed >= 3)"
-            label="Step 3"
-            desc="Personal Information"
-          />
-          <StepIcon
-            :process="Boolean(processed === 3)"
-            :complete="Boolean(processed >= 4)"
-            label="Step 4"
-            desc="Personal Information"
-          />
-          <StepIcon
-            :process="Boolean(processed === 4)"
-            :complete="Boolean(processed >= 5)"
-            label="Step 5"
-            desc="Personal Information"
-          />
-          <StepIcon
-            :process="Boolean(processed === 5)"
-            :complete="Boolean(processed >= 6)"
-            label="Step 6"
-            desc="Personal Information"
+            v-for="(step, index) in steps"
+            :key="index"
+            :process="currentStepIndex === index"
+            :complete="currentStepIndex > index"
+            :label="'Step ' + (index + 1)"
+            :desc="step.description"
           />
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-[1rem]">
           <button>
-            All Steps (5)<span class="inline-block mx-1">-></span>
+            All Steps ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
           </button>
         </div>
       </div>
     </div>
     <div class="pb-20 bg-bg leading-[1.6rem] col-span-8">
-      <Step1 :stepData="step1Data" v-if="processed === 0" />
-      <Step2 :stepData="step2Data" v-if="processed === 1" />
-      <Step3 :stepData="step3Data" v-if="processed === 2" />
-      <Step4 :stepData="step4Data" v-if="processed === 3" />
-      <Step5 :stepData="step5Data" v-if="processed === 4" />
-      <Step6 :stepData="step6Data" v-if="processed === 5" />
+      <component 
+        :is="currentStepComponent" 
+        :stepData="currentStepData" 
+        @update:stepData="" 
+      />
     </div>
   </div>
   <div class="bg-[#F0F0F0] fixed lg:static bottom-0 w-screen h-fit">
     <div class="container py-4 flex w-full justify-between items-center">
-      <div class="text-xs text-[#1D1B20]">auto saving</div>
+      <div class="text-xs text-[#1D1B20]">Auto Saving</div>
 
       <div class="flex gap-2">
-		<button class="text-secondary" @click="previousStep" v-if="processed !== 0"><</button>
-		<Button v-if="processed !== 5" level="primary" @clicked="nextStep()">
-		  step {{ stepN }} ->
-		</Button>
-	  </div>
+        <button class="text-secondary" @click="previousStep" :disabled="currentStepIndex === 0">
+          &larr;
+        </button>
+        <Button 
+          v-if="!isLastStep" 
+          level="primary" 
+          @clicked="nextStep"
+        >
+          Step  &rarr;
+        </Button>
+      </div>
 
-      <div v-if="processed === 5" class="lg:flex justify-end grow lg:gap-2">
-        <Button level="other" @clicked=""> Accept </Button>
-        <Button level="other" @clicked=""> Reject </Button>
+      <div class="lg:flex justify-end grow lg:gap-2">
+        <Button level="other" @clicked="accept" >
+          Accept
+        </Button>
+        <Button level="other" @clicked="reject"> Reject </Button>
       </div>
     </div>
   </div>
-    <div class=" fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
-
-  <div  v-for="(alert, index) in alerts" :key="index">
-      <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
-      </div>
-	</div>
+  <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
+    <!-- <SnackBar 
+      v-for="(alert, index) in alerts" 
+      :key="index" 
+      :isDanger="alert.isDanger" 
+      :message="alert.message" 
+      @close="removeAlert(index)" 
+    /> -->
+  </div>
 </template>
-<script setup>
-// import BaseContainer from '../components/baseContainer.vue';
-import Button from '../components/button.vue'
-import Header from '../components/header.vue'
-// import Heading from '../components/heading.vue';
-// import StyledIcon from '../components/styledIcon.vue';
-import BaseLayout from '../layouts/baseLayout.vue'
-import StepIcon from './stepsSections/components/stepIcon.vue'
+<script setup lang="ts">
+import { ref, computed, reactive, watch } from 'vue';
+import { useVerificationRequestStore } from '../stores/verificationRequest';
+import Header from '../components/header.vue'; 
+import StepIcon from './stepsSections/components/stepIcon.vue';
+import Step1 from './stepsSections/step1.vue';
+import Step2 from './stepsSections/step2.vue';
+import Step3 from './stepsSections/step3.vue';
+import Step4 from './stepsSections/step4.vue';
+import Step5 from './stepsSections/step5.vue';
+import Step6 from './stepsSections/step6.vue';
+import SnackBar from '../components/snackBar.vue';
+import Button from '../components/button.vue';
+import { useToast } from 'vue-toastification';
+import { createRequestList, updateFieldsInRequestList } from '../data/request';
+import objectConvertor from '../data/convertor';
+import validateInputStep1 from '../data/validate/validateInputStep1';
+import validateInputStep2 from '../data/validate/validateInputStep2';
+import validateInputStep3 from '../data/validate/validateInputStep3';
+import validateInputStep4 from '../data/validate/validateInputStep4';
+// import validateInputStep4 from '../data/validateInputStep4';
+// import validateInputStep5 from '../data/validateInputStep5';
+// import validateInputStep6 from '../data/validateInputStep6';// يفترض أن يكون لديك دوال تحقق لكل خطوة
+import { ValidationResult } from '../data/types';
 
-import Step1 from './stepsSections/step1.vue'
-import Step2 from './stepsSections/step2.vue'
-import Step3 from './stepsSections/step3.vue'
-import Step4 from './stepsSections/step4.vue'
-import Step5 from './stepsSections/step5.vue'
-import Step6 from './stepsSections/step6.vue'
-
-// import Contact from './homeSections/contact.vue';
-// import JobRequest from './homeSections/jobRequest.vue';
-// import ProcessItem from './homeSections/processItem.vue';
-// import Review from './homeSections/review.vue';
-// import Verification from './homeSections/verification.vue';
-
-import { computed, reactive, ref } from 'vue'
-
-import { createRequestList, updateFieldsInRequestList } from '../data/request'
-import validateInputStep1 from '../data/validate/validateInputStep1'
-import objectConvertor from '../data/validate/convertor'
-import SnackBar from '../components/snackBar.vue'
-
-// Data
-const processed = ref(0)
-const stepN = ref(2)
-
-const fieldsStep1 = ['name', 'first_name', 'last_name']
-const requestListStep1 = createRequestList(fieldsStep1)
-// ===============
-const alerts = reactive([]);
-// Methods
-const triggerAlert = function(message) {
-	alerts.push({ message });
-	setTimeout(() => {
-		alerts.shift(); // Automatically remove the alert after some time
-	}, 3000);
+// إعدادات التنبيهات من Pinia Store (إذا كنت تستخدم Pinia لإدارة التنبيهات)
+// import { useAlertsStore } from '../stores/alerts';
+// 
+interface Alert {
+  isDanger: boolean;
+  message: string;
 }
 
-const removeAlert = function(index) {
-	alerts.splice(index, 1);
-}
-// ================
+const store = useVerificationRequestStore();
+// const alertsStore = useAlertsStore();
+const toast = useToast();
 
-const updatedFieldsStep1 = {
-  first_name: 'abdo',
-  last_name: 'asofi',
-}
+const currentStepIndex = ref(0); // المرحلة الحالية
+const totalSteps = 6;
 
-const step1Data = reactive({
-  employer_name: {
-    value: '',
-    isValid: null,
-    validationMessage: null,
+// تعريف المراحل مع المكونات والوصف
+const steps = [
+  {
+    component: Step1,
+    description: "Personal Information",
+    validate: () => validateInputStep1(store.step1),
   },
-  first_name: {
-    value: '',
-    isValid: null,
-    validationMessage: null,
+  {
+    component: Step2,
+    description: "Education Information",
+    validate: () => validateInputStep2(store.step2),
   },
-  // last_name:{
-  // 	value:"",
-  // 	isValid:null,
-  // 	validationMessage:null,
-
-  // },
-  middle_name: {
-    value: '',
-    isValid: null,
-    validationMessage: null,
+  {
+    component: Step3,
+    description: "Employment History",
+    validate: () => validateInputStep3(store.step3),
   },
-  // dont_middle_name:{
-  // 	value:true,
-  // 	isValid:null,
-  // 	validationMessage:null
-
+  {
+    component: Step4,
+    description: "Professional Qualifications",
+    validate: () => validateInputStep4(store.step4),
+  },
+  // {
+  //   component: Step5,
+  //   description: "Review Information",
+  //   validate: () => validateInputStep5(store.step5),
   // },
-  // suffix:{
-  // 	value:"",
-  // 	isValid:null,
-  // 	validationMessage:null
-
+  // {
+  //   component: Step6,
+  //   description: "Final Verification",
+  //   validate: () => validateInputStep6(store.step6),
   // },
-})
-const step2Data = reactive({})
-const step3Data = reactive({})
-const step4Data = reactive({})
-const step5Data = reactive({})
-const step6Data = reactive({})
-const previousStep = function () {
-	processed.value--
-	stepN.value--
-}
-// Methods
-const nextStep = function () {
-  // processed=processed.value++;
-  /// رسالة الفاليديشن ارسلها للحقل
-  // //  isValid استخدم ذا عشان يحمر الحقل
-  //validationMessage واستخدم ذا عشان تعرض رسالة تحت الحق
+];
 
-  //     <StyledInput
-  //   labelText="Employer Name"
-  //   :isMandatory="true"
-  //   infoText="Employer Name"
-  //   inputType="number"
-  //   @input-change="handleInput"
-  //   name="EmployerName"
-  //   id="EmployerName"
-  //  :isValid="true" :isValid="false"  :isValid="null"
-  //validationMessage="h"
-  // />
+const currentStepComponent = computed(() => steps[currentStepIndex.value].component);
 
-  // حسب فرابي شوف اذا تحتاج تستخدم متغيرات ترسلها للكمبوننت حق الستيب ومنها تتعبي اذا الفاليديشن حق الابناء الحقول بارسال القيم الي فوق
+const currentStepData = computed(() => {
+  return store[`step${currentStepIndex.value + 1}` as keyof typeof store];
+});
 
-  // if (processed.value === 0) {
-  //   step1Save()
-  // }
-  // if(processed.value===1){
-  // 	step2Save()
-  // }
-  // if(processed.value===2){
-  // 	step3Save()
-  // }
-  // if(processed.value===3){
-  // 	step4Save()
-  // }
-  // if(processed.value===4){
-  // 	step5Save()
-  // }
-  // if(processed.value===5){
-  // 	step6Save()
-  // }
-  processed.value++
-  stepN.value++
-}
+// حساب نسبة الإنجاز
+const percentageCompleted = computed(() => {
+  return Math.round((100 / totalSteps) * (currentStepIndex.value + 1));
+});
 
-const step1Save = function () {
-  console.log('***** updateFieldsInRequestList ****')
-  // اذا حفظت بنجاح
-  // step1Data["اسم الحقل"]["value"]
-  // مالم اعرض الرت او عالج الفاليديشن
-  let validateRes = validateInputStep1(step1Data)
+// تحقق من كون المرحلة الحالية هي الأخيرة
+const isLastStep = computed(() => currentStepIndex.value === totalSteps - 1);
 
-  if (validateRes===true) {
-	triggerAlert("aaaaaaaaaaaaaaaaaaaaa")
-  } else {
-    let converted = objectConvertor(step1Data)
+// دالة التحقق من صحة المرحلة الحالية
+const isCurrentStepValid = computed(() => {
+  const validationResult: ValidationResult = steps[currentStepIndex.value].validate();
+  store.updateValidation(currentStepIndex.value, validationResult);
+  
+  return Object.values(validationResult).every(field => field.isValid);
+});
 
-    updateFieldsInRequestList(requestListStep1, converted)
-	processed.value++
-	stepN.value++
+// دالة التحقق من صحة جميع الخطوات
+// const isAllStepsValid = computed(() => {
+//   let allValid = true;
+  
+//   steps.forEach((step, index) => {
+//     const validationResult = step.validate();
+//     store.updateValidation(index, validationResult);
+//     if (!Object.values(validationResult).every(field => field.isValid)) {
+//       allValid = false;
+//     }
+//   });
+  
+//   return allValid;
+// });
+
+// قائمة التنبيهات
+// const alerts = computed(() => alertsStore.alerts);
+
+// دالة إزالة تنبيه
+// const removeAlert = (index: number) => {
+//   alertsStore.removeAlert(index);
+// };
+
+// دالة تحديث بيانات الخطوة الحالية
+// const updateStepData = (newData: any) => {
+//   store.updateStep(['step1', 'step2', 'step3', 'step4', 'step5', 'step6'][currentStepIndex.value], newData);
+// };
+
+// دالة التنقل للخلف
+const previousStep = () => {
+  if (currentStepIndex.value > 0) {
+    currentStepIndex.value--;
   }
-}
+};
 
-const step2Save = function () {
-  // اذا حفظت بنجاح
-  // step2Data["اسم الحقل"]
-  processed.value = 2
-  // مالم اعرض الرت او عالج الفاليديشن
-}
+// دالة التنقل للأمام
+const nextStep = () => {
+  console.log("******************************",isCurrentStepValid.value)
+  console.log("******************************",store.step1)
+  if(isCurrentStepValid.value) {
+    currentStepIndex.value++;
+  } else {
+    // alertsStore.addAlert({ isDanger: true, message: "يرجى تصحيح الأخطاء في البيانات المدخلة." });
+  }
+};
 
-const step3Save = function () {
-  // اذا حفظت بنجاح
-  processed.value = 3
-  // مالم اعرض الرت او عالج الفاليديشن
-}
+// دالة قبول الطلب في خطوة 6
+const accept = async () => {
+  // التحقق من صحة جميع الخطوات
+  // if (!isAllStepsValid.value) {
+  //   // alertsStore.addAlert({ isDanger: true, message: "يرجى تصحيح الأخطاء في جميع الخطوات." });
+  //   return;
+  // }
 
-const step4Save = function () {
-  // اذا حفظت بنجاح
-  processed.value = 4
-  // مالم اعرض الرت او عالج الفاليديشن
-}
+  // دمج جميع البيانات من الخطوات المختلفة
+  const finalData = objectConvertor({
+    ...store.step1,
+    // ...store.step2,
+    // ...store.step3,
+    // ...store.step4,
+    // ...store.step5,
+    // ...store.step6,
+  });
 
-const step5Save = function () {
-  // اذا حفظت بنجاح
-  processed.value = 5
-  // مالم اعرض الرت او عالج الفاليديشن
-}
+  try {
+    if (!store.documentName) {
+      // إنشاء وثيقة جديدة إذا لم تكن موجودة
+      const requestList = createRequestList(['name', 'user_id']); // تأكد من تحديد الحقول المطلوبة
 
-const step6Save = function () {
-  /// هنا تقدر تنتقل
-  // اذا حفظت بنجاح
-  processed.value = 6
-  // مالم اعرض الرت او عالج الفاليديشن
-}
-const nextNum = computed(() => {
-  return processed.value++
-})
+      // يمكن إضافة منطق إضافي هنا لإنشاء وثيقة جديدة باستخدام `useDocumentResource`
+      console.log("*****",store.documentName)
+      toast.success("تم إنشاء الوثيقة بنجاح.");
+    } else {
+      
+      // تحديث الوثيقة الحالية
+      const requestList = createRequestList(['name', 'user_id']); // تأكد من تحديد الحقول المطلوبة
+      updateFieldsInRequestList(requestList, { ...finalData, name: store.documentName });
+      toast.success("تم تحديث الوثيقة بنجاح.");
+    }
+  } catch (error) {
+    console.error("Error saving verification request:", error);
+    // alertsStore.addAlert({ isDanger: true, message: "حدث خطأ أثناء حفظ البيانات." });
+  }
+};
+
+// دالة رفض الطلب (يمكنك تخصيصها حسب احتياجاتك)
+const reject = () => {
+  // alertsStore.addAlert({ isDanger: false, message: "تم رفض الطلب." });
+  store.resetStore();
+  currentStepIndex.value = 0;
+};
+
+const documentName = computed(() => store.documentName);
+watch(documentName, (newVal, oldVal) => {
+  console.log(`documentName تغير من "${oldVal}" إلى "${newVal}"`);
+});
 </script>
+
+<style scoped>
+/* أضف أي تنسيقات إضافية هنا إذا لزم الأمر */
+</style>
