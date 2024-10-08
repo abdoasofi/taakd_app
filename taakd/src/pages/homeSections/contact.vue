@@ -114,6 +114,7 @@ import validateInputContact from '../../data/validate/validateInputContact'
 import objectConvertor from '../../data/validate/convertor'
 import { createRequestList, updateFieldsInRequestList } from '../../data/request'
 import VerificationInformation from '../../components/Icons/verificationInformation.vue'
+import { useVerificationRequestStore } from '../../stores/verificationRequest';
 
 // Props
 const props = defineProps({
@@ -125,6 +126,8 @@ const props = defineProps({
     type: Object,
   },
 })
+const store = useVerificationRequestStore();
+
 // ===== 1 =====
 const fieldsContact = ['name', 'mobile_number','country', 'from_time', 'to_time' ,'is_degree_or_diploma']
 const requestListContact = createRequestList(fieldsContact)
@@ -198,21 +201,34 @@ const handleCountryChange = (value) => {
 // =============== ============
 
 function save() {
-  console.log('***** updateFieldsInRequestList ****')
-  // اذا حفظت بنجاح
-  // data["اسم الحقل"]["value"]
-  // مالم اعرض الرت او عالج الفاليديشن
-  console.log(" ******* data  ********** ",data)
-  let validateRes = validateInputContact(data)
+  const finalData = objectConvertor({
+    ...store.home,
+    // ...store.step2,
+    // ...store.step3,
+    // ...store.step4,
+    // ...store.step5,
+    // ...store.step6,
+  });
+  console.log('***** data ****',data)
 
-  if (validateRes===true) {
-    console.log("aaaaaaaaaaaaaaaaaaaaa")
-	// triggerAlert("aaaaaaaaaaaaaaaaaaaaa")
-  } else {
-    let converted = objectConvertor(data)
+  const requestList = createRequestList(['name', 'user_id']); // تأكد من تحديد الحقول المطلوبة
+  updateFieldsInRequestList(requestList, { ...data, name: 'VIR-2024-26-09-000008'});
 
-    updateFieldsInRequestList(requestListContact, converted)
-  }
+//   console.log('***** updateFieldsInRequestList ****')
+//   // اذا حفظت بنجاح
+//   // data["اسم الحقل"]["value"]
+//   // مالم اعرض الرت او عالج الفاليديشن
+//   console.log(" ******* data  ********** ",data)
+//   let validateRes = validateInputContact(data)
+
+//   if (validateRes===true) {
+//     console.log("aaaaaaaaaaaaaaaaaaaaa")
+// 	// triggerAlert("aaaaaaaaaaaaaaaaaaaaa")
+//   } else {
+//     let converted = objectConvertor(data)
+
+//     updateFieldsInRequestList(requestListContact, converted)
+//   }
 }
 
 // =============== ============

@@ -9,6 +9,13 @@ export interface FormField<T = any> {
   touched?: boolean;
 }
 
+export interface HomeData {
+  country: FormField<string>;
+  mobile_number: FormField<string>;
+  is_degree_or_diploma: FormField<boolean>;
+  from_time: FormField<string>;
+  to_time: FormField<string>;
+}
 // باقي التعريفات كما هي...
 
 // تعريفات الخطوات (Step Data)
@@ -25,17 +32,17 @@ export interface Step1Data {
 }
 
 export interface EducationInformation {
-  field_of_study_or_major: string;
-  country: string;
-  city: string;
-  governorate: string;
-  location_text: string;
-  from_date: string;
-  to_date: string;
-  phone: string;
-  ext: string;
-  diploma:boolean;
-  another_name:boolean;
+  field_of_study_or_major: FormField<string>;
+  country: FormField<string>;
+  city: FormField<string>;
+  governorate: FormField<string>;
+  location_text: FormField<string>;
+  from_date: FormField<string>;
+  to_date: FormField<string>;
+  phone: FormField<string>;
+  ext: FormField<string>;
+  diploma:FormField<boolean>;
+  another_name:FormField<boolean>;
 
 }
 
@@ -111,6 +118,12 @@ export interface ValidationResult {
 export interface RequestData {
   name: string;
   user_id: string;
+  // Home
+  country:string;
+  mobile_number:string;
+  is_degree_or_diploma: boolean;
+  from_time:string;
+  to_time:string;
   // Step1
   employer_name: string;
   first_name: string;
@@ -135,7 +148,8 @@ export interface UpdateFields {
 }
 
 // تعريف FormData: تجميع بيانات جميع الخطوات
-export type FormData = Step1Data &
+export type FormData = HomeData &
+  Step1Data &
   Step2Data &
   Step3Data &
   Step4Data &

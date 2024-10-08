@@ -3,6 +3,7 @@
 // src/stores/verificationRequest.ts
 import { defineStore } from 'pinia';
 import {
+  HomeData,
   Step1Data,
   Step2Data,
   Step3Data,
@@ -19,6 +20,7 @@ interface StepValidation {
 
 interface VerificationRequestStoreState {
   documentName: string | null;
+  home:HomeData;
   step1: Step1Data;
   step2: Step2Data;
   step3: Step3Data;
@@ -30,6 +32,13 @@ interface VerificationRequestStoreState {
 
 const getDefaultState = (): VerificationRequestStoreState => ({
   documentName: null,
+  home: {
+    country: { value: '', isValid: false, validationMessage: '' },
+    mobile_number: { value: '', isValid: false, validationMessage: '' },
+    is_degree_or_diploma: { value: false, isValid: false, validationMessage: '' },
+    from_time: { value: '', isValid: true, validationMessage: '' },
+    to_time: { value: '', isValid: false, validationMessage: '' },
+  },
   step1: {
     employer_name: { value: '', isValid: false, validationMessage: '' },
     first_name: { value: '', isValid: false, validationMessage: '' },
@@ -105,5 +114,13 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       }
     },
     // يمكنك إضافة إجراءات مماثلة للخطوات الأخرى إذا لزم الأمر
+
+       // تحديث حقل معين في Home باستخدام FormField
+       updateSHomeField<K extends keyof HomeData>(field: K, value: HomeData[K]['value']) {
+        if (this.home[field]) {
+          this.home[field].value = value;
+          // يمكنك إضافة منطق للتحقق من صحة الحقل هنا إذا لزم الأمر
+        }
+      },
   },
 });
