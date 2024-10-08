@@ -23,6 +23,10 @@
   "company_name",
   "service_package_section",
   "package",
+  "file_image",
+  "column_break_kwfj",
+  "d_file_image",
+  "section_break_yslk",
   "other_services",
   "section_break_ovyy",
   "package_price",
@@ -170,12 +174,33 @@
    "fieldname": "total_price",
    "fieldtype": "Currency",
    "label": "Total Price"
+  },
+  {
+   "fetch_from": "package.custom__file_image",
+   "fieldname": "file_image",
+   "fieldtype": "Attach Image",
+   "hidden": 1,
+   "label": " File Image"
+  },
+  {
+   "fieldname": "column_break_kwfj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "d_file_image",
+   "fieldtype": "Image",
+   "label": " D File Image",
+   "options": "file_image"
+  },
+  {
+   "fieldname": "section_break_yslk",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-09-26 03:11:42.075988",
+ "modified": "2024-10-08 14:49:04.773489",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",
