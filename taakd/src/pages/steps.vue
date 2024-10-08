@@ -8,7 +8,7 @@
       <div class="sticky top-4">
         <div class="pb-3 font-medium text-primary text-[1rem]">
           <p>اسم المستند: {{ documentName }}</p>
-          <span class="m-2">&larr;</span>Model steps instructions of Job Request ({{ percentageCompleted }}% Completed)
+          <span class="m-2"></span>Model steps instructions of Job Request ({{ percentageCompleted }}% Completed)
         </div>
         <div class="py-3 grid grid-cols-6 lg:flex lg:flex-col lg:gap-4 w-full">
           <StepIcon
@@ -18,6 +18,7 @@
             :complete="currentStepIndex > index"
             :label="'Step ' + (index + 1)"
             :desc="step.description"
+            :percentageCompleted="percentageCompleted"
           />
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-[1rem]">
