@@ -115,6 +115,7 @@ class ApplicantInvitation(Document):
 		return new_doc  
 
 	def create_sales_invoice(self,customer):
+			print("*"*50)
 			if not customer:
 				frappe.throw(_("Customer is not set. Cannot create Sales Invoice.") )   
 			sales_invoice = frappe.get_doc(
@@ -129,6 +130,15 @@ class ApplicantInvitation(Document):
 			return sales_invoice
 			
 	def preparing_the_sales_invoice(self, list_items, sales_invoice):
+		if self.package:
+			sales_invoice.append(
+				"items",
+				{
+					"item_code": self.package,
+					"qty": 1,
+					"uom":"Nos",
+				},
+			)     
 		for i in list_items:
 			is_stock_item = frappe.get_value("Item", i.service, "is_stock_item")
 			if is_stock_item:
@@ -140,22 +150,6 @@ class ApplicantInvitation(Document):
 						"uom":"Nos",
 					},
 				)
-			elif bundle := frappe.db.exists("Product Bundle", {"new_item_code": i.service}):
-				self.preparing(bundle, sales_invoice)
-		if self.package:
-			self.preparing(self.package, sales_invoice)   
-
-	def preparing(self, bundle, sales_invoice):
-		bundle = frappe.get_doc("Product Bundle", bundle)
-		for b_i in bundle.items:
-			sales_invoice.append(
-				"items",
-				{
-					"item_code": b_i.item_code,
-					"qty": 1,
-					"uom":"Nos",
-				},
-			)
 
 	def get_item_price(self,item):
 		try:
