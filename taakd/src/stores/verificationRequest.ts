@@ -1,18 +1,16 @@
-// ملف التخزين (Store):
-// src/stores/verificationRequest.ts
 // src/stores/verificationRequest.ts
 import { defineStore } from 'pinia';
 import {
   HomeData,
-  Step1Data,
-  Step2Data,
-  Step3Data,
-  Step4Data,
-  Step5Data,
-  Step6Data,
   RequestData,
   ValidationResult,
+  UpdateFields,
 } from '../data/types';
+import { createDocumentResource } from 'frappe-ui';
+
+import { ref } from 'vue';
+import { createRequestList, updateFieldsInRequestList, } from '../data/request';
+import { useToast } from 'vue-toastification';
 
 interface StepValidation {
   validation: ValidationResult;
@@ -20,107 +18,117 @@ interface StepValidation {
 
 interface VerificationRequestStoreState {
   documentName: string | null;
-  home:HomeData;
-  step1: Step1Data;
-  step2: Step2Data;
-  step3: Step3Data;
-  step4: Step4Data;
-  step5: Step5Data;
-  step6: Step6Data;
+  home: HomeData;
   validations: StepValidation[];
 }
 
 const getDefaultState = (): VerificationRequestStoreState => ({
   documentName: null,
   home: {
-    country: { value: '', isValid: false, validationMessage: '' },
+    country: { value: 'اليمن', isValid: false, validationMessage: '' },
     mobile_number: { value: '', isValid: false, validationMessage: '' },
     is_degree_or_diploma: { value: false, isValid: false, validationMessage: '' },
-    from_time: { value: '', isValid: true, validationMessage: '' },
+    from_time: { value: '', isValid: false, validationMessage: '' },
     to_time: { value: '', isValid: false, validationMessage: '' },
   },
-  step1: {
-    employer_name: { value: '', isValid: false, validationMessage: '' },
-    first_name: { value: '', isValid: false, validationMessage: '' },
-    last_name: { value: '', isValid: false, validationMessage: '' },
-    // middle_name: { value: '', isValid: true, validationMessage: '' },
-    suffix: { value: '', isValid: true, validationMessage: '' },
-    alias_name: { value: '', isValid: true, validationMessage: '' },
-    // email_address: { value: '', isValid: false, validationMessage: '' },
-    // i_agree_to_the_electronic_signature: { value: false, isValid: false, validationMessage: '' },
-    // i_acknowledge_the_above: { value: false, isValid: false, validationMessage: '' },
-  },
-  step2: {
-    education_information: [],
-  },
-  step3: {
-    employment_history: [],
-  },
-  step4: {
-    professional_qualification: [],
-  },
-  step5: {
-    review_comments: { value: '', isValid: true, validationMessage: '' },
-    // أضف الحقول المطلوبة لمراجعة المعلومات
-  },
-  step6: {
-    full_name: { value: '', isValid: false, validationMessage: '' },
-    email_address: { value: '', isValid: false, validationMessage: '' },
-    other_languages: { value: [], isValid: true, validationMessage: '' },
-    electronic_signature: { value: '', isValid: false, validationMessage: '' },
-    i_agree_to_the_electronic_signature: { value: false, isValid: false, validationMessage: '' },
-    i_acknowledge_the_above: { value: false, isValid: false, validationMessage: '' },
-  },
-  validations: Array.from({ length: 6 }, () => ({ validation: {} })),
+  validations: Array.from({ length: 5 }, () => ({ validation: {} })), // تم تحديث الطول ليوافق عدد الحقول
 });
 
 export const useVerificationRequestStore = defineStore('verificationRequest', {
   state: (): VerificationRequestStoreState => getDefaultState(),
-  
+
   actions: {
+    // تعيين اسم الوثيقة
     setDocumentName(name: string) {
-      console.log("$$$$$$$$$$$$$$",name)
       this.documentName = name;
     },
-    // تحديث بيانات الخطوة باستخدام النوع المحدد
-    updateStep<T extends keyof VerificationRequestStoreState>(
-      step: T,
-      data: Partial<VerificationRequestStoreState[T]>
+
+    // دالة لتحديث أي حقل في `home`
+    updateStep<K extends keyof VerificationRequestStoreState['home']>(
+      field: K,
+      payload: Partial<VerificationRequestStoreState['home'][K]>
     ) {
-      this[step] = { ...this[step], ...data };
+      this.home[field] = { ...this.home[field], ...payload };
     },
-    // تحديث التحقق من خطوات معينة
-    updateValidation(stepIndex: number, validation: ValidationResult) {
-      if (stepIndex >= 0 && stepIndex < this.validations.length) {
-        this.validations[stepIndex].validation = validation;
-      }
-    },
-    // إعادة تعيين المتجر إلى الحالة الافتراضية
+
+    // إعادة تعيين الستور إلى الحالة الافتراضية
     resetStore() {
       Object.assign(this, getDefaultState());
     },
-    // تحديث حقل معين في Step1 باستخدام FormField
-    // updateStep1Field<K extends keyof Step1Data>(field: K, value: Step1Data[K]['value']) {
-    //   if (this.step1[field]) {
-    //     this.step1[field].value = value;
-    //     // يمكنك إضافة منطق للتحقق من صحة الحقل هنا إذا لزم الأمر
-    //   }
-    // },
-    // تحديث حقل معين في Step6 باستخدام FormField
-    updateStep6Field<K extends keyof Step6Data>(field: K, value: Step6Data[K]['value']) {
-      if (this.step6[field]) {
-        this.step6[field].value = value;
-        // يمكنك إضافة منطق للتحقق من صحة الحقل هنا إذا لزم الأمر
+
+    /**
+     * تحميل الوثيقة الحالية
+     */
+    async loadDocument() {
+      const toast = useToast();
+      const requestList = createRequestList(['name', 'user_id']);
+      try {
+        // انتظار جلب البيانات
+        await requestList.fetch();
+        if (requestList.data.length > 0) {
+          this.documentName = requestList.data[0].name;
+          toast.success("تم تحميل الوثيقة بنجاح.");
+        } else {
+          // لا توجد وثيقة، نقوم بإنشاء واحدة جديدة
+          const initialFields: UpdateFields = {
+            country: this.home.country.value,
+            mobile_number: this.home.mobile_number.value,
+            is_degree_or_diploma: this.home.is_degree_or_diploma.value,
+            from_time: this.home.from_time.value,
+            to_time: this.home.to_time.value,
+          };
+          await this.createNewDocument(initialFields);
+        }
+      } catch (error) {
+        console.error("Error loading document:", error);
+        toast.error("حدث خطأ أثناء تحميل الوثيقة.");
       }
     },
-    // يمكنك إضافة إجراءات مماثلة للخطوات الأخرى إذا لزم الأمر
 
-       // تحديث حقل معين في Home باستخدام FormField
-       updateSHomeField<K extends keyof HomeData>(field: K, value: HomeData[K]['value']) {
-        if (this.home[field]) {
-          this.home[field].value = value;
-          // يمكنك إضافة منطق للتحقق من صحة الحقل هنا إذا لزم الأمر
-        }
-      },
+    /**
+     * إنشاء وثيقة جديدة
+     */
+    // async createNewDocument(initialFields: UpdateFields) {
+    //   const toast = useToast();
+
+    //   try {
+    //     const newDoc = await frappeCreateDocumentResource<RequestData>({
+    //       doctype: 'Verification Instructions Request',
+    //       fields: initialFields,
+    //     });
+
+    //     this.documentName = newDoc.name;
+    //     toast.success("تم إنشاء الوثيقة الجديدة بنجاح.");
+    //   } catch (error) {
+    //     console.error("Error creating new document:", error);
+    //     toast.error("حدث خطأ أثناء إنشاء الوثيقة الجديدة.");
+    //   }
+    // },
+
+    /**
+     * تحديث الحقول في الوثيقة الحالية
+     */
+    async updateDocumentFields(updatedFields: UpdateFields) {
+      const toast = useToast();
+      if (!this.documentName) {
+        toast.error("لم يتم العثور على اسم الوثيقة. يرجى إنشاء وثيقة أولاً.");
+        return;
+      }
+
+      const requestList = createRequestList(['name', 'user_id']);
+      try {
+        // await updateFieldsInRequestList(requestList, updatedFields);
+        // toast.success("تم تحديث الوثيقة بنجاح.");
+        const request = createDocumentResource({
+          doctype: 'Verification Instructions Request',
+          name: this.documentName // يمكنك تغيير الاسم حسب الحاجة
+          // auto: true,
+        })
+        await request.setValue.submit(updatedFields)
+      } catch (error) {
+        console.error("Error updating document fields:", error);
+        toast.error("حدث خطأ أثناء تحديث الوثيقة.");
+      }
+    },
   },
 });

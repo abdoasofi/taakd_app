@@ -73,7 +73,7 @@
     <!-- <JobRequest />
     <Review />
     <Verification /> -->
-    <Contact :location="location" :data="data"/>
+    <Contact :location="location"/>
   </BaseLayout>
 
   <!--

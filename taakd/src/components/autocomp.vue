@@ -1,3 +1,4 @@
+<!-- autocomp.vue -->
 <template>
     <div class="relative">
         <label

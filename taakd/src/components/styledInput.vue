@@ -1,3 +1,4 @@
+<!-- styledInput.vue -->
 <template>
   <div class="relative">
     <!-- Label with dynamic color and optional mandatory indicator and info icon -->

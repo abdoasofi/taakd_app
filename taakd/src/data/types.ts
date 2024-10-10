@@ -1,5 +1,5 @@
 // تعريفات الأنواع (Types):
-// src/data/types.ts
+/// src/data/types.ts
 
 // واجهة لحقل النموذج
 export interface FormField<T = any> {
@@ -9,6 +9,7 @@ export interface FormField<T = any> {
   touched?: boolean;
 }
 
+// واجهات البيانات لكل خطوة
 export interface HomeData {
   country: FormField<string>;
   mobile_number: FormField<string>;
@@ -16,97 +17,7 @@ export interface HomeData {
   from_time: FormField<string>;
   to_time: FormField<string>;
 }
-// باقي التعريفات كما هي...
-
-// تعريفات الخطوات (Step Data)
-export interface Step1Data {
-  employer_name: FormField<string>;
-  first_name: FormField<string>;
-  last_name: FormField<string>;
-  middle_name?: FormField<string>;
-  suffix?: FormField<string>;
-  alias_name?: FormField<string>;
-  // email_address: FormField<string>;
-  // i_agree_to_the_electronic_signature: FormField<boolean>;
-  // i_acknowledge_the_above: FormField<boolean>;
-}
-
-export interface EducationInformation {
-  field_of_study_or_major: FormField<string>;
-  country: FormField<string>;
-  city: FormField<string>;
-  governorate: FormField<string>;
-  location_text: FormField<string>;
-  from_date: FormField<string>;
-  to_date: FormField<string>;
-  phone: FormField<string>;
-  ext: FormField<string>;
-  diploma:FormField<boolean>;
-  another_name:FormField<boolean>;
-
-}
-
-export interface EmploymentHistory {
-  company: FormField<string>;
-  name_of_your_employer: FormField<string>;
-  contact_the_employer: FormField<string>;
-  issuing_salary: FormField<string>;
-  country: FormField<string>;
-  city: FormField<string>;
-  governorate: FormField<string>;
-  location_text: FormField<string>;
-  continuous: FormField<boolean>;
-  from_date: FormField<string>;
-  end_date: FormField<string>;
-  phone: FormField<string>;
-  ext: FormField<string>;
-  official_job_title_held_currently: FormField<string>;
-  type_of_employment: FormField<string>;
-  the_company_has_different_names: FormField<boolean>;
-  permission: FormField<boolean>;
-  nickname_checkbox: FormField<boolean>;
-  different_company_names: FormField<string>;
-  nickname: FormField<string>;
-}
-
-export interface ProfessionalQualification {
-  awarding_body: FormField<string>;
-  license_or_certificate_number: FormField<string>;
-  issuing_country: FormField<string>; 
-  date_awarded: FormField<string>;
-  expiration_date: FormField<string>;
-  award_name_description: FormField<string>;
-  is_an_expiration_date: FormField<boolean>;
-  your_name_varies: FormField<boolean>;
-
-}
-
-export interface Step2Data {
-  education_information: EducationInformation[];
-}
-
-export interface Step3Data {
-  employment_history: EmploymentHistory[];
-}
-
-export interface Step4Data {
-  professional_qualification: ProfessionalQualification[];
-}
-
-export interface Step5Data {
-  review_comments: FormField<string>;
-  // أضف الحقول المطلوبة لمراجعة المعلومات
-}
-
-export interface Step6Data {
-  full_name: FormField<string>;
-  email_address: FormField<string>;
-  other_languages: FormField<string[]>;
-  electronic_signature: FormField<string>;
-  i_agree_to_the_electronic_signature: FormField<boolean>;
-  i_acknowledge_the_above: FormField<boolean>;
-}
-
+// واجهة لنتائج التحقق
 export interface ValidationResult {
   [key: string]: {
     isValid: boolean;
@@ -119,27 +30,12 @@ export interface RequestData {
   name: string;
   user_id: string;
   // Home
-  country:string;
-  mobile_number:string;
+  country: string;
+  mobile_number: string;
   is_degree_or_diploma: boolean;
-  from_time:string;
-  to_time:string;
-  // Step1
-  employer_name: string;
-  first_name: string;
-  last_name: string;
-  middle_name?: string;
-  suffix?: string;
-  alias_name?: string;
-  email_address: string;
-  // Step2 إلى Step6
-  education_information: EducationInformation[];
-  employment_history: EmploymentHistory[];
-  professional_qualification: ProfessionalQualification[];
-  review_comments: string;
-  full_name: string;
-  other_languages: string[];
-  // ... أضف الحقول الأخرى حسب الحاجة
+  from_time: string;
+  to_time: string;
+
 }
 
 // واجهة UpdateFields: لتمثيل الحقول المحدثة
@@ -148,10 +44,7 @@ export interface UpdateFields {
 }
 
 // تعريف FormData: تجميع بيانات جميع الخطوات
-export type FormData = HomeData &
-  Step1Data &
-  Step2Data &
-  Step3Data &
-  Step4Data &
-  Step5Data &
-  Step6Data;
+export type FormData = {
+  home: HomeData;
+
+};
