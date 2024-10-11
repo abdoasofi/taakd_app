@@ -16,13 +16,12 @@
   "middle_name",
   "dont_middle_name",
   "suffix",
+  "country",
   "amended_from",
   "aliases_section",
   "alias_name",
   "id_card_information_section",
   "date_of_birth",
-  "column_break_dskm",
-  "repeat_enter_date_of_birth",
   "contact_information_tab",
   "contact_information_section",
   "email",
@@ -37,13 +36,14 @@
   "to_time",
   "current_mailing_address_tab",
   "current_mailing_address_section",
-  "country",
+  "country_now",
   "city",
   "governorate",
   "zip_code",
   "location_text",
   "column_break_kced",
   "street_address",
+  "date_living_address",
   "education_information_tab",
   "education_information_section",
   "donot_employer",
@@ -128,7 +128,8 @@
   {
    "fieldname": "suffix",
    "fieldtype": "Select",
-   "label": "Suffix"
+   "label": "Suffix",
+   "options": "\nJunior (Jr.)\nSenior (Sr.)"
   },
   {
    "fieldname": "amended_from",
@@ -203,8 +204,7 @@
    "description": "HireRight may need to contact you from time to time to clarify certain items contained in the data report submitted through your job application.\nWe will never share your email address with others or sell it",
    "fieldname": "email",
    "fieldtype": "Data",
-   "label": "Email",
-   "options": "Email"
+   "label": "Email"
   },
   {
    "fieldname": "phone",
@@ -222,16 +222,6 @@
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
    "label": "Date of Birth"
-  },
-  {
-   "fieldname": "column_break_dskm",
-   "fieldtype": "Column Break"
-  },
-  {
-   "description": "Most public records are stored using name and date of birth.\nTherefore, providing this information allows us to search for these sources accurately",
-   "fieldname": "repeat_enter_date_of_birth",
-   "fieldtype": "Date",
-   "label": "Repeat Enter Date of Birth"
   },
   {
    "description": "All fields marked with an asterisk ( * ) are required.\nPlease provide your employment history, beginning with the most recent. To add additional employers, click the \"Add\" icon.",
@@ -426,8 +416,7 @@
    "fieldname": "application_status",
    "fieldtype": "Select",
    "label": "Application Status",
-   "options": "New Request\nIn Progress\nSubmitted\nVerification Started\nMore Info Needed\nWriting report\nReport is ready",
-   "read_only": 1
+   "options": "New Request\nIn Progress\nSubmitted\nVerification Started\nMore Info Needed\nWriting report\nReport is ready"
   },
   {
    "default": "Step 1",
@@ -510,12 +499,23 @@
    "fieldname": "mobile_number",
    "fieldtype": "Data",
    "label": "Mobile Number"
+  },
+  {
+   "fieldname": "country_now",
+   "fieldtype": "Link",
+   "label": "Country",
+   "options": "Location"
+  },
+  {
+   "fieldname": "date_living_address",
+   "fieldtype": "Date",
+   "label": "Date you started living at this address"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-01 20:32:54.064689",
+ "modified": "2024-10-11 20:37:52.634946",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
