@@ -8,9 +8,8 @@ import {
   UpdateFields,
 } from '../data/types';
 import { createDocumentResource } from 'frappe-ui';
-
 import { ref } from 'vue';
-import { createRequestList, updateFieldsInRequestList, } from '../data/request';
+import { createRequestList, updateFieldsInRequestList } from '../data/request';
 import { useToast } from 'vue-toastification';
 
 interface StepValidation {
@@ -51,7 +50,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     email: { value: '', isValid: false, validationMessage: '' },
     date_of_birth: { value: '', isValid: false, validationMessage: '' },
   },
-  validations: Array.from({ length: 5 }, () => ({ validation: {} })), // تم تحديث الطول ليوافق عدد الحقول
+  validations: Array.from({ length: 5 }, () => ({ validation: {} })),
 });
 
 export const useVerificationRequestStore = defineStore('verificationRequest', {
@@ -70,6 +69,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     ) {
       this.home[field] = { ...this.home[field], ...payload };
     },
+
     // دالة لتحديث أي حقل في `step1`
     updateStep1<K extends keyof VerificationRequestStoreState['step1']>(
       field: K,
@@ -77,6 +77,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     ) {
       this.step1[field] = { ...this.step1[field], ...payload };
     },
+
     // إعادة تعيين الستور إلى الحالة الافتراضية
     resetStore() {
       Object.assign(this, getDefaultState());
@@ -114,22 +115,21 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     /**
      * إنشاء وثيقة جديدة
      */
-    // async createNewDocument(initialFields: UpdateFields) {
-    //   const toast = useToast();
+    async createNewDocument(initialFields: UpdateFields) {
+      const toast = useToast();
 
-    //   try {
-    //     const newDoc = await frappeCreateDocumentResource<RequestData>({
-    //       doctype: 'Verification Instructions Request',
-    //       fields: initialFields,
-    //     });
-
-    //     this.documentName = newDoc.name;
-    //     toast.success("تم إنشاء الوثيقة الجديدة بنجاح.");
-    //   } catch (error) {
-    //     console.error("Error creating new document:", error);
-    //     toast.error("حدث خطأ أثناء إنشاء الوثيقة الجديدة.");
-    //   }
-    // },
+      try {
+        const newDoc = await createDocumentResource({
+          doctype: 'Verification Instructions Request',
+          fields: initialFields,
+        });
+        this.documentName = newDoc.name;
+        toast.success("تم إنشاء الوثيقة الجديدة بنجاح.");
+      } catch (error) {
+        console.error("Error creating new document:", error);
+        toast.error("حدث خطأ أثناء إنشاء الوثيقة الجديدة.");
+      }
+    },
 
     /**
      * تحديث الحقول في الوثيقة الحالية
@@ -141,19 +141,101 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         return;
       }
 
-      const requestList = createRequestList(['name', 'user_id']);
       try {
-        // await updateFieldsInRequestList(requestList, updatedFields);
-        // toast.success("تم تحديث الوثيقة بنجاح.");
         const request = createDocumentResource({
           doctype: 'Verification Instructions Request',
-          name: this.documentName // يمكنك تغيير الاسم حسب الحاجة
-          // auto: true,
-        })
-        await request.setValue.submit(updatedFields)
+          name: this.documentName, // تأكد من أن الاسم صحيح
+        });
+
+        await request.setValue.submit(updatedFields);
+        toast.success("تم تحديث الوثيقة بنجاح.");
       } catch (error) {
         console.error("Error updating document fields:", error);
         toast.error("حدث خطأ أثناء تحديث الوثيقة.");
+      }
+    },
+
+    /**
+     * دالة التحقق من صحة بيانات Step 1
+     */
+    validateStep1(): boolean {
+      let isValid = true;
+      const requiredFields: (keyof Step1Data)[] = [
+        'employer_name',
+        'first_name',
+        'last_name',
+        // 'country_now',
+        // 'city',
+        // 'governorate',
+        'zip_code',
+        'location_text',
+        // 'street_address',
+        'date_living_address',
+        'email',
+        'date_of_birth',
+      ];
+
+      requiredFields.forEach((field) => {
+        const fieldData = this.step1[field];
+        if (!fieldData.value || (Array.isArray(fieldData.value) && fieldData.value.length === 0)) {
+          this.updateStep1(field, {
+            isValid: false,
+            validationMessage: 'هذا الحقل مطلوب.',
+          });
+          isValid = false;
+        } else {
+          this.updateStep1(field, {
+            isValid: true,
+            validationMessage: '',
+          });
+        }
+      });
+
+      // إضافة تحقق إضافي إذا لزم الأمر (مثل التحقق من صحة البريد الإلكتروني)
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (this.step1.email.value && !emailPattern.test(this.step1.email.value)) {
+        this.updateStep1('email', {
+          isValid: false,
+          validationMessage: 'يرجى إدخال بريد إلكتروني صحيح.',
+        });
+        isValid = false;
+      } else if (this.step1.email.value) {
+        this.updateStep1('email', {
+          isValid: true,
+          validationMessage: '',
+        });
+      }
+
+      return isValid;
+    },
+
+    /**
+     * دالة الحفظ لخطوة Step 1
+     */
+    async saveStep1() {
+      const toast = useToast();
+      // التحقق من صحة البيانات
+      if (!this.validateStep1()) {
+        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+        throw new Error('Validation failed');
+      }
+
+      // تجهيز البيانات للإرسال
+      const dataToSubmit: UpdateFields = {};
+      for (const key in this.step1) {
+        if (Object.prototype.hasOwnProperty.call(this.step1, key)) {
+          const field = key as keyof Step1Data;
+          dataToSubmit[key] = this.step1[field].value;
+        }
+      }
+
+      // إرسال البيانات إلى Doctype
+      try {
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حفظ البيانات بنجاح.');
+      } catch (error) {
+        // الخطأ يتم معالجته في updateDocumentFields
+        throw error;
       }
     },
   },

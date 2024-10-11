@@ -1,5 +1,5 @@
 <!-- المكون الفرعي: -->
-<!-- stepsSections/step1.vue -->
+<!-- /pages/stepsSections/step1.vue -->
 <template>
   <div class="pt-3 container">
     <!-- <p>اسم المستند: {{ documentName }}</p> -->
@@ -312,15 +312,14 @@
   </div>
 
 </template>
-
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import CheckBox from '../../components/checkBox.vue';
 import FieldContainer from '../../components/fieldContainer.vue';
 import StyledInput from '../../components/styledInput.vue';
 import SupportingText from '../../components/supportingText.vue';
-import { Step1Data, ValidationResult } from '../../data/types';
+
 import InfoRow from '../../components/InfoRow.vue';
 import Toggle from "../../components/toggle.vue";
 import FieldsGroup from "../../components/fieldsGroup.vue";
@@ -330,36 +329,22 @@ import Button from '../../components/button.vue';
 import Autocomp from '../../components/autocomp.vue';
 import Textarea from '../../components/textarea.vue';
 import { useLocation } from '../../stores/locations';
-// import Textarea from 'frappe-ui/src/components/Textarea.vue';
-
 
 const store = useVerificationRequestStore();
 const toast = useToast();
-
 const locations = useLocation();
-const location = locations.getLocation()
-
+const location = locations.getLocation();
 
 // تعريف متغيرات التحميل
 const loading = ref(false);
-
-// const optionSuffix = reactive([
-//   { value: "", label: "" },
-//   { value: "Junior (Jr.)", label: "Junior (Jr.)" },
-//   { value: "Senior (Sr.)", label: "Senior (Sr.)" },
-// ])
-
 const selectedCountry = ref('')
 const selectedCity= ref('')
-
 // تحميل البيانات عند تحميل الصفحة
 onMounted(async () => {
-  
   loading.value = true;
   await store.loadDocument();
   loading.value = false;
 });
-
 const optionCountry = computed(() => {
   if (location && location.data) {
     return location.data
@@ -394,66 +379,79 @@ const optionCountry = computed(() => {
 // تعريف computed properties لربط v-model مع مخزن Pinia
 const employerName = computed({
   get: () => store.step1.employer_name.value,
-  set: (val: string) => store.updateStep1('employer_name', { value: val })
+  set: (val: string) => store.updateStep1('employer_name', { value: val }),
 });
 
 const firstName = computed({
   get: () => store.step1.first_name.value,
-  set: (val: string) => store.updateStep1('first_name', { value: val })
+  set: (val: string) => store.updateStep1('first_name', { value: val }),
 });
+
 const lastName = computed({
   get: () => store.step1.last_name.value,
-  set: (val: string) => store.updateStep1('last_name', { value: val })
+  set: (val: string) => store.updateStep1('last_name', { value: val }),
 });
+
 const middleName = computed({
   get: () => store.step1.middle_name.value,
-  set: (val: string) => store.updateStep1('middle_name', { value: val })
+  set: (val: string) => store.updateStep1('middle_name', { value: val }),
 });
+
 const suffix = computed({
   get: () => store.step1.suffix.value,
-  set: (val: string) => store.updateStep1('suffix', { value: val })
+  set: (val: string) => store.updateStep1('suffix', { value: val }),
 });
+
 const country = computed({
   get: () => store.step1.country_now.value,
-  set: (val: string) => store.updateStep1('country_now', { value: val })
+  set: (val: string) => store.updateStep1('country_now', { value: val }),
 });
+
 const governorate = computed({
-  get: () => store.step1.city.value,
-  set: (val: string) => store.updateStep1('city', { value: val })
-});
-const city = computed({
   get: () => store.step1.governorate.value,
-  set: (val: string) => store.updateStep1('governorate', { value: val })
+  set: (val: string) => store.updateStep1('governorate', { value: val }),
 });
+
+const city = computed({
+  get: () => store.step1.city.value,
+  set: (val: string) => store.updateStep1('city', { value: val }),
+});
+
 const locationText = computed({
   get: () => store.step1.location_text.value,
-  set: (val: string) => store.updateStep1('location_text', { value: val })
+  set: (val: string) => store.updateStep1('location_text', { value: val }),
 });
+
 const streetAddress = computed({
   get: () => store.step1.street_address.value,
-  set: (val: string) => store.updateStep1('street_address', { value: val })
+  set: (val: string) => store.updateStep1('street_address', { value: val }),
 });
+
 const zipCode = computed({
   get: () => store.step1.zip_code.value,
-  set: (val: string) => store.updateStep1('zip_code', { value: val })
+  set: (val: string) => store.updateStep1('zip_code', { value: val }),
 });
+
 const dateLivingAddress = computed({
   get: () => store.step1.date_living_address.value,
-  set: (val: string) => store.updateStep1('date_living_address', { value: val })
+  set: (val: string) => store.updateStep1('date_living_address', { value: val }),
 });
+
 const email = computed({
   get: () => store.step1.email.value,
-  set: (val: string) => store.updateStep1('email', { value: val })
+  set: (val: string) => store.updateStep1('email', { value: val }),
 });
+
 const dateOfBirth = computed({
   get: () => store.step1.date_of_birth.value,
-  set: (val: string) => store.updateStep1('date_of_birth', { value: val })
+  set: (val: string) => store.updateStep1('date_of_birth', { value: val }),
 });
 
 // const aliasName = computed({
 //   get: () => store.step1.alias_name.value,
 //   set: (val: string) => store.updateStep1('alias_name', { value: val })
 // });
+
 // const phone = computed({
 //   get: () => store.step1.phone.value,
 //   set: (val: string) => store.updateStep1('phone', { value: val })
@@ -461,99 +459,32 @@ const dateOfBirth = computed({
 
 // معالجة تغيير اختيار الدولة
 const handleCountryChange = (value) => {
-  store.step1.country_now.value=value.value
-}
+  // store.step1.country_now.value=value.value
+  store.updateStep1('country_now', { value: value.value });
+};
+
 const handleCityChange = (value) => {
-  store.step1.city.value=value.value
-}
+  // store.step1.city.value=value.value
+  store.updateStep1('city', { value: value.value });
+};
+
 const handleGovernorateChange = (value) => {
-  store.step1.governorate.value=value.value
-}
- // دالة الحفظ
+  // store.step1.governorate.value=value.value
+  store.updateStep1('governorate', { value: value.value });
+};
+
+// دالة الحفظ
 const save = async () => {
-  // التحقق من صحة الحقول
-  const { step1 } = store;
-  let isValid = true;
-
-  // تحقق من 
-  if (!step1.employer_name.value) {
-    store.updateStep1('employer_name', {
-      isValid: false,
-      validationMessage: 'يرجى تحديد .',
-    });
-    isValid = false;
-  } else {
-    store.updateStep1('employer_name', {
-      isValid: true,
-      validationMessage: '',
-    });
-  }
-
-  // تحقق من 
-  if (!step1.first_name.value) {
-    store.updateStep1('first_name', {
-      isValid: false,
-      validationMessage: 'يرجى تحديد .',
-    });
-    isValid = false;
-  } else {
-    store.updateStep1('first_name', {
-      isValid: true,
-      validationMessage: '',
-    });
-  }
-
-  // تحقق من 
-  if (!step1.last_name.value) {
-    store.updateStep1('last_name', {
-      isValid: false,
-      validationMessage: 'يرجى اختيار .',
-    });
-    isValid = false;
-  } else {
-    store.updateStep1('last_name', {
-      isValid: true,
-      validationMessage: '',
-    });
-  }
-
-  if (!isValid) {
-    toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-    return;
-  }
-
-  // متابعة الحفظ إذا كانت البيانات صحيحة
   try {
     loading.value = true;
-    const updatedFields = {
-      last_name: store.step1.last_name.value,
-      employer_name: store.step1.employer_name.value,
-      first_name: store.step1.first_name.value,
-      middle_name: store.step1.middle_name.value,
-      suffix: store.step1.suffix.value,
-      country_now: store.step1.country_now.value,
-      city: store.step1.city.value,
-      governorate: store.step1.governorate.value,
-      location_text: store.step1.location_text.value,
-      street_address: store.step1.street_address.value,
-      zip_code: store.step1.zip_code.value,
-      date_living_address: store.step1.date_living_address.value,
-      email: store.step1.email.value,
-      // alias_name: store.step1.alias_name.value,
-      // phone: store.step1.phone.value,
-      date_of_birth: store.step1.date_of_birth.value,
-    };
-    console.log("**********//*/*/*/*/*/*/*",updatedFields)
-    await store.updateDocumentFields(updatedFields);
-    toast.success('تم حفظ البيانات بنجاح.');
+    await store.saveStep1();
+    // كود إضافي بعد الحفظ إذا لزم الأمر
   } catch (error) {
-    console.error('Error saving data:', error);
-    toast.error('حدث خطأ أثناء حفظ البيانات.');
+    // الخطأ يتم معالجته في دالة saveStep1
   } finally {
     loading.value = false;
   }
 };
-
 </script>
 
 <style scoped>

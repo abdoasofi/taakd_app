@@ -1,5 +1,4 @@
-<!-- المكون الرئيسي: -->
-<!-- src/components/steps.vue -->
+<!-- src/pages/steps.vue -->
 <template>
   <Header />
   <div class="lg:grid lg:grid-cols-12 lg:container py-8 bg-bg">
@@ -66,7 +65,7 @@
         <Button 
           v-if="!isLastStep" 
           level="primary" 
-          @clicked="nextStep"
+          @clicked="handleStep" 
         >
           Step  &rarr;
         </Button>
@@ -97,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
 import StepIcon from './stepsSections/components/stepIcon.vue';
@@ -111,9 +110,6 @@ import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
 import objectConvertor from '../data/convertor';
 import validateInputStep1 from '../data/validate/validateInputStep1';
-import validateInputStep2 from '../data/validate/validateInputStep2';
-import validateInputStep3 from '../data/validate/validateInputStep3';
-import validateInputStep4 from '../data/validate/validateInputStep4';
 // قم بإضافة استيراد دوال التحقق الأخرى إذا لزم الأمر
 import { ValidationResult } from '../data/types';
 
@@ -130,22 +126,22 @@ const steps = [
   {
     component: Step1,
     description: "Personal Information",
-    validate: () => validateInputStep1(store.step1),
+    // validate: () => validateInputStep1(store.step1),
   },
   {
     component: Step2,
     description: "Education Information",
-    validate: () => validateInputStep2(store.step2),
+    // validate: () => validateInputStep2(store.step2),
   },
   {
     component: Step3,
     description: "Employment History",
-    validate: () => validateInputStep3(store.step3),
+    // validate: () => validateInputStep3(store.step3),
   },
   {
     component: Step4,
     description: "Professional Qualifications",
-    validate: () => validateInputStep4(store.step4),
+    // validate: () => validateInputStep4(store.step4),
   },
   {
     component: Step5,
@@ -173,37 +169,6 @@ const percentageCompleted = computed(() => {
 // تحقق من كون المرحلة الحالية هي الأخيرة
 const isLastStep = computed(() => currentStepIndex.value === totalSteps - 1);
 
-// دالة التحقق من صحة المرحلة الحالية
-// const isCurrentStepValid = computed(() => {
-//   const validationResult: ValidationResult = steps[currentStepIndex.value].validate();
-//   store.updateValidation(currentStepIndex.value, validationResult);
-  
-//   return Object.values(validationResult).every(field => field.isValid);
-// });
-
-// دالة التحقق من صحة جميع الخطوات
-const isAllStepsValid = computed(() => {
-  let allValid = true;
-  
-  steps.forEach((step, index) => {
-    if (step.validate) {
-      const validationResult = step.validate();
-      store.updateValidation(index, validationResult);
-      if (!Object.values(validationResult).every(field => field.isValid)) {
-        allValid = false;
-      }
-    }
-  });
-  
-  return allValid;
-});
-
-// دالة تحديث بيانات الخطوة الحالية
-// const updateStepData = (newData: any) => {
-//   const stepKey = `step${currentStepIndex.value + 1}` as keyof typeof store;
-//   store.updateStep(stepKey, newData);
-// };
-
 // دالة التنقل للخلف
 const previousStep = () => {
   if (currentStepIndex.value > 0) {
@@ -211,65 +176,35 @@ const previousStep = () => {
   }
 };
 
-// دالة التنقل للأمام
-const nextStep = async () => {
-  // if (!isCurrentStepValid.value) {
-  //   toast.error("يرجى تصحيح الأخطاء في البيانات المدخلة.");
-  //   return;
-  // }
-
-  // تحويل البيانات الحالية
-  const stepKey = `step${currentStepIndex.value + 1}` as keyof typeof store;
-  const stepData = store[stepKey] as any; // يمكن تحسين هذا النوع لاحقًا
-  const finalData = objectConvertor(stepData);
-
+// دالة التنقل للأمام (زر "Step")
+const handleStep = async () => {
   try {
-    await store.updateDocumentFields(finalData);
-    toast.success("تم تحديث الوثيقة بنجاح.");
-    currentStepIndex.value++;
+    loading.value = true;
+
+    // استدعاء saveStep1 من المتجر لحفظ البيانات الحالية
+    await store.saveStep1();
+
+    toast.success("تم حفظ البيانات بنجاح.");
+
+    // الانتقال إلى الخطوة التالية
+    if (currentStepIndex.value < totalSteps - 1) {
+      currentStepIndex.value++;
+    }
   } catch (error) {
-    console.error("Error updating document:", error);
-    toast.error("حدث خطأ أثناء تحديث الوثيقة.");
+    // الخطأ يتم معالجته في دالة saveStep1
+  } finally {
+    loading.value = false;
   }
 };
 
 // دالة قبول الطلب في خطوة 6
 const accept = async () => {
-//   // التحقق من صحة جميع الخطوات
-//   if (!isAllStepsValid.value) {
-//     toast.error("يرجى تصحيح الأخطاء في جميع الخطوات.");
-//     return;
-//   }
-
-//   // دمج جميع البيانات من الخطوات المختلفة
-//   const formData: FormData = {
-//     home: store.home,
-//     step1: store.step1,
-//     step2: store.step2,
-//     step3: store.step3,
-//     step4: store.step4,
-//     step5: store.step5,
-//     step6: store.step6,
-//   };
-
-//   const finalData = objectConvertor(formData);
-
-//   try {
-//     if (!store.documentName) {
-//       await store.createDocument(finalData as RequestData);
-//       toast.success("تم إنشاء الوثيقة بنجاح.");
-//     } else {
-//       await store.updateDocument(finalData as Partial<RequestData>);
-//       toast.success("تم تحديث الوثيقة بنجاح.");
-//     }
-//     // بعد القبول، يمكن إعادة تعيين المتجر أو الانتقال إلى صفحة أخرى
-//   } catch (error) {
-//     console.error("Error saving verification request:", error);
-//     toast.error("حدث خطأ أثناء حفظ البيانات.");
-//   }
+  // تنفيذ منطق القبول هنا إذا لزم الأمر
+  toast.success("تم قبول الطلب بنجاح.");
+  // يمكن إعادة التوجيه أو إعادة تعيين المتجر هنا
 };
 
-// دالة رفض الطلب
+ // دالة رفض الطلب
 const reject = () => {
   toast.info("تم رفض الطلب.");
   store.resetStore();
@@ -287,8 +222,15 @@ watch(documentName, (newVal, oldVal) => {
   console.log(`documentName تغير من "${oldVal}" إلى "${newVal}"`);
 });
 
+// تعريف متغير التحميل للتحكم في حالة الزر "Step"
+const loading = ref(false);
+
 // تحميل الوثيقة عند بدء المكون
-// loadDocument();
+onMounted(async () => {
+  loading.value = true;
+  await store.loadDocument();
+  loading.value = false;
+});
 </script>
 
 <style scoped>
