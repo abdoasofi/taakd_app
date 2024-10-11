@@ -35,7 +35,8 @@
               infoText="Select your country"
               inputType="text"
               :options="optionCountry"
-              v-model="country"
+              :v-model="country"
+              @input-change="handleCountryChange"
               :isValid="store.home.country.isValid"
               :validationMessage="store.home.country.validationMessage"
               :isMandatory="true"
@@ -123,6 +124,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
+import { useLocation } from '../../stores/locations';
 import Button from '../../components/button.vue';
 import Heading from '../../components/heading.vue';
 import StyledInput from '../../components/styledInput.vue';
@@ -132,17 +134,35 @@ import VerificationInformation from '../../components/Icons/verificationInformat
 import { useToast } from 'vue-toastification';
 import FadeInOut from '../../components/fadeInOut.vue'; // تأكد من استيراده
 
+
 const store = useVerificationRequestStore();
 const toast = useToast();
+
+const locations = useLocation();
+const location = locations.getLocation()
+
+// تأكد أن location و data موجودة قبل استخدامها
+const optionCountry = computed(() => {
+  if (location && location.data) {
+    return location.data
+      .filter((loc) => loc.location_type === 'Country')
+      .map((loc) => ({
+        label: loc.location_name,
+        value: loc.location_name,
+      }))
+  }
+  return [] // إرجاع مصفوفة فارغة إذا لم تتوفر البيانات
+})
+
+
+
 
 // تعريف متغيرات التحميل
 const loading = ref(false);
 
-// خيارات الدول (يمكنك جلبها من API أو تعريفها محليًا)
-const optionCountry = ['اليمن', 'السعودية', 'الإمارات', 'قطر', 'البحرين'];
-
 // تحميل البيانات عند تحميل الصفحة
 onMounted(async () => {
+  console.log("////////////////////////////",locations.getLocation())
   loading.value = true;
   await store.loadDocument();
   loading.value = false;
@@ -151,32 +171,35 @@ onMounted(async () => {
 // تعريف computed properties لربط v-model مع مخزن Pinia
 const mobileNumber = computed({
   get: () => store.home.mobile_number.value,
-  set: (val: string) => store.updateStep('mobile_number', { value: val })
+  set: (val: string) => store.updateHome('mobile_number', { value: val })
 });
 
 const country = computed({
   get: () => store.home.country.value,
-  set: (val: string) => store.updateStep('country', { value: val })
+  set: (val: string) => store.updateHome('country', { value: val })
 });
 
 const fromTime = computed({
   get: () => store.home.from_time.value,
-  set: (val: string) => store.updateStep('from_time', { value: val })
+  set: (val: string) => store.updateHome('from_time', { value: val })
 });
 
 const toTime = computed({
   get: () => store.home.to_time.value,
-  set: (val: string) => store.updateStep('to_time', { value: val })
+  set: (val: string) => store.updateHome('to_time', { value: val })
 });
 
 const isDegreeOrDiploma = computed({
   get: () => store.home.is_degree_or_diploma.value,
   set: (val: boolean | string) => {
     const booleanVal = val === 'true' || val === true;
-    store.updateStep('is_degree_or_diploma', { value: booleanVal });
+    store.updateHome('is_degree_or_diploma', { value: booleanVal });
   }
 });
-
+// معالجة تغيير اختيار الدولة
+const handleCountryChange = (value) => {
+  store.home.country.value=value.value
+}
 // دالة الحفظ
 const save = async () => {
   // التحقق من صحة الحقول
@@ -186,13 +209,13 @@ const save = async () => {
   // تحقق من رقم الهاتف
   const phoneRegex = /^\d{10,}$/; // مثال على regex لرقم الهاتف
   // if (!phoneRegex.test(home.mobile_number.value)) {
-  //   store.updateStep('mobile_number', {
+  //   store.updateHome('mobile_number', {
   //     isValid: false,
   //     validationMessage: 'يرجى إدخال رقم هاتف صالح.',
   //   });
   //   isValid = false;
   // } else {
-    store.updateStep('mobile_number', {
+    store.updateHome('mobile_number', {
       isValid: true,
       validationMessage: '',
     });
@@ -200,26 +223,26 @@ const save = async () => {
 
   // تحقق من التوقيت
   if (!home.from_time.value) {
-    store.updateStep('from_time', {
+    store.updateHome('from_time', {
       isValid: false,
       validationMessage: 'يرجى تحديد الوقت.',
     });
     isValid = false;
   } else {
-    store.updateStep('from_time', {
+    store.updateHome('from_time', {
       isValid: true,
       validationMessage: '',
     });
   }
 
   if (!home.to_time.value) {
-    store.updateStep('to_time', {
+    store.updateHome('to_time', {
       isValid: false,
       validationMessage: 'يرجى تحديد الوقت.',
     });
     isValid = false;
   } else {
-    store.updateStep('to_time', {
+    store.updateHome('to_time', {
       isValid: true,
       validationMessage: '',
     });
@@ -227,13 +250,13 @@ const save = async () => {
 
   // تحقق من البلد
   if (!home.country.value) {
-    store.updateStep('country', {
+    store.updateHome('country', {
       isValid: false,
       validationMessage: 'يرجى اختيار بلد.',
     });
     isValid = false;
   } else {
-    store.updateStep('country', {
+    store.updateHome('country', {
       isValid: true,
       validationMessage: '',
     });
@@ -241,13 +264,13 @@ const save = async () => {
 
   // تحقق من الدرجة أو الدبلوم
   if (home.is_degree_or_diploma.value === null || home.is_degree_or_diploma.value === undefined) {
-    store.updateStep('is_degree_or_diploma', {
+    store.updateHome('is_degree_or_diploma', {
       isValid: false,
       validationMessage: 'يرجى اختيار ما إذا كنت حصلت على درجة أو دبلوم.',
     });
     isValid = false;
   } else {
-    store.updateStep('is_degree_or_diploma', {
+    store.updateHome('is_degree_or_diploma', {
       isValid: true,
       validationMessage: '',
     });
