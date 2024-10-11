@@ -17,6 +17,25 @@ export interface HomeData {
   from_time: FormField<string>;
   to_time: FormField<string>;
 }
+
+export interface Step1Data {
+  employer_name: FormField<string>;
+  first_name: FormField<string>;
+  last_name: FormField<string>;
+  middle_name: FormField<string>;
+  suffix: FormField<string>;
+  alias_name: FormField<[]>;
+  country_now: FormField<string>;
+  city: FormField<string>;
+  governorate: FormField<string>;
+  zip_code: FormField<string>;
+  location_text: FormField<string>;
+  street_address: FormField<string>;
+  date_living_address: FormField<string>;
+  phone: FormField<[]>;
+  email: FormField<string>;
+  date_of_birth: FormField<string>;
+}
 // واجهة لنتائج التحقق
 export interface ValidationResult {
   [key: string]: {
@@ -35,6 +54,24 @@ export interface RequestData {
   is_degree_or_diploma: boolean;
   from_time: string;
   to_time: string;
+  // Step1
+  employer_name: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
+  suffix: string;
+  alias_name: [];
+  city: string;
+  country_now: string;
+  governorate: string;
+  zip_code: string;
+  location_text: string;
+  street_address: string;
+  date_living_address: string;
+  phone: [];
+  email: string;
+  date_of_birth: string
+  //  Step2
 
 }
 
@@ -45,6 +82,7 @@ export interface UpdateFields {
 
 // تعريف FormData: تجميع بيانات جميع الخطوات
 export type FormData = {
-  home: HomeData;
+  home: HomeData &
+  Step1Data;
 
 };

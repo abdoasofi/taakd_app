@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia';
 import {
   HomeData,
+  Step1Data,
   RequestData,
   ValidationResult,
   UpdateFields,
@@ -19,17 +20,36 @@ interface StepValidation {
 interface VerificationRequestStoreState {
   documentName: string | null;
   home: HomeData;
+  step1: Step1Data;
   validations: StepValidation[];
 }
 
 const getDefaultState = (): VerificationRequestStoreState => ({
   documentName: null,
   home: {
-    country: { value: 'اليمن', isValid: false, validationMessage: '' },
+    country: { value: '', isValid: false, validationMessage: '' },
     mobile_number: { value: '', isValid: false, validationMessage: '' },
     is_degree_or_diploma: { value: false, isValid: false, validationMessage: '' },
     from_time: { value: '', isValid: false, validationMessage: '' },
     to_time: { value: '', isValid: false, validationMessage: '' },
+  },
+  step1: {
+    employer_name: { value: '', isValid: false, validationMessage: '' },
+    first_name: { value: '', isValid: false, validationMessage: '' },
+    last_name: { value: '', isValid: false, validationMessage: '' },
+    middle_name: { value: '', isValid: true, validationMessage: '' },
+    suffix: { value: '', isValid: true, validationMessage: '' },
+    alias_name: { value: [], isValid: true, validationMessage: '' },
+    country_now: { value: '', isValid: false, validationMessage: '' },
+    city: { value: '', isValid: false, validationMessage: '' },
+    governorate: { value: '', isValid: false, validationMessage: '' },
+    zip_code: { value: '', isValid: false, validationMessage: '' },
+    location_text: { value: '', isValid: false, validationMessage: '' },
+    street_address: { value: '', isValid: false, validationMessage: '' },
+    date_living_address: { value: '', isValid: false, validationMessage: '' },
+    phone: { value: [], isValid: true, validationMessage: '' },
+    email: { value: '', isValid: false, validationMessage: '' },
+    date_of_birth: { value: '', isValid: false, validationMessage: '' },
   },
   validations: Array.from({ length: 5 }, () => ({ validation: {} })), // تم تحديث الطول ليوافق عدد الحقول
 });
@@ -44,13 +64,19 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     // دالة لتحديث أي حقل في `home`
-    updateStep<K extends keyof VerificationRequestStoreState['home']>(
+    updateHome<K extends keyof VerificationRequestStoreState['home']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['home'][K]>
     ) {
       this.home[field] = { ...this.home[field], ...payload };
     },
-
+    // دالة لتحديث أي حقل في `step1`
+    updateStep1<K extends keyof VerificationRequestStoreState['step1']>(
+      field: K,
+      payload: Partial<VerificationRequestStoreState['step1'][K]>
+    ) {
+      this.step1[field] = { ...this.step1[field], ...payload };
+    },
     // إعادة تعيين الستور إلى الحالة الافتراضية
     resetStore() {
       Object.assign(this, getDefaultState());
