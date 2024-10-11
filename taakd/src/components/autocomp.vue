@@ -63,11 +63,9 @@ const selectedOption = ref('');
 const emit = defineEmits(['input-change']); // Declare the emitted event
 const showInfo = ref(false);
 const emitSelected = function(value)  {
-  console.log("**************",value);
   selectedOption.value = value.value;
   emit('input-change', {name:props.name,
 		value:selectedOption.value}); // Emit the event with a message
-  console.log("**************",selectedOption);
 
 };
 // Props
