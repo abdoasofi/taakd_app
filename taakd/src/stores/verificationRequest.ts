@@ -3,6 +3,7 @@ import { defineStore } from 'pinia';
 import {
   HomeData,
   Step1Data,
+  Step2Data, // أضف Step2Data هنا
   RequestData,
   ValidationResult,
   UpdateFields,
@@ -20,6 +21,7 @@ interface VerificationRequestStoreState {
   documentName: string | null;
   home: HomeData;
   step1: Step1Data;
+  step2: Step2Data; // أضف الخطوة الثانية إلى واجهة الحالة
   validations: StepValidation[];
 }
 
@@ -50,6 +52,9 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     email: { value: '', isValid: false, validationMessage: '' },
     date_of_birth: { value: '', isValid: false, validationMessage: '' },
   },
+  step2: { // أضف حالة الخطوة الثانية الافتراضية هنا
+    educationInformation: [],
+  },
   validations: Array.from({ length: 5 }, () => ({ validation: {} })),
 });
 
@@ -76,6 +81,14 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       payload: Partial<VerificationRequestStoreState['step1'][K]>
     ) {
       this.step1[field] = { ...this.step1[field], ...payload };
+    },
+
+    // دالة لتحديث أي حقل في `step2`
+    updateStep2<K extends keyof VerificationRequestStoreState['step2']>(
+      field: K,
+      payload: Partial<VerificationRequestStoreState['step2'][K]>
+    ) {
+      this.step2[field] = { ...this.step2[field], ...payload };
     },
 
     // إعادة تعيين الستور إلى الحالة الافتراضية
@@ -144,7 +157,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       try {
         const request = createDocumentResource({
           doctype: 'Verification Instructions Request',
-          name: this.documentName, // تأكد من أن الاسم صحيح
+          name: this.documentName,
         });
 
         await request.setValue.submit(updatedFields);
@@ -191,7 +204,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         }
       });
 
-      // إضافة تحقق إضافي إذا لزم الأمر (مثل التحقق من صحة البريد الإلكتروني)
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (this.step1.email.value && !emailPattern.test(this.step1.email.value)) {
         this.updateStep1('email', {
@@ -210,11 +222,24 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     /**
+     * دالة التحقق من صحة بيانات Step 2
+     */
+    validateStep2(): boolean {
+      let isValid = true;
+      this.step2.educationInformation.forEach(education => {
+        if (!education.name_of_school_or_college_university || !education.field_of_study_or_major) {
+          isValid = false;
+        }
+      });
+      return isValid;
+    },
+
+    /**
      * دالة الحفظ لخطوة Step 1
      */
     async saveStep1() {
       const toast = useToast();
-      // التحقق من صحة البيانات
+            // التحقق من صحة البيانات
       if (!this.validateStep1()) {
         toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
         throw new Error('Validation failed');
@@ -234,7 +259,28 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         await this.updateDocumentFields(dataToSubmit);
         toast.success('تم حفظ البيانات بنجاح.');
       } catch (error) {
-        // الخطأ يتم معالجته في updateDocumentFields
+        throw error;
+      }
+    },
+
+    /**
+     * دالة الحفظ لخطوة Step 2
+     */
+    async saveStep2() {
+      const toast = useToast();
+      if (!this.validateStep2()) {
+        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+        throw new Error('Validation failed');
+      }
+
+      const dataToSubmit: UpdateFields = {
+        education_information: this.step2.educationInformation,
+      };
+
+       try {
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حفظ بيانات التعليم بنجاح.');
+      } catch (error) {
         throw error;
       }
     },

@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
 import StepIcon from './stepsSections/components/stepIcon.vue';
@@ -108,10 +108,6 @@ import Step5 from './stepsSections/step5.vue';
 import Step6 from './stepsSections/step6.vue';
 import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
-import objectConvertor from '../data/convertor';
-import validateInputStep1 from '../data/validate/validateInputStep1';
-// قم بإضافة استيراد دوال التحقق الأخرى إذا لزم الأمر
-import { ValidationResult } from '../data/types';
 
 // استيراد الستور
 const store = useVerificationRequestStore();
@@ -126,32 +122,28 @@ const steps = [
   {
     component: Step1,
     description: "Personal Information",
-    // validate: () => validateInputStep1(store.step1),
+    save: store.saveStep1,
   },
   {
     component: Step2,
     description: "Education Information",
-    // validate: () => validateInputStep2(store.step2),
+    save: store.saveStep2,
   },
   {
     component: Step3,
-    description: "Employment History",
-    // validate: () => validateInputStep3(store.step3),
+    description: "Employment History"
   },
   {
     component: Step4,
-    description: "Professional Qualifications",
-    // validate: () => validateInputStep4(store.step4),
+    description: "Professional Qualifications"
   },
   {
     component: Step5,
-    description: "Review Information",
-    // validate: () => validateInputStep5(store.step5), // Uncomment إذا كانت دوال التحقق متوفرة
+    description: "Review Information"
   },
   {
     component: Step6,
-    description: "Final Verification",
-    // validate: () => validateInputStep6(store.step6), // Uncomment إذا كانت دوال التحقق متوفرة
+    description: "Final Verification"
   },
 ];
 
@@ -181,17 +173,19 @@ const handleStep = async () => {
   try {
     loading.value = true;
 
-    // استدعاء saveStep1 من المتجر لحفظ البيانات الحالية
-    await store.saveStep1();
-
-    toast.success("تم حفظ البيانات بنجاح.");
+    // تحقق مما إذا كانت الخطوة الحالية تحتوي على دالة save
+    const step = steps[currentStepIndex.value];
+    if (step.save) {
+      await step.save();
+      toast.success("تم حفظ البيانات بنجاح.");
+    }
 
     // الانتقال إلى الخطوة التالية
     if (currentStepIndex.value < totalSteps - 1) {
       currentStepIndex.value++;
     }
   } catch (error) {
-    // الخطأ يتم معالجته في دالة saveStep1
+    console.error("خطأ أثناء الحفظ:", error);
   } finally {
     loading.value = false;
   }
@@ -199,9 +193,8 @@ const handleStep = async () => {
 
 // دالة قبول الطلب في خطوة 6
 const accept = async () => {
-  // تنفيذ منطق القبول هنا إذا لزم الأمر
   toast.success("تم قبول الطلب بنجاح.");
-  // يمكن إعادة التوجيه أو إعادة تعيين المتجر هنا
+  // يمكن تنفيذ منطق إضافي هنا إذا لزم الأمر
 };
 
  // دالة رفض الطلب
@@ -218,9 +211,6 @@ const toggleAllStepsModal = () => {
 
 // مراقبة تغييرات اسم المستند
 const documentName = computed(() => store.documentName);
-watch(documentName, (newVal, oldVal) => {
-  console.log(`documentName تغير من "${oldVal}" إلى "${newVal}"`);
-});
 
 // تعريف متغير التحميل للتحكم في حالة الزر "Step"
 const loading = ref(false);

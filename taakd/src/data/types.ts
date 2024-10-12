@@ -8,7 +8,6 @@ export interface FormField<T = any> {
   validationMessage: string;
   touched?: boolean;
 }
-
 // واجهات البيانات لكل خطوة
 export interface HomeData {
   country: FormField<string>;
@@ -36,7 +35,27 @@ export interface Step1Data {
   email: FormField<string>;
   date_of_birth: FormField<string>;
 }
-// واجهة لنتائج التحقق
+
+export interface EducationInformation {
+  id: string;
+  name_of_school_or_college_university: string;
+  country: string;
+  city: string;
+  governorate: string;
+  location_text: string;
+  from_date: string;
+  to_date: string;
+  field_of_study_or_major: string;
+  phone: string;
+  ext: string;
+  diploma: string;
+  another_name: string;
+}
+
+export interface Step2Data {
+  educationInformation: EducationInformation[];
+}
+
 export interface ValidationResult {
   [key: string]: {
     isValid: boolean;
@@ -70,9 +89,9 @@ export interface RequestData {
   date_living_address: string;
   phone: [];
   email: string;
-  date_of_birth: string
-  //  Step2
-
+  date_of_birth: string;
+    //  Step2
+  education_information: EducationInformation[];
 }
 
 // واجهة UpdateFields: لتمثيل الحقول المحدثة
@@ -80,9 +99,8 @@ export interface UpdateFields {
   [key: string]: any;
 }
 
-// تعريف FormData: تجميع بيانات جميع الخطوات
 export type FormData = {
   home: HomeData &
-  Step1Data;
-
+  Step1Data &
+  Step2Data;
 };
