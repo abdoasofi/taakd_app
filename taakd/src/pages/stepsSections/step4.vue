@@ -1,25 +1,25 @@
+<!-- src/pages/stepsSections/step4.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl  font-bold mb-3 text-black">Professional qualification verification </h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">Additional Professional Qualifications</h1>
     <ul>
       <li>
         All fields marked with an asterisk ( * ) are required.
       </li>
       <li>
-        Please provide information regarding Professional qualifications and/or trade memberships beginning with the most recent.
+        Please provide any additional professional qualifications or certifications.
       </li>
     </ul>
-
   </div>
-  <div class="space-y-2">
-    <!-- Iterate Over Professional Qualifications -->
+
+  <div class="space-y-2 mt-3">
+    <!-- Iterate Over Additional Professional Qualifications -->
     <FieldsToggleContainer
-      v-for="(qualification, index) in request.doc.professional_qualification"
+      v-for="(qualification, index) in additionalProfessionalQualifications"
       :key="qualification.id"
       :title="qualification.awarding_body || `Qualification ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
-
         <!-- Awarding Body Field -->
         <FieldContainer>
           <StyledInput
@@ -68,12 +68,9 @@
             validationMessage="Issuing Country is required."
           />
         </FieldContainer>  
-
-
-
       </div>
-      <div class="lg:grid grid-cols-2 lg:gap-2">
 
+      <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Expiration Date Field -->
         <FieldContainer>
           <StyledInput 
@@ -89,13 +86,14 @@
             validationMessage="Expiration Date is required."
           />
         </FieldContainer>
+        
         <!-- Date Awarded Field -->
         <FieldContainer>
           <StyledInput 
             id="date_awarded" 
             name="date_awarded" 
             labelText="Date Awarded" 
-            isMandatory="true" 
+            :isMandatory="true" 
             infoText="Date when the qualification was awarded." 
             inputType="date" 
             v-model="qualification.date_awarded" 
@@ -103,6 +101,7 @@
           />
         </FieldContainer>
       </div>
+
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Award Name/Description Field -->
         <FieldContainer>
@@ -110,7 +109,7 @@
             labelText="Award Name/Description"
             :isMandatory="true"
             infoText="Provide the name or description of the award."
-            inputType="text"
+            inputType="date"
             name="award_name_description"
             :id="`award_name_description-${qualification.id}`"
             v-model="qualification.award_name_description"
@@ -119,9 +118,11 @@
           />
         </FieldContainer> 
       </div>
-     <div class="lg:grid grid-rows-2 lg:gap-2">
-           <!-- Is Expiration Date Checkbox -->
-           <FieldContainer>
+
+      <!-- Checkboxes -->
+      <div class="lg:grid grid-rows-2 lg:gap-2">
+        <!-- Is Expiration Date Checkbox -->
+        <FieldContainer>
           <CheckBox 
             :name="`is_an_expiration_date-${qualification.id}`" 
             :id="`is_an_expiration_date-${qualification.id}`" 
@@ -130,6 +131,7 @@
             Does this qualification have an expiration date?
           </CheckBox>
         </FieldContainer>
+
         <!-- Your Name Varies Checkbox -->
         <FieldContainer>
           <CheckBox 
@@ -140,8 +142,7 @@
             Does your name vary in this qualification?
           </CheckBox>
         </FieldContainer>        
-     </div>
-     
+      </div>
 
       <!-- Save Qualification Button -->
       <div class="flex justify-end py-2">
@@ -151,13 +152,14 @@
 
     <!-- Add Qualification Button -->
     <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addQualification">+ Add Professional Qualification</Button>
+      <Button level="secondary" @clicked="addQualification">+ Add Additional Professional Qualification</Button>
     </div>
   </div>
 </template>
-<script setup>
+
+<script setup lang="ts">
 import { ref, computed, watch, reactive, nextTick } from 'vue'
-import { createDocumentResource } from 'frappe-ui'
+import { useVerificationRequestStore } from '../../stores/verificationRequest'
 import { useToast } from 'vue-toastification'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -169,19 +171,20 @@ import StyledInput from '../../components/styledInput.vue'
 import Autocomp from '../../components/autocomp.vue'
 import CheckBox from '../../components/checkBox.vue'
 
-// تهيئة Toast
-const toast = useToast()
-
-// مورد المستند
-const request = createDocumentResource({
-  doctype: 'Verification Instructions Request',
-  name: 'VIR-2024-26-09-000007', // يمكنك تغيير الاسم حسب الحاجة
-  // auto: true,
-})
-
-// الحصول على خيارات الدولة (يمكنك استخدام نفس البيانات المستخدمة في الكمبوننتات السابقة)
+// استيراد البيانات (البلديات والمحافظات)
 import { location } from '../../data/useAddressLogic'
 
+// استيراد الستور
+const store = useVerificationRequestStore()
+const toast = useToast()
+
+// ربط بيانات المؤهلات المهنية الإضافية مع المخزن
+const additionalProfessionalQualifications = computed({
+  get: () => store.step4.professional_qualification,
+  set: (val) => store.updateStep4('professional_qualification', val)
+})
+
+// الحصول على خيارات الدولة
 const getOptionCountry = (qualification) => {
   const options = location.data
     .filter(loc => loc.location_type === 'Country')
@@ -203,86 +206,8 @@ const getOptionCountry = (qualification) => {
 
 // التعامل مع تغيير Issuing Country
 const handleIssuingCountryChange = (index, value) => {
-  const qualification = request.doc.professional_qualification[index]
-  qualification.issuing_country = value.value
+  additionalProfessionalQualifications.value[index].issuing_country = value.value
   // إذا كان هناك حقول تعتمد على البلد، يمكنك إعادة تعيينها هنا إذا لزم الأمر
-}
-
-// تهيئة professional_qualification
-watch(() => request.doc, (newDoc) => {
-  if (newDoc) {
-    if (!newDoc.professional_qualification) {
-      // تهيئة professional_qualification كمصفوفة فارغة إذا لم تكن موجودة
-      newDoc.professional_qualification = []
-    } else {
-      // التأكد من تهيئة جميع الحقول في الإدخالات الحالية
-      newDoc.professional_qualification.forEach(qualification => {
-        qualification.awarding_body = qualification.awarding_body || ''
-        qualification.license_or_certificate_number = qualification.license_or_certificate_number || ''
-        qualification.issuing_country = qualification.issuing_country || ''
-        qualification.date_awarded = qualification.date_awarded || ''
-        qualification.expiration_date = qualification.expiration_date || ''
-        qualification.award_name_description = qualification.award_name_description || ''
-        qualification.is_an_expiration_date = qualification.is_an_expiration_date || false
-        qualification.your_name_varies = qualification.your_name_varies || false
-      })
-    }
-  }
-}, { immediate: true })
-
-// تهيئة افتراضية
-if (!request.doc || !request.doc.professional_qualification) {
-  if (request.doc) {
-    request.doc.professional_qualification = []
-  } else {
-    // التعامل مع الحالة التي يكون فيها request.doc في البداية null
-    request.doc = {
-      professional_qualification: []
-    }
-  }
-}
-
-// إضافة مؤهل مهني جديد
-const addQualification = () => {
-  const newQualification = {
-    id: uuidv4(), // معرف فريد
-    awarding_body: '',
-    license_or_certificate_number: '',
-    issuing_country: '',
-    date_awarded: '',
-    expiration_date: '',
-    award_name_description: '',
-    is_an_expiration_date: false,
-    your_name_varies: false,
-  }
-  request.doc.professional_qualification.push(newQualification)
-  nextTick(() => {
-    // إذا كنت تستخدم مكون FieldsToggleContainer مع إمكانية فتح الأقسام، يمكنك فتح القسم الجديد هنا
-    // مثال: openSections[newQualification.id] = true
-  })
-}
-
-// حفظ الطلب بالكامل
-const saveRequest = async () => {
-  try {
-    await request.setValue.submit(request.doc)
-    toast.success('تم حفظ الطلب بنجاح!')
-  } catch (error) {
-    console.error('فشل في حفظ الطلب:', error)
-    toast.error('فشل في حفظ الطلب.')
-  }
-}
-
-// حفظ مؤهل مهني فردي
-const saveQualification = async (index) => {
-  try {
-    // يمكنك تعديل هذا الجزء لحفظ السجل التعليمي الفردي حسب إعدادات الـ Backend الخاص بك
-    await request.setValue.submit(request.doc)
-    toast.success(`تم حفظ المؤهل المهني ${index + 1} بنجاح!`)
-  } catch (error) {
-    console.error(`فشل في حفظ المؤهل المهني ${index + 1}:`, error)
-    toast.error(`فشل في حفظ المؤهل المهني ${index + 1}.`)
-  }
 }
 
 // دوال التحقق من الصحة
@@ -303,13 +228,45 @@ const validateDateAwarded = (date_awarded) => {
 }
 
 const validateExpirationDate = (expiration_date) => {
-  if (request.doc.professional_qualification.some(q => q.is_an_expiration_date && (typeof q.expiration_date !== 'string' || q.expiration_date.trim() === ''))) {
-    return false
-  }
-  return true
+  return typeof expiration_date === 'string' && expiration_date.trim() !== ''
 }
 
 const validateAwardNameDescription = (award_name_description) => {
   return typeof award_name_description === 'string' && award_name_description.trim() !== ''
 }
+
+// دالة لإضافة مؤهل مهني إضافي جديد
+const addQualification = () => {
+  const newQualification = {
+    id: uuidv4(), // معرف فريد
+    awarding_body: '',
+    license_or_certificate_number: '',
+    issuing_country: '',
+    date_awarded: '',
+    expiration_date: '',
+    award_name_description: '',
+    is_an_expiration_date: false,
+    your_name_varies: false,
+  }
+  additionalProfessionalQualifications.value.push(newQualification)
+  nextTick(() => {
+    // إذا كنت تستخدم مكون FieldsToggleContainer مع إمكانية فتح الأقسام، يمكنك فتح القسم الجديد هنا
+    // مثال: openSections[newQualification.id] = true
+  })
+}
+
+// دالة حفظ المؤهل المهني الفردي
+const saveQualification = async (index) => {
+  try {
+    await store.saveStep4()
+    toast.success(`تم حفظ المؤهل المهني ${index + 1} بنجاح!`)
+  } catch (error) {
+    console.error(`فشل في حفظ المؤهل المهني ${index + 1}:`, error)
+    toast.error(`فشل في حفظ المؤهل المهني ${index + 1}.`)
+  }
+}
 </script>
+
+<style scoped>
+/* أضف أي تنسيقات خاصة بالمكون هنا */
+</style>

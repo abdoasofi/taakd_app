@@ -76,6 +76,17 @@ export interface EmploymentHistory {
   nickname: string;
   file: any; // يُفضل تحديد نوع البيانات إذا كان ممكنًا
 }
+export interface ProfessionalQualification {
+  id: string;
+  awarding_body: string;
+  license_or_certificate_number: string;
+  issuing_country: string;
+  date_awarded: string;
+  expiration_date?: string; // اختياري
+  award_name_description: string;
+  is_an_expiration_date: boolean;
+  your_name_varies: boolean;
+}
 
 export interface Step2Data {
   educationInformation: EducationInformation[];
@@ -83,6 +94,19 @@ export interface Step2Data {
 
 export interface Step3Data {
   employment_history: EmploymentHistory[];
+}
+
+export interface Step4Data {
+  professional_qualification: ProfessionalQualification[];
+}
+
+export interface Step6Data {
+  other_languages: FormField<[]>; // اختيار متعدد (اختياري)
+  electronic_signature: FormField<string>; // سلسلة نصية تمثل صورة التوقيع
+  full_name: FormField<string>;
+  email_address: FormField<string>;
+  i_agree_to_electronic_signature: FormField<boolean>;
+  acknowledge_electronic_signature: FormField<boolean>;
 }
 
 
@@ -124,6 +148,10 @@ export interface RequestData {
   education_information: EducationInformation[];
   // Step3
   employment_history: EmploymentHistory[];
+  // Step4
+  professional_qualification: ProfessionalQualification[];
+  // Step6
+  step6_data: Step6Data;
 }
 
 // واجهة UpdateFields: لتمثيل الحقول المحدثة
@@ -135,5 +163,7 @@ export type FormData = {
   home: HomeData &
     Step1Data &
     Step2Data &
-    Step3Data;
+    Step3Data &
+    Step4Data &
+    Step6Data;
 };

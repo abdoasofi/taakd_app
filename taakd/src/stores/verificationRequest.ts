@@ -5,6 +5,8 @@ import {
   Step1Data,
   Step2Data,
   Step3Data,
+  Step4Data,
+  Step6Data,
   RequestData,
   ValidationResult,
   UpdateFields,
@@ -24,6 +26,8 @@ interface VerificationRequestStoreState {
   step1: Step1Data;
   step2: Step2Data;
   step3: Step3Data;
+  step4: Step4Data;
+  step6: Step6Data;
   validations: StepValidation[];
 }
 
@@ -59,6 +63,17 @@ const getDefaultState = (): VerificationRequestStoreState => ({
   },
   step3: { 
     employment_history: [],
+  },
+  step4: {
+    professional_qualification: [],
+  },
+  step6: { // تهيئة الحقول الافتراضية لـ step6_data
+    other_languages:  { value: [], isValid: true, validationMessage: '' },
+    electronic_signature: { value: '', isValid: false, validationMessage: '' },
+    full_name: { value: '', isValid: false, validationMessage: '' },
+    email_address: { value: '', isValid: false, validationMessage: '' },
+    i_agree_to_electronic_signature: { value: false, isValid: false, validationMessage: '' },
+    acknowledge_electronic_signature: { value: false, isValid: false, validationMessage: '' },
   },
   validations: Array.from({ length: 5 }, () => ({ validation: {} })),
 });
@@ -102,6 +117,22 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       payload: Partial<VerificationRequestStoreState['step3'][K]>
     ) {
       this.step3[field] = { ...this.step3[field], ...payload };
+    },
+
+    // دالة لتحديث أي حقل في `step4`
+    updateStep4<K extends keyof VerificationRequestStoreState['step4']>(
+      field: K,
+      payload: Partial<VerificationRequestStoreState['step4'][K]>
+    ) {
+      this.step4[field] = { ...this.step4[field], ...payload };
+    },
+
+    // تحديث step6_data
+    updateStep6<K extends keyof VerificationRequestStoreState['step6']>(
+      field: K,
+      payload: Partial<VerificationRequestStoreState['step6'][K]>
+    ) {
+      this.step6[field] = { ...this.step6[field], ...payload };
     },
 
     // إعادة تعيين الستور إلى الحالة الافتراضية
@@ -272,6 +303,77 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     /**
+ * دالة التحقق من صحة بيانات Step 4
+ */
+    validateStep4(): boolean {
+      let isValid = true;
+      this.step4.professional_qualification.forEach((qualification, index) => {
+        if (
+          !qualification.awarding_body ||
+          !qualification.license_or_certificate_number ||
+          !qualification.issuing_country ||
+          !qualification.date_awarded ||
+          !qualification.award_name_description
+          // إعادة التحقق من Expiration Date يتم بناءً على is_an_expiration_date
+        ) {
+          isValid = false;
+          // يمكن إضافة رسائل تحقق خاصة بكل حقل إذا لزم الأمر
+        }
+
+        if (qualification.is_an_expiration_date && (!qualification.expiration_date || qualification.expiration_date.trim() === '')) {
+          isValid = false;
+        }
+      });
+      return isValid;
+    },
+
+
+    /**
+     * دالة التحقق من صحة بيانات Step6
+     */
+    validateStep6(): boolean {
+      let isValid = true;
+      const requiredFields: (keyof Step6Data)[] = [
+        'full_name',
+        'email_address',
+
+      ];
+      
+      requiredFields.forEach((field) => {
+        const fieldData = this.step1[field];
+        if (!fieldData.value || (Array.isArray(fieldData.value) && fieldData.value.length === 0)) {
+          this.updateStep6(field, {
+            isValid: false,
+            validationMessage: 'هذا الحقل مطلوب.',
+          });
+          isValid = false;
+        } else {
+          this.updateStep6(field, {
+            isValid: true,
+            validationMessage: '',
+          });
+        }
+      });
+
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (this.step6.email.value && !emailPattern.test(this.step6.email.value)) {
+        this.updateStep6('email', {
+          isValid: false,
+          validationMessage: 'يرجى إدخال بريد إلكتروني صحيح.',
+        });
+        isValid = false;
+      } else if (this.step6.email.value) {
+        this.updateStep6('email', {
+          isValid: true,
+          validationMessage: '',
+        });
+      }
+
+      return isValid;
+    },
+
+
+    /**
      * دالة الحفظ لخطوة Step 1
      */
     async saveStep1() {
@@ -343,6 +445,53 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         throw error;
       }
     },
+    /**
+     * دالة الحفظ لخطوة Step 4
+     */
+    async saveStep4() {
+      const toast = useToast();
+      if (!this.validateStep4()) {
+        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+        throw new Error('Validation failed');
+      }
+
+      const dataToSubmit: UpdateFields = {
+        professional_qualification: this.step4.professional_qualification,
+      };
+
+      try {
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حفظ بيانات المؤهلات المهنية الإضافية بنجاح.');
+      } catch (error) {
+        console.error('حدث خطأ أثناء حفظ بيانات المؤهلات المهنية الإضافية:', error);
+        toast.error('حدث خطأ أثناء حفظ بيانات المؤهلات المهنية الإضافية.');
+        throw error;
+      }
+    },  
+    
+    /**
+     * دالة الحفظ لخطوة Step6
+     */
+    async saveStep6() {
+      const toast = useToast();
+      // if (!this.validateStep6()) {
+      //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+      //   throw new Error('Validation failed');
+      // }
+
+      const dataToSubmit: UpdateFields = {
+        step6_data: this.step6,
+      };
+      console.log("----------------------",dataToSubmit)
+      try {
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حفظ بيانات Step6 بنجاح.');
+      } catch (error) {
+        console.error('حدث خطأ أثناء حفظ بيانات Step6:', error);
+        toast.error('حدث خطأ أثناء حفظ بيانات Step6.');
+        throw error;
+      }
+    },    
     
   },
 });
