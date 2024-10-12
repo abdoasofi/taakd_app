@@ -52,9 +52,39 @@ export interface EducationInformation {
   another_name: string;
 }
 
+export interface EmploymentHistory {
+  id: string;
+  company: string;
+  name_of_your_employer: string;
+  contact_the_employer: boolean;
+  issuing_salary: boolean;
+  country: string;
+  city: string;
+  governorate: string;
+  location_text: string;
+  continuous: boolean;
+  activity_has_stopped: boolean;
+  from_date: string;
+  end_date: string;
+  phone: string;
+  ext: string;
+  official_job_title_held_currently: string;
+  type_of_employment: string;
+  the_company_has_different_names: boolean;
+  different_company_names: string;
+  you_have_a_nicknamecx: boolean;
+  nickname: string;
+  file: any; // يُفضل تحديد نوع البيانات إذا كان ممكنًا
+}
+
 export interface Step2Data {
   educationInformation: EducationInformation[];
 }
+
+export interface Step3Data {
+  employment_history: EmploymentHistory[];
+}
+
 
 export interface ValidationResult {
   [key: string]: {
@@ -90,8 +120,10 @@ export interface RequestData {
   phone: [];
   email: string;
   date_of_birth: string;
-    //  Step2
+  // Step2
   education_information: EducationInformation[];
+  // Step3
+  employment_history: EmploymentHistory[];
 }
 
 // واجهة UpdateFields: لتمثيل الحقول المحدثة
@@ -101,6 +133,7 @@ export interface UpdateFields {
 
 export type FormData = {
   home: HomeData &
-  Step1Data &
-  Step2Data;
+    Step1Data &
+    Step2Data &
+    Step3Data;
 };

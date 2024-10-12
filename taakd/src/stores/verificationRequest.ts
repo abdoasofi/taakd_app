@@ -3,7 +3,8 @@ import { defineStore } from 'pinia';
 import {
   HomeData,
   Step1Data,
-  Step2Data, // أضف Step2Data هنا
+  Step2Data,
+  Step3Data,
   RequestData,
   ValidationResult,
   UpdateFields,
@@ -21,7 +22,8 @@ interface VerificationRequestStoreState {
   documentName: string | null;
   home: HomeData;
   step1: Step1Data;
-  step2: Step2Data; // أضف الخطوة الثانية إلى واجهة الحالة
+  step2: Step2Data;
+  step3: Step3Data;
   validations: StepValidation[];
 }
 
@@ -52,8 +54,11 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     email: { value: '', isValid: false, validationMessage: '' },
     date_of_birth: { value: '', isValid: false, validationMessage: '' },
   },
-  step2: { // أضف حالة الخطوة الثانية الافتراضية هنا
+  step2: { 
     educationInformation: [],
+  },
+  step3: { 
+    employment_history: [],
   },
   validations: Array.from({ length: 5 }, () => ({ validation: {} })),
 });
@@ -89,6 +94,14 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       payload: Partial<VerificationRequestStoreState['step2'][K]>
     ) {
       this.step2[field] = { ...this.step2[field], ...payload };
+    },
+
+    // دالة لتحديث أي حقل في `step3`
+    updateStep3<K extends keyof VerificationRequestStoreState['step3']>(
+      field: K,
+      payload: Partial<VerificationRequestStoreState['step3'][K]>
+    ) {
+      this.step3[field] = { ...this.step3[field], ...payload };
     },
 
     // إعادة تعيين الستور إلى الحالة الافتراضية
@@ -235,6 +248,30 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     /**
+ * دالة التحقق من صحة بيانات Step 3
+ */
+    validateStep3(): boolean {
+      let isValid = true;
+      this.step3.employment_history.forEach((employment, index) => {
+        if (
+          !employment.company ||
+          !employment.name_of_your_employer ||
+          !employment.country ||
+          !employment.city ||
+          !employment.governorate ||
+          !employment.from_date ||
+          !employment.end_date ||
+          !employment.phone ||
+          !employment.official_job_title_held_currently 
+        ) {
+          isValid = false;
+          // يمكن إضافة رسائل تحقق خاصة لكل حقل إذا لزم الأمر
+        }
+      });
+      return isValid;
+    },
+
+    /**
      * دالة الحفظ لخطوة Step 1
      */
     async saveStep1() {
@@ -284,5 +321,28 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         throw error;
       }
     },
+    /**
+     * دالة الحفظ لخطوة Step 3
+     */
+    async saveStep3() {
+      const toast = useToast();
+      if (!this.validateStep3()) {
+        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+        throw new Error('Validation failed');
+      }
+
+      const dataToSubmit: UpdateFields = {
+        employment_history: this.step3.employment_history,
+      };
+
+      try {
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حفظ بيانات التوظيف بنجاح.');
+      } catch (error) {
+        console.error('حدث خطأ أثناء حفظ بيانات التوظيف:', error);
+        throw error;
+      }
+    },
+    
   },
 });
