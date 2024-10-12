@@ -4,6 +4,8 @@ import { createApp, reactive } from 'vue'
 import router from './router'
 import App from './App.vue'
 
+import translationPlugin from './translation'
+
 import { createPinia } from 'pinia';
 
 
@@ -51,6 +53,7 @@ setConfig('resourceFetcher', frappeRequest)
 
 app.use(router)
 app.use(resourcesPlugin)
+app.use(translationPlugin)
 
 app.component('Button', Button)
 app.component('Card', Card)
