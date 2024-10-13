@@ -115,6 +115,7 @@ import Button from '../../components/button.vue';
 import { useRouter } from 'vue-router';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
+import QRious from 'qrious';
 
 // استدعاء المخزن
 const store = useVerificationRequestStore();
@@ -142,20 +143,41 @@ const printPDF = async () => {
     let heightLeft = imgHeight;
     let position = 0;
 
-    // إضافة الصورة إلى ملف PDF
-    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeight;
+    // إضافة الترويسة
+    pdf.setFontSize(18);
+    pdf.text('تأكد', 105, 20, { align: 'center' }); // اسم الشركة
+    pdf.setFontSize(12);
+    pdf.text('الموقع الجغرافي: الرياض، المملكة العربية السعودية', 105, 30, { align: 'center' }); // الموقع الجغرافي
 
-    // إذا كان المحتوى أطول من صفحة واحدة، قم بإضافة صفحات إضافية
-    while (heightLeft >= 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    // إضافة الشعار الافتراضي (صورة من الإنترنت)
+    const logo = new Image();
+    logo.src = 'https://via.placeholder.com/150'; // شعار افتراضي
+    logo.onload = () => {
+      // pdf.addImage(logo, 'PNG', 10, 10, 30, 30); // إضافة الشعار بعد تحميله
+
+      // إنشاء QR code للرقم الضريبي
+      const qr = new QRious({
+        value: '123456789', // الرقم الضريبي
+        size: 100,
+      });
+      const qrData = qr.toDataURL();
+      pdf.addImage(qrData, 'PNG', 170, 10, 30, 30); // إضافة QR code
+
+      // إضافة الصورة إلى ملف PDF
+      pdf.addImage(imgData, 'PNG', 0, 50, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-    }
 
-    // حفظ ملف PDF
-    pdf.save('report.pdf');
+      // إذا كان المحتوى أطول من صفحة واحدة، قم بإضافة صفحات إضافية
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      // حفظ ملف PDF
+      pdf.save('report.pdf');
+    };
   }
 };
 </script>
