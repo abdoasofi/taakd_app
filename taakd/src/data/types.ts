@@ -151,7 +151,12 @@ export interface RequestData {
   // Step4
   professional_qualification: ProfessionalQualification[];
   // Step6
-  step6_data: Step6Data;
+  other_languages: string[];
+  electronic_signature: string;
+  full_name: string;
+  email_address: string;
+  i_agree_to_electronic_signature: boolean;
+  acknowledge_electronic_signature: boolean; 
 }
 
 // واجهة UpdateFields: لتمثيل الحقول المحدثة

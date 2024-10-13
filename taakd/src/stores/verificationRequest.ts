@@ -67,7 +67,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
   step4: {
     professional_qualification: [],
   },
-  step6: { // تهيئة الحقول الافتراضية لـ step6_data
+  step6: { // تهيئة الحقول الافتراضية لـ step6
     other_languages:  { value: [], isValid: true, validationMessage: '' },
     electronic_signature: { value: '', isValid: false, validationMessage: '' },
     full_name: { value: '', isValid: false, validationMessage: '' },
@@ -127,7 +127,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step4[field] = { ...this.step4[field], ...payload };
     },
 
-    // تحديث step6_data
+    // تحديث step6
     updateStep6<K extends keyof VerificationRequestStoreState['step6']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['step6'][K]>
@@ -474,24 +474,29 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      */
     async saveStep6() {
       const toast = useToast();
+            // التحقق من صحة البيانات
       // if (!this.validateStep6()) {
       //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
       //   throw new Error('Validation failed');
       // }
 
-      const dataToSubmit: UpdateFields = {
-        step6_data: this.step6,
-      };
-      console.log("----------------------",dataToSubmit)
+      // تجهيز البيانات للإرسال
+      const dataToSubmit: UpdateFields = {};
+      for (const key in this.step6) {
+        if (Object.prototype.hasOwnProperty.call(this.step6, key)) {
+          const field = key as keyof Step6Data;
+          dataToSubmit[key] = this.step6[field].value;
+        }
+      }
+
+      // إرسال البيانات إلى Doctype
       try {
         await this.updateDocumentFields(dataToSubmit);
-        toast.success('تم حفظ بيانات Step6 بنجاح.');
+        toast.success('تم حفظ البيانات بنجاح.');
       } catch (error) {
-        console.error('حدث خطأ أثناء حفظ بيانات Step6:', error);
-        toast.error('حدث خطأ أثناء حفظ بيانات Step6.');
         throw error;
       }
-    },    
+    }, 
     
   },
 });
