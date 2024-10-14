@@ -21,7 +21,9 @@ export interface Step1Data {
   employer_name: FormField<string>;
   first_name: FormField<string>;
   last_name: FormField<string>;
+  dont_middle_name: FormField<boolean>;
   middle_name: FormField<string>;
+  this_is_my_name_column: FormField<boolean>;
   suffix: FormField<string>;
   alias_name: FormField<[]>;
   country_now: FormField<string>;
@@ -131,7 +133,9 @@ export interface RequestData {
   employer_name: string;
   first_name: string;
   last_name: string;
+  dont_middle_name: boolean;
   middle_name: string;
+  this_is_my_name_column: boolean;
   suffix: string;
   alias_name: [];
   city: string;

@@ -53,8 +53,9 @@
 
     <FieldContainer>
       <CheckBox 
-        name="certify" 
-        id="certify" 
+        name="dont_middle_name" 
+        id="dont_middle_name"
+        v-model="dontMiddleName" 
       >
         I certify that I do not have a Middle Name on my official identification document
       </CheckBox>
@@ -202,8 +203,9 @@
     </div>
         <FieldContainer>
       <CheckBox 
-        name="certify" 
-        id="certify" 
+        name="this_is_my_name_column" 
+        id="this_is_my_name_column" 
+        v-model="thisIsMyNameColumn"
 
       > 
       I certify this is my current legal name, exactly as it is displayed on my government-issued identification document *
@@ -392,9 +394,19 @@ const lastName = computed({
   set: (val: string) => store.updateStep1('last_name', { value: val }),
 });
 
+const dontMiddleName = computed({
+  get: () => store.step1.dont_middle_name.value,
+  set: (val: boolean) => store.updateStep1('dont_middle_name', { value: val }),
+});
+
 const middleName = computed({
   get: () => store.step1.middle_name.value,
   set: (val: string) => store.updateStep1('middle_name', { value: val }),
+});
+
+const thisIsMyNameColumn = computed({
+  get: () => store.step1.this_is_my_name_column.value,
+  set: (val: boolean) => store.updateStep1('this_is_my_name_column', { value: val }),
 });
 
 const suffix = computed({

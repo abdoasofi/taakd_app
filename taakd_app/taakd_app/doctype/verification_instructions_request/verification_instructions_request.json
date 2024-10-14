@@ -8,10 +8,11 @@
  "field_order": [
   "personal_information_tab",
   "personal_information_section",
-  "this_is_my_name_column",
+  "column_break_xhnr",
   "employer_name",
   "first_name",
   "last_name",
+  "this_is_my_name_column",
   "column_break_vrit",
   "middle_name",
   "dont_middle_name",
@@ -90,10 +91,10 @@
    "label": "Personal Information"
   },
   {
-   "description": "I certify this is my current legal name, exactly as it is displayed on my government-issued identification document ",
+   "default": "0",
    "fieldname": "this_is_my_name_column",
-   "fieldtype": "Column Break",
-   "label": "This is my name"
+   "fieldtype": "Check",
+   "label": "I certify this is my current legal name, exactly as it is displayed on my government-issued identification document "
   },
   {
    "fieldname": "first_name",
@@ -510,12 +511,16 @@
    "fieldname": "date_living_address",
    "fieldtype": "Date",
    "label": "Date you started living at this address"
+  },
+  {
+   "fieldname": "column_break_xhnr",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-14 16:33:16.313658",
+ "modified": "2024-10-14 17:40:59.891045",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
