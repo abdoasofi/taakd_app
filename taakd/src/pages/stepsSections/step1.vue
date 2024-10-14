@@ -62,7 +62,7 @@
     </FieldContainer>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
-      <FieldContainer>
+      <FieldContainer v-if="!dontMiddleName">
         <StyledInput
           labelText="Middle Name"
           inputType="text"
@@ -91,16 +91,18 @@
         />
       </FieldContainer>
       <FieldContainer>
-            <Autocomp
-              id="suffix"
-              name="suffix"
-              labelText="Suffix"
-              infoText="Select your suffix"
-              inputType="text"
-              v-model="suffix"
-              :isValid="store.step1.suffix.isValid"
-              :validationMessage="store.step1.suffix.validationMessage"
-            />
+        <Autocomp
+          id="suffix"
+          name="suffix"
+          labelText="Suffix"
+          infoText="Select your suffix"
+          inputType="text"
+          :options="suffixOptions"
+          @input-change="handleSuffix"
+          v-model="suffix"
+          :isValid="store.step1.suffix.isValid"
+          :validationMessage="store.step1.suffix.validationMessage"
+        />
           </FieldContainer>
 
     </div>
@@ -139,11 +141,12 @@
               labelText="City"
               infoText="City"
               inputType="text"
+              :options="optionCity"
               @input-change="handleCityChange"
               v-model="city"
               :isValid="store.step1.city.isValid"
               :validationMessage="store.step1.city.validationMessage"
-            />
+             />
           </FieldContainer>
           <FieldContainer>
             <Autocomp
@@ -152,6 +155,7 @@
               labelText="Governorate"
               infoText="Governorate"
               inputType="text"
+              :options="optionGovernorate"
               @input-change="handleGovernorateChange"
               v-model="governorate"
               :isValid="store.step1.governorate.isValid"
@@ -341,6 +345,15 @@ const location = locations.getLocation();
 const loading = ref(false);
 const selectedCountry = ref('')
 const selectedCity= ref('')
+// خيارات Suffix
+const suffixOptions = [
+  { label: 'Jr.', value: 'Jr.' },
+  { label: 'Sr.', value: 'Sr.' },
+  { label: 'III', value: 'III' },
+  { label: 'PhD', value: 'PhD' },
+  { label: 'MD', value: 'MD' },
+  { label: 'Esq.', value: 'Esq.' }
+];
 // تحميل البيانات عند تحميل الصفحة
 onMounted(async () => {
   loading.value = true;
@@ -359,25 +372,32 @@ const optionCountry = computed(() => {
   return [] // إرجاع مصفوفة فارغة إذا لم تتوفر البيانات
 })
 
-// const optionCity = computed(() => {
-//   if (location && location.data) {
-//         return location.filter(loc => loc.location_type === 'City' && loc.parent_location == selectedCountry.value).map(loc => ({
-//             label: loc.location_name,
-//             value: loc.location_name
-//         }))    
-//   }
-  
-//   return []
-//     })
-// const optionGovernorate = computed(() => {
-//     if (location && location.data) {
-//               return location.filter(loc => loc.location_type === 'Governorate' && loc.parent_location == selectedCity.value).map(loc => ({
-//             label: loc.location_name,
-//             value: loc.location_name
-//         }))
-//     }
-//   return []
-//     })
+// فلترة المدن بناءً على الدولة
+const optionCity = computed(() => {
+  if (location && location.data && country.value) {
+    return location.data
+      .filter(loc => loc.location_type === 'City' && loc.parent_location === country.value)
+      .map(loc => ({
+        label: loc.location_name,
+        value: loc.location_name
+      }));
+  }
+  return [];
+});
+
+// فلترة المحافظات بناءً على المدينة
+const optionGovernorate = computed(() => {
+  if (location && location.data && city.value) {
+    return location.data
+      .filter(loc => loc.location_type === 'Governorate' && loc.parent_location === city.value)
+      .map(loc => ({
+        label: loc.location_name,
+        value: loc.location_name
+      }));
+  }
+  return [];
+});
+
 // تعريف computed properties لربط v-model مع مخزن Pinia
 const employerName = computed({
   get: () => store.step1.employer_name.value,
@@ -483,6 +503,11 @@ const handleCityChange = (value) => {
 const handleGovernorateChange = (value) => {
   // store.step1.governorate.value=value.value
   store.updateStep1('governorate', { value: value.value });
+};
+
+const handleSuffix  = (value) => {
+  // store.step1.suffix.value=value.value
+  store.updateStep1('suffix', { value: value.value });
 };
 
 // دالة الحفظ

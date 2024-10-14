@@ -130,7 +130,7 @@
    "fieldname": "suffix",
    "fieldtype": "Select",
    "label": "Suffix",
-   "options": "\nJunior (Jr.)\nSenior (Sr.)"
+   "options": "\nJr.\nSr.\nIII\nPhD\nMD\nEsq"
   },
   {
    "fieldname": "amended_from",
@@ -520,7 +520,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-14 17:40:59.891045",
+ "modified": "2024-10-14 19:06:52.058098",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",
