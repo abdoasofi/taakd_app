@@ -497,7 +497,7 @@
   },
   {
    "fieldname": "mobile_number",
-   "fieldtype": "Data",
+   "fieldtype": "Phone",
    "label": "Mobile Number"
   },
   {
@@ -515,7 +515,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-11 20:37:52.634946",
+ "modified": "2024-10-14 16:33:16.313658",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",

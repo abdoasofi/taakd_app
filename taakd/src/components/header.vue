@@ -1,3 +1,4 @@
+<!-- header.vue -->
 <template>
     <header class="header w-full overflow-x-hidden z-10 relative">
       <div class="container flex justify-between items-center ">

@@ -24,6 +24,11 @@
               :isValid="store.home.mobile_number.isValid"
               :validationMessage="store.home.mobile_number.validationMessage"
               placeholder="Enter your mobile number"
+              :class="{
+                'border-red-500': !store.home.mobile_number.isValid,
+                'border-green-500': store.home.mobile_number.isValid
+              }"
+              @input="validateMobileNumber"
             />
             <small class="block text-[10px] font-normal">Supporting text</small>
           </div>
@@ -134,14 +139,12 @@ import VerificationInformation from '../../components/Icons/verificationInformat
 import { useToast } from 'vue-toastification';
 import FadeInOut from '../../components/fadeInOut.vue'; // تأكد من استيراده
 
-
 const store = useVerificationRequestStore();
 const toast = useToast();
 
 const locations = useLocation();
 const location = locations.getLocation()
 
-// تأكد أن location و data موجودة قبل استخدامها
 const optionCountry = computed(() => {
   if (location && location.data) {
     return location.data
@@ -154,21 +157,14 @@ const optionCountry = computed(() => {
   return [] // إرجاع مصفوفة فارغة إذا لم تتوفر البيانات
 })
 
-
-
-
-// تعريف متغيرات التحميل
 const loading = ref(false);
 
-// تحميل البيانات عند تحميل الصفحة
 onMounted(async () => {
-  console.log("////////////////////////////",locations.getLocation())
   loading.value = true;
   await store.loadDocument();
   loading.value = false;
 });
 
-// تعريف computed properties لربط v-model مع مخزن Pinia
 const mobileNumber = computed({
   get: () => store.home.mobile_number.value,
   set: (val: string) => store.updateHome('mobile_number', { value: val })
@@ -196,30 +192,32 @@ const isDegreeOrDiploma = computed({
     store.updateHome('is_degree_or_diploma', { value: booleanVal });
   }
 });
-// معالجة تغيير اختيار الدولة
+
 const handleCountryChange = (value) => {
-  store.home.country.value=value.value
-}
+  store.home.country.value = value.value;
+};
+
+// دالة للتحقق من صحة رقم الهاتف
+const validateMobileNumber = () => {
+  // تعبير منتظم لقبول أي مفتاح دولة متبوعًا بـ "-" ثم رقم الهاتف
+  const regex = /^\+\d{1,3}-\d{7,15}$/;
+  const isValid = regex.test(store.home.mobile_number.value);
+  store.updateHome('mobile_number', {
+    isValid,
+    validationMessage: isValid ? '' : 'يرجى إدخال رقم هاتف بصيغة صحيحة (+<CountryCode>-<PhoneNumber>).',
+  });
+};
+
 // دالة الحفظ
 const save = async () => {
-  // التحقق من صحة الحقول
   const { home } = store;
   let isValid = true;
 
   // تحقق من رقم الهاتف
-  const phoneRegex = /^\d{10,}$/; // مثال على regex لرقم الهاتف
-  // if (!phoneRegex.test(home.mobile_number.value)) {
-  //   store.updateHome('mobile_number', {
-  //     isValid: false,
-  //     validationMessage: 'يرجى إدخال رقم هاتف صالح.',
-  //   });
-  //   isValid = false;
-  // } else {
-    store.updateHome('mobile_number', {
-      isValid: true,
-      validationMessage: '',
-    });
-  // }
+  validateMobileNumber();
+  if (!home.mobile_number.isValid) {
+    isValid = false;
+  }
 
   // تحقق من التوقيت
   if (!home.from_time.value) {
@@ -281,7 +279,6 @@ const save = async () => {
     return;
   }
 
-  // متابعة الحفظ إذا كانت البيانات صحيحة
   try {
     loading.value = true;
     const updatedFields = {
@@ -291,7 +288,6 @@ const save = async () => {
       from_time: store.home.from_time.value,
       to_time: store.home.to_time.value,
     };
-
     await store.updateDocumentFields(updatedFields);
     toast.success('تم حفظ البيانات بنجاح.');
   } catch (error) {
