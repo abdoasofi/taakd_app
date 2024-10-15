@@ -1,5 +1,5 @@
 // تعريفات الأنواع (Types):
-/// src/data/types.ts
+// src/data/types.ts
 
 // واجهة لحقل النموذج
 export interface FormField<T = any> {
@@ -8,6 +8,7 @@ export interface FormField<T = any> {
   validationMessage: string;
   touched?: boolean;
 }
+
 // واجهات البيانات لكل خطوة
 export interface HomeData {
   country: FormField<string>;
@@ -15,6 +16,18 @@ export interface HomeData {
   is_degree_or_diploma: FormField<boolean>;
   from_time: FormField<string>;
   to_time: FormField<string>;
+}
+
+export interface PhoneNumber {
+  id: string;
+  phone: string;
+}
+
+export interface AliasName {
+  id: string;
+  first_name: string;
+  last_name: string;
+  middle_name: string;
 }
 
 export interface Step1Data {
@@ -25,7 +38,7 @@ export interface Step1Data {
   middle_name: FormField<string>;
   this_is_my_name_column: FormField<boolean>;
   suffix: FormField<string>;
-  alias_name: FormField<[]>;
+  alias_name: AliasName[];
   country_now: FormField<string>;
   city: FormField<string>;
   governorate: FormField<string>;
@@ -33,7 +46,7 @@ export interface Step1Data {
   location_text: FormField<string>;
   street_address: FormField<string>;
   date_living_address: FormField<string>;
-  phone: FormField<[]>;
+  phone: PhoneNumber[];  
   email: FormField<string>;
   date_of_birth: FormField<string>;
 }
@@ -78,6 +91,7 @@ export interface EmploymentHistory {
   nickname: string;
   file: any; // يُفضل تحديد نوع البيانات إذا كان ممكنًا
 }
+
 export interface ProfessionalQualification {
   id: string;
   awarding_body: string;
@@ -110,7 +124,6 @@ export interface Step6Data {
   i_agree_to_electronic_signature: FormField<boolean>;
   acknowledge_electronic_signature: FormField<boolean>;
 }
-
 
 export interface ValidationResult {
   [key: string]: {
