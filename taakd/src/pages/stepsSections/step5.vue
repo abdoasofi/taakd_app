@@ -1,19 +1,19 @@
 <!-- step5.vue -->
 <template>
-  <div class="container mx-auto py-8">
-    <h1 class="text-4xl font-bold mb-6 text-center">Review Your Information</h1>
+  <div class="container mx-auto py-8 px-4">
+    <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Review Your Information</h1>
 
-    <div id="report-content" ref="reportContent">
+    <div id="report-content" ref="reportContent" class="bg-gray-50 p-6 rounded-lg shadow-lg">
       <!-- ترويسة PDF -->
-      <div class="header-pdf mb-6">
-        <img src="../../assets/logo.png" alt="Logo" class="h-12 mx-auto mb-4" />
-                عنوان التقرير
+      <div class="header-pdf mb-8">
+        <img src="../../assets/logo.png" alt="Logo" class="h-16 mx-auto mb-4" />
+        <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
       </div>
 
       <!-- Step 1: Personal Information -->
-      <section class="bg-white shadow-md rounded-lg p-6 mb-6">
-        <h2 class="text-2xl font-semibold mb-4">Step 1: Personal Information</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <section class="bg-white shadow-inner rounded-lg p-6 mb-8">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 1: Personal Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InfoRow label="Employer Name" :value="store.step1.employer_name.value" />
           <InfoRow label="First Name" :value="store.step1.first_name.value" />
           <InfoRow label="Last Name" :value="store.step1.last_name.value" />
@@ -31,12 +31,16 @@
       </section>
 
       <!-- Step 2: Education Information -->
-      <section class="bg-white shadow-md rounded-lg p-6 mb-6 page-break-before">
-        <h2 class="text-2xl font-semibold mb-4">Step 2: Education Information</h2>
+      <section class="bg-white shadow-inner rounded-lg p-6 mb-8 page-break-before">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 2: Education Information</h2>
         <div v-if="store.step2.educationInformation.length > 0">
-          <div v-for="(education, index) in store.step2.educationInformation" :key="index" class="mb-4">
-            <h3 class="text-xl font-semibold mb-2">Education {{ index + 1 }}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            v-for="(education, index) in store.step2.educationInformation"
+            :key="index"
+            class="mb-6"
+          >
+            <h3 class="text-xl font-semibold mb-3 text-gray-700">Education {{ index + 1 }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InfoRow label="School/University" :value="education.name_of_school_or_college_university" />
               <InfoRow label="Field of Study" :value="education.field_of_study_or_major" />
               <InfoRow label="Country" :value="education.country" />
@@ -47,17 +51,21 @@
           </div>
         </div>
         <div v-else>
-          <p>No education information provided.</p>
+          <p class="text-gray-600">No education information provided.</p>
         </div>
       </section>
 
       <!-- Step 3: Employment History -->
-      <section class="bg-white shadow-md rounded-lg p-6 mb-6 page-break-before">
-        <h2 class="text-2xl font-semibold mb-4">Step 3: Employment History</h2>
+      <section class="bg-white shadow-inner rounded-lg p-6 mb-8 page-break-before">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 3: Employment History</h2>
         <div v-if="store.step3.employment_history.length > 0">
-          <div v-for="(employment, index) in store.step3.employment_history" :key="index" class="mb-4">
-            <h3 class="text-xl font-semibold mb-2">Employment {{ index + 1 }}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            v-for="(employment, index) in store.step3.employment_history"
+            :key="index"
+            class="mb-6"
+          >
+            <h3 class="text-xl font-semibold mb-3 text-gray-700">Employment {{ index + 1 }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InfoRow label="Company" :value="employment.company" />
               <InfoRow label="Job Title" :value="employment.official_job_title_held_currently" />
               <InfoRow label="Country" :value="employment.country" />
@@ -68,17 +76,21 @@
           </div>
         </div>
         <div v-else>
-          <p>No employment history provided.</p>
+          <p class="text-gray-600">No employment history provided.</p>
         </div>
       </section>
 
       <!-- Step 4: Professional Qualification -->
-      <section class="bg-white shadow-md rounded-lg p-6 mb-6 page-break-before">
-        <h2 class="text-2xl font-semibold mb-4">Step 4: Professional Qualification</h2>
+      <section class="bg-white shadow-inner rounded-lg p-6 mb-8 page-break-before">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 4: Professional Qualification</h2>
         <div v-if="store.step4.professional_qualification.length > 0">
-          <div v-for="(qualification, index) in store.step4.professional_qualification" :key="index" class="mb-4">
-            <h3 class="text-xl font-semibold mb-2">Qualification {{ index + 1 }}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div
+            v-for="(qualification, index) in store.step4.professional_qualification"
+            :key="index"
+            class="mb-6"
+          >
+            <h3 class="text-xl font-semibold mb-3 text-gray-700">Qualification {{ index + 1 }}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InfoRow label="Awarding Body" :value="qualification.awarding_body" />
               <InfoRow label="License/Certificate Number" :value="qualification.license_or_certificate_number" />
               <InfoRow label="Issuing Country" :value="qualification.issuing_country" />
@@ -88,27 +100,26 @@
           </div>
         </div>
         <div v-else>
-          <p>No professional qualifications provided.</p>
+          <p class="text-gray-600">No professional qualifications provided.</p>
         </div>
       </section>
 
       <!-- تذييل PDF -->
-      <div class="footer-pdf">
-        <!-- سيتم إضافة أرقام الصفحات بواسطة jsPDF -->
+      <div class="footer-pdf text-right text-sm text-gray-500 mt-8">
         Page {PAGE_NUM} of {TOTAL_PAGES}
       </div>
     </div>
 
     <!-- أزرار الطباعة والعودة -->
-    <div class="flex justify-center space-x-4 mt-8">
+    <div class="flex justify-center space-x-6 mt-12">
       <Button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded btn-back"
+        class="btn-back"
         @click="goBack"
       >
         Edit Information
       </Button>
       <Button
-        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded btn-print"
+        class="btn-print"
         @click="printPDF"
       >
         Print PDF
@@ -158,33 +169,44 @@ const printPDF = () => {
   Promise.all(promises)
     .then(() => {
       const opt = {
-        margin:       [20, 10, 20, 10], // الهوامش [أعلى، يمين، أسفل، يسار]
-        filename:     'report.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak:    { mode: ['css', 'legacy'], before: '.page-break-before', after: '.page-break-after' }
+        margin: [20, 10, 20, 10], // الهوامش [أعلى، يمين، أسفل، يسار]
+        filename: 'report.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css', 'legacy'], before: '.page-break-before', after: '.page-break-after' }
       };
 
       // إنشاء كائن jsPDF
       const pdf = new jsPDF(opt.jsPDF.orientation, opt.jsPDF.unit, opt.jsPDF.format);
 
-      html2pdf().set(opt).from(reportContent.value).toPdf().get('pdf').then((pdfDoc: jsPDF) => {
-        const totalPages = pdfDoc.internal.getNumberOfPages();
+      html2pdf()
+        .set(opt)
+        .from(reportContent.value)
+        .toPdf()
+        .get('pdf')
+        .then((pdfDoc: jsPDF) => {
+          const totalPages = pdfDoc.internal.getNumberOfPages();
 
-        // إضافة أرقام الصفحات
-        for (let i = 1; i <= totalPages; i++) {
-          pdfDoc.setPage(i);
-          pdfDoc.setFontSize(10);
-          pdfDoc.setTextColor(150, 150, 150);
-          pdfDoc.text(`Page ${i} of ${totalPages}`, pdfDoc.internal.pageSize.getWidth() - 20, pdfDoc.internal.pageSize.getHeight() - 10, { align: 'right' });
-        }
+          // إضافة أرقام الصفحات
+          for (let i = 1; i <= totalPages; i++) {
+            pdfDoc.setPage(i);
+            pdfDoc.setFontSize(10);
+            pdfDoc.setTextColor(150, 150, 150);
+            pdfDoc.text(
+              `Page ${i} of ${totalPages}`,
+              pdfDoc.internal.pageSize.getWidth() - 20,
+              pdfDoc.internal.pageSize.getHeight() - 10,
+              { align: 'right' }
+            );
+          }
 
-        // حفظ ملف PDF
-        pdfDoc.save('report.pdf');
-      }).catch(error => {
-        console.error('خطأ أثناء إنشاء PDF:', error);
-      });
+          // حفظ ملف PDF
+          pdfDoc.save('report.pdf');
+        })
+        .catch(error => {
+          console.error('خطأ أثناء إنشاء PDF:', error);
+        });
     })
     .catch(error => {
       console.error('خطأ في تحميل الصور:', error);
@@ -216,13 +238,16 @@ section {
 }
 
 /* تحسين تصميم العناوين لضمان وضوحها في PDF */
-h1, h2, h3 {
-  font-family: 'Arial', sans-serif;
+h1,
+h2,
+h3 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* إزالة الأزرار من الطباعة */
 @media print {
-  .btn-print, .btn-back {
+  .btn-print,
+  .btn-back {
     display: none;
   }
 }
@@ -230,7 +255,7 @@ h1, h2, h3 {
 /* تنسيقات ترويسة PDF */
 .header-pdf {
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   margin-bottom: 20px;
 }
@@ -245,10 +270,43 @@ h1, h2, h3 {
 
 /* تحسين تنسيقات الأزرار باستخدام Tailwind */
 .btn-print {
-  @apply bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded;
+  @apply bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-300;
 }
 
 .btn-back {
-  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  @apply bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-300;
+}
+
+/* تحسين تنسيقات InfoRow */
+.info-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row label {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.info-row .value {
+  margin-top: 2px;
+  color: #2d3748;
+}
+
+/* إضافة تأثيرات ظل للنصوص الهامة */
+.text-blue-600 {
+  color: #2c5282;
+}
+
+.text-gray-700 {
+  color: #4a5568;
+}
+
+.text-gray-600 {
+  color: #718096;
+}
+
+.text-gray-800 {
+  color: #2d3748;
 }
 </style>

@@ -1,40 +1,37 @@
+<!-- InfoRow.vue -->
 <template>
-    <div class="info-row">
-      <span class="label">{{ label }}:</span>
-      <span class="value">{{ value }}</span>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'InfoRow',
-    props: {
-      label: {
-        type: String,
-        required: true
-      },
-      value: {
-        type: String,
-        required: true
-      }
-    }
+  <div class="info-row">
+    <label class="block mb-1">{{ label }}</label>
+    <div class="value">{{ value || 'N/A' }}</div>
+  </div>
+</template>
+
+<script setup lang="ts">
+defineProps({
+  label: {
+    type: String,
+    required: true
+  },
+  value: {
+    type: [String, Number],
+    default: ''
   }
-  </script>
-  
-  <style scoped>
-  .info-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .label {
-    font-weight: bold;
-    color: #374151; /* لون للعنوان */
-  }
-  
-  .value {
-    color: #111827; /* لون للقيمة */
-  }
-  </style>
+});
+</script>
+
+<style scoped>
+.info-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row label {
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.info-row .value {
+  margin-top: 2px;
+  color: #2d3748;
+}
+</style>
