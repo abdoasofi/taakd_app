@@ -2,23 +2,17 @@
 <!-- /pages/stepsSections/step1.vue -->
 <template>
   <div class="pt-3 container">
-    <!-- <p>اسم المستند: {{ documentName }}</p> -->
     <h1 class="text-3xl  font-bold mb-3 text-black">Personal Information</h1>
     <ul>
-      <li>
-        All fields marked with an asterisk ( * ) are required.
-      </li>
-      <li>
-        Providing your information as completely and accurately as possible will help speed up the completion of your Background Verification
-      </li>
+      <li>All fields marked with an asterisk ( * ) are required.</li>
+      <li>Providing your information as completely and accurately as possible will help speed up the completion of your Background Verification</li>
     </ul>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
       <h1 class="text-lg font-medium mb-1 mt-4 text-black">Name</h1>
       <Info
-      text="Please provide your name exactly as it appears on your current government-issued identification document such as your Passport,
-       Driver’s License or National Identification Document"
-    />
+        text="Please provide your name exactly as it appears on your current government-issued identification document such as your Passport, Driver’s License or National Identification Document"
+      />
     </div>
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
@@ -46,7 +40,6 @@
           :validationMessage="store.step1.first_name.validationMessage"
           name="first_name"
           id="firstName"
-    
         />
       </FieldContainer>
     </div>
@@ -87,7 +80,6 @@
           :validationMessage="store.step1.last_name.validationMessage"
           name="last_name"
           id="lastName"
-
         />
       </FieldContainer>
       <FieldContainer>
@@ -103,66 +95,67 @@
           :isValid="store.step1.suffix.isValid"
           :validationMessage="store.step1.suffix.validationMessage"
         />
-          </FieldContainer>
-
+      </FieldContainer>
     </div>
+
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
-            <Autocomp
-              name="country_now"
-              id="country"
-              labelText="Country"
-              infoText="Select your country"
-              inputType="text"
-              :options="optionCountry"
-              @input-change="handleCountryChange"
-              v-model="country"
-              :isValid="store.step1.country_now.isValid"
-              :validationMessage="store.step1.country_now.validationMessage"
-            />
-          </FieldContainer>
-          <FieldContainer>
-            <Textarea
-              id="street_address"
-              name="street_address"
-              labelText="Street Address"
-              labelColor="blue"
-              infoText="Street Address"
-              size="xl"
-              v-model="streetAddress"
-              :isValid="store.step1.street_address.isValid"
-              :validationMessage="store.step1.street_address.validationMessage"
-            />
-          </FieldContainer>
-          <FieldContainer>
-            <Autocomp
-              name="city"
-              id="city"
-              labelText="City"
-              infoText="City"
-              inputType="text"
-              :options="optionCity"
-              @input-change="handleCityChange"
-              v-model="city"
-              :isValid="store.step1.city.isValid"
-              :validationMessage="store.step1.city.validationMessage"
-             />
-          </FieldContainer>
-          <FieldContainer>
-            <Autocomp
-              name="governorate"
-              id="governorate"
-              labelText="Governorate"
-              infoText="Governorate"
-              inputType="text"
-              :options="optionGovernorate"
-              @input-change="handleGovernorateChange"
-              v-model="governorate"
-              :isValid="store.step1.governorate.isValid"
-              :validationMessage="store.step1.governorate.validationMessage"
-            />
-          </FieldContainer>
-          <FieldContainer>
+        <Autocomp
+          name="country_now"
+          id="country"
+          labelText="Country"
+          infoText="Select your country"
+          inputType="text"
+          :options="optionCountry"
+          @input-change="handleCountryChange"
+          v-model="country"
+          :isValid="store.step1.country_now.isValid"
+          :validationMessage="store.step1.country_now.validationMessage"
+        />
+      </FieldContainer>
+      <FieldContainer>
+        <Textarea
+          id="street_address"
+          name="street_address"
+          labelText="Street Address"
+          labelColor="blue"
+          infoText="Street Address"
+          size="xl"
+          v-model="streetAddress"
+          :isValid="store.step1.street_address.isValid"
+          :validationMessage="store.step1.street_address.validationMessage"
+        />
+      </FieldContainer>
+      <FieldContainer>
+        <Autocomp
+          name="city"
+          id="city"
+          labelText="City"
+          infoText="City"
+          inputType="text"
+          :options="optionCity"
+          @input-change="handleCityChange"
+          v-model="city"
+          :isValid="store.step1.city.isValid"
+          :validationMessage="store.step1.city.validationMessage"
+        />
+      </FieldContainer>
+      <FieldContainer>
+        <Autocomp
+          name="governorate"
+          id="governorate"
+          labelText="Governorate"
+          infoText="Governorate"
+          inputType="text"
+          :options="optionGovernorate"
+          @input-change="handleGovernorateChange"
+          v-model="governorate"
+          :isValid="store.step1.governorate.isValid"
+          :validationMessage="store.step1.governorate.validationMessage"
+        />
+      </FieldContainer>
+
+      <FieldContainer>
         <StyledInput
           labelText="Location Text"
           :isMandatory="true"
@@ -173,7 +166,6 @@
           :validationMessage="store.step1.location_text.validationMessage"
           name="location_text"
           id="locationText"
-    
         />
       </FieldContainer>
       <FieldContainer>
@@ -187,85 +179,101 @@
           :validationMessage="store.step1.zip_code.validationMessage"
           name="zip_code"
           id="zipCode"
-    
         />
       </FieldContainer>
-              <!-- Date you started living at this address -->
-              <FieldContainer>
-          <StyledInput 
-            id="date_living_address" 
-            name="date_living_address" 
-            labelText="Date you started living at this address" 
-            :isMandatory="true" 
-            infoText="End date of your education." 
-            inputType="date" 
-            v-model="dateLivingAddress"
-            :isValid="store.step1.zip_code.isValid"
-            :validationMessage="store.step1.zip_code.validationMessage"
-          />
-        </FieldContainer>
+
+      <FieldContainer>
+        <StyledInput 
+          id="date_living_address" 
+          name="date_living_address" 
+          labelText="Date you started living at this address" 
+          :isMandatory="true" 
+          infoText="End date of your education." 
+          inputType="date" 
+          v-model="dateLivingAddress"
+          :isValid="store.step1.zip_code.isValid"
+          :validationMessage="store.step1.zip_code.validationMessage"
+        />
+      </FieldContainer>
     </div>
-        <FieldContainer>
+
+    <FieldContainer>
       <CheckBox 
         name="this_is_my_name_column" 
         id="this_is_my_name_column" 
         v-model="thisIsMyNameColumn"
-
-      > 
-      I certify this is my current legal name, exactly as it is displayed on my government-issued identification document *
+      >
+        I certify this is my current legal name, exactly as it is displayed on my government-issued identification document *
       </CheckBox>
     </FieldContainer>
+
     <div class="lg:grid grid-ows-2 lg:gap-2">
-          <h1 class="text-lg font-medium   text-black">Alias Name</h1>
-          <Info
-          text="Skip this section if you do not have any alias names.        
-          Please provide:
-              Any other names appearing on government-issued identity documents where that name differs from your primary identity document; or
-              A prior legal name which can include your birth surname or any official change to a legal name and government identity documents were issued; or
-              A name that you use in an “official” capacity which can include any name under which you hold a professional qualification or that you use(d) to apply for any credit or may be recorded in any employee file at a current or past employer."
-        />    
-        <!-- <Toggle>
-      <FieldContainer>
-        <StyledInput
-          labelText="First Name"
-          :isMandatory="true"
-          infoText="First Name"
-          inputType="text"
-          v-model="step1.first_name.value"
-          @input="handleInput('first_name', step1.first_name.value)"
-          name="first_name"
-          id="firstName"
-    
-        />
-      </FieldContainer>
-      <FieldContainer>
-        <StyledInput
-          labelText="Middle Name"
-          inputType="text"
-          name="middle_name"
-          id="MiddleName"
-
-        />
-      </FieldContainer>
-      <FieldContainer>
-        <StyledInput
-          labelText="Last Name"
-          :isMandatory="true"
-          infoText="Last Name"
-          inputType="text"
-          v-model="step1.last_name.value"
-          @input="handleInput('last_name', step1.last_name.value)"
-          name="last_name"
-          id="lastName"
-
-        />
-      </FieldContainer>
-        </Toggle> -->
+      <h1 class="text-lg font-medium   text-black">Alias Name</h1>
+      <Info
+        text="Skip this section if you do not have any alias names.        
+        Please provide:
+        Any other names appearing on government-issued identity documents where that name differs from your primary identity document; or
+        A prior legal name which can include your birth surname or any official change to a legal name and government identity documents were issued; or
+        A name that you use in an “official” capacity which can include any name under which you hold a professional qualification or that you use(d) to apply for any credit or may be recorded in any employee file at a current or past employer."
+      />    
     </div>
-    <!-- <InfoRow label="Username" value="Instructions for Verifying Basic Information Instructions for Verifying Basic Information."/> -->
-    <!-- <Info
-      text="Instructions for Verifying Basic Information Instructions for Verifying Basic Information."
-    /> -->
+
+    <!-- إضافة قسم Alias Name -->
+    <div class="lg:grid grid-cols-1 lg:gap-2">
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">Alias Name</h1>
+      <Info text="Please provide your alias name." />
+
+      <!-- جدول فرعي لAlias Name -->
+      <div v-for="(alias, index) in aliasNames" :key="index" class="flex items-center mb-2">
+        <FieldContainer>
+          <StyledInput
+            labelText="Full Name"
+            inputType="text"
+            v-model="aliasNames[index].first_name"
+            :isValid="true"
+            :validationMessage="''"
+            name="first_name"
+            :id="aliasNames[index].first_name"
+            @input="updateAliasName(index, aliasNames[index].first_name)"
+          />
+        </FieldContainer>
+        <FieldContainer>
+          <StyledInput
+            labelText="Middle Name"
+            inputType="text"
+            v-model="aliasNames[index].middle_name"
+            :isValid="true"
+            :validationMessage="''"
+            name="middle_name"
+            :id="`middle_name-${aliasNames[index]}`"
+            @input="updateAliasName(index, aliasNames[index].middle_name)"
+          />
+        </FieldContainer>
+        <FieldContainer>
+          <StyledInput
+            labelText="Last Name"
+            inputType="text"
+            v-model="aliasNames[index].last_name"
+            :isValid="true"
+            :validationMessage="''"
+            name="last_name"
+            :id="`last_name-${aliasNames[index]}`"
+            @input="updateAliasName(index, aliasNames[index].last_name)"
+          />
+        </FieldContainer>
+
+        <!-- زر حذف Alias Name -->
+        <Button @click="removeAliasName(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+          Remove
+        </Button>
+      </div>
+
+      <!-- زر إضافة Alias Name جديد -->
+      <Button @click="addAliasName" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Add Alias Name
+      </Button>
+    </div>
+
     <div class="lg:grid grid-ows-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
@@ -278,46 +286,76 @@
           v-model="email"
           :isValid="store.step1.email.isValid"
           :validationMessage="store.step1.email.validationMessage"
-       
         />
       </FieldContainer>
-          <Info
-          text=" Taakd may occasionally need to contact you for clarification of items on your Background Verification. We will never share or sell your email address"
-        />    
+      <Info
+        text=" Taakd may occasionally need to contact you for clarification of items on your Background Verification. We will never share or sell your email address"
+      />    
+    </div>
 
-    </div> 
-    <div class="lg:grid grid-ows-2 lg:gap-2">
-          <h1 class="text-lg font-medium   text-black">Identification</h1>
-          <Info
-          text=" Most public records are stored using your name and birth date, so providing this information allows us to accurately search these sources"
-        />    
+    <!-- إضافة قسم أرقام الهواتف -->
+    <div class="lg:grid grid-cols-1 lg:gap-2">
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">Phone Numbers</h1>
+      <Info text="Please provide your phone numbers. You can add multiple phone numbers." />
 
-    </div> 
-  <div class="lg:grid grid-cols-2 lg:gap-2">
-        <!-- Date of Birth -->
+      <!-- جدول فرعي لأرقام الهواتف -->
+      <div v-for="(phone, index) in phoneNumbers" :key="index" class="flex items-center mb-2">
         <FieldContainer>
-          <StyledInput 
-            id="date_of_birth" 
-            name="date_of_birth" 
-            labelText="Date of Birth" 
-            infoText="Start date of your education." 
-            inputType="date" 
-            v-model="dateOfBirth"
-            :isValid="store.step1.date_of_birth.isValid"
-            :validationMessage="store.step1.date_of_birth.validationMessage"
+          <StyledInput
+            labelText="Phone"
+            inputType="text"
+            v-model="phoneNumbers[index].phone"
+            :isValid="true"
+            :validationMessage="''"
+            name="phone"
+            id="phone"
+            @input="updatePhoneNumber(index, phoneNumbers[index].phone)"
           />
         </FieldContainer>
-      
+        <!-- زر حذف رقم الهاتف -->
+        <Button @click="removePhoneNumber(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+          Remove
+        </Button>
       </div>
-      <div class="pt-5 flex w-full justify-center">
-          <Button level="other" @click="save" :disabled="loading" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            <span v-if="loading">جاري الحفظ...</span>
-            <span v-else>save -></span>
-          </Button>
-        </div>
-  </div>
 
+      <!-- زر إضافة رقم هاتف جديد -->
+      <Button @click="addPhoneNumber" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        Add Phone Number
+      </Button>
+    </div>
+
+    <div class="lg:grid grid-ows-2 lg:gap-2">
+      <h1 class="text-lg font-medium   text-black">Identification</h1>
+      <Info
+        text=" Most public records are stored using your name and birth date, so providing this information allows us to accurately search these sources"
+      />    
+    </div>
+
+    <div class="lg:grid grid-cols-2 lg:gap-2">
+      <!-- Date of Birth -->
+      <FieldContainer>
+        <StyledInput 
+          id="date_of_birth" 
+          name="date_of_birth" 
+          labelText="Date of Birth" 
+          infoText="Start date of your education." 
+          inputType="date" 
+          v-model="dateOfBirth"
+          :isValid="store.step1.date_of_birth.isValid"
+          :validationMessage="store.step1.date_of_birth.validationMessage"
+        />
+      </FieldContainer>
+    </div>
+
+    <div class="pt-5 flex w-full justify-center">
+      <Button level="other" @click="save" :disabled="loading" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <span v-if="loading">جاري الحفظ...</span>
+        <span v-else>save -></span>
+      </Button>
+    </div>
+  </div>
 </template>
+
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
@@ -325,16 +363,13 @@ import CheckBox from '../../components/checkBox.vue';
 import FieldContainer from '../../components/fieldContainer.vue';
 import StyledInput from '../../components/styledInput.vue';
 import SupportingText from '../../components/supportingText.vue';
-
-import InfoRow from '../../components/InfoRow.vue';
-import Toggle from "../../components/toggle.vue";
-import FieldsGroup from "../../components/fieldsGroup.vue";
 import Info from './components/info.vue';
 import { useToast } from 'vue-toastification';
 import Button from '../../components/button.vue';
 import Autocomp from '../../components/autocomp.vue';
 import Textarea from '../../components/textarea.vue';
 import { useLocation } from '../../stores/locations';
+import { v4 as uuidv4 } from 'uuid'
 
 const store = useVerificationRequestStore();
 const toast = useToast();
@@ -343,8 +378,7 @@ const location = locations.getLocation();
 
 // تعريف متغيرات التحميل
 const loading = ref(false);
-const selectedCountry = ref('')
-const selectedCity= ref('')
+
 // خيارات Suffix
 const suffixOptions = [
   { label: 'Jr.', value: 'Jr.' },
@@ -354,12 +388,17 @@ const suffixOptions = [
   { label: 'MD', value: 'MD' },
   { label: 'Esq.', value: 'Esq.' }
 ];
+
 // تحميل البيانات عند تحميل الصفحة
 onMounted(async () => {
   loading.value = true;
   await store.loadDocument();
   loading.value = false;
 });
+
+// تعريف المتغيرات
+const phoneNumbers = ref([{ phone: '' }]);
+const aliasNames = ref([{ id:'',first_name: '', last_name: '', middle_name: '' }]);
 const optionCountry = computed(() => {
   if (location && location.data) {
     return location.data
@@ -509,15 +548,48 @@ const handleSuffix  = (value) => {
   // store.step1.suffix.value=value.value
   store.updateStep1('suffix', { value: value.value });
 };
+// دالة لإضافة رقم هاتف جديد
+const addPhoneNumber = () => {
+  phoneNumbers.value.push({ phone: '' });
+};
 
+// دالة لحذف رقم هاتف
+const removePhoneNumber = (index) => {
+  phoneNumbers.value.splice(index, 1);
+};
+
+// دالة لتحديث رقم هاتف
+const updatePhoneNumber = (index, value) => {
+  store.updatePhoneNumber(index, value);
+};
+
+// دالة لإضافة Alias Name جديد
+const addAliasName = () => {
+  aliasNames.value.push({ id:uuidv4(), first_name: '', last_name: '', middle_name: '' });
+};
+
+// دالة لحذف Alias Name
+const removeAliasName = (index) => {
+  aliasNames.value.splice(index, 1);
+};
+
+// دالة لتحديث Alias Name
+const updateAliasName = (index, value) => {
+  store.updateAliasName(index, value);
+};
+ 
 // دالة الحفظ
 const save = async () => {
   try {
+    console.log("*-*-*-*-*-*-**-*-",aliasNames)
+    console.log("*+*+*+*+*+*+*++*",phoneNumbers)
+
+    // store.updateStep1('phone', phoneNumbers.value);
+    // store.updateStep1('alias_name', aliasNames.value);
     loading.value = true;
     await store.saveStep1();
-    // كود إضافي بعد الحفظ إذا لزم الأمر
   } catch (error) {
-    // الخطأ يتم معالجته في دالة saveStep1
+    // معالجة الخطأ
   } finally {
     loading.value = false;
   }
