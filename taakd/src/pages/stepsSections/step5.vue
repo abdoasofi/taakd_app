@@ -1,6 +1,6 @@
 <!-- step5.vue -->
 <template>
-  <div class="container mx-auto py-8 px-4">
+  <div class="container mx-auto py-8 px-4 relative">
     <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Review Your Information</h1>
 
     <div id="report-content" ref="reportContent" class="bg-gray-50 p-6 rounded-lg shadow-lg">
@@ -10,8 +10,8 @@
         <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
       </div>
 
-      <!-- Step 1: Personal Information -->
-      <section class="bg-white shadow-inner rounded-lg p-6 mb-8">
+  <!-- Step 1: Personal Information -->
+  <section class="bg-white shadow-inner rounded-lg p-6 mb-8">
         <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 1: Personal Information</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InfoRow label="Employer Name" :value="store.step1.employer_name.value" />
@@ -103,11 +103,17 @@
           <p class="text-gray-600">No professional qualifications provided.</p>
         </div>
       </section>
-
+      
       <!-- تذييل PDF -->
       <div class="footer-pdf text-right text-sm text-gray-500 mt-8">
         Page {PAGE_NUM} of {TOTAL_PAGES}
       </div>
+    </div>
+
+    <!-- مؤشر التحميل Overlay -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="spinner"></div>
+      <p class="loading-text">جارٍ إنشاء ملف PDF، يرجى الانتظار...</p>
     </div>
 
     <!-- أزرار الطباعة والعودة -->
@@ -121,8 +127,10 @@
       <Button
         class="btn-print"
         @click="printPDF"
+        :disabled="isLoading"
       >
-        Print PDF
+        <span v-if="!isLoading">Print PDF</span>
+        <span v-else>Processing...</span>
       </Button>
     </div>
   </div>
@@ -149,12 +157,17 @@ const goBack = () => {
 // إضافة المرجع للمحتوى
 const reportContent = ref<null | HTMLElement>(null);
 
+// حالة التحميل
+const isLoading = ref(false);
+
 // دالة طباعة PDF
 const printPDF = () => {
   if (!reportContent.value) {
     console.error('لا يمكن العثور على المحتوى للطباعة.');
     return;
   }
+
+  isLoading.value = true; // تفعيل حالة التحميل
 
   // الانتظار حتى يتم تحميل جميع الصور
   const images = reportContent.value.querySelectorAll('img');
@@ -203,13 +216,16 @@ const printPDF = () => {
 
           // حفظ ملف PDF
           pdfDoc.save('report.pdf');
+          isLoading.value = false; // إيقاف حالة التحميل بعد الحفظ
         })
         .catch(error => {
           console.error('خطأ أثناء إنشاء PDF:', error);
+          isLoading.value = false; // إيقاف حالة التحميل في حالة الخطأ
         });
     })
     .catch(error => {
       console.error('خطأ في تحميل الصور:', error);
+      isLoading.value = false; // إيقاف حالة التحميل في حالة الخطأ
     });
 };
 </script>
@@ -247,7 +263,8 @@ h3 {
 /* إزالة الأزرار من الطباعة */
 @media print {
   .btn-print,
-  .btn-back {
+  .btn-back,
+  .loading-overlay {
     display: none;
   }
 }
@@ -270,7 +287,11 @@ h3 {
 
 /* تحسين تنسيقات الأزرار باستخدام Tailwind */
 .btn-print {
-  @apply bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-300;
+  @apply bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 flex items-center justify-center;
+}
+
+.btn-print:disabled {
+  @apply bg-green-400 cursor-not-allowed;
 }
 
 .btn-back {
@@ -308,5 +329,40 @@ h3 {
 
 .text-gray-800 {
   color: #2d3748;
+}
+
+/* تنسيقات مؤشر التحميل */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #2c5282;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 1rem;
+  color: #2d3748;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
