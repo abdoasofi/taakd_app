@@ -21,7 +21,8 @@
     "typescript": "^4.5.0",
     "html2pdf.js": "^0.10.1",
     "html2canvas": "^1.4.1",
-    "qrious": "^4.0.2"
+    "qrious": "^4.0.2",
+    "@heroicons/vue": "^2.0.13"
 
 
 

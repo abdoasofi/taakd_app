@@ -10,9 +10,12 @@
         <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
       </div>
 
-  <!-- Step 1: Personal Information -->
-  <section class="bg-white shadow-inner rounded-lg p-6 mb-8">
-        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 1: Personal Information</h2>
+      <!-- Step 1: Personal Information -->
+      <section class="bg-white shadow-inner rounded-lg p-6 mb-8">
+        <div class="flex items-center mb-4">
+          <UserIcon class="h-6 w-6 text-blue-600 mr-2" />
+          <h2 class="text-2xl font-semibold text-blue-600">Step 1: Personal Information</h2>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <InfoRow label="Employer Name" :value="store.step1.employer_name.value" />
           <InfoRow label="First Name" :value="store.step1.first_name.value" />
@@ -32,14 +35,20 @@
 
       <!-- Step 2: Education Information -->
       <section class="bg-white shadow-inner rounded-lg p-6 mb-8 page-break-before">
-        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 2: Education Information</h2>
+        <div class="flex items-center mb-4">
+          <AcademicCapIcon class="h-6 w-6 text-green-600 mr-2" />
+          <h2 class="text-2xl font-semibold text-green-600">Step 2: Education Information</h2>
+        </div>
         <div v-if="store.step2.educationInformation.length > 0">
           <div
             v-for="(education, index) in store.step2.educationInformation"
             :key="index"
             class="mb-6"
           >
-            <h3 class="text-xl font-semibold mb-3 text-gray-700">Education {{ index + 1 }}</h3>
+            <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
+              <AcademicCapIcon class="h-5 w-5 text-green-500 mr-2" />
+              Education {{ index + 1 }}
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InfoRow label="School/University" :value="education.name_of_school_or_college_university" />
               <InfoRow label="Field of Study" :value="education.field_of_study_or_major" />
@@ -57,14 +66,20 @@
 
       <!-- Step 3: Employment History -->
       <section class="bg-white shadow-inner rounded-lg p-6 mb-8 page-break-before">
-        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 3: Employment History</h2>
+        <div class="flex items-center mb-4">
+          <BriefcaseIcon class="h-6 w-6 text-yellow-600 mr-2" />
+          <h2 class="text-2xl font-semibold text-yellow-600">Step 3: Employment History</h2>
+        </div>
         <div v-if="store.step3.employment_history.length > 0">
           <div
             v-for="(employment, index) in store.step3.employment_history"
             :key="index"
             class="mb-6"
           >
-            <h3 class="text-xl font-semibold mb-3 text-gray-700">Employment {{ index + 1 }}</h3>
+            <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
+              <BriefcaseIcon class="h-5 w-5 text-yellow-500 mr-2" />
+              Employment {{ index + 1 }}
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InfoRow label="Company" :value="employment.company" />
               <InfoRow label="Job Title" :value="employment.official_job_title_held_currently" />
@@ -82,14 +97,20 @@
 
       <!-- Step 4: Professional Qualification -->
       <section class="bg-white shadow-inner rounded-lg p-6 mb-8 page-break-before">
-        <h2 class="text-2xl font-semibold mb-6 text-blue-600">Step 4: Professional Qualification</h2>
+        <div class="flex items-center mb-4">
+          <CheckBadgeIcon class="h-6 w-6 text-purple-600 mr-2" />
+          <h2 class="text-2xl font-semibold text-purple-600">Step 4: Professional Qualification</h2>
+        </div>
         <div v-if="store.step4.professional_qualification.length > 0">
           <div
             v-for="(qualification, index) in store.step4.professional_qualification"
             :key="index"
             class="mb-6"
           >
-            <h3 class="text-xl font-semibold mb-3 text-gray-700">Qualification {{ index + 1 }}</h3>
+            <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
+              <CheckBadgeIcon class="h-5 w-5 text-purple-500 mr-2" />
+              Qualification {{ index + 1 }}
+            </h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <InfoRow label="Awarding Body" :value="qualification.awarding_body" />
               <InfoRow label="License/Certificate Number" :value="qualification.license_or_certificate_number" />
@@ -103,7 +124,7 @@
           <p class="text-gray-600">No professional qualifications provided.</p>
         </div>
       </section>
-      
+
       <!-- تذييل PDF -->
       <div class="footer-pdf text-right text-sm text-gray-500 mt-8">
         Page {PAGE_NUM} of {TOTAL_PAGES}
@@ -141,9 +162,16 @@ import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import InfoRow from '../../components/InfoRow.vue';
 import Button from '../../components/button.vue';
 import { useRouter } from 'vue-router';
-import html2pdf from 'html2pdf.js';
-import { jsPDF } from 'jspdf';
+import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.js';import { jsPDF } from 'jspdf';
 import { ref } from 'vue';
+
+// استيراد الأيقونات من Heroicons
+import { 
+  UserIcon, 
+  AcademicCapIcon, 
+  BriefcaseIcon, 
+  CheckBadgeIcon // بديل لـ BadgeCheckIcon
+} from '@heroicons/vue/24/solid';
 
 // استخدام Pinia store
 const store = useVerificationRequestStore();
