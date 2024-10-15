@@ -48,7 +48,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     middle_name: { value: '', isValid: true, validationMessage: '' },
     this_is_my_name_column: { value: false, isValid: false, validationMessage: '' },
     suffix: { value: '', isValid: true, validationMessage: '' },
-    alias_name: { value: [], isValid: true, validationMessage: '' },
+    alias_name: [], 
     country_now: { value: '', isValid: false, validationMessage: '' },
     city: { value: '', isValid: false, validationMessage: '' },
     governorate: { value: '', isValid: false, validationMessage: '' },
@@ -56,7 +56,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     location_text: { value: '', isValid: false, validationMessage: '' },
     street_address: { value: '', isValid: false, validationMessage: '' },
     date_living_address: { value: '', isValid: false, validationMessage: '' },
-    phone: { value: [], isValid: true, validationMessage: '' },
+    phone: [],
     email: { value: '', isValid: false, validationMessage: '' },
     date_of_birth: { value: '', isValid: false, validationMessage: '' },
   },
@@ -69,7 +69,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
   step4: {
     professional_qualification: [],
   },
-  step6: { // تهيئة الحقول الافتراضية لـ step6
+  step6: { 
     other_languages:  { value: [], isValid: true, validationMessage: '' },
     electronic_signature: { value: '', isValid: false, validationMessage: '' },
     full_name: { value: '', isValid: false, validationMessage: '' },
@@ -84,7 +84,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
   state: (): VerificationRequestStoreState => getDefaultState(),
 
   actions: {
-    // تعيين اسم الوثيقة
+     // تعيين اسم الوثيقة
     setDocumentName(name: string) {
       this.documentName = name;
     },
@@ -145,11 +145,41 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     /**
      * تحميل الوثيقة الحالية
      */
+    addPhoneNumber() {
+      this.step1.phone.push({ id: `${Date.now()}`, phone: '' });
+    },
+
+    removePhoneNumber(index: number) {
+      this.step1.phone.splice(index, 1);
+    },
+
+    updatePhoneNumber(index: number, value: string) {
+      this.step1.phone[index].phone = value;
+    },
+
+    validatePhoneNumbers(): boolean {
+      let isValid = true;
+      this.step1.phone.forEach((phone, index) => {
+        if (!phone.phone || phone.phone.trim() === '') {
+          isValid = false;
+          this.step1.phone[index].isValid = false;
+        } else {
+          this.step1.phone[index].isValid = true;
+        }
+      });
+      return isValid;
+    },
+
+    updateAliasName(index: number, value: { first_name: string, last_name: string, middle_name: string }) {
+      console.log("/*/**/*/*/*//*/")
+      this.step1.alias_name[index] = value;
+    },
+
     async loadDocument() {
       const toast = useToast();
       const requestList = createRequestList(['name', 'user_id']);
       try {
-        // انتظار جلب البيانات
+        // انتظار جلب البيانات        
         await requestList.fetch();
         if (requestList.data.length > 0) {
           this.documentName = requestList.data[0].name;
@@ -170,13 +200,11 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         toast.error("حدث خطأ أثناء تحميل الوثيقة.");
       }
     },
-
     /**
      * إنشاء وثيقة جديدة
      */
-    async createNewDocument(initialFields: UpdateFields) {
+  async createNewDocument(initialFields: UpdateFields) {
       const toast = useToast();
-
       try {
         const newDoc = await createDocumentResource({
           doctype: 'Verification Instructions Request',
@@ -192,20 +220,18 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
 
     /**
      * تحديث الحقول في الوثيقة الحالية
-     */
+     */   
     async updateDocumentFields(updatedFields: UpdateFields) {
       const toast = useToast();
       if (!this.documentName) {
         toast.error("لم يتم العثور على اسم الوثيقة. يرجى إنشاء وثيقة أولاً.");
         return;
       }
-
       try {
         const request = createDocumentResource({
           doctype: 'Verification Instructions Request',
           name: this.documentName,
         });
-
         await request.setValue.submit(updatedFields);
         toast.success("تم تحديث الوثيقة بنجاح.");
       } catch (error) {
@@ -377,7 +403,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
 
     /**
      * دالة الحفظ لخطوة Step 1
-     */
+     */    
     async saveStep1() {
       const toast = useToast();
             // التحقق من صحة البيانات
@@ -395,7 +421,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         }
       }
 
-      // إرسال البيانات إلى Doctype
       try {
         await this.updateDocumentFields(dataToSubmit);
         toast.success('تم حفظ البيانات بنجاح.');
@@ -403,7 +428,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         throw error;
       }
     },
-
+  
     /**
      * دالة الحفظ لخطوة Step 2
      */
