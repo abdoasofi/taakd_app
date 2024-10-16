@@ -3,23 +3,33 @@
   <div class="container mx-auto py-8 px-4 relative">
     <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Review Your Information</h1>
 
-    <div id="report-content" ref="reportContent" class="bg-gray-50 p-6 rounded-lg shadow-lg">
+    <div id="report-content" ref="reportContent" class="bg-white p-8 rounded-lg shadow-lg">
       <!-- ترويسة PDF -->
-      <div class="header-pdf ">
+      <div class="header-pdf mb-8">
         <img src="@/assets/logo.png" alt="Logo" class="h-16 mx-auto mb-4" />
         <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
       </div>
 
       <!-- مكونات الخطوات المنفصلة -->
-      <Step1PersonalInfo />
-      <Step2EducationInfo />
-      <Step3EmploymentHistory />
-      <Step4ProfessionalQualification />
+      <section class="report-section">
+        <Step1PersonalInfo />
+      </section>
+
+      <section class="report-section page-break-before">
+        <Step2EducationInfo />
+      </section>
+
+      <section class="report-section page-break-before">
+        <Step3EmploymentHistory />
+      </section>
+
+      <section class="report-section page-break-before">
+        <Step4ProfessionalQualification />
+      </section>
 
       <!-- تذييل PDF -->
       <div class="footer-pdf text-right text-sm text-gray-500 mt-8">
-        <!-- سيتم تحديث أرقام الصفحات ديناميكيًا بواسطة jsPDF -->
-        <!-- يمكن إزالة هذا العنصر وإضافة التذييل مباشرة في jsPDF -->
+        <span class="page-number"></span>
       </div>
     </div>
 
@@ -78,7 +88,6 @@ const isLoading = ref(false);
 
 // دالة طباعة PDF
 const printPDF = async () => {
-
   if (!reportContent.value) {
     console.error('لا يمكن العثور على المحتوى للطباعة.');
     return;
@@ -112,7 +121,7 @@ const printPDF = async () => {
         image: { type: 'jpeg', quality: 0.95 }, // خفض الجودة قليلاً لتحسين أداء التحويل
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        // pagebreak: { mode: ['css', 'legacy'], before: '.page-break-before', after: '.page-break-after' }
+        pagebreak: { mode: ['css', 'legacy'], before: '.page-break-before', after: '.page-break-after' }
       };
       html2pdf()
         .set(opt)
@@ -120,22 +129,15 @@ const printPDF = async () => {
         .toPdf()
         .get('pdf')
         .then((pdfDoc: jsPDF) => {
+          // إضافة رقم الصفحة ديناميكيًا
           // const totalPages = pdfDoc.internal.getNumberOfPages();
-
-          // // إضافة أرقام الصفحات
           // for (let i = 1; i <= totalPages; i++) {
           //   pdfDoc.setPage(i);
           //   pdfDoc.setFontSize(10);
-          //   pdfDoc.setTextColor(150, 150, 150);
-          //   pdfDoc.text(
-          //     `Page ${i} of ${totalPages}`,
-          //     pdfDoc.internal.pageSize.getWidth() - 20,
-          //     pdfDoc.internal.pageSize.getHeight() - 10,
-          //     { align: 'right' }
-          //   );
+          //   pdfDoc.setTextColor(150);
+          //   pdfDoc.text(`Page ${i} of ${totalPages}`, pdfDoc.internal.pageSize.getWidth() - 30, pdfDoc.internal.pageSize.getHeight() - 10);
           // }
 
-          // حفظ ملف PDF
           pdfDoc.save('report.pdf');
           isLoading.value = false; // إيقاف حالة التحميل بعد الحفظ
         })
@@ -200,12 +202,11 @@ h3 {
   margin-top: 10px;
 }
 
-
-
 /* تحسين تنسيقات InfoRow */
 .info-row {
   display: flex;
   flex-direction: column;
+  margin-bottom: 12px;
 }
 
 .info-row label {
@@ -269,4 +270,27 @@ h3 {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+/* تحسين تنسيق التقرير */
+.report-section {
+  margin-bottom: 20px;
+}
+
+/* تنسيقات الجنس للتقرير */
+.bg-white {
+  background-color: #ffffff;
+}
+
+/* إضافة تنسيقات خاصة للفصول */
+
+/* تحسين تنسيق التذييل */
+.footer-pdf {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 100%;
+}
+
+/* تنسيق الإشعارات */
+
 </style>
