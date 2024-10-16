@@ -200,18 +200,7 @@ h3 {
   margin-top: 10px;
 }
 
-/* تحسين تنسيقات الأزرار باستخدام Tailwind */
-.btn-print {
-  @apply bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 flex items-center justify-center;
-}
 
-.btn-print:disabled {
-  @apply bg-green-400 cursor-not-allowed;
-}
-
-.btn-back {
-  @apply bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 text-white font-semibold py-2 px-6 rounded-lg transition duration-300;
-}
 
 /* تحسين تنسيقات InfoRow */
 .info-row {
