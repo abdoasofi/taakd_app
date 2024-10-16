@@ -368,7 +368,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       ];
       
       requiredFields.forEach((field) => {
-        const fieldData = this.step1[field];
+        const fieldData = this.step6[field];
         if (!fieldData.value || (Array.isArray(fieldData.value) && fieldData.value.length === 0)) {
           this.updateStep6(field, {
             isValid: false,
