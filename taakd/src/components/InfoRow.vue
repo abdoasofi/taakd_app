@@ -1,22 +1,18 @@
-<!-- InfoRow.vue -->
+<!-- src/components/InfoRow.vue -->
 <template>
   <div class="info-row">
-    <label class="block mb-1">{{ label }}</label>
-    <div class="value">{{ value || 'N/A' }}</div>
+    <label class="text-sm">{{ label }}</label>
+    <span class="value">{{ value || 'N/A' }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-defineProps({
-  label: {
-    type: String,
-    required: true
-  },
-  value: {
-    type: [String, Number],
-    default: ''
-  }
-});
+import { defineProps } from 'vue';
+
+const props = defineProps<{
+  label: string;
+  value: string;
+}>();
 </script>
 
 <style scoped>
