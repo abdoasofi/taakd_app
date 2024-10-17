@@ -116,8 +116,8 @@ export interface Step4Data {
 }
 
 export interface Step6Data {
-  other_languages: FormField<string[]>; // اختيار متعدد (اختياري)
-  electronic_signature: FormField<string>; // سلسلة نصية تمثل صورة التوقيع
+  other_languages: FormField<string[]>; // تصحيح النوع إلى string[]
+  electronic_signature: FormField<string>;
   full_name: FormField<string>;
   email_address: FormField<string>;
   i_agree_to_the_electronic_signature: FormField<boolean>;

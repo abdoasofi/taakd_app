@@ -132,7 +132,7 @@ import Select from '../../components/select.vue';
 import CustomSignaturePad from '../../components/CustomSignaturePad.vue';
 import Info from './components/info.vue';
 
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, toRaw } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import { useToast } from 'vue-toastification';
 
@@ -187,7 +187,10 @@ const electronicSignature = computed<string>({
   set: (val: string) => store.updateStep6('electronic_signature', { value: val }),
 });
 
-
+// const acknowledgeElectronicSignature = computed<boolean>({
+//   get: () => store.step6.acknowledge_electronic_signature.value,
+//   set: (val: boolean) => store.updateStep6('acknowledge_electronic_signature', { value: val }),
+// });
 
 // إضافة computed property لحقل "I acknowledge the above"
 const acknowledgeTheAbove = computed<boolean>({
@@ -206,9 +209,7 @@ const save = async () => {
     loading.value = true;
     await store.saveStep6();
     toast.success('تم حفظ البيانات بنجاح!');
-    console.log("*-*-*-*-*-*-*-*-*-*-*-*-*--")
   } catch (error) {
-    console.log("*++*+*+*++*+**++++*")
     toast.error('حدث خطأ أثناء حفظ البيانات.');
   } finally {
     loading.value = false;

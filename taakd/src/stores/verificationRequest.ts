@@ -70,7 +70,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     professional_qualification: [],
   },
   step6: { 
-    other_languages:  { value: [], isValid: true, validationMessage: '' },
+    other_languages:  { value: [] as string[], isValid: true, validationMessage: '' }, // تصحيح النوع هنا
     electronic_signature: { value: '', isValid: false, validationMessage: '' },
     full_name: { value: '', isValid: false, validationMessage: '' },
     email_address: { value: '', isValid: false, validationMessage: '' },
