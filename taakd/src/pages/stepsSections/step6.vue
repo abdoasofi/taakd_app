@@ -99,7 +99,6 @@
         <CheckBox 
           name="i_agree_to_electronic_signature_confirmation" 
           id="AgreeToElectronicSignatureConfirmation" 
-          v-model="acknowledgeElectronicSignature"
         >
           I certify that I am the person identified. My clicking the “Accept & Continue” button constitutes my electronic signature to this document
         </CheckBox>
