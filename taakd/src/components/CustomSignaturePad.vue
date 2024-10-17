@@ -1,84 +1,116 @@
 <!-- src/components/CustomSignaturePad.vue -->
 <template>
-    <div class="signature-pad-container">
-      <canvas ref="signatureCanvas" class="signature-pad"></canvas>
-      <div class="signature-buttons mt-2 flex space-x-2">
-        <button type="button" level="secondary" @click="clearSignature">مسح التوقيع</button>
-        <button type="button" level="secondary" @click="saveSignature">حفظ التوقيع</button>
-      </div>
+  <div>
+    <canvas ref="canvas" width="400" height="200" class="border"></canvas>
+    <div class="mt-2">
+      <button @click="clear" class="px-4 py-2 bg-gray-300 rounded">Clear</button>
+      <button @click="save" class="px-4 py-2 bg-blue-500 text-white rounded ml-2">Save</button>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, onBeforeUnmount } from 'vue'
-  import SignaturePad from 'signature_pad'
-  import button from './button.vue' // تأكد من مسار مكون الزر الصحيح
-  
-  const emit = defineEmits(['save-signature'])
-  
-  const signatureCanvas = ref(null)
-  let signaturePad = null
-  
-  onMounted(() => {
-    const canvas = signatureCanvas.value
-  
-    // ضبط حجم اللوحة لتناسب الجهاز
-    function resizeCanvas() {
-      const ratio = Math.max(window.devicePixelRatio || 1, 1)
-      canvas.width = canvas.offsetWidth * ratio
-      canvas.height = canvas.offsetHeight * ratio
-      canvas.getContext('2d').scale(ratio, ratio)
-      signaturePad.clear() // مسح أي توقيع موجود بعد تغيير الحجم
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+
+const emit = defineEmits(['save-signature']);
+
+const canvas = ref<HTMLCanvasElement | null>(null);
+let ctx: CanvasRenderingContext2D | null = null;
+let drawing = false;
+
+const startDrawing = (e: MouseEvent | TouchEvent) => {
+  drawing = true;
+  if (ctx && canvas.value) {
+    const { offsetX, offsetY } = getEventPosition(e);
+    ctx.beginPath();
+    ctx.moveTo(offsetX, offsetY);
+  }
+};
+
+const draw = (e: MouseEvent | TouchEvent) => {
+  if (drawing && ctx && canvas.value) {
+    const { offsetX, offsetY } = getEventPosition(e);
+    ctx.lineTo(offsetX, offsetY);
+    ctx.stroke();
+  }
+};
+
+const stopDrawing = () => {
+  drawing = false;
+  if (ctx) {
+    ctx.closePath();
+  }
+};
+
+const getEventPosition = (e: MouseEvent | TouchEvent) => {
+  if (e instanceof MouseEvent) {
+    return { offsetX: e.offsetX, offsetY: e.offsetY };
+  } else {
+    const touch = e.touches[0];
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const offsetX = touch.clientX - rect.left;
+    const offsetY = touch.clientY - rect.top;
+    return { offsetX, offsetY };
+  }
+};
+
+const clear = () => {
+  if (ctx && canvas.value) {
+    ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
+    emit('save-signature', ''); // إرسال توقيع فارغ عند المسح
+  }
+};
+
+const save = () => {
+  if (canvas.value) {
+    const dataUrl = canvas.value.toDataURL('image/png');
+    emit('save-signature', dataUrl);
+  }
+};
+
+onMounted(() => {
+  if (canvas.value) {
+    ctx = canvas.value.getContext('2d');
+    if (ctx) {
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      canvas.value.style.touchAction = 'none'; // لمنع التمرير عند استخدام اللمس
+
+      // إضافة مستمعي الأحداث
+      canvas.value.addEventListener('mousedown', startDrawing);
+      canvas.value.addEventListener('mousemove', draw);
+      canvas.value.addEventListener('mouseup', stopDrawing);
+      canvas.value.addEventListener('mouseout', stopDrawing);
+
+      // للأجهزة اللمسية
+      canvas.value.addEventListener('touchstart', startDrawing);
+      canvas.value.addEventListener('touchmove', draw);
+      canvas.value.addEventListener('touchend', stopDrawing);
+      canvas.value.addEventListener('touchcancel', stopDrawing);
     }
-  
-    window.addEventListener('resize', resizeCanvas)
-    resizeCanvas()
-  
-    // تهيئة SignaturePad
-    signaturePad = new SignaturePad(canvas, {
-      minWidth: 1,
-      maxWidth: 3,
-      penColor: 'black',
-    })
-  })
-  
-  onBeforeUnmount(() => {
-    if (signaturePad) {
-      signaturePad.off()
-      signaturePad = null
-    }
-  })
-  
-  const clearSignature = () => {
-    if (signaturePad) {
-      signaturePad.clear()
-    }
   }
-  
-  const saveSignature = () => {
-    if (signaturePad.isEmpty()) {
-      alert('يرجى توقيع المستند قبل الحفظ.')
-    } else {
-      const dataURL = signaturePad.toDataURL()
-      emit('save-signature', dataURL)
-    }
+});
+
+onBeforeUnmount(() => {
+  if (canvas.value) {
+    canvas.value.removeEventListener('mousedown', startDrawing);
+    canvas.value.removeEventListener('mousemove', draw);
+    canvas.value.removeEventListener('mouseup', stopDrawing);
+    canvas.value.removeEventListener('mouseout', stopDrawing);
+
+    canvas.value.removeEventListener('touchstart', startDrawing);
+    canvas.value.removeEventListener('touchmove', draw);
+    canvas.value.removeEventListener('touchend', stopDrawing);
+    canvas.value.removeEventListener('touchcancel', stopDrawing);
   }
-  </script>
-  
-  <style scoped>
-  .signature-pad-container {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-  }
-  .signature-pad {
-    width: 100%;
-    height: 200px;
-    border: 1px solid #000;
-    border-radius: 4px;
-  }
-  .signature-buttons {
-    display: flex;
-    justify-content: flex-end;
-  }
-  </style>
+});
+</script>
+
+<style scoped>
+canvas {
+  cursor: crosshair;
+}
+button {
+  margin-right: 10px;
+}
+</style>

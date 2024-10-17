@@ -1,4 +1,3 @@
-// تعريفات الأنواع (Types):
 // src/data/types.ts
 
 // واجهة لحقل النموذج
@@ -117,12 +116,12 @@ export interface Step4Data {
 }
 
 export interface Step6Data {
-  other_languages: FormField<[]>; // اختيار متعدد (اختياري)
+  other_languages: FormField<string[]>; // اختيار متعدد (اختياري)
   electronic_signature: FormField<string>; // سلسلة نصية تمثل صورة التوقيع
   full_name: FormField<string>;
   email_address: FormField<string>;
-  i_agree_to_electronic_signature: FormField<boolean>;
-  acknowledge_electronic_signature: FormField<boolean>;
+  i_agree_to_the_electronic_signature: FormField<boolean>;
+  i_acknowledge_the_above: FormField<boolean>; // إضافة هذا الحقل
 }
 
 export interface ValidationResult {
@@ -150,7 +149,7 @@ export interface RequestData {
   middle_name: string;
   this_is_my_name_column: boolean;
   suffix: string;
-  alias_name: [];
+  alias_name: AliasName[];
   city: string;
   country_now: string;
   governorate: string;
@@ -158,7 +157,7 @@ export interface RequestData {
   location_text: string;
   street_address: string;
   date_living_address: string;
-  phone: [];
+  phone: PhoneNumber[];
   email: string;
   date_of_birth: string;
   // Step2
@@ -172,8 +171,8 @@ export interface RequestData {
   electronic_signature: string;
   full_name: string;
   email_address: string;
-  i_agree_to_electronic_signature: boolean;
-  acknowledge_electronic_signature: boolean; 
+  i_agree_to_the_electronic_signature: boolean;
+  i_acknowledge_the_above: boolean; // إضافة هذا الحقل
 }
 
 // واجهة UpdateFields: لتمثيل الحقول المحدثة

@@ -1,3 +1,5 @@
+<!-- src/pages/step6.vue -->
+
 <template>
   <div class="pt-3 container">
     <h1 class="text-4xl font-bold">Screening Disclosure and Authorization</h1>
@@ -47,7 +49,6 @@
           <img :src="electronicSignature" alt="Electronic Signature" class="mt-2 border p-2 max-w-full h-auto" />
         </div>
       </FieldContainer>
-      
     </div>
     <FieldContainer>
       <CheckBox 
@@ -91,7 +92,6 @@
           A copy of the signed consent form will be sent to this address if permitted by the company that requested the background report."
         /> 
       </div>
-
     </div>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
@@ -108,7 +108,7 @@
         <CheckBox 
           name="i_acknowledge_the_above" 
           id="Acknowledge" 
-          
+          v-model="acknowledgeTheAbove"
         >
           I understand that I am using electronic means to sign this document. *
         </CheckBox>
@@ -116,11 +116,11 @@
     </div>
 
     <div class="pt-5 flex w-full justify-center">
-          <Button level="other" @click="save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            <span v-if="loading">جاري الحفظ...</span>
-            <span v-else>save -></span>
-          </Button>
-        </div>
+      <Button level="other" @click="save" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <span v-if="loading">جاري الحفظ...</span>
+        <span v-else>Save -></span>
+      </Button>
+    </div>
   </div>
 </template>
 
@@ -140,10 +140,13 @@ import { useToast } from 'vue-toastification';
 // استيراد الستور
 const store = useVerificationRequestStore();
 const toast = useToast();
+
 // تعريف متغيرات التحميل
 const loading = ref(true);
+
 // استيراد النوع Step6Data
 import type { Step6Data } from '../../data/types';
+
 // تحميل البيانات عند تحميل الصفحة
 onMounted(async () => {
   loading.value = true;
@@ -160,40 +163,38 @@ const languageOptions = ref([
 ]);
 
 // تعريف computed properties لربط v-model مع مخزن Pinia
-const otherLanguages = computed({
+const otherLanguages = computed<string[]>({
   get: () => store.step6.other_languages.value,
-  set: (val: []) => store.updateStep6('other_languages', { value: val }),
+  set: (val: string[]) => store.updateStep6('other_languages', { value: val }),
 });
 
-const fullName = computed({
+const fullName = computed<string>({
   get: () => store.step6.full_name.value,
   set: (val: string) => store.updateStep6('full_name', { value: val }),
 });
 
-const iAgreeToElectronicSignature = computed({
-  get: () => store.step6.i_agree_to_electronic_signature.value,
-  set: (val: boolean) => store.updateStep6('i_agree_to_electronic_signature', { value: val }),
+const iAgreeToElectronicSignature = computed<boolean>({
+  get: () => store.step6.i_agree_to_the_electronic_signature.value,
+  set: (val: boolean) => store.updateStep6('i_agree_to_the_electronic_signature', { value: val }),
 });
 
-const emailAddress = computed({
+const emailAddress = computed<string>({
   get: () => store.step6.email_address.value,
   set: (val: string) => store.updateStep6('email_address', { value: val }),
 });
 
-const electronicSignature = computed({
+const electronicSignature = computed<string>({
   get: () => store.step6.electronic_signature.value,
   set: (val: string) => store.updateStep6('electronic_signature', { value: val }),
 });
 
-const acknowledgeElectronicSignature = computed({
-  get: () => store.step6.acknowledge_electronic_signature.value,
-  set: (val: boolean) => store.updateStep6('acknowledge_electronic_signature', { value: val }),
-});
 
-// const acknowledgeTheAbove = computed({
-//   get: () => store.step6.acknowledge_the_above.value,
-//   set: (val: boolean) => store.updateStep6('acknowledge_the_above', { value: val }),
-// });
+
+// إضافة computed property لحقل "I acknowledge the above"
+const acknowledgeTheAbove = computed<boolean>({
+  get: () => store.step6.i_acknowledge_the_above.value,
+  set: (val: boolean) => store.updateStep6('i_acknowledge_the_above', { value: val }),
+});
 
 // دالة لحفظ التوقيع الإلكتروني
 const saveSignature = (signature: string) => {
@@ -205,9 +206,11 @@ const save = async () => {
   try {
     loading.value = true;
     await store.saveStep6();
-    toast.success('Data saved successfully!');
+    toast.success('تم حفظ البيانات بنجاح!');
+    console.log("*-*-*-*-*-*-*-*-*-*-*-*-*--")
   } catch (error) {
-    toast.error('Error saving data.');
+    console.log("*++*+*+*++*+**++++*")
+    toast.error('حدث خطأ أثناء حفظ البيانات.');
   } finally {
     loading.value = false;
   }

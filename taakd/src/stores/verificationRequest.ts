@@ -74,8 +74,8 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     electronic_signature: { value: '', isValid: false, validationMessage: '' },
     full_name: { value: '', isValid: false, validationMessage: '' },
     email_address: { value: '', isValid: false, validationMessage: '' },
-    i_agree_to_electronic_signature: { value: false, isValid: false, validationMessage: '' },
-    acknowledge_electronic_signature: { value: false, isValid: false, validationMessage: '' },
+    i_agree_to_the_electronic_signature: { value: false, isValid: false, validationMessage: '' },
+    i_acknowledge_the_above: { value: false, isValid: false, validationMessage: '' }, // إضافة هذا الحقل
   },
   validations: Array.from({ length: 5 }, () => ({ validation: {} })),
 });
@@ -84,12 +84,12 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
   state: (): VerificationRequestStoreState => getDefaultState(),
 
   actions: {
-     // تعيين اسم الوثيقة
+    // تعيين اسم الوثيقة
     setDocumentName(name: string) {
       this.documentName = name;
     },
 
-    // دالة لتحديث أي حقل في `home`
+    // دوال تحديث الحقول لمختلف الخطوات
     updateHome<K extends keyof VerificationRequestStoreState['home']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['home'][K]>
@@ -97,7 +97,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.home[field] = { ...this.home[field], ...payload };
     },
 
-    // دالة لتحديث أي حقل في `step1`
     updateStep1<K extends keyof VerificationRequestStoreState['step1']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['step1'][K]>
@@ -105,7 +104,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step1[field] = { ...this.step1[field], ...payload };
     },
 
-    // دالة لتحديث أي حقل في `step2`
     updateStep2<K extends keyof VerificationRequestStoreState['step2']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['step2'][K]>
@@ -113,7 +111,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step2[field] = { ...this.step2[field], ...payload };
     },
 
-    // دالة لتحديث أي حقل في `step3`
     updateStep3<K extends keyof VerificationRequestStoreState['step3']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['step3'][K]>
@@ -121,7 +118,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step3[field] = { ...this.step3[field], ...payload };
     },
 
-    // دالة لتحديث أي حقل في `step4`
     updateStep4<K extends keyof VerificationRequestStoreState['step4']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['step4'][K]>
@@ -143,20 +139,29 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     /**
-     * تحميل الوثيقة الحالية
+     * إضافة رقم هاتف جديد
      */
     addPhoneNumber() {
       this.step1.phone.push({ id: `${Date.now()}`, phone: '' });
     },
 
+    /**
+     * إزالة رقم هاتف
+     */
     removePhoneNumber(index: number) {
       this.step1.phone.splice(index, 1);
     },
 
+    /**
+     * تحديث رقم هاتف معين
+     */
     updatePhoneNumber(index: number, value: string) {
       this.step1.phone[index].phone = value;
     },
 
+    /**
+     * التحقق من صحة أرقام الهواتف
+     */
     validatePhoneNumbers(): boolean {
       let isValid = true;
       this.step1.phone.forEach((phone, index) => {
@@ -170,11 +175,16 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       return isValid;
     },
 
-    updateAliasName(index: number, value: { first_name: string, last_name: string, middle_name: string }) {
-      console.log("/*/**/*/*/*//*/")
+    /**
+     * تحديث اسم مستعار
+     */
+    updateAliasName(index: number, value: { first_name: string; last_name: string; middle_name: string }) {
       this.step1.alias_name[index] = value;
     },
 
+    /**
+     * تحميل الوثيقة الحالية
+     */
     async loadDocument() {
       const toast = useToast();
       const requestList = createRequestList(['name', 'user_id']);
@@ -184,6 +194,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         if (requestList.data.length > 0) {
           this.documentName = requestList.data[0].name;
           toast.success("تم تحميل الوثيقة بنجاح.");
+
+          // هنا يمكنك تحميل الحقول المرتبطة من الوثيقة إلى الستور
+          await this.loadStep6Fields(); // تأكد من إنشاء هذه الدالة لتحميل الحقول المطلوبة
+
         } else {
           // لا توجد وثيقة، نقوم بإنشاء واحدة جديدة
           const initialFields: UpdateFields = {
@@ -200,10 +214,11 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         toast.error("حدث خطأ أثناء تحميل الوثيقة.");
       }
     },
+
     /**
      * إنشاء وثيقة جديدة
      */
-  async createNewDocument(initialFields: UpdateFields) {
+    async createNewDocument(initialFields: UpdateFields) {
       const toast = useToast();
       try {
         const newDoc = await createDocumentResource({
@@ -237,6 +252,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       } catch (error) {
         console.error("Error updating document fields:", error);
         toast.error("حدث خطأ أثناء تحديث الوثيقة.");
+        throw new Error('Error updating document fields');
       }
     },
 
@@ -307,8 +323,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     /**
- * دالة التحقق من صحة بيانات Step 3
- */
+     * دالة التحقق من صحة بيانات Step 3
+     */
     validateStep3(): boolean {
       let isValid = true;
       this.step3.employment_history.forEach((employment, index) => {
@@ -331,8 +347,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     },
 
     /**
- * دالة التحقق من صحة بيانات Step 4
- */
+     * دالة التحقق من صحة بيانات Step 4
+     */
     validateStep4(): boolean {
       let isValid = true;
       this.step4.professional_qualification.forEach((qualification, index) => {
@@ -345,7 +361,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           // إعادة التحقق من Expiration Date يتم بناءً على is_an_expiration_date
         ) {
           isValid = false;
-          // يمكن إضافة رسائل تحقق خاصة بكل حقل إذا لزم الأمر
+          // يمكن إضافة رسائل تحقق خاصة لكل حقل إذا لزم الأمر
         }
 
         if (qualification.is_an_expiration_date && (!qualification.expiration_date || qualification.expiration_date.trim() === '')) {
@@ -364,12 +380,12 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const requiredFields: (keyof Step6Data)[] = [
         'full_name',
         'email_address',
-
+        'i_acknowledge_the_above',
       ];
       
       requiredFields.forEach((field) => {
         const fieldData = this.step6[field];
-        if (!fieldData.value || (Array.isArray(fieldData.value) && fieldData.value.length === 0)) {
+        if (fieldData.value === false || !fieldData.value || (Array.isArray(fieldData.value) && fieldData.value.length === 0)) {
           this.updateStep6(field, {
             isValid: false,
             validationMessage: 'هذا الحقل مطلوب.',
@@ -384,14 +400,54 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       });
 
       const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (this.step6.email.value && !emailPattern.test(this.step6.email.value)) {
-        this.updateStep6('email', {
+      if (this.step6.email_address.value && !emailPattern.test(this.step6.email_address.value)) {
+        this.updateStep6('email_address', {
           isValid: false,
           validationMessage: 'يرجى إدخال بريد إلكتروني صحيح.',
         });
         isValid = false;
-      } else if (this.step6.email.value) {
-        this.updateStep6('email', {
+      } else if (this.step6.email_address.value) {
+        this.updateStep6('email_address', {
+          isValid: true,
+          validationMessage: '',
+        });
+      }
+
+      // التحقق من التوقيع الإلكتروني والموافقة
+      if (!this.step6.electronic_signature.value) {
+        this.updateStep6('electronic_signature', {
+          isValid: false,
+          validationMessage: 'التوقيع الإلكتروني مطلوب.',
+        });
+        isValid = false;
+      } else {
+        this.updateStep6('electronic_signature', {
+          isValid: true,
+          validationMessage: '',
+        });
+      }
+
+      if (!this.step6.i_agree_to_the_electronic_signature.value) {
+        this.updateStep6('i_agree_to_the_electronic_signature', {
+          isValid: false,
+          validationMessage: 'يجب الموافقة على التوقيع الإلكتروني.',
+        });
+        isValid = false;
+      } else {
+        this.updateStep6('i_agree_to_the_electronic_signature', {
+          isValid: true,
+          validationMessage: '',
+        });
+      }
+
+      if (!this.step6.acknowledge_electronic_signature.value) {
+        this.updateStep6('acknowledge_electronic_signature', {
+          isValid: false,
+          validationMessage: 'يجب تأكيد التوقيع الإلكتروني.',
+        });
+        isValid = false;
+      } else {
+        this.updateStep6('acknowledge_electronic_signature', {
           isValid: true,
           validationMessage: '',
         });
@@ -500,6 +556,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      * دالة الحفظ لخطوة Step6
      */
     async saveStep6() {
+      console.log("*-*-*-*-/////////////////////////////*-*-*-*--")
       const toast = useToast();
             // التحقق من صحة البيانات
       // if (!this.validateStep6()) {
@@ -515,7 +572,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           dataToSubmit[key] = this.step6[field].value;
         }
       }
-
+      console.log("**************************************",dataToSubmit)
       // إرسال البيانات إلى Doctype
       try {
         await this.updateDocumentFields(dataToSubmit);
@@ -525,5 +582,30 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       }
     }, 
     
+    /**
+     * دالة تحميل الحقول الخاصة بـ Step6 من الوثيقة
+     * يجب إنشاء هذه الدالة لتحميل البيانات الخاصة بـ Step6 بشكل صحيح
+     */
+    async loadStep6Fields() {
+      if (!this.documentName) return;
+      try {
+        const request = createDocumentResource({
+          doctype: 'Verification Instructions Request',
+          name: this.documentName,
+        });
+        const data = await request.fetch(); // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+        // تحديث الحقول في Step6
+        this.updateStep6('other_languages', { value: data.other_languages });
+        this.updateStep6('electronic_signature', { value: data.electronic_signature });
+        this.updateStep6('full_name', { value: data.full_name });
+        this.updateStep6('email_address', { value: data.email_address });
+        this.updateStep6('i_agree_to_the_electronic_signature', { value: data.i_agree_to_the_electronic_signature });
+        this.updateStep6('acknowledge_electronic_signature', { value: data.acknowledge_electronic_signature });
+        this.updateStep6('i_acknowledge_the_above', { value: data.i_acknowledge_the_above });
+      } catch (error) {
+        console.error("Error loading Step6 fields:", error);
+        // يمكنك إضافة رسالة خطأ هنا باستخدام toast
+      }
+    },
   },
 });
