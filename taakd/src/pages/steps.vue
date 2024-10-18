@@ -57,7 +57,7 @@
       </div>
 
       <!-- Navigation Buttons -->
-      <div class="flex gap-2">
+      <div   v-if="!isLastStep"  class="flex gap-2">
         <button 
           class="flex items-center justify-center px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300" 
           @click="previousStep" 
@@ -71,7 +71,7 @@
         </button>
         
         <Button 
-          v-if="!isLastStep" 
+        
           level="primary" 
           @clicked="handleStep" 
         >
@@ -81,6 +81,17 @@
 
       <!-- Accept/Reject Buttons for Last Step -->
       <div class="lg:flex justify-end grow lg:gap-2" v-if="isLastStep">
+        <button 
+          class="flex items-center justify-center px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300" 
+          @click="previousStep" 
+          :disabled="currentStepIndex === 0" 
+          v-if="currentStepIndex > 0"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2 transform rotate-180">
+            <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
+          </svg>
+          {{ 'Step ' + currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+        </button>
         <Button level="other" @clicked="accept" >
           Accept
         </Button>
