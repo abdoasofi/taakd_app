@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-white  con-border">
-      <main class="py-6 px-4 lg:px-52">
+    <div class="bg-white  con-border relative overflow-hidden">
+      <main class="py-6 px-4 lg:px-52 ">
         <slot />
       </main>
     </div>
