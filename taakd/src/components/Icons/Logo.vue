@@ -1,7 +1,7 @@
 <template>
 
     <div class="py-0">
-        <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="140" height="140" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clip-path="url(#clip0_651_6446)">
                 <path d="M55.9662 21.9149V24.1236L62.7031 21.8174V25.0489L53.3271 28.1221V22.8374L55.9662 21.9149Z" fill="#81C045"/>
                 <mask id="mask0_651_6446" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-15" y="-10" width="102" height="102">
