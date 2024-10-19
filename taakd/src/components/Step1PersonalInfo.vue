@@ -1,7 +1,7 @@
 <!-- src/components/Step1PersonalInfo.vue -->
 <template>
-  <section class="report-section">
-    <div class="bg-white shadow-inner rounded-lg p-6 mb-8">
+ 
+    <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
       <div class="flex items-center mb-6">
         <UserIcon class="h-6 w-6 text-blue-600 mr-2" />
         <h2 class="text-2xl font-semibold text-blue-600">Step 1: Personal Information</h2>
@@ -22,7 +22,7 @@
         <InfoRow label="Date of Birth" :value="store.step1.date_of_birth.value" />
       </div>
     </div>
-  </section>
+ 
 </template>
 
 <script setup lang="ts">

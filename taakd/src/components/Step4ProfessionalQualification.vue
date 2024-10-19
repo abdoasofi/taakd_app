@@ -1,7 +1,7 @@
 <!-- src/components/Step4ProfessionalQualification.vue -->
 <template>
-  <section class="report-section">
-    <div class="bg-white shadow-inner rounded-lg p-6 mb-8">
+  
+    <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
       <!-- ترويسة الخطوة -->
       <div class="flex items-center mb-6">
         <CheckBadgeIcon class="h-6 w-6 text-purple-600 mr-2" />
@@ -9,7 +9,7 @@
       </div>
 
       <!-- عرض المؤهلات المهنية إذا وجدت -->
-      <div v-if="professionalQualification.length > 0">
+      <div v-if="professionalQualification.length > 0" class="[&>*:nth-child(5n)]:break-before-page [&>*:nth-child(5n)]:py-8 py-5">
         <div
           v-for="(qualification, index) in professionalQualification"
           :key="qualification.id"
@@ -37,7 +37,7 @@
         <p class="text-gray-600">No professional qualifications provided.</p>
       </div>
     </div>
-  </section>
+
 </template>
 
 <script setup lang="ts">

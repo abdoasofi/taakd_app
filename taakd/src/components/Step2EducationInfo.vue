@@ -1,7 +1,7 @@
 <!-- src/components/Step2EducationInfo.vue -->
 <template>
-  <section class="report-section">
-    <div class="bg-white shadow-inner rounded-lg p-6 mb-8">
+ 
+    <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
       <!-- ترويسة الخطوة -->
       <div class="flex items-center mb-6">
         <AcademicCapIcon class="h-6 w-6 text-green-600 mr-2" />
@@ -9,12 +9,13 @@
       </div>
 
       <!-- عرض معلومات التعليم إذا وجدت -->
-      <div v-if="educationInformation.length > 0">
+      <div v-if="educationInformation.length > 0" class="[&>*:nth-child(5n)]:break-before-page [&>*:nth-child(5n)]:py-8 py-5">
         <div
           v-for="(education, index) in educationInformation"
           :key="education.id"
-          class="mb-6 report-education"
+          class="mb-6 report-education "
         >
+        
           <!-- عنوان كل تعليم -->
           <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
             <AcademicCapIcon class="h-5 w-5 text-green-500 mr-2" />
@@ -38,7 +39,7 @@
         <p class="text-gray-600">No education information provided.</p>
       </div>
     </div>
-  </section>
+
 </template>
 
 <script setup lang="ts">

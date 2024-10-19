@@ -1,7 +1,7 @@
 <!-- src/components/Step3EmploymentHistory.vue -->
 <template>
-  <section class="report-section">
-    <div class="bg-white shadow-inner rounded-lg p-6 mb-8">
+
+    <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
       <!-- ترويسة الخطوة -->
       <div class="flex items-center mb-6">
         <BriefcaseIcon class="h-6 w-6 text-yellow-600 mr-2" />
@@ -9,7 +9,7 @@
       </div>
 
       <!-- عرض تاريخ التوظيف إذا وجد -->
-      <div v-if="employmentHistory.length > 0">
+      <div v-if="employmentHistory.length > 0" class="[&>*:nth-child(5n)]:break-before-page [&>*:nth-child(5n)]:py-8 py-5">
         <div
           v-for="(employment, index) in employmentHistory"
           :key="employment.id"
@@ -38,7 +38,7 @@
         <p class="text-gray-600">No employment history provided.</p>
       </div>
     </div>
-  </section>
+
 </template>
 
 <script setup lang="ts">

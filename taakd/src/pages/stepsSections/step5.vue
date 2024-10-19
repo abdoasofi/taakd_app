@@ -1,35 +1,32 @@
 <!-- src/views/step5.vue -->
 <template>
-  <div class="container mx-auto py-8 px-4 relative">
+  <div class=" relative">
     <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Review Your Information</h1>
 
-    <div id="report-content" ref="reportContent" class="bg-white p-8 rounded-lg shadow-lg">
-      <!-- ترويسة PDF -->
-      <div class="header-pdf mb-8">
-        <img src="@/assets/logo.png" alt="Logo" class="h-16 mx-auto mb-4" />
-        <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
-      </div>
-
-      <!-- مكونات الخطوات المنفصلة -->
-      <section class="report-section">
-        <Step1PersonalInfo />
-      </section>
-
-      <section class="report-section page-break-before">
-        <Step2EducationInfo />
-      </section>
-
-      <section class="report-section page-break-before">
-        <Step3EmploymentHistory />
-      </section>
-
-      <section class="report-section page-break-before">
-        <Step4ProfessionalQualification />
-      </section>
-
-      <!-- تذييل PDF -->
-      <div class="footer-pdf text-right text-sm text-gray-500 mt-8">
-        <span class="page-number"></span>
+    <div class="mr-5">
+      <div id="yourDivId" ref="reportContent"  >
+        <!-- ترويسة PDF -->
+        <div  >
+          <img src="@/assets/logo.png" alt="Logo" class="h-16 mx-auto mb-4" />
+          <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
+        </div>
+        <!-- مكونات الخطوات المنفصلة -->
+        <section  class="my-5">
+          <Step1PersonalInfo />
+        </section>
+        <section  class="my-5">
+          <Step2EducationInfo />
+        </section>
+        <section class="my-5">
+          <Step3EmploymentHistory />
+        </section>
+        <section class="my-5">
+          <Step4ProfessionalQualification />
+        </section>
+        <!-- تذييل PDF -->
+        <div class="text-right text-sm text-gray-500 mt-8">
+          <span class="page-number"></span>
+        </div>
       </div>
     </div>
 
@@ -49,7 +46,7 @@
       </Button>
       <Button
         class="btn-print"
-        @click="printPDF"
+        @click="printDiv"
         :disabled="isLoading"
       >
         <span v-if="!isLoading">Print PDF</span>
@@ -70,7 +67,7 @@ import { useRouter } from 'vue-router';
 import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.js';
 import { jsPDF } from 'jspdf';
 import { ref, nextTick } from 'vue';
-
+import printJS from 'print-js';
 // استخدام Pinia store
 const store = useVerificationRequestStore();
 const router = useRouter();
@@ -86,71 +83,78 @@ const reportContent = ref<null | HTMLElement>(null);
 // حالة التحميل
 const isLoading = ref(false);
 
-// دالة طباعة PDF
-const printPDF = async () => {
-  if (!reportContent.value) {
-    console.error('لا يمكن العثور على المحتوى للطباعة.');
-    return;
-  }
-
-  if (!(reportContent.value instanceof HTMLElement)) {
-    console.error('reportContent.value ليس عنصر DOM');
-    return;
-  }
-
-  isLoading.value = true; // تفعيل حالة التحميل
-
-  // التأكد من تحديث DOM
-  await nextTick();
-
-  // الانتظار حتى يتم تحميل جميع الصور
-  const images = reportContent.value.querySelectorAll('img');
-  const promises = Array.from(images).map(img => {
-    if (img.complete) return Promise.resolve();
-    return new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = reject;
-    });
+const printDiv = () => {
+  printJS({ 
+    printable: 'yourDivId', 
+    type: 'html', 
+    targetStyles: ['*'] // Includes styles from your Tailwind CSS
   });
-
-  Promise.all(promises)
-    .then(() => {
-      const opt = {
-        margin: [10, 10, 10, 10], // تقليل الهوامش [أعلى، يمين، أسفل، يسار]
-        filename: 'report.pdf',
-        image: { type: 'jpeg', quality: 0.95 }, // خفض الجودة قليلاً لتحسين أداء التحويل
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['css', 'legacy'], before: '.page-break-before', after: '.page-break-after' }
-      };
-      html2pdf()
-        .set(opt)
-        .from(reportContent.value)
-        .toPdf()
-        .get('pdf')
-        .then((pdfDoc: jsPDF) => {
-          // إضافة رقم الصفحة ديناميكيًا
-          // const totalPages = pdfDoc.internal.getNumberOfPages();
-          // for (let i = 1; i <= totalPages; i++) {
-          //   pdfDoc.setPage(i);
-          //   pdfDoc.setFontSize(10);
-          //   pdfDoc.setTextColor(150);
-          //   pdfDoc.text(`Page ${i} of ${totalPages}`, pdfDoc.internal.pageSize.getWidth() - 30, pdfDoc.internal.pageSize.getHeight() - 10);
-          // }
-
-          pdfDoc.save('report.pdf');
-          isLoading.value = false; // إيقاف حالة التحميل بعد الحفظ
-        })
-        .catch(error => {
-          console.error('خطأ أثناء إنشاء PDF:', error);
-          isLoading.value = false; // إيقاف حالة التحميل في حالة الخطأ
-        });
-    })
-    .catch(error => {
-      console.error('خطأ في تحميل الصور:', error);
-      isLoading.value = false; // إيقاف حالة التحميل في حالة الخطأ
-    });
 };
+// // دالة طباعة PDF
+// const printPDF = async () => {
+//   if (!reportContent.value) {
+//     console.error('لا يمكن العثور على المحتوى للطباعة.');
+//     return;
+//   }
+
+//   if (!(reportContent.value instanceof HTMLElement)) {
+//     console.error('reportContent.value ليس عنصر DOM');
+//     return;
+//   }
+
+//   isLoading.value = true; // تفعيل حالة التحميل
+
+//   // التأكد من تحديث DOM
+//   await nextTick();
+
+//   // الانتظار حتى يتم تحميل جميع الصور
+//   const images = reportContent.value.querySelectorAll('img');
+//   const promises = Array.from(images).map(img => {
+//     if (img.complete) return Promise.resolve();
+//     return new Promise((resolve, reject) => {
+//       img.onload = resolve;
+//       img.onerror = reject;
+//     });
+//   });
+
+//   Promise.all(promises)
+//     .then(() => {
+//       const opt = {
+//         margin: [10, 10, 10, 10], // تقليل الهوامش [أعلى، يمين، أسفل، يسار]
+//         filename: 'report.pdf',
+//         image: { type: 'jpeg', quality: 0.95 }, // خفض الجودة قليلاً لتحسين أداء التحويل
+//         html2canvas: { scale: 2, useCORS: true },
+//         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+//         pagebreak: { mode: ['css', 'legacy'], before: '.break-before-all', after: '.break-after-all' }
+//       };
+//       html2pdf()
+//         .set(opt)
+//         .from(reportContent.value)
+//         .toPdf()
+//         .get('pdf')
+//         .then((pdfDoc: jsPDF) => {
+//           // إضافة رقم الصفحة ديناميكيًا
+//           // const totalPages = pdfDoc.internal.getNumberOfPages();
+//           // for (let i = 1; i <= totalPages; i++) {
+//           //   pdfDoc.setPage(i);
+//           //   pdfDoc.setFontSize(10);
+//           //   pdfDoc.setTextColor(150);
+//           //   pdfDoc.text(`Page ${i} of ${totalPages}`, pdfDoc.internal.pageSize.getWidth() - 30, pdfDoc.internal.pageSize.getHeight() - 10);
+//           // }
+
+//           pdfDoc.save('report.pdf');
+//           isLoading.value = false; // إيقاف حالة التحميل بعد الحفظ
+//         })
+//         .catch(error => {
+//           console.error('خطأ أثناء إنشاء PDF:', error);
+//           isLoading.value = false; // إيقاف حالة التحميل في حالة الخطأ
+//         });
+//     })
+//     .catch(error => {
+//       console.error('خطأ في تحميل الصور:', error);
+//       isLoading.value = false; // إيقاف حالة التحميل في حالة الخطأ
+//     });
+// };
 </script>
 
 <style scoped>
