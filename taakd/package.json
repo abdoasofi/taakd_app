@@ -17,6 +17,7 @@
     "html2pdf.js": "^0.10.1",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.0.0",
+    "print-js": "^1.6.0",
     "qrious": "^4.0.2",
     "typescript": "^4.5.0",
     "uuid": "^9.0.0",
