@@ -2,7 +2,7 @@
     <div class="py-6">
         <div class="flex gap-2 mb-2">
             <div class="w-10">
-                <StyledIcon />
+                <StyledIcon status=1 scalse=1 icon="md-ratereview-outlined" />
             </div>
             <Heading level="secondary" class="text-black" tag="h2">verification for Verifying Basic Information:</Heading>
         </div>
@@ -18,7 +18,7 @@
     
     </template>
     <script setup>
-    import Heading from '../../components/heading.vue';
+import Heading from '../../components/heading.vue';
 import StyledIcon from '../../components/styledIcon.vue';
 
     </script>

@@ -31,7 +31,7 @@ const props = defineProps({
 	status: { type: Number,
 		required: true,default:0 },
     icon: { type: String,
-     default:"bi-music-player"},
+     default:""},
      scale:{ type: Number,
       default:2 },
 	
