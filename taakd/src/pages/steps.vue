@@ -19,7 +19,7 @@
             :label="'Step ' + (index + 1)"
             :desc="step.description"
             :percentageCompleted="percentageCompleted"
-            @click="goToStep(index)" 
+            @click="goToStep(index) " 
           />
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-base">
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="pb-20 bg-bg leading-6 col-span-8">
+    <div class="  col-span-8">
       <component 
         :is="currentStepComponent" 
         :stepData="currentStepData" 
@@ -92,6 +92,7 @@
           </svg>
           {{ 'Step ' + currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
+        
         <Button level="other" @clicked="accept" >
           Accept
         </Button>
@@ -113,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
 import StepIcon from './stepsSections/components/stepIcon.vue';
@@ -125,6 +126,7 @@ import Step5 from './stepsSections/step5.vue';
 import Step6 from './stepsSections/step6.vue';
 import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
+import { createRequestList } from '../data/request';
 
 // استيراد الستور
 const store = useVerificationRequestStore();
@@ -134,6 +136,35 @@ const toast = useToast();
 const currentStepIndex = ref(0);
 const totalSteps = 6;
 
+
+const requestList = createRequestList(['name', 'user_id','application_status']); 
+const verificationStore = useVerificationRequestStore();
+
+const documentNameValue = ref('');
+
+const updateDocumentName = (newName) => {
+  documentNameValue.value = newName;
+};
+
+// استخدام watch لمراقبة تغيير قيمة name في requestList
+watch(
+  () => {
+    // افترض أن البيانات موجودة في requestList.value.data[0].name
+    // تحقق من وجود البيانات قبل الوصول إليها لتجنب الأخطاء
+    
+    return requestList && requestList.data && requestList.data.length > 0
+      ? requestList.data[0]
+      : null;
+  },
+  (newName) => {
+    if(newName)
+   { 
+    updateDocumentName(newName.name);
+  
+    verificationStore.setDocumentName(newName.name);}
+  },
+  { immediate: true } // تنفيذ المراقبة فور التهيئة
+);
 // تعريف المراحل مع المكونات والوصف ودوال التحقق
 const steps = [
   {
@@ -180,27 +211,66 @@ const isLastStep = computed(() => currentStepIndex.value === totalSteps - 1);
 
 // دالة التنقل للخلف
 const previousStep = () => {
+
   if (currentStepIndex.value > 0) {
     currentStepIndex.value--;
   }
 };
 
 // دالة الانتقال إلى خطوة معينة
-const goToStep = (index) => {
-  currentStepIndex.value = index; // تحديث الفهرس الحالي
+const goToStep = async(index) => {
+  currentStepIndex.value = index;
+  try {
+    loading.value = true;
+    
+    if(currentStepIndex.value===1){
+      await store.saveStep1();
+    }
+    else if(currentStepIndex.value===2){
+      await store.saveStep2();
+    }else if(currentStepIndex.value===3){
+      await store.saveStep3();
+    }
+    else if(currentStepIndex.value===4){
+      await store.saveStep4();
+    }
+    else if(currentStepIndex.value===6){
+      await store.saveStep6();
+    }
+ 
+  } catch (error) {
+    console.error("خطأ أثناء الحفظ:", error);
+  } finally {
+    loading.value = false;
+  }
+   // تحديث الفهرس الحالي
 };
 
 // دالة التنقل للأمام (زر "Step")
 const handleStep = async () => {
   try {
     loading.value = true;
-
-    // تحقق مما إذا كانت الخطوة الحالية تحتوي على دالة save
-    const step = steps[currentStepIndex.value];
-    if (step.save) {
-      await step.save();
-      toast.success("تم حفظ البيانات بنجاح.");
+    
+    if(currentStepIndex.value===0){
+      await store.saveStep1();
     }
+    else if(currentStepIndex.value===1){
+      await store.saveStep2();
+    }else if(currentStepIndex.value===2){
+      await store.saveStep3();
+    }
+    else if(currentStepIndex.value===3){
+      await store.saveStep4();
+    }
+    else if(currentStepIndex.value===5){
+      await store.saveStep6();
+    }
+    // تحقق مما إذا كانت الخطوة الحالية تحتوي على دالة save
+    // const step = steps[currentStepIndex.value];
+    // if (step.save) {
+    //   await step.save();
+    //   toast.success("تم حفظ البيانات بنجاح.");
+    // }
 
     // الانتقال إلى الخطوة التالية
     if (currentStepIndex.value < totalSteps - 1) {

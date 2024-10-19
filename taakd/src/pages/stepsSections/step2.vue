@@ -7,7 +7,7 @@
       <li>All fields marked with an asterisk ( * ) are required.</li>
       <li>Please provide your education and training information beginning with the most recent</li>
     </ul>
-  
+  </div>
     <div class="space-y-2 mt-3">
       <FieldsToggleContainer
         v-for="(education, index) in educationInformation"
@@ -206,7 +206,7 @@
         <Button level="secondary" @clicked="addEducation">+ Add Education Information</Button>
       </div>
     </div>
-  </div>
+  
 </template>
 
 <script setup lang="ts">

@@ -1,9 +1,9 @@
 <!-- contact.vue -->
 <template>
   <div class="pt-6">
-    <div class="flex gap-2 mb-2">
-      <div class="w-7 lg:w-9 shrink-0">
-        <VerificationInformation />
+    <div class="flex gap-2 mb-2 items-center">
+      <div class="w-10 lg:w-14 shrink-0 ">
+        <StyledIcon status=1 scalse=1 icon="md-verified-outlined" />
       </div>
       <Heading level="secondary" class="text-black" tag="h2">
         Here you can follow the progress of your report and communicate with Taakd
@@ -138,6 +138,7 @@ import Autocomp from '../../components/autocomp.vue';
 import VerificationInformation from '../../components/Icons/verificationInformation.vue';
 import { useToast } from 'vue-toastification';
 import FadeInOut from '../../components/fadeInOut.vue'; // تأكد من استيراده
+import StyledIcon from '../../components/styledIcon.vue';
 
 const store = useVerificationRequestStore();
 const toast = useToast();
