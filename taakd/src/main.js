@@ -7,8 +7,37 @@ import App from './App.vue'
 import translationPlugin from './translation'
 
 import { createPinia } from 'pinia';
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { 
+	FaRegularFileAlt,
+	MdDoneTwotone,
+	BiMusicPlayer,
+	AiProtocols,
+	MdVerifiedOutlined,
+	IoDocumentTextOutline,
+	MdRatereviewOutlined,
+	MdLogout,
+	MdPhoneOutlined,
+	HiLockClosed,
+	MdLanguageOutlined,
+	FaSearch
 
+} from "oh-vue-icons/icons";
+addIcons(
+	FaRegularFileAlt,
+	MdDoneTwotone,
+	BiMusicPlayer,
+	AiProtocols,
+	MdVerifiedOutlined,
+	IoDocumentTextOutline,
+	MdRatereviewOutlined,
+	MdLogout,
+	MdPhoneOutlined,
+	HiLockClosed,
+	MdLanguageOutlined,
+	FaSearch
 
+);
 import {
   Button,
   Card,
@@ -42,6 +71,7 @@ const requesList = reactive({
 });
 
 
+
 const reques = reactive(requesData);
 
 app.provide("reques", reques);
@@ -58,7 +88,13 @@ app.use(translationPlugin)
 app.component('Button', Button)
 app.component('Card', Card)
 app.component('Input', Input)
-
+app.component("v-icon", OhVueIcon);
 app.use(pinia);
 
 app.mount('#app')
+
+
+
+
+
+
