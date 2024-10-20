@@ -24,7 +24,8 @@
     "vue": "^3.4.29",
     "vue-router": "^4.0.12",
     "vue-signature-pad": "^1.0.0",
-    "vue-toastification": "2.0.0-rc.5"
+    "vue-toastification": "2.0.0-rc.5",
+    "vue-sonner": "^1.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.0.0",

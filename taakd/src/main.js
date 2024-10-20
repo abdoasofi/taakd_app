@@ -51,32 +51,32 @@ let app = createApp(App)
 
 const pinia = createPinia();
 
-let requesData = localStorage.getItem("reques")
-if (!requesData) {
-	const requesJSON = JSON.stringify({
-		items: []
-	})
+// let requesData = localStorage.getItem("reques")
+// if (!requesData) {
+// 	const requesJSON = JSON.stringify({
+// 		items: "gggggggggggggg"
+// 	})
 
-	localStorage.setItem("reques", requesJSON)
-	requesData = {
-		items: []
-	}
-} else {
-	requesData = JSON.parse(requesData);
-}
+// 	localStorage.setItem("reques", requesJSON)
+// 	requesData = {
+// 		items: []
+// 	}
+// } else {
+// 	requesData = JSON.parse(requesData);
+// }
 
-const requesList = reactive({
-	requesName:'VIR-2024-26-09-000008'
+// const requesList = reactive({
+// 	requesName:'ffffffffffff'
 
-});
+// });
 
 
 
-const reques = reactive(requesData);
+// const reques = reactive(requesData);
 
-app.provide("reques", reques);
+// app.provide("reques", reques);
 
-app.provide("requesList", requesList);
+// app.provide("requesList", requesList);
 
 
 setConfig('resourceFetcher', frappeRequest)
