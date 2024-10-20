@@ -1,7 +1,7 @@
 <template>
     <div class="py-6">
-        <div class="flex gap-2 mb-2">
-            <div class="w-10">
+        <div class="flex gap-2 mb-2 items-center">
+            <div class="w-10 lg:w-14 shrink-0 ">
                 <StyledIcon status=1 scalse=1 icon="md-ratereview-outlined" />
             </div>
             <Heading level="secondary" class="text-black" tag="h2">verification for Verifying Basic Information:</Heading>
