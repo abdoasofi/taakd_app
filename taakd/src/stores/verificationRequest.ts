@@ -12,8 +12,6 @@ import {
   UpdateFields,
 } from '../data/types';
 import { createDocumentResource } from 'frappe-ui';
-import { ref } from 'vue';
-import { createRequestList, updateFieldsInRequestList } from '../data/request';
 import { useToast } from 'vue-toastification';
 
 interface StepValidation {
@@ -88,6 +86,26 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     setDocumentName(name: string) {
       this.documentName = name;
     },
+        /**
+     * تحميل الوثيقة الحالية
+     */
+    async loadDocument() {
+
+      const toast = useToast();
+      try {
+          await this.loadHomeFields();
+          await this.loadStep1Fields();
+          await this.loadStep2Fields();
+          await this.loadStep3Fields();
+          await this.loadStep4Fields();
+          await this.loadStep6Fields(); 
+
+      } catch (error) {
+        console.error("Error loading document:", error);
+        toast.error("حدث خطأ أثناء تحميل الوثيقة.");
+      }
+    },
+    
 
     // دوال تحديث الحقول لمختلف الخطوات
     updateHome<K extends keyof VerificationRequestStoreState['home']>(
@@ -181,61 +199,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     updateAliasName(index: number, value: { first_name: string; last_name: string; middle_name: string }) {
       this.step1.alias_name[index] = value;
     },
-
-    /**
-     * تحميل الوثيقة الحالية
-     */
-    async loadDocument() {
-      const toast = useToast();
-      const requestList = createRequestList(['name', 'user_id']);
-      try {
-        // انتظار جلب البيانات        
-        await requestList.fetch();
-        if (requestList.data.length > 0) {
-          this.documentName = requestList.data[0].name;
-          toast.success("تم تحميل الوثيقة بنجاح.");
-
-          // هنا يمكنك تحميل الحقول المرتبطة من الوثيقة إلى الستور
-          await this.loadStep6Fields(); // تأكد من إنشاء هذه الدالة لتحميل الحقول المطلوبة
-
-        } else {
-          // لا توجد وثيقة، نقوم بإنشاء واحدة جديدة
-          const initialFields: UpdateFields = {
-            country: this.home.country.value,
-            mobile_number: this.home.mobile_number.value,
-            is_degree_or_diploma: this.home.is_degree_or_diploma.value,
-            from_time: this.home.from_time.value,
-            to_time: this.home.to_time.value,
-          };
-          await this.createNewDocument(initialFields);
-        }
-      } catch (error) {
-        console.error("Error loading document:", error);
-        toast.error("حدث خطأ أثناء تحميل الوثيقة.");
-      }
-    },
-
-    /**
-     * إنشاء وثيقة جديدة
-     */
-    async createNewDocument(initialFields: UpdateFields) {
-      const toast = useToast();
-      try {
-        const newDoc = await createDocumentResource({
-          doctype: 'Verification Instructions Request',
-          fields: initialFields,
-        });
-        this.documentName = newDoc.name;
-        toast.success("تم إنشاء الوثيقة الجديدة بنجاح.");
-      } catch (error) {
-        console.error("Error creating new document:", error);
-        toast.error("حدث خطأ أثناء إنشاء الوثيقة الجديدة.");
-      }
-    },
-
-    /**
-     * تحديث الحقول في الوثيقة الحالية
-     */   
+ 
     async updateDocumentFields(updatedFields: UpdateFields) {
       const toast = useToast();
       if (!this.documentName) {
@@ -556,7 +520,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      * دالة الحفظ لخطوة Step6
      */
     async saveStep6() {
-      console.log("*-*-*-*-/////////////////////////////*-*-*-*--")
       const toast = useToast();
             // التحقق من صحة البيانات
       // if (!this.validateStep6()) {
@@ -572,7 +535,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           dataToSubmit[key] = this.step6[field].value;
         }
       }
-      console.log("**************************************",dataToSubmit)
       // إرسال البيانات إلى Doctype
       try {
         await this.updateDocumentFields(dataToSubmit);
@@ -581,19 +543,157 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         throw error;
       }
     }, 
-    
-    /**
-     * دالة تحميل الحقول الخاصة بـ Step6 من الوثيقة
-     * يجب إنشاء هذه الدالة لتحميل البيانات الخاصة بـ Step6 بشكل صحيح
-     */
-    async loadStep6Fields() {
-      if (!this.documentName) return;
+        /**
+     * دالة تحميل الحقول الخاصة بـ Home من الوثيقة
+   */
+    async loadHomeFields() {
+      
       try {
         const request = createDocumentResource({
           doctype: 'Verification Instructions Request',
           name: this.documentName,
         });
-        const data = await request.fetch(); // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+        const data = await request.reload();
+          // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+        // تحديث الحقول في Home
+        this.updateHome('country', { value: data.country });
+        this.updateHome('mobile_number', { value: data.mobile_number });
+        this.updateHome('is_degree_or_diploma', { value: data.is_degree_or_diploma });
+        this.updateHome('from_time', { value: data.from_time });
+        this.updateHome('to_time', { value: data.to_time });
+        
+      } catch (error) {
+        console.error("Error loading Step1 fields:", error);
+        const toast = useToast();
+        toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الأولى.");
+      }
+    },
+    /**
+     * دالة تحميل الحقول الخاصة بـ Step1 من الوثيقة
+   */
+   
+    async loadStep1Fields() {
+      try {
+        const request = createDocumentResource({
+          doctype: 'Verification Instructions Request',
+          name: this.documentName,
+        });
+        const data = await request.reload();
+         // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+        // تحديث الحقول في Step1
+        this.updateStep1('employer_name', { value: data.employer_name });
+        this.updateStep1('first_name', { value: data.first_name });
+        this.updateStep1('last_name', { value: data.last_name });
+        this.updateStep1('dont_middle_name', { value: data.dont_middle_name });
+        this.updateStep1('middle_name', { value: data.middle_name });
+        this.updateStep1('this_is_my_name_column', { value: data.this_is_my_name_column });
+        this.updateStep1('suffix', { value: data.suffix });
+        this.updateStep1('country_now', { value: data.country_now });
+        this.updateStep1('city', { value: data.city });
+        this.updateStep1('governorate', { value: data.governorate });
+        this.updateStep1('zip_code', { value: data.zip_code });
+        this.updateStep1('location_text', { value: data.location_text });
+        this.updateStep1('street_address', { value: data.street_address });
+        this.updateStep1('date_living_address', { value: data.date_living_address });
+        this.updateStep1('email', { value: data.email });
+        this.updateStep1('date_of_birth', { value: data.date_of_birth });
+
+        // تحميل الحقول الفرعية مثل alias_name و phone إذا كانت موجودة
+        if (data.alias_name && Array.isArray(data.alias_name)) {
+          this.step1.alias_name = data.alias_name;
+        }
+
+        if (data.phone && Array.isArray(data.phone)) {
+          this.step1.phone = data.phone;
+        }
+
+        // يمكنك إضافة المزيد من الحقول بناءً على احتياجاتك
+
+        this.validations = data.validations || this.validations; // تحديث التحققات إذا كانت موجودة
+      } catch (error) {
+        console.error("Error loading Step1 fields:", error);
+        const toast = useToast();
+        toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الأولى.");
+      }
+    },
+ /**
+     * دالة تحميل الحقول الخاصة بـ Step2 من الوثيقة
+ */
+
+    async loadStep2Fields() {
+      // if (!this.documentName) return;
+      try {
+        const request = createDocumentResource({
+          doctype: 'Verification Instructions Request',
+          name: this.documentName,
+        });
+        const data = await request.reload();
+        // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+        this.step2.educationInformation = data.education_information;
+
+      } catch (error) {
+        console.error("Error loading Step1 fields:", error);
+        const toast = useToast();
+        toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الأولى.");
+      }
+    },   
+
+  /**
+   * دالة تحميل الحقول الخاصة بـ Step3 من الوثيقة
+   * يجب إنشاء هذه الدالة لتحميل البيانات الخاصة بـ Step6 بشكل صحيح
+   */
+
+  async loadStep3Fields() {
+    // if (!this.documentName) return;
+    try {
+      const request = createDocumentResource({
+        doctype: 'Verification Instructions Request',
+        name: this.documentName,
+      });
+      const data = await request.reload();
+      // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+      this.step3.employment_history = data.employment_history;
+
+    } catch (error) {
+      console.error("Error loading Step1 fields:", error);
+      const toast = useToast();
+      toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الأولى.");
+    }
+  },   
+
+  /**
+   * دالة تحميل الحقول الخاصة بـ Step4 من الوثيقة
+   * يجب إنشاء هذه الدالة لتحميل البيانات الخاصة بـ Step6 بشكل صحيح
+   */
+
+  async loadStep4Fields() {
+    // if (!this.documentName) return;
+    try {
+      const request = createDocumentResource({
+        doctype: 'Verification Instructions Request',
+        name: this.documentName,
+      });
+      const data = await request.reload();
+       // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
+      this.step4.professional_qualification = data.professional_qualification;
+  
+    } catch (error) {
+      console.error("Error loading Step1 fields:", error);
+      const toast = useToast();
+      toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الأولى.");
+    }
+  }, 
+    /**
+     * دالة تحميل الحقول الخاصة بـ Step6 من الوثيقة
+   */
+    async loadStep6Fields() {
+      // if (!this.documentName) return;
+      try {
+        const request = createDocumentResource({
+          doctype: 'Verification Instructions Request',
+          name:this.documentName,
+        });
+        const data = await request.reload(); // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
         // تحديث الحقول في Step6
         this.updateStep6('other_languages', { value: data.other_languages });
         this.updateStep6('electronic_signature', { value: data.electronic_signature });

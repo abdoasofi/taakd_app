@@ -127,7 +127,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, onUpdated } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import { useLocation } from '../../stores/locations';
 import Button from '../../components/button.vue';
@@ -135,7 +135,6 @@ import Heading from '../../components/heading.vue';
 import StyledInput from '../../components/styledInput.vue';
 import FieldContainer from '../../components/fieldContainer.vue';
 import Autocomp from '../../components/autocomp.vue';
-import VerificationInformation from '../../components/Icons/verificationInformation.vue';
 import { useToast } from 'vue-toastification';
 import FadeInOut from '../../components/fadeInOut.vue'; // تأكد من استيراده
 import StyledIcon from '../../components/styledIcon.vue';
@@ -160,12 +159,14 @@ const optionCountry = computed(() => {
 
 const loading = ref(false);
 
-onMounted(async () => {
-  loading.value = true;
-  await store.loadDocument();
-  loading.value = false;
-});
-
+// onMounted(async () => {
+//   loading.value = true;
+//   await store.loadDocument();
+//   loading.value = false;
+// });
+// onUpdated(async () => {
+//   await store.loadDocument();
+// });
 const mobileNumber = computed({
   get: () => store.home.mobile_number.value,
   set: (val: string) => store.updateHome('mobile_number', { value: val })

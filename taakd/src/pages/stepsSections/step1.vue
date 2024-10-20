@@ -217,7 +217,6 @@
         A name that you use in an “official” capacity which can include any name under which you hold a professional qualification or that you use(d) to apply for any credit or may be recorded in any employee file at a current or past employer."
       />    
     </div>
-
     <!-- إضافة قسم Alias Name -->
     <div class="lg:grid grid-cols-1 lg:gap-2">
       <h1 class="text-lg font-medium mb-1 mt-4 text-black">Alias Name</h1>
@@ -390,11 +389,11 @@ const suffixOptions = [
 ];
 
 // تحميل البيانات عند تحميل الصفحة
-onMounted(async () => {
-  loading.value = true;
-  await store.loadDocument();
-  loading.value = false;
-});
+// onMounted(async () => {
+//   loading.value = true;
+//   await store.loadStep1Fields();
+//   loading.value = false;
+// });
 
 // تعريف المتغيرات
 const phoneNumbers = ref([{ phone: '' }]);

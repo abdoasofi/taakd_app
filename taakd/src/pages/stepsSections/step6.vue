@@ -146,12 +146,12 @@ const loading = ref(true);
 // استيراد النوع Step6Data
 import type { Step6Data } from '../../data/types';
 
-// تحميل البيانات عند تحميل الصفحة
-onMounted(async () => {
-  loading.value = true;
-  await store.loadDocument();
-  loading.value = false;
-});
+// // تحميل البيانات عند تحميل الصفحة
+// onMounted(async () => {
+//   loading.value = true;
+//   await store.loadDocument();
+//   loading.value = false;
+// });
 
 // خيارات اللغات الأخرى
 const languageOptions = ref([

@@ -210,7 +210,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, reactive } from 'vue'
+import { ref, computed, watch, nextTick, reactive, onMounted } from 'vue'
 import { useVerificationRequestStore } from '../../stores/verificationRequest'
 import { useToast } from 'vue-toastification'
 import { v4 as uuidv4 } from 'uuid'
@@ -228,7 +228,9 @@ import { location } from '../../data/useAddressLogic'
 // استيراد الستور
 const store = useVerificationRequestStore()
 const toast = useToast()
-
+// onMounted(async () => {
+//   await store.loadStep2Fields();
+// });
 // ربط بيانات التعليم مع المخزن
 const educationInformation = computed({
   get: () => store.step2.educationInformation,

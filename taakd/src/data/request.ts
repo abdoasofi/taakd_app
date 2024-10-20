@@ -46,13 +46,11 @@ export async function updateFieldsInRequestList(
   requestList: ResourceList<RequestData>,
   updatedFields: UpdateFields
 ): Promise<void> {
-  console.log("******************************",requestList)
-  console.log("******************************",updatedFields)
   // if (!requestList || !requestList.data || requestList.data.length === 0) {
   //   throw new Error("Request list data is not available");
   // }
 
-  const documentName: string = 'VIR-2024-26-09-000008';
+  const documentName: string = '';
 
   const document: ResourceDocument<RequestData> | undefined = requestList.documents.find(doc => doc.name === documentName);
 

@@ -114,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, onUpdated } from 'vue';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
 import StepIcon from './stepsSections/components/stepIcon.vue';
@@ -179,11 +179,13 @@ const steps = [
   },
   {
     component: Step3,
-    description: "Employment History"
+    description: "Employment History",
+    save: store.saveStep3,
   },
   {
     component: Step4,
-    description: "Professional Qualifications"
+    description: "Professional Qualifications",
+    save: store.saveStep4,
   },
   {
     component: Step5,
@@ -191,7 +193,8 @@ const steps = [
   },
   {
     component: Step6,
-    description: "Final Verification"
+    description: "Final Verification",
+    save: store.saveStep6,
   },
 ];
 
@@ -312,6 +315,9 @@ onMounted(async () => {
   loading.value = true;
   await store.loadDocument();
   loading.value = false;
+});
+onUpdated(async () => {
+  await store.loadDocument();
 });
 </script>
 

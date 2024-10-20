@@ -177,7 +177,9 @@ import { location } from '../../data/useAddressLogic'
 // استيراد الستور
 const store = useVerificationRequestStore()
 const toast = useToast()
-
+// onMounted(async () => {
+//   await store.loadStep4Fields();
+// });
 // ربط بيانات المؤهلات المهنية الإضافية مع المخزن
 const additionalProfessionalQualifications = computed({
   get: () => store.step4.professional_qualification,

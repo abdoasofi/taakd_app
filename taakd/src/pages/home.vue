@@ -99,7 +99,7 @@
 
 <script setup>
 import router from '@/router';
-import { ref, watch, reactive } from 'vue';
+import { ref, watch, reactive, onMounted, onUpdated } from 'vue';
 import { Button } from 'frappe-ui';
 import BaseContainer from '../components/baseContainer.vue';
 import ProcessItem from './homeSections/processItem.vue';
@@ -116,6 +116,7 @@ import BackgroundLayout from '../layouts/backgroundLayout.vue';
 import bg1 from '@/assets/bg1.svg';
 
 
+const store = useVerificationRequestStore();
 
 const documentName = ref('');
 
@@ -153,6 +154,15 @@ const data = reactive({
 const alerts = reactive([]);
 
 // Methods
+
+// تحميل الوثيقة عند بدء المكون
+onMounted(async () => {
+  await store.loadDocument();
+});
+
+onUpdated(async () => {
+   store.loadDocument();
+});
 const triggerAlert = function(message) {
   alerts.push({ message });
   setTimeout(() => {
