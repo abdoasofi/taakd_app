@@ -5,8 +5,8 @@
           <div class="rounded bg-white p-6 men_shadow min-w-80 shrink grow-0">
             <div class="flex justify-between items-start">
               <div class="space-y-1 text-dark_gray">
-                <div class="font-semibold">[User Name]</div>
-                <div class="font-normal">[User Name]@gmail.com</div>
+                <div class="font-semibold">{{ session.user }}</div>
+                <!-- <div class="font-normal">{{ session.user }}</div> -->
               </div>
               <button class="text-lg font-bold" :onclick="closeFunc">x</button>
             </div>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="font-normal text-mid_gray">English</div>
               </button>
-              <button class="flex gap-3 items-center border-b-[1px] border-b-light_gray hover:bg-gray-50">
+              <button @click="router.replace({ name: 'reset' });" class="flex gap-3 items-center border-b-[1px] border-b-light_gray hover:bg-gray-50">
                 <div>
                   <v-icon scale="2" name="hi-lock-closed" />
                 </div>
@@ -32,7 +32,7 @@
                 </div>
                 <div>Contact Us</div>
               </button>
-              <button class="flex gap-3  items-center hover:bg-gray-50">
+              <button @click="session.logout.submit()" class="flex gap-3  items-center hover:bg-gray-50">
                 <div>
                   <v-icon scale="2" name="md-logout" />
                 </div>
@@ -45,14 +45,17 @@
 
 </template>
 <script setup>
-
-
+import router from '@/router';
+import { computed } from 'vue';
+import { session } from '../data/session'
+import { useVerificationRequestStore } from '../stores/verificationRequest';
+const store = useVerificationRequestStore();
 
 const props = defineProps({
     closeFunc:{type:Function}
 });
 
-
+const documentName = computed(() => store.documentName);
 const closeMenu = () => {
     this.closeFunc.call();
 };
