@@ -26,16 +26,32 @@
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
-        <Select
-          labelText="Other Languages"
-          :isMandatory="false"
-          infoText="Select other languages"
+        <!-- <AutocompM
           name="other_languages"
           id="OtherLanguages"
-          :options="languageOptions"
+          labelText="Other Languages"
+          infoText="Select Other Languages"
+          inputType="text"
+          :options="getOptionLanguage()"
           v-model="otherLanguages"
+          :isValid="store.step1.country_now.isValid"
+          :validationMessage="store.step1.country_now.validationMessage"
+            
+          /> -->
+      </FieldContainer>  
+      <FieldContainer>
+        <Autocomp
+          name="other_languages"
+          id="OtherLanguages"
+          labelText="Other Languages"
+          infoText="Select Other Languages"
+          inputType="text"
+          :options="getOptionLanguage()"
+          v-model="otherLanguages"
+          :isValid="store.step1.country_now.isValid"
+          :validationMessage="store.step1.country_now.validationMessage"
         />
-      </FieldContainer>   
+      </FieldContainer>
     </div>
     <div class="lg:grid grid-cols-1 lg:gap-2">
       <FieldContainer>
@@ -124,6 +140,7 @@
 </template>
 
 <script setup lang="ts">
+import { Autocomplete } from 'frappe-ui'
 import Button from '../../components/button.vue';
 import CheckBox from '../../components/checkBox.vue';
 import FieldContainer from '../../components/fieldContainer.vue';
@@ -132,9 +149,12 @@ import Select from '../../components/select.vue';
 import CustomSignaturePad from '../../components/CustomSignaturePad.vue';
 import Info from './components/info.vue';
 
-import { ref, computed, onMounted, toRaw } from 'vue';
+import { ref, computed } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import { useToast } from 'vue-toastification';
+import { useLanguage } from '../../stores/language';
+import Autocomp from '../../components/autocomp.vue';
+import AutocompM from '../../components/autocompMultiple.vue';
 
 // استيراد الستور
 const store = useVerificationRequestStore();
@@ -142,9 +162,11 @@ const toast = useToast();
 
 // تعريف متغيرات التحميل
 const loading = ref(true);
+const languages = useLanguage();
+const language = languages.getLanguage();
+
 
 // استيراد النوع Step6Data
-import type { Step6Data } from '../../data/types';
 
 // // تحميل البيانات عند تحميل الصفحة
 // onMounted(async () => {
@@ -154,13 +176,15 @@ import type { Step6Data } from '../../data/types';
 // });
 
 // خيارات اللغات الأخرى
-const languageOptions = ref([
-  { value: 'en', text: 'English' },
-  { value: 'es', text: 'Spanish' },
-  { value: 'fr', text: 'French' },
-  // أضف المزيد من اللغات حسب الحاجة
-]);
-
+const languageOptions = ref([]);
+const getOptionLanguage = () => {
+  const options = language.data
+    .map(loc => ({
+      label: loc.language_name,
+      value: loc.language_name
+    }))
+  return options
+}
 // تعريف computed properties لربط v-model مع مخزن Pinia
 const otherLanguages = computed<string[]>({
   get: () => store.step6.other_languages.value,
@@ -206,6 +230,8 @@ const saveSignature = (signature: string) => {
 // دالة الحفظ
 const save = async () => {
   try {
+  
+    console.log("********************",language)
     loading.value = true;
     await store.saveStep6();
     toast.success('تم حفظ البيانات بنجاح!');
