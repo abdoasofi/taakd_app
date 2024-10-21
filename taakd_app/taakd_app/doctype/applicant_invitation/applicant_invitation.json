@@ -24,6 +24,7 @@
   "service_package_section",
   "package",
   "file_image",
+  "description",
   "column_break_kwfj",
   "d_file_image",
   "section_break_yslk",
@@ -195,12 +196,18 @@
   {
    "fieldname": "section_break_yslk",
    "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "package.description",
+   "fieldname": "description",
+   "fieldtype": "Text Editor",
+   "label": "Description"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-08 14:49:04.773489",
+ "modified": "2024-10-21 20:07:13.657968",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",
