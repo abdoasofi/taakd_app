@@ -322,7 +322,6 @@
       <FileUpload
         :name="`file-${employment.id}`"
         :id="`file-${employment.id}`"
-        v-model="employment.file"
       />
 
       <!-- Save Employment Button -->
