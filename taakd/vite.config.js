@@ -14,7 +14,7 @@ export default defineConfig({
   build: {
     outDir: `../${path.basename(path.resolve('..'))}/public/taakd`,
     emptyOutDir: true,
-    target: 'es2015',
+    target: 'es2018',
   },
   optimizeDeps: {
     include: ['frappe-ui > feather-icons', 'showdown', 'engine.io-client'],
