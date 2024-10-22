@@ -88,7 +88,7 @@ export interface EmploymentHistory {
   different_company_names: string;
   you_have_a_nicknamecx: boolean;
   nickname: string;
-  file: any; // يُفضل تحديد نوع البيانات إذا كان ممكنًا
+  file: File | string | null; // دعم كائن File أو رابط الملف (string)
 }
 
 export interface ProfessionalQualification {
