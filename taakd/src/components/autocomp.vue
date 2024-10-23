@@ -28,7 +28,7 @@
         {
           'border-1 border-mid_gray focus:border-black focus:ring-0': isValid === null,
           'border-1 border-warn focus:ring-warn': isValid === false,
-          'border-3 border-secondary focus:ring-secondary': isValid === true
+          'border-3 border-mid_gray focus:border-black': isValid === true
         }
       ]">
             <Autocomplete
@@ -45,7 +45,7 @@
           <p v-if="isValid === false" class="text-warn  text-[10px]">{{ validationMessage }}</p>
           </FadeInOut>
           <FadeInOut>
-          <p v-if="isValid === true" class="text-secondary  text-[10px]">{{ validationMessage }}</p>
+          <!-- <p v-if="isValid === true" class="text-secondary  text-[10px]">{{ validationMessage }}</p> -->
           </FadeInOut>
     </div>
   </template>

@@ -26,7 +26,7 @@
         'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-none',
         {
           'border-1 border-mid_gray focus:border-black focus:ring-0': isValid === null,
-          'border-1 border-warn focus:ring-warn': isValid === false,
+          'border-1 border-mid_gray focus:border-black': isValid === false,
           'border-3 border-secondary focus:ring-secondary': isValid === true
         }
       ]">
@@ -47,7 +47,7 @@
        
         </select> </div>
         <FadeInOut>
-          <p v-if="isValid === false" class="text-warn  text-[10px]">{{ validationMessage }}</p>
+          <!-- <p v-if="isValid === false" class="text-warn  text-[10px]">{{ validationMessage }}</p> -->
           </FadeInOut>
           <FadeInOut>
           <p v-if="isValid === true" class="text-secondary  text-[10px]">{{ validationMessage }}</p>

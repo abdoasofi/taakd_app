@@ -1,31 +1,25 @@
 <!-- styledInput.vue -->
 <template>
   <div class="relative">
-    <!-- Label with dynamic color and optional mandatory indicator and info icon -->
-    <label
-      :class="[
-        'mb-2 text-sm flex items-center',
-        {
-          [`text-${labelColor}`]: true,
-        },
-      ]"
-      :for="id"
-    >
+    <!-- التسمية مع اللون الديناميكي ومؤشر إلزامي اختياري وأيقونة معلومات -->
+    <label :class="['mb-2 text-sm flex items-center', labelColorClass]" :for="id">
       {{ labelText }}
-      <!-- Mandatory indicator -->
+      <!-- مؤشر إلزامي -->
       <span v-if="isMandatory" class="ml-1 text-red-500">*</span>
-      <!-- Info icon -->
-      <span
+      <!-- أيقونة معلومات -->
+      <button
         v-if="infoText"
         class="ml-2 cursor-pointer relative"
         @mouseover="showInfo = true"
         @mouseleave="showInfo = false"
+        aria-label="مزيد من المعلومات"
       >
         <svg
           class="w-5 h-5 text-mid_gray text-[10px]"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          aria-hidden="true"
         >
           <path
             stroke-linecap="round"
@@ -34,52 +28,54 @@
             d="M13 16h-1v-4h1m0-4h-1v1h-1v1h1v2h1v-2h1v-1h-1V9zm-1-6a9 9 0 100 18 9 9 0 000-18z"
           />
         </svg>
-        <!-- Info tooltip -->
+        <!-- تلميح معلومات -->
         <div
           v-if="showInfo"
-          class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 left-1/2 transform -translate-x-1/2"
+          class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 left-1/2 transform -translate-x-1/2 z-10"
+          role="tooltip"
+          :id="`${id}-tooltip`"
         >
           {{ infoText }}
         </div>
-      </span>
+      </button>
     </label>
 
-    <!-- Input field -->
+    <!-- حقل الإدخال -->
     <input
       :id="id"
       :name="name"
       :type="inputType"
-      :class="[
-        'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-none',
-        {
-          'border-1 border-mid_gray focus:border-black focus:ring-0': isValid === null,
-          'border-1 border-warn focus:ring-warn': isValid === false,
-          'border-3 border-secondary focus:ring-secondary': isValid === true,
-        },
-      ]"
+      :class="inputClasses"
       :value="modelValue"
       @input="onInput"
-      placeholder="Enter at least 3 characters"
+      @focus="isFocused = true"
+      @blur="isFocused = false"
+      :placeholder="placeholder"
+      :aria-describedby="infoText ? `${id}-tooltip` : null"
     />
 
+    <!-- رسائل التحقق من الصحة -->
     <FadeInOut>
-      <p v-if="isValid === false" class="text-warn text-[10px]">{{
-        validationMessage
-      }}</p>
+      <p v-if="isValid === false" class="text-warn text-[10px] ">
+        <template v-if="Array.isArray(validationMessages)">
+          <div v-for="(msg, index) in validationMessages" :key="index">{{ msg }}</div>
+        </template>
+        <template v-else>
+          {{ validationMessages }}
+        </template>
+      </p>
     </FadeInOut>
     <FadeInOut>
-      <p v-if="isValid === true" class="text-secondary text-[10px]"
-        >{{
-        validationMessage
-      }}</p
-      >
+      <p v-if="isValid === true" class="text-mid_gray text-[10px]">
+        {{ validationMessages }}
+      </p>
     </FadeInOut>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import FadeInOut from "./fadeInOut.vue";
+import { ref, computed } from 'vue';
+import FadeInOut from './fadeInOut.vue';
 
 // تعريف props لدعم v-model
 const props = defineProps({
@@ -87,11 +83,11 @@ const props = defineProps({
   name: { type: String, required: true },
   labelText: {
     type: String,
-    default: "Label",
+    default: 'Label',
   },
   labelColor: {
     type: String,
-    default: "dark_gray",
+    default: 'dark_gray',
   },
   isMandatory: {
     type: Boolean,
@@ -99,23 +95,27 @@ const props = defineProps({
   },
   infoText: {
     type: String,
-    default: "",
+    default: '',
   },
   inputType: {
     type: String,
-    default: "text",
+    default: 'text',
   },
   isValid: {
     type: [Boolean, null],
     default: null,
-  }, // The validity state of the input (true, false, or null)
-  validationMessage: {
-    type: String,
-    default: "",
+  }, // حالة صلاحية الإدخال (true, false, أو null)
+  validationMessages: {
+    type: [String, Array],
+    default: '',
   },
   modelValue: {
+    type: [String, Number],
+    default: '',
+  },
+  placeholder: {
     type: String,
-    default: "",
+    default: 'Enter at least 3 characters',
   },
 });
 
@@ -125,14 +125,41 @@ const emit = defineEmits(['update:modelValue']);
 // إدارة حالة عرض المعلومات
 const showInfo = ref(false);
 
-// دالة معالجة الإدخال وإصدار الحدث لتحديث القيمة في المكون الأب
+// إدارة حالة التركيز
+const isFocused = ref(false);
+
+// خاصية محسوبة لتحديد فئة لون التسمية
+const labelColorClass = computed(() => {
+  const colorMap = {
+    dark_gray: 'text-dark_gray',
+    blue: 'text-blue-500',
+    // أضف المزيد من الخريطة اللونية حسب الحاجة
+  };
+  return colorMap[props.labelColor] || 'text-dark_gray';
+});
+
+// خاصية محسوبة لتحديد فئات الإدخال بناءً على حالة الصلاحية والتركيز
+const inputClasses = computed(() => {
+  return [
+    'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-dashed',
+    {
+      'border border-mid_gray': !isFocused.value && props.isValid === null,
+      'border border-warn': !isFocused.value && props.isValid === false,
+      'border border-mid_gray': !isFocused.value && props.isValid === true,
+      'border border-green': isFocused.value, // الإطار الأخضر عند التركيز
+      // يمكنك إضافة المزيد من الفئات بناءً على الحاجة
+    },
+  ];
+});
+
+// معالجة الإدخال بدون استخدام الديبونس
 const onInput = (event) => {
   emit('update:modelValue', event.target.value);
 };
 </script>
 
 <style scoped>
-/* Custom border-width utility for Tailwind */
+/* تعريف فئات عرض الحد المخصص إذا لزم الأمر */
 .border-1 {
   border-width: 1px;
 }
