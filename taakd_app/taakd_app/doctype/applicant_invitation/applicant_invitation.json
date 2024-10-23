@@ -16,6 +16,7 @@
   "last_name",
   "_full_name",
   "language",
+  "cumulative_invoice",
   "section_break_vuey",
   "column_break_wrlb",
   "company_email",
@@ -69,7 +70,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Payd From",
-   "options": "\nCompany\nEmployee",
+   "options": "Employee\nCompany\nCumulative invoice",
    "reqd": 1
   },
   {
@@ -202,12 +203,18 @@
    "fieldname": "description",
    "fieldtype": "Text Editor",
    "label": "Description"
+  },
+  {
+   "default": "0",
+   "fieldname": "cumulative_invoice",
+   "fieldtype": "Check",
+   "label": "Cumulative invoice"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-21 20:07:13.657968",
+ "modified": "2024-10-23 22:37:46.169229",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",
