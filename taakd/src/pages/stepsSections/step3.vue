@@ -1,7 +1,7 @@
 <!-- src/pages/stepsSections/step3.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl  font-bold mb-3 text-black">Employment History</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">Employment History</h1>
     <ul>
       <li>
         All fields marked with an asterisk ( * ) are required.
@@ -323,7 +323,45 @@
         :name="`file-${employment.id}`"
         :id="`file-${employment.id}`"
       />
-
+       <!-- File Upload Button and Display -->
+      <div class="lg:grid grid-cols-2 lg:gap-2 items-center">
+        <!-- Upload File Button -->
+        <div>
+          <button
+            type="button"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
+            @click="triggerFileInput(employment.id)"
+          >
+            Select File
+          </button>
+        </div>
+        
+        <!-- Hidden File Input and File Display -->
+        <div>
+          <input
+            type="file"
+            :id="`file-input-${employment.id}`"
+            hidden
+            @change="(e) => handleFileSelect(e, index)"
+            accept=".jpeg,.jpg,.png,.pdf,.mp4"
+          />
+          <!-- Display Selected File Name or Existing File -->
+          <span v-if="employment.file">
+            <template v-if="typeof employment.file === 'string'">
+              <a
+                :href="employment.file"
+                target="_blank"
+                class="ml-2 text-blue-600 underline"
+              >
+                View File
+              </a>
+            </template>
+            <template v-else>
+              {{ employment.file.name }}
+            </template>
+          </span>
+        </div>
+      </div>
       <!-- Save Employment Button -->
       <div class="flex justify-end py-2">
         <Button level="primary" @clicked="saveEmployment(index)">Save</Button>
@@ -540,6 +578,36 @@ const saveEmployment = async (index) => {
   } catch (error) {
     console.error(`Failed to save employment ${index + 1}:`, error)
     toast.error(`Failed to save employment ${index + 1}.`)
+  }
+}
+
+// دالة تحفيز فتح نافذة اختيار الملف
+const triggerFileInput = (id) => {
+  const fileInput = document.getElementById(`file-input-${id}`)
+  if (fileInput) {
+    fileInput.click()
+  }
+}
+
+// دالة التعامل مع اختيار الملف
+const handleFileSelect = async (event, index) => {
+  const selectedFile = event.target.files[0]
+  if (selectedFile) {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'video/mp4']
+    if (!allowedTypes.includes(selectedFile.type)) {
+      toast.error('نوع الملف غير مدعوم.')
+      return
+    }
+
+    const maxSize = 10 * 1024 * 1024 // 10 ميجابايت
+    if (selectedFile.size > maxSize) {
+      toast.error('حجم الملف كبير جداً. يجب ألا يتجاوز 10 ميجابايت.')
+      return
+    }
+
+    // تحديث الملف في الـ Store
+    employmentHistory.value[index].file = selectedFile
+    toast.success('تم اختيار الملف بنجاح.')
   }
 }
 </script>

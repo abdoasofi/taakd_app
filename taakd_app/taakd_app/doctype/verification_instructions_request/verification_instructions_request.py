@@ -1,16 +1,17 @@
 # Copyright (c) 2024, Asofi and contributors
 # For license information, please see license.txt
 # verification_instructions_request.py
+# verification_instructions_request.py
+import frappe
 from frappe.model.document import Document
 from frappe.utils.file_manager import save_file
-import frappe
 from frappe import _
-
 
 class VerificationInstructionsRequest(Document):
     """Document class for Verification Instructions Request."""
-
-    # def before_save(self) -> None:
+    
+    def before_save(self):
+        pass
     #     """Hook that runs before saving the document."""
     #     self.add_full_name()
 
@@ -21,30 +22,24 @@ class VerificationInstructionsRequest(Document):
     #         parts.append(self.middle_name)
     #     parts.append(self.last_name)
     #     self.full_name = " ".join(parts)
-
+    
 
 @frappe.whitelist()
-def upload_verification_file() -> dict:
-    """
-    Handles the upload of a verification file and associates it with a specific employment record.
-
-    Returns:
-        dict: A dictionary containing the status and file URL or an error message.
-    """
+def upload_verification_file():
     try:
         # الحصول على البيانات المرسلة من الطلب
         doctype = frappe.form_dict.get('doctype')
         docname = frappe.form_dict.get('docname')
         fieldname = frappe.form_dict.get('fieldname')
         parentfield = frappe.form_dict.get('parentfield')
-        employment_id = frappe.form_dict.get('employment_id')  # تم تعديل هذا السطر
+        employment_id = frappe.form_dict.get('employment_id')  # الحصول على معرف التوظيف
         filedata = frappe.request.files.get('filedata')
         
         # التحقق من توفر جميع المعاملات المطلوبة
         if not all([doctype, docname, fieldname, parentfield, employment_id, filedata]):
             frappe.throw(_("Missing required parameters."))
 
-        # Check user permissions
+        # التحقق من صلاحيات المستخدم
         if not frappe.has_permission(doctype, "write", doc=docname):
             frappe.throw(_("You do not have permission to modify this document."))
 
@@ -62,21 +57,18 @@ def upload_verification_file() -> dict:
             decode=False,
             is_private=0,
         )
-
+        print("*"*50,file_doc.file_url)
         # الحصول على الوثيقة الرئيسية
         parent_doc = frappe.get_doc(doctype, docname)
         
-        # العثور على السجل الفرعي بناءً على `employment_id`
-        child_doc = None
-        for child in parent_doc.get(parentfield, []):
-            if child.name == employment_id:
-                child_doc = child
-                break
-
+        # العثور على السجل الفرعي بناءً على `employment_id` في حقل 'id'
+        child_doc = next((child for child in parent_doc.get(parentfield, []) if child.name == employment_id), None)
+        print("*"*50,child_doc)
         if not child_doc:
             frappe.throw(_("Employment record not found."))
 
         # تحديث حقل الملف في السجل الفرعي
+        
         child_doc.file = file_doc.file_url
         parent_doc.save()
         frappe.db.commit()
