@@ -10,7 +10,7 @@ class ApplicantInvitation(Document):
         self.add_company_information()
         self.add_full_name()
         self.package_price = self.get_item_price(self.package)
-        self.other_services_price  =  self.sum_other_services_price()
+        self.other_services_price = self.sum_other_services_price()
         self.sum_total_price()
 
     def on_submit(self):
@@ -54,33 +54,31 @@ class ApplicantInvitation(Document):
             frappe.throw(_("لا يمكن اختيار نفس service أكثر من مرة."))
              
     def add_full_name(self):
-        middle_name = self.middle_name
-        if self.middle_name == None: 
-            middle_name = ""
+        middle_name = self.middle_name or ""
         self._full_name = f"{self.first_name} {middle_name} {self.last_name}"  
 
     def add_company_information(self):
         user = frappe.get_doc("User", frappe.session.user)
-        self.db_set("company_name",user.full_name)
+        self.company_name = user.full_name
         if user.full_name == "Administrator":
-            self.db_set("company_email","administrator") 
+            self.company_email = "administrator" 
         else:
-            self.db_set("company_email",user.email)
+            self.company_email = user.email
 
     def create_user(self):
-        if frappe.db.exists("User", {"email":self.email}):
-            return True 
+        if frappe.db.exists("User", {"email": self.email}):
+            return frappe.get_doc("User", {"email": self.email})
         else:
             new_doc = frappe.new_doc("User")
             new_doc.email = self.email
             new_doc.first_name = self.first_name
             new_doc.last_name = self.last_name
-            new_doc.middle_name = self.middle_name
+            new_doc.middle_name = self.middle_name or ""
             new_doc.enabled = True
             new_doc.language = self.language
             new_doc.module_profile = ""
             new_doc.role_profile_name = "Applicant"
-            new_doc.insert(ignore_permissions = True)
+            new_doc.insert(ignore_permissions=True)
             return new_doc   
 
     def create_customer(self, customer_name, customer_type, email, customer_group):
@@ -95,14 +93,10 @@ class ApplicantInvitation(Document):
         Returns:
             doc: A Frappe Customer document.
         """
-        if frappe.db.exists(
-                            "Customer",
-                            {
-                                "customer_name": customer_name,
-                                "email": email
-                            }):
+        filters = {"customer_name": customer_name, "email": email}
+        if frappe.db.exists("Customer", filters):
             frappe.logger().debug(f"Customer '{customer_name}' already exists.")
-            customer_doc = frappe.get_doc("Customer", {"customer_name": customer_name})
+            customer_doc = frappe.get_doc("Customer", filters)
         else:
             new_doc = frappe.new_doc("Customer")
             new_doc.customer_name = customer_name
@@ -115,20 +109,19 @@ class ApplicantInvitation(Document):
         
         return customer_doc
                 
-    def create_verification_instructions_request(self,sales_invoice_name):
+    def create_verification_instructions_request(self, sales_invoice_name):
         new_doc = frappe.new_doc("Verification Instructions Request")
         new_doc.payd_from = self.payd_from
         new_doc.user_id = self.email
         new_doc.company_submitting_application = self.company_email
         new_doc.language = self.language
         new_doc.sales_invoice = sales_invoice_name
-        # new_doc.sales_invoice = sales_invoice_name
-        new_doc.insert(ignore_permissions = True)
+        new_doc.insert(ignore_permissions=True)
         return new_doc  
-
+    
     def create_sales_invoice(self, customer):
         if not customer:
-            frappe.throw(_("Customer is not set. Cannot create Sales Invoice.") )   
+            frappe.throw(_("Customer is not set. Cannot create Sales Invoice."))   
 
         # التحقق من قيمة cumulative_invoice و payd_from
         if self.cumulative_invoice == 1 and self.payd_from == "Company":
@@ -137,31 +130,27 @@ class ApplicantInvitation(Document):
                 # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة
                 sales_invoice = frappe.get_doc("Sales Invoice", existing_invoice)
                 self.preparing_the_sales_invoice(self.other_services, sales_invoice)
-                sales_invoice.save(ignore_permissions = True)
+                sales_invoice.save(ignore_permissions=True)
                 frappe.db.commit()  # التأكد من حفظ التغييرات
                 return sales_invoice.name
             else:
                 # إذا لم توجد فاتورة مسودة، ننشئ فاتورة جديدة
-                sales_invoice = frappe.get_doc(
-                    {
-                        "doctype": "Sales Invoice",
-                        "customer": customer,
-                    }
-                )
+                sales_invoice = frappe.get_doc({
+                    "doctype": "Sales Invoice",
+                    "customer": customer,
+                })
                 self.preparing_the_sales_invoice(self.other_services, sales_invoice)
-                sales_invoice.save(ignore_permissions = True)
+                sales_invoice.save(ignore_permissions=True)
                 frappe.db.commit()
                 return sales_invoice.name
         else:
             # السلوك الحالي لإنشاء فاتورة جديدة
-            sales_invoice = frappe.get_doc(
-                {
-                    "doctype": "Sales Invoice",
-                    "customer": customer,
-                }
-            )
+            sales_invoice = frappe.get_doc({
+                "doctype": "Sales Invoice",
+                "customer": customer,
+            })
             self.preparing_the_sales_invoice(self.other_services, sales_invoice)
-            sales_invoice.save(ignore_permissions = True)
+            sales_invoice.save(ignore_permissions=True)
             frappe.db.commit()
             return sales_invoice.name
 
@@ -192,7 +181,8 @@ class ApplicantInvitation(Document):
                 {
                     "item_code": self.package,
                     "qty": 1,
-                    "uom":"Nos",
+                    "uom": "Nos",
+                    # Consider adding 'rate' or 'price' if necessary
                 },
             )     
         for i in list_items:
@@ -203,11 +193,11 @@ class ApplicantInvitation(Document):
                     {
                         "item_code": i.service,
                         "qty": 1,
-                        "uom":"Nos",
+                        "uom": "Nos",
                     },
                 )
 
-    def get_item_price(self,item):
+    def get_item_price(self, item):
         try:
             price_data = frappe.db.get_list(
                 "Item Price",
@@ -215,23 +205,39 @@ class ApplicantInvitation(Document):
                 filters={'item_code': item},
                 limit=1
             )
-            # Check if we got any results
             if price_data:
-                return price_data[0].price_list_rate  # Extracting the price
+                return float(price_data[0].price_list_rate)
             else:
-                return 0  # Handle the case where no price was found
+                frappe.log_error(
+                    _("Price not found for item: {0}").format(item),
+                    "ApplicantInvitation: get_item_price"
+                )
+                return 0.0  # Return a default value instead of None
         except Exception as e:
-            print("An error occurred while fetching item price:", str(e))
+            frappe.log_error(
+                _("Error fetching price for item {0}: {1}").format(item, str(e)),
+                "ApplicantInvitation: get_item_price"
+            )
+            return 0.0  # Return a default value instead of None
 
-    def sum_other_services_price (self):
-        sum_other_services_price = 0
+    def sum_other_services_price(self):
+        sum_other_services_price = 0.0
         if self.other_services:
             for i in self.other_services:
-                sum_other_services_price += self.get_item_price(i.service)
-            return sum_other_services_price
+                service_price = self.get_item_price(i.service)
+                if service_price is not None:
+                    sum_other_services_price += service_price
+                else:
+                    frappe.log_error(
+                        _("Service price for {0} returned None.").format(i.service),
+                        "ApplicantInvitation: sum_other_services_price"
+                    )
+        return sum_other_services_price
 
-    def sum_total_price (self):
-        self.total_price  =  self.sum_other_services_price() + self.get_item_price(self.package)
+    def sum_total_price(self):
+        other_services_price = self.sum_other_services_price() or 0.0
+        package_price = self.get_item_price(self.package) or 0.0
+        self.total_price = other_services_price + package_price
 
     @frappe.whitelist()
     def get_filtered_item_codes(self):
@@ -242,7 +248,7 @@ class ApplicantInvitation(Document):
                 SELECT item_code
                 FROM `tabProduct Bundle Item`
                 WHERE parent = %s
-                """, (parent)  # Ensure the parameter is a tuple
+                """, (parent,)  # Ensure the parameter is a tuple
             )
             return item_codes
         except Exception as e:
