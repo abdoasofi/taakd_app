@@ -4,30 +4,14 @@
     <h1 class="text-4xl font-bold mb-8 text-center text-gray-800">Review Your Information</h1>
 
     <div class="mr-5">
-      <div id="yourDivId" ref="reportContent"  >
-        <!-- ترويسة PDF -->
-        <div  >
-          <img src="@/assets/logo.png" alt="Logo" class="h-16 mx-auto mb-4" />
-          <h2 class="text-3xl font-semibold text-center text-gray-700">Information Review Report</h2>
-        </div>
-        <!-- مكونات الخطوات المنفصلة -->
-        <section  class="my-5">
-          <Step1PersonalInfo />
-        </section>
-        <section  class="my-5">
-          <Step2EducationInfo />
-        </section>
-        <section class="my-5">
-          <Step3EmploymentHistory />
-        </section>
-        <section class="my-5">
-          <Step4ProfessionalQualification />
-        </section>
-        <!-- تذييل PDF -->
-        <div class="text-right text-sm text-gray-500 mt-8">
-          <span class="page-number"></span>
+      <ReportView/>
+      <div class="hidden">
+        <div id="yourDivId"  >
+          <Report/>
         </div>
       </div>
+      
+
     </div>
 
     <!-- مؤشر التحميل Overlay -->
@@ -68,6 +52,8 @@ import html2pdf from 'html2pdf.js/dist/html2pdf.bundle.js';
 import { jsPDF } from 'jspdf';
 import { ref, nextTick } from 'vue';
 import printJS from 'print-js';
+import Report from './report.vue';
+import ReportView from './reportView.vue';
 // استخدام Pinia store
 const store = useVerificationRequestStore();
 const router = useRouter();
