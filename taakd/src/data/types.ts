@@ -18,15 +18,15 @@ export interface HomeData {
 }
 
 export interface PhoneNumber {
-  id: string;
-  phone: string;
+  id: string;  // معرف فريد لكل رقم هاتف
+  phone: string;  // رقم الهاتف
 }
 
 export interface AliasName {
-  id: string;
-  first_name: string;
-  last_name: string;
-  middle_name: string;
+  id: string;  // معرف فريد لكل اسم مستعار
+  first_name: string;  // الاسم الأول
+  last_name: string;  // اسم العائلة
+  middle_name: string;  // الاسم الأوسط
 }
 
 export interface Step1Data {
@@ -37,7 +37,7 @@ export interface Step1Data {
   middle_name: FormField<string>;
   this_is_my_name_column: FormField<boolean>;
   suffix: FormField<string>;
-  alias_name: AliasName[];
+  alias_name: AliasName[];  // قائمة أسماء المستعارة
   country_now: FormField<string>;
   city: FormField<string>;
   governorate: FormField<string>;
@@ -45,7 +45,7 @@ export interface Step1Data {
   location_text: FormField<string>;
   street_address: FormField<string>;
   date_living_address: FormField<string>;
-  phone: PhoneNumber[];  
+  phone: PhoneNumber[];  // قائمة أرقام الهاتف
   email: FormField<string>;
   date_of_birth: FormField<string>;
 }

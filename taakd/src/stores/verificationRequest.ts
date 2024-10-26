@@ -21,6 +21,7 @@ interface StepValidation {
 
 interface VerificationRequestStoreState {
   documentName: string | null;
+  isLoding:boolean;
   home: HomeData;
   step1: Step1Data;
   step2: Step2Data;
@@ -32,6 +33,7 @@ interface VerificationRequestStoreState {
 
 const getDefaultState = (): VerificationRequestStoreState => ({
   documentName: null,
+  isLoding:false,
   home: {
     country: { value: '', isValid: false, validationMessage: '' },
     mobile_number: { value: '', isValid: false, validationMessage: '' },
@@ -47,7 +49,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     middle_name: { value: '', isValid: true, validationMessage: '' },
     this_is_my_name_column: { value: false, isValid: false, validationMessage: '' },
     suffix: { value: '', isValid: true, validationMessage: '' },
-    alias_name: [], 
+    alias_name: [], // أسماء المستعارة
     country_now: { value: '', isValid: false, validationMessage: '' },
     city: { value: '', isValid: false, validationMessage: '' },
     governorate: { value: '', isValid: false, validationMessage: '' },
@@ -55,7 +57,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     location_text: { value: '', isValid: false, validationMessage: '' },
     street_address: { value: '', isValid: false, validationMessage: '' },
     date_living_address: { value: '', isValid: false, validationMessage: '' },
-    phone: [],
+    phone: [], // أرقام الهاتف
     email: { value: '', isValid: false, validationMessage: '' },
     date_of_birth: { value: '', isValid: false, validationMessage: '' },
   },
@@ -83,14 +85,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
   state: (): VerificationRequestStoreState => getDefaultState(),
 
   actions: {
-    // تعيين اسم الوثيقة
     setDocumentName(name: string) {
       this.documentName = name;
     },
 
-    /**
-     * تحميل الوثيقة الحالية
-     */
     async loadDocument() {
       const toast = useToast();
       try {
@@ -105,9 +103,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         toast.error("حدث خطأ أثناء تحميل الوثيقة.");
       }
     },
-    
+    // إضافة اسم مستعار جديد
 
-    // دوال تحديث الحقول لمختلف الخطوات
     updateHome<K extends keyof VerificationRequestStoreState['home']>(
       field: K,
       payload: Partial<VerificationRequestStoreState['home'][K]>
@@ -150,35 +147,22 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step6[field] = { ...this.step6[field], ...payload };
     },
 
-    // إعادة تعيين الستور إلى الحالة الافتراضية
     resetStore() {
       Object.assign(this, getDefaultState());
     },
 
-    /**
-     * إضافة رقم هاتف جديد
-     */
     addPhoneNumber() {
       this.step1.phone.push({ id: `${Date.now()}`, phone: '' });
     },
 
-    /**
-     * إزالة رقم هاتف
-     */
     removePhoneNumber(index: number) {
       this.step1.phone.splice(index, 1);
     },
 
-    /**
-     * تحديث رقم هاتف معين
-     */
-    updatePhoneNumber(index: number, value: string) {
+    updatePhoneNumber(index: number, value:{ phone: string;}) {
       this.step1.phone[index].phone = value;
     },
 
-    /**
-     * التحقق من صحة أرقام الهواتف
-     */
     validatePhoneNumbers(): boolean {
       let isValid = true;
       this.step1.phone.forEach((phone, index) => {
@@ -192,9 +176,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       return isValid;
     },
 
-    /**
-     * تحديث اسم مستعار
-     */
     updateAliasName(index: number, value: { first_name: string; last_name: string; middle_name: string }) {
       this.step1.alias_name[index] = value;
     },
@@ -219,9 +200,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       }
     },
 
-    /**
-     * دالة التحقق من صحة بيانات Step 1
-     */
     validateStep1(): boolean {
       let isValid = true;
       const requiredFields: (keyof Step1Data)[] = [
@@ -233,7 +211,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         // 'governorate',
         'zip_code',
         'location_text',
-         // 'street_address',
+        // 'street_address',
         'date_living_address',
         'email',
         'date_of_birth',
@@ -272,6 +250,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       return isValid;
     },
 
+    
+    
     /**
      * دالة التحقق من صحة بيانات Step 2
      */
@@ -415,36 +395,37 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
 
       return isValid;
     },
-
-
-    /**
-     * دالة الحفظ لخطوة Step 1
-     */    
     async saveStep1() {
+
       const toast = useToast();
-      // التحقق من صحة البيانات
+    
+      // تحقق من صلاحية البيانات
       if (!this.validateStep1()) {
         toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
         throw new Error('Validation failed');
       }
-
-      // تجهيز البيانات للإرسال
+      const aliasNameToSubmit: UpdateFields = {
+        alias_name: this.step1.alias_name, 
+      };
       const dataToSubmit: UpdateFields = {};
+    
       for (const key in this.step1) {
         if (Object.prototype.hasOwnProperty.call(this.step1, key)) {
           const field = key as keyof Step1Data;
           dataToSubmit[key] = this.step1[field].value;
         }
       }
-
+    
       try {
         await this.updateDocumentFields(dataToSubmit);
+        await this.updateDocumentFields(aliasNameToSubmit);
         toast.success('تم حفظ البيانات بنجاح.');
       } catch (error) {
         throw error;
       }
     },
 
+    
     /**
      * دالة الحفظ لخطوة Step2
      */
@@ -458,29 +439,29 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const dataToSubmit: UpdateFields = {
         education_information: this.step2.educationInformation,
       };
-      
-      // رفع الملفات المرتبطة بالتوظيف هنا إذا كانت موجودة
-      const savePromises = this.step3.employment_history.map(async (employment) => {
-        if (employment.file && employment.file instanceof File) { // تأكد أن الملف هو كائن File
-          try {
-            const uploadedFile = await this.uploadFile(employment.id, employment.file as File);
-            // تحديث حقل الملف برابطه المرفوع
-            employment.file = uploadedFile.file_url; // تخزين رابط الملف في الحالة
-          } catch (error) {
-            toast.error(`فشل رفع الملف للسجل: ${employment.company}.`);
-            throw error;
-          }
-        }
-      });
+      console.log("*/*//*/*/*/*/*/*/*/*/",dataToSubmit)
+      // // رفع الملفات المرتبطة بالتوظيف هنا إذا كانت موجودة
+      // const savePromises = this.step3.employment_history.map(async (employment) => {
+      //   if (employment.file && employment.file instanceof File) { // تأكد أن الملف هو كائن File
+      //     try {
+      //       const uploadedFile = await this.uploadFile(employment.id, employment.file as File);
+      //       // تحديث حقل الملف برابطه المرفوع
+      //       employment.file = uploadedFile.file_url; // تخزين رابط الملف في الحالة
+      //     } catch (error) {
+      //       toast.error(`فشل رفع الملف للسجل: ${employment.company}.`);
+      //       throw error;
+      //     }
+      //   }
+      // });
 
-      try {
-        await Promise.all(savePromises);
-        toast.success('تم رفع الملفات بنجاح.');
-      } catch (error) {
-        console.error('Error uploading files:', error);
-        toast.error('فشل رفع بعض الملفات.');
-        throw error;
-      }
+      // try {
+      //   await Promise.all(savePromises);
+      //   toast.success('تم رفع الملفات بنجاح.');
+      // } catch (error) {
+      //   console.error('Error uploading files:', error);
+      //   toast.error('فشل رفع بعض الملفات.');
+      //   throw error;
+      // }
 
       try {
         await this.updateDocumentFields(dataToSubmit);
@@ -494,6 +475,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      * دالة الحفظ لخطوة Step3
      */
     async saveStep3() {
+      this.isLoding = true;
       const toast = useToast();
       if (!this.validateStep3()) {
         toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
@@ -509,7 +491,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           } catch (error) {
             toast.error(`فشل رفع الملف للسجل رقم ${index + 1}.`);
             throw new Error(`File upload failed for employment index ${index}`);
+          }finally{
+            this.isLoding = false;
           }
+    
         }
       });
 
@@ -519,6 +504,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       } catch (error) {
         console.error('Error uploading files:', error);
         throw error;
+      }finally{
+        this.isLoding = false;
       }
 
       // تجهيز البيانات للإرسال بعد رفع الملفات
@@ -537,7 +524,11 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         console.error('حدث خطأ أثناء حفظ بيانات التوظيف:', error);
         toast.error('حدث خطأ أثناء حفظ بيانات التوظيف.');
         throw error;
+      }finally{
+        this.isLoding = false;
       }
+      this.isLoding = false;
+
     },
 
     /**
@@ -628,10 +619,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       }
     },
 
-    /**
-     * دوال تحميل الحقول لكل خطوة
-     */
-
     async loadHomeFields() {
       try {
         const request = createDocumentResource({
@@ -645,7 +632,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         this.updateHome('is_degree_or_diploma', { value: data.is_degree_or_diploma });
         this.updateHome('from_time', { value: data.from_time });
         this.updateHome('to_time', { value: data.to_time });
-        
       } catch (error) {
         console.error("Error loading Home fields:", error);
         const toast = useToast();
@@ -660,7 +646,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           name: this.documentName,
         });
         const data = await request.reload();
-        // تحديث الحقول في Step1
+        
         this.updateStep1('employer_name', { value: data.employer_name });
         this.updateStep1('first_name', { value: data.first_name });
         this.updateStep1('last_name', { value: data.last_name });
@@ -686,10 +672,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         if (data.phone && Array.isArray(data.phone)) {
           this.step1.phone = data.phone;
         }
-
-        // يمكنك إضافة المزيد من الحقول بناءً على احتياجاتك
-
-        this.validations = data.validations || this.validations; // تحديث التحققات إذا كانت موجودة
+        this.validations = data.validations || this.validations; // تحديث التحققات إذا كانت موجودة      
       } catch (error) {
         console.error("Error loading Step1 fields:", error);
         const toast = useToast();
@@ -704,14 +687,13 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           name: this.documentName,
         });
         const data = await request.reload();
-        // تحديث الحقول في Step2
         this.step2.educationInformation = data.education_information;
       } catch (error) {
         console.error("Error loading Step2 fields:", error);
         const toast = useToast();
         toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الثانية.");
       }
-    },   
+    },
 
     async loadStep3Fields() {
       try {
@@ -720,14 +702,13 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           name: this.documentName,
         });
         const data = await request.reload();
-        // تحديث الحقول في Step3
         this.step3.employment_history = data.employment_history;
       } catch (error) {
         console.error("Error loading Step3 fields:", error);
         const toast = useToast();
         toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الثالثة.");
       }
-    },   
+    },
 
     async loadStep4Fields() {
       try {
@@ -736,23 +717,21 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           name: this.documentName,
         });
         const data = await request.reload();
-        // تحديث الحقول في Step4
         this.step4.professional_qualification = data.professional_qualification;
       } catch (error) {
         console.error("Error loading Step4 fields:", error);
         const toast = useToast();
         toast.error("حدث خطأ أثناء تحميل بيانات الخطوة الرابعة.");
       }
-    }, 
+    },
 
     async loadStep6Fields() {
       try {
         const request = createDocumentResource({
           doctype: 'Verification Instructions Request',
-          name:this.documentName,
+          name: this.documentName,
         });
-        const data = await request.reload(); // تأكد من كيفية جلب البيانات حسب مكتبة frappe-ui
-        // تحديث الحقول في Step6
+        const data = await request.reload();
         this.updateStep6('other_languages', { value: data.other_languages });
         this.updateStep6('electronic_signature', { value: data.electronic_signature });
         this.updateStep6('full_name', { value: data.full_name });

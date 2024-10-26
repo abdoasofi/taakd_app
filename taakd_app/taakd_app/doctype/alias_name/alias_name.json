@@ -15,23 +15,25 @@
    "fieldname": "first_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Full Name"
+   "label": "First Name"
   },
   {
    "fieldname": "last_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Last Name"
   },
   {
    "fieldname": "middle_name",
    "fieldtype": "Data",
+   "in_list_view": 1,
    "label": "Middle Name"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-10-15 01:35:40.181036",
+ "modified": "2024-10-25 01:56:22.256508",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Alias Name",
