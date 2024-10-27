@@ -127,7 +127,7 @@ class ApplicantInvitation(Document):
         if self.cumulative_invoice == 1 and self.payd_from == "Company":
             existing_invoice = self.get_existing_draft_invoice(customer)
             if existing_invoice:
-                # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة
+                # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة مع تجديع الأصناف المتشابهة
                 sales_invoice = frappe.get_doc("Sales Invoice", existing_invoice)
                 self.preparing_the_sales_invoice(self.other_services, sales_invoice)
                 sales_invoice.save(ignore_permissions=True)
@@ -176,26 +176,44 @@ class ApplicantInvitation(Document):
 
     def preparing_the_sales_invoice(self, list_items, sales_invoice):
         if self.package:
-            sales_invoice.append(
-                "items",
-                {
-                    "item_code": self.package,
-                    "qty": 1,
-                    "uom": "Nos",
-                    # Consider adding 'rate' or 'price' if necessary
-                },
-            )     
+            self.add_or_update_item(sales_invoice, self.package, qty=1, uom="Nos")
         for i in list_items:
             is_stock_item = frappe.get_value("Item", i.service, "is_stock_item")
             if is_stock_item:
-                sales_invoice.append(
-                    "items",
-                    {
-                        "item_code": i.service,
-                        "qty": 1,
-                        "uom": "Nos",
-                    },
-                )
+                self.add_or_update_item(sales_invoice, i.service, qty=1, uom="Nos")
+
+    def add_or_update_item(self, sales_invoice, item_code, qty, uom):
+        """
+        يضيف صنفًا إلى الفاتورة أو يحدث الكمية إذا كان الصنف موجودًا بالفعل.
+
+        Args:
+            sales_invoice (Document): وثيقة فاتورة المبيعات.
+            item_code (str): كود الصنف.
+            qty (float): الكمية المراد إضافتها.
+            uom (str): وحدة القياس.
+        """
+        # البحث عن الصنف في الفاتورة الحالية
+        existing_item = None
+        for item in sales_invoice.items:
+            if item.item_code == item_code:
+                existing_item = item
+                break
+        
+        if existing_item:
+            # زيادة الكمية إذا الصنف موجود بالفعل
+            existing_item.qty += qty
+            frappe.logger().debug(f"Item '{item_code}' exists. Increasing qty to {existing_item.qty}.")
+        else:
+            # إضافة الصنف كعنصر جديد إذا لم يكن موجودًا
+            sales_invoice.append(
+                "items",
+                {
+                    "item_code": item_code,
+                    "qty": qty,
+                    "uom": uom,
+                },
+            )
+            frappe.logger().debug(f"Adding new item '{item_code}' with qty {qty}.")
 
     def get_item_price(self, item):
         try:
