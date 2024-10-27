@@ -329,9 +329,9 @@
       </div>
 
       <!-- Save Employment Button -->
-      <div class="flex justify-end py-2">
+      <!-- <div class="flex justify-end py-2">
         <Button level="primary" @clicked="saveEmployment(index)">Save</Button>
-      </div>
+      </div> -->
     </FieldsToggleContainer>
 
     <!-- Add Employment Button -->

@@ -197,9 +197,9 @@
           </FieldContainer>
         </div>
 
-        <div class="flex justify-end py-2">
+        <!-- <div class="flex justify-end py-2">
           <Button level="primary" @clicked="saveEducation(index)">Save</Button>
-        </div>
+        </div> -->
       </FieldsToggleContainer>
 
       <div class="flex justify-center py-3">

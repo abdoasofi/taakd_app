@@ -145,9 +145,9 @@
       </div>
 
       <!-- Save Qualification Button -->
-      <div class="flex justify-end py-2">
+      <!-- <div class="flex justify-end py-2">
         <Button level="primary" @clicked="saveQualification(index)">Save</Button>
-      </div>
+      </div> -->
     </FieldsToggleContainer>
 
     <!-- Add Qualification Button -->

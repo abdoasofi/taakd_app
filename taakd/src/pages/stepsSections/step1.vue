@@ -361,12 +361,12 @@
       </FieldContainer>
     </div>
 
-    <div class="pt-5 flex w-full justify-center">
+    <!-- <div class="pt-5 flex w-full justify-center">
       <Button level="other" @click="save" :disabled="loading" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
         <span v-if="loading">جاري الحفظ...</span>
         <span v-else>save -></span>
       </Button>
-    </div>
+    </div> -->
   </div>
 </template>
 
