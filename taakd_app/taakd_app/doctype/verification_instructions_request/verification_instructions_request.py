@@ -1,6 +1,3 @@
-# Copyright (c) 2024, Asofi and contributors
-# For license information, please see license.txt
-# verification_instructions_request.py
 # verification_instructions_request.py
 import frappe
 from frappe.model.document import Document
@@ -22,7 +19,7 @@ class VerificationInstructionsRequest(Document):
     #         parts.append(self.middle_name)
     #     parts.append(self.last_name)
     #     self.full_name = " ".join(parts)
-    
+
 
 @frappe.whitelist()
 def upload_verification_file():
@@ -57,23 +54,29 @@ def upload_verification_file():
             decode=False,
             is_private=0,
         )
-        print("*"*50,file_doc.file_url)
+        print("************* file_doc.file_url *********************** ",file_doc.file_url)
+        # الحصول على رابط الملف
+        file_url = file_doc.file_url
+        print("************* file_url *********************** ",file_url)
         # الحصول على الوثيقة الرئيسية
         parent_doc = frappe.get_doc(doctype, docname)
+        print("************* parent_doc *********************** ",parent_doc)
+        # العثور على السجل الفرعي بناءً على `employment_id` في حقل 'employment_id'
+        child_doc = next((child for child in parent_doc.get(parentfield, []) if child.employment_id == employment_id), None)
         
-        # العثور على السجل الفرعي بناءً على `employment_id` في حقل 'id'
-        child_doc = next((child for child in parent_doc.get(parentfield, []) if child.name == employment_id), None)
-        print("*"*50,child_doc)
+        print("************* child.employment_id == employment_id *********************** ",child_doc.employment_id, employment_id)
         if not child_doc:
             frappe.throw(_("Employment record not found."))
 
         # تحديث حقل الملف في السجل الفرعي
-        
-        child_doc.file = file_doc.file_url
+        print("************* child_doc.file  *********************** ",child_doc.file )
+        child_doc.file = file_url
+        print("************* child_doc.file  *********************** ",child_doc.file )
+        child_doc.save()
         parent_doc.save()
         frappe.db.commit()
 
-        return {"status": "success", "file_url": file_doc.file_url}
+        return {"status": "success", "file_url": file_url}
 
     except Exception as e:
         frappe.log_error(message=str(e), title="File Upload Error")

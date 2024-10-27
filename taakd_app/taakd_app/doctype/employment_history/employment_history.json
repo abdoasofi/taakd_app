@@ -32,7 +32,9 @@
   "you_have_a_nicknamecx",
   "nickname",
   "choose_a_file_section",
-  "file"
+  "file",
+  "section_break_ovae",
+  "employment_id"
  ],
  "fields": [
   {
@@ -167,7 +169,7 @@
   },
   {
    "fieldname": "file",
-   "fieldtype": "Attach",
+   "fieldtype": "Data",
    "label": "File"
   },
   {
@@ -186,12 +188,22 @@
    "fieldname": "contact_the_employer",
    "fieldtype": "Check",
    "label": "Do we have permission to contact this current employer?"
+  },
+  {
+   "fieldname": "section_break_ovae",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "employment_id",
+   "fieldtype": "Data",
+   "label": "Employment ID",
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-09-30 23:45:08.290744",
+ "modified": "2024-10-27 00:25:29.724433",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Employment History",

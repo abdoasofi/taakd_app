@@ -3,9 +3,7 @@
   <div class="pt-3 container">
     <h1 class="text-3xl font-bold mb-3 text-black">Employment History</h1>
     <ul>
-      <li>
-        All fields marked with an asterisk ( * ) are required.
-      </li>
+      <li>All fields marked with an asterisk ( * ) are required.</li>
       <li>
         Please provide your employment history, beginning with the most recent. To add additional employers, click the "Add" icon.
       </li>
@@ -16,7 +14,7 @@
     <!-- Iterate Over Employment History -->
     <FieldsToggleContainer
       v-for="(employment, index) in employmentHistory"
-      :key="employment.id"
+      :key="employment.employment_id"
       :title="employment.company || `Employment ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
@@ -28,7 +26,7 @@
             infoText="Company"
             inputType="text"
             name="company"
-            :id="`company-${employment.id}`"
+            :id="`company-${employment.employment_id}`"
             v-model="employment.company"
             :isValid="validateCompany(employment.company)"
             validationMessage="Company name is required."
@@ -43,7 +41,7 @@
             infoText="Name of Your Employer"
             inputType="text"
             name="name_of_your_employer"
-            :id="`name_of_your_employer-${employment.id}`"
+            :id="`name_of_your_employer-${employment.employment_id}`"
             v-model="employment.name_of_your_employer"
             :isValid="validateNameOfYourEmployer(employment.name_of_your_employer)"
             validationMessage="Name of Your Employer is required."
@@ -55,8 +53,8 @@
         <!-- Permission Checkbox -->
         <FieldContainer>
           <CheckBox 
-            :name="`contact_the_employer-${employment.id}`" 
-            :id="`contact_the_employer-${employment.id}`" 
+            :name="`contact_the_employer-${employment.employment_id}`" 
+            :id="`contact_the_employer-${employment.employment_id}`" 
             v-model="employment.contact_the_employer"
           >
             Do we have permission to contact this current employer?
@@ -66,8 +64,8 @@
         <!-- Issuing Salary Checkbox -->
         <FieldContainer>
           <CheckBox 
-            :name="`issuing_salary-${employment.id}`" 
-            :id="`issuing_salary-${employment.id}`" 
+            :name="`issuing_salary-${employment.employment_id}`" 
+            :id="`issuing_salary-${employment.employment_id}`" 
             v-model="employment.issuing_salary"
           >
             Does this employer issue your paycheck? 
@@ -85,7 +83,7 @@
             infoText="Country"
             inputType="text"
             name="country"
-            :id="`country-${employment.id}`"
+            :id="`country-${employment.employment_id}`"
             :options="getOptionCountry(employment)"
             v-model="employment.country"
             @input-change="(value) => handleCountryChange(index, value)"
@@ -102,7 +100,7 @@
             infoText="City"
             inputType="text"
             name="city"
-            :id="`city-${employment.id}`"
+            :id="`city-${employment.employment_id}`"
             :options="getOptionCity(employment)"
             v-model="employment.city"
             @input-change="(value) => handleCityChange(index, value)"
@@ -119,7 +117,7 @@
             infoText="Governorate"
             inputType="text"
             name="governorate"
-            :id="`governorate-${employment.id}`"
+            :id="`governorate-${employment.employment_id}`"
             :options="getOptionGovernorate(employment)"
             v-model="employment.governorate"
             @input-change="(value) => handleGovernorateChange(index, value)"
@@ -136,7 +134,7 @@
             infoText="Location Text"
             inputType="text"
             name="location_text"
-            :id="`location_text-${employment.id}`"
+            :id="`location_text-${employment.employment_id}`"
             v-model="employment.location_text"
             validationMessage="You can edit the message."
           />
@@ -148,8 +146,8 @@
         <!-- Continuous Checkbox -->
         <FieldContainer>
           <CheckBox 
-            :name="`continuous-${employment.id}`" 
-            :id="`continuous-${employment.id}`" 
+            :name="`continuous-${employment.employment_id}`" 
+            :id="`continuous-${employment.employment_id}`" 
             v-model="employment.continuous"
           >
             Continuous
@@ -159,13 +157,13 @@
         <!-- Activity Has Stopped Checkbox -->
         <FieldContainer>
           <CheckBox 
-            :name="`activity_has_stopped-${employment.id}`" 
-            :id="`activity_has_stopped-${employment.id}`" 
+            :name="`activity_has_stopped-${employment.employment_id}`" 
+            :id="`activity_has_stopped-${employment.employment_id}`" 
             v-model="employment.activity_has_stopped"
           >
             Activity Has Stopped
           </CheckBox>
-        </FieldContainer>
+        </FieldContainer> 
       </div>
 
       <div class="lg:grid grid-cols-2 lg:gap-2">
@@ -207,7 +205,7 @@
             infoText="+999-77885951"
             inputType="text"
             name="phone"
-            :id="`phone-${employment.id}`"
+            :id="`phone-${employment.employment_id}`"
             v-model="employment.phone"
             :isValid="validatePhone(employment.phone)" 
             validationMessage="Valid phone number is required."
@@ -222,7 +220,7 @@
             infoText="Ext"
             inputType="text"
             name="ext"
-            :id="`ext-${employment.id}`"
+            :id="`ext-${employment.employment_id}`"
             v-model="employment.ext"
             validationMessage="You can edit the message."
           />
@@ -238,7 +236,7 @@
             infoText="Official Job Title Held Currently"
             inputType="text"
             name="official_job_title_held_currently"
-            :id="`official_job_title_held_currently-${employment.id}`"
+            :id="`official_job_title_held_currently-${employment.employment_id}`"
             v-model="employment.official_job_title_held_currently"
             :isValid="validateOfficialJobTitleHeldCurrently(employment.official_job_title_held_currently)" 
             validationMessage="Official Job Title is required."
@@ -253,7 +251,7 @@
             infoText="Type of Employment"
             inputType="text"
             name="type_of_employment"
-            :id="`type_of_employment-${employment.id}`"
+            :id="`type_of_employment-${employment.employment_id}`"
             v-model="employment.type_of_employment"
             @input-change="(value) => handleTypeOfEmployment(index, value)"
             :isValid="validateTypeOfEmployment(employment.type_of_employment)"
@@ -266,8 +264,8 @@
         <!-- The Company has Different Names Checkbox -->
         <FieldContainer>
           <CheckBox 
-            :name="`the_company_has_different_names-${employment.id}`" 
-            :id="`the_company_has_different_names-${employment.id}`" 
+            :name="`the_company_has_different_names-${employment.employment_id}`" 
+            :id="`the_company_has_different_names-${employment.employment_id}`" 
             v-model="employment.the_company_has_different_names"
           >
             The Company has Different Names
@@ -277,8 +275,8 @@
         <!-- Nickname Checkbox -->
         <FieldContainer>
           <CheckBox 
-            :name="`nickname_checkbox-${employment.id}`" 
-            :id="`nickname_checkbox-${employment.id}`" 
+            :name="`nickname_checkbox-${employment.employment_id}`" 
+            :id="`nickname_checkbox-${employment.employment_id}`" 
             v-model="employment.you_have_a_nicknamecx"
           >
             You Have a Nickname?
@@ -295,7 +293,7 @@
             infoText="Different Company Names"
             inputType="text"
             name="different_company_names"
-            :id="`different_company_names-${employment.id}`"
+            :id="`different_company_names-${employment.employment_id}`"
             v-model="employment.different_company_names"
             :isValid="false"
             validationMessage="You can edit the message."
@@ -310,7 +308,7 @@
             infoText="Nickname"
             inputType="text"
             name="nickname"
-            :id="`nickname-${employment.id}`"
+            :id="`nickname-${employment.employment_id}`"
             v-model="employment.nickname"
             :isValid="false"
             validationMessage="You can edit the message."
@@ -319,49 +317,17 @@
       </div>
 
       <!-- File Upload -->
-      <FileUpload
-        :name="`file-${employment.id}`"
-        :id="`file-${employment.id}`"
-      />
-       <!-- File Upload Button and Display -->
-      <div class="lg:grid grid-cols-2 lg:gap-2 items-center">
-        <!-- Upload File Button -->
-        <div>
-          <button
-            type="button"
-            class="bg-blue-500 text-white px-4 py-2 rounded"
-            @click="triggerFileInput(employment.id)"
-          >
-            Select File
-          </button>
-        </div>
-        
-        <!-- Hidden File Input and File Display -->
-        <div>
-          <input
-            type="file"
-            :id="`file-input-${employment.id}`"
-            hidden
-            @change="(e) => handleFileSelect(e, index)"
-            accept=".jpeg,.jpg,.png,.pdf,.mp4"
+      <div class="lg:grid grid-cols-1 lg:gap-2">
+        <FieldContainer>
+          <FileUpload
+            v-model="employment.file"
+            :id="`file-${employment.employment_id}`"
+            :name="employment.employment_id" 
+            validationMessage="Please select a valid file."
           />
-          <!-- Display Selected File Name or Existing File -->
-          <span v-if="employment.file">
-            <template v-if="typeof employment.file === 'string'">
-              <a
-                :href="employment.file"
-                target="_blank"
-                class="ml-2 text-blue-600 underline"
-              >
-                View File
-              </a>
-            </template>
-            <template v-else>
-              {{ employment.file.name }}
-            </template>
-          </span>
-        </div>
+        </FieldContainer>
       </div>
+
       <!-- Save Employment Button -->
       <div class="flex justify-end py-2">
         <Button level="primary" @clicked="saveEmployment(index)">Save</Button>
@@ -376,7 +342,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, reactive, nextTick } from 'vue'
+import { ref, computed, reactive, nextTick } from 'vue'
 import { useVerificationRequestStore } from '../../stores/verificationRequest'
 import { useToast } from 'vue-toastification'
 import { v4 as uuidv4 } from 'uuid'
@@ -392,6 +358,7 @@ import FileUpload from '../../components/fileUpload.vue'
 
 // استيراد البيانات (البلديات والمحافظات)
 import { location } from '../../data/useAddressLogic'
+import { EmploymentHistory } from '../../data/types'
 
 // استيراد الستور
 const store = useVerificationRequestStore()
@@ -540,8 +507,8 @@ const validateOfficialJobTitleHeldCurrently = (official_job_title_held_currently
 
 // دالة لإضافة سجل توظيف جديد
 const addEmployment = () => {
-  const newEmployment = {
-    id: uuidv4(), // مُعرف فريد
+  const newEmployment: EmploymentHistory = {
+    employment_id: uuidv4(), // مُعرف فريد
     company: '',
     name_of_your_employer: '',
     contact_the_employer: false,
@@ -566,48 +533,21 @@ const addEmployment = () => {
   }
   employmentHistory.value.push(newEmployment)
   nextTick(() => {
-    openSections.value[newEmployment.id] = true
+    openSections.value[newEmployment.employment_id] = true
   })
 }
 
 // دالة حفظ بيانات التوظيف
 const saveEmployment = async (index) => {
+  if (store.isLoding) {
+    return
+  }
   try {
     await store.saveStep3()
     toast.success(`Employment ${index + 1} has been saved successfully!`)
   } catch (error) {
     console.error(`Failed to save employment ${index + 1}:`, error)
     toast.error(`Failed to save employment ${index + 1}.`)
-  }
-}
-
-// دالة تحفيز فتح نافذة اختيار الملف
-const triggerFileInput = (id) => {
-  const fileInput = document.getElementById(`file-input-${id}`)
-  if (fileInput) {
-    fileInput.click()
-  }
-}
-
-// دالة التعامل مع اختيار الملف
-const handleFileSelect = async (event, index) => {
-  const selectedFile = event.target.files[0]
-  if (selectedFile) {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'video/mp4']
-    if (!allowedTypes.includes(selectedFile.type)) {
-      toast.error('نوع الملف غير مدعوم.')
-      return
-    }
-
-    const maxSize = 10 * 1024 * 1024 // 10 ميجابايت
-    if (selectedFile.size > maxSize) {
-      toast.error('حجم الملف كبير جداً. يجب ألا يتجاوز 10 ميجابايت.')
-      return
-    }
-
-    // تحديث الملف في الـ Store
-    employmentHistory.value[index].file = selectedFile
-    toast.success('تم اختيار الملف بنجاح.')
   }
 }
 </script>

@@ -20,6 +20,7 @@ export interface HomeData {
 export interface PhoneNumber {
   id: string;  // معرف فريد لكل رقم هاتف
   phone: string;  // رقم الهاتف
+  isValid?: boolean; // إضافة هذا الحقل للتحقق من صحة الرقم
 }
 
 export interface AliasName {
@@ -67,7 +68,7 @@ export interface EducationInformation {
 }
 
 export interface EmploymentHistory {
-  id: string;
+  employment_id: string; // معرف التوظيف الفريد (uuid)
   company: string;
   name_of_your_employer: string;
   contact_the_employer: boolean;

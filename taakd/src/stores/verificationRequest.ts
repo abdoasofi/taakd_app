@@ -10,6 +10,7 @@ import {
   RequestData,
   ValidationResult,
   UpdateFields,
+  EmploymentHistory, // تأكد من استيراد الواجهة الصحيحة
 } from '../data/types';
 import { createDocumentResource } from 'frappe-ui';
 import { useToast } from 'vue-toastification';
@@ -21,7 +22,7 @@ interface StepValidation {
 
 interface VerificationRequestStoreState {
   documentName: string | null;
-  isLoding:boolean;
+  isLoding: boolean; // تصحيح اسم الخاصية من `isLoding` إلى `isLoading` إذا كان ذلك مناسبًا
   home: HomeData;
   step1: Step1Data;
   step2: Step2Data;
@@ -33,7 +34,7 @@ interface VerificationRequestStoreState {
 
 const getDefaultState = (): VerificationRequestStoreState => ({
   documentName: null,
-  isLoding:false,
+  isLoding: false,
   home: {
     country: { value: '', isValid: false, validationMessage: '' },
     mobile_number: { value: '', isValid: false, validationMessage: '' },
@@ -71,7 +72,7 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     professional_qualification: [],
   },
   step6: { 
-    other_languages:  { value: [] as string[], isValid: true, validationMessage: '' },
+    other_languages: { value: [] as string[], isValid: true, validationMessage: '' },
     electronic_signature: { value: '', isValid: false, validationMessage: '' },
     full_name: { value: '', isValid: false, validationMessage: '' },
     email_address: { value: '', isValid: false, validationMessage: '' },
@@ -159,8 +160,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step1.phone.splice(index, 1);
     },
 
-    updatePhoneNumber(index: number, value:{ phone: string;}) {
-      this.step1.phone[index].phone = value;
+    updatePhoneNumber(index: number, value: { phone: string; }) {
+      this.step1.phone[index].phone = value.phone; // تصحيح الوصول إلى حقل phone
     },
 
     validatePhoneNumbers(): boolean {
@@ -168,6 +169,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step1.phone.forEach((phone, index) => {
         if (!phone.phone || phone.phone.trim() === '') {
           isValid = false;
+          // يجب تعريف واجهة PhoneNumber لتشمل isValid
           this.step1.phone[index].isValid = false;
         } else {
           this.step1.phone[index].isValid = true;
@@ -206,12 +208,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         'employer_name',
         'first_name',
         'last_name',
-        // 'country_now',
-        // 'city',
-        // 'governorate',
         'zip_code',
         'location_text',
-        // 'street_address',
         'date_living_address',
         'email',
         'date_of_birth',
@@ -249,8 +247,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
 
       return isValid;
     },
-
-    
     
     /**
      * دالة التحقق من صحة بيانات Step 2
@@ -260,6 +256,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       this.step2.educationInformation.forEach(education => {
         if (!education.name_of_school_or_college_university || !education.field_of_study_or_major) {
           isValid = false;
+          // يمكنك إضافة رسائل تحقق خاصة بكل حقل إذا لزم الأمر
         }
       });
       return isValid;
@@ -320,6 +317,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const requiredFields: (keyof Step6Data)[] = [
         'full_name',
         'email_address',
+        'i_agree_to_the_electronic_signature',
         'i_acknowledge_the_above',
       ];
       
@@ -395,8 +393,8 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
 
       return isValid;
     },
-    async saveStep1() {
 
+    async saveStep1() {
       const toast = useToast();
     
       // تحقق من صلاحية البيانات
@@ -425,7 +423,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       }
     },
 
-    
     /**
      * دالة الحفظ لخطوة Step2
      */
@@ -439,29 +436,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const dataToSubmit: UpdateFields = {
         education_information: this.step2.educationInformation,
       };
-      console.log("*/*//*/*/*/*/*/*/*/*/",dataToSubmit)
-      // // رفع الملفات المرتبطة بالتوظيف هنا إذا كانت موجودة
-      // const savePromises = this.step3.employment_history.map(async (employment) => {
-      //   if (employment.file && employment.file instanceof File) { // تأكد أن الملف هو كائن File
-      //     try {
-      //       const uploadedFile = await this.uploadFile(employment.id, employment.file as File);
-      //       // تحديث حقل الملف برابطه المرفوع
-      //       employment.file = uploadedFile.file_url; // تخزين رابط الملف في الحالة
-      //     } catch (error) {
-      //       toast.error(`فشل رفع الملف للسجل: ${employment.company}.`);
-      //       throw error;
-      //     }
-      //   }
-      // });
-
-      // try {
-      //   await Promise.all(savePromises);
-      //   toast.success('تم رفع الملفات بنجاح.');
-      // } catch (error) {
-      //   console.error('Error uploading files:', error);
-      //   toast.error('فشل رفع بعض الملفات.');
-      //   throw error;
-      // }
+      console.log("Data to Submit for Step2:", dataToSubmit)
 
       try {
         await this.updateDocumentFields(dataToSubmit);
@@ -479,6 +454,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const toast = useToast();
       if (!this.validateStep3()) {
         toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+        this.isLoding = false;
         throw new Error('Validation failed');
       }
 
@@ -486,15 +462,12 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const uploadPromises = this.step3.employment_history.map(async (employment, index) => {
         if (employment.file instanceof File) { // تحقق إذا كان الملف كائن File
           try {
-            const uploadedFile = await this.uploadFile(employment.id, employment.file);
+            const uploadedFile = await this.uploadFile(employment.employment_id, employment.file); // استخدام employment_id
             employment.file = uploadedFile.file_url; // تخزين رابط الملف المرفوع
           } catch (error) {
             toast.error(`فشل رفع الملف للسجل رقم ${index + 1}.`);
             throw new Error(`File upload failed for employment index ${index}`);
-          }finally{
-            this.isLoding = false;
           }
-    
         }
       });
 
@@ -503,32 +476,52 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         await Promise.all(uploadPromises);
       } catch (error) {
         console.error('Error uploading files:', error);
-        throw error;
-      }finally{
         this.isLoding = false;
+        throw error;
       }
 
       // تجهيز البيانات للإرسال بعد رفع الملفات
       const dataToSubmit: UpdateFields = {
         employment_history: this.step3.employment_history.map(employment => ({
-          ...employment,
+          employment_id: employment.employment_id, // تأكد من تضمين employment_id
+          company: employment.company,
+          name_of_your_employer: employment.name_of_your_employer,
+          contact_the_employer: employment.contact_the_employer,
+          issuing_salary: employment.issuing_salary,
+          country: employment.country,
+          city: employment.city,
+          governorate: employment.governorate,
+          location_text: employment.location_text,
+          continuous: employment.continuous,
+          activity_has_stopped: employment.activity_has_stopped,
+          from_date: employment.from_date,
+          end_date: employment.end_date,
+          phone: employment.phone,
+          ext: employment.ext,
+          official_job_title_held_currently: employment.official_job_title_held_currently,
+          type_of_employment: employment.type_of_employment,
+          the_company_has_different_names: employment.the_company_has_different_names,
+          different_company_names: employment.different_company_names,
+          you_have_a_nicknamecx: employment.you_have_a_nicknamecx,
+          nickname: employment.nickname,
           file: employment.file, // الآن يجب أن يكون الرابط النصي للملف
         })),
+        
       };
 
       // حفظ بيانات التوظيف إلى الـ Doctype
       try {
+        
+        console.log("Data to Submit for Step3:", dataToSubmit);
         await this.updateDocumentFields(dataToSubmit);
         toast.success('تم حفظ بيانات التوظيف بنجاح.');
       } catch (error) {
         console.error('حدث خطأ أثناء حفظ بيانات التوظيف:', error);
         toast.error('حدث خطأ أثناء حفظ بيانات التوظيف.');
         throw error;
-      }finally{
-        this.isLoding = false;
+      } finally {
+        this.isLoding = false; // تعيين isLoading هنا بعد انتهاء جميع العمليات
       }
-      this.isLoding = false;
-
     },
 
     /**
@@ -585,7 +578,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
 
     /**
      * دالة تحميل الملف إلى الـ Doctype
-     * @param employmentId معرف التوظيف (uuid)
+     * @param employmentId معرف التوظيف (employment_id)
      * @param file الملف الذي سيتم تحميله
      */
     async uploadFile(employmentId: string, file: File) {
@@ -702,7 +695,30 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
           name: this.documentName,
         });
         const data = await request.reload();
-        this.step3.employment_history = data.employment_history;
+        this.step3.employment_history = data.employment_history.map((employment: any) => ({
+          employment_id: employment.employment_id || '', // تأكد من تعيين `employment_id`
+          company: employment.company || '',
+          name_of_your_employer: employment.name_of_your_employer || '',
+          contact_the_employer: employment.contact_the_employer || false,
+          issuing_salary: employment.issuing_salary || false,
+          country: employment.country || '',
+          city: employment.city || '',
+          governorate: employment.governorate || '',
+          location_text: employment.location_text || '',
+          continuous: employment.continuous || false,
+          activity_has_stopped: employment.activity_has_stopped || false,
+          from_date: employment.from_date || '',
+          end_date: employment.end_date || '',
+          phone: employment.phone || '',
+          ext: employment.ext || '',
+          official_job_title_held_currently: employment.official_job_title_held_currently || '',
+          type_of_employment: employment.type_of_employment || '',
+          the_company_has_different_names: employment.the_company_has_different_names || false,
+          different_company_names: employment.different_company_names || '',
+          you_have_a_nicknamecx: employment.you_have_a_nicknamecx || false,
+          nickname: employment.nickname || '',
+          file: employment.file || null,
+        }));
       } catch (error) {
         console.error("Error loading Step3 fields:", error);
         const toast = useToast();
@@ -737,7 +753,6 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         this.updateStep6('full_name', { value: data.full_name });
         this.updateStep6('email_address', { value: data.email_address });
         this.updateStep6('i_agree_to_the_electronic_signature', { value: data.i_agree_to_the_electronic_signature });
-        this.updateStep6('acknowledge_electronic_signature', { value: data.acknowledge_electronic_signature });
         this.updateStep6('i_acknowledge_the_above', { value: data.i_acknowledge_the_above });
       } catch (error) {
         console.error("Error loading Step6 fields:", error);
