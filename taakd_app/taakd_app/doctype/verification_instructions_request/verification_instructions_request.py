@@ -8,7 +8,8 @@ class VerificationInstructionsRequest(Document):
     """Document class for Verification Instructions Request."""
     
     def before_save(self):
-        pass
+        create_applicant_report(self)
+
     #     """Hook that runs before saving the document."""
     #     self.add_full_name()
 
@@ -20,6 +21,13 @@ class VerificationInstructionsRequest(Document):
     #     parts.append(self.last_name)
     #     self.full_name = " ".join(parts)
 
+    def on_submit(self):
+        print("*-"*50)
+
+        """Hook that runs when the document is submitted."""
+        create_applicant_report(self)
+
+    
 
 @frappe.whitelist()
 def upload_verification_file():
@@ -81,3 +89,44 @@ def upload_verification_file():
     except Exception as e:
         frappe.log_error(message=str(e), title="File Upload Error")
         return {"status": "error", "message": _("An error occurred while uploading the file. Please try again.")}
+        
+def create_applicant_report(doc):
+    print("*"*50)
+    """Create a new applicant report based on the verification instructions request."""
+    applicant_report = frappe.get_doc({
+        "doctype": "Applicant Report",
+        "verification_instructions_request": doc.name,
+        "employer_name": doc.employer_name,
+        "first_name": doc.first_name,
+        "last_name": doc.last_name,
+        "middle_name": doc.middle_name,
+        "country": doc.country,
+        "city": doc.city,
+        "governorate": doc.governorate,
+        "from_time": doc.from_time,
+        "to_time": doc.to_time,
+        "email": doc.email,
+        "date_of_birth": doc.date_of_birth,
+        "education_information": []  # List to hold child records
+    })
+
+    # Copying data from child table `education_information`
+    for entry in doc.education_information:
+        child_entry = {
+            "name_of_school_or_college_university": entry.name_of_school_or_college_university,
+            "country": entry.country,
+            "city": entry.city,
+            "governorate": entry.governorate,
+            "date_enrolled_from": entry.date_enrolled_from,
+            "date_enrolled_to": entry.date_enrolled_to,
+            "field_of_study_or_major": entry.field_of_study_or_major,
+            "phone": entry.phone,
+            "Ext": entry.ext,
+            "diploma": entry.diploma,
+            "another_name": entry.another_name
+        }
+        applicant_report.append("education_information", child_entry)
+    print("#"*50,applicant_report.education_information)
+    # Insert the new applicant report
+    applicant_report.insert()
+    frappe.db.commit()  # Ensure the record is saved
