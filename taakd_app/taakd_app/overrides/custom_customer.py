@@ -28,6 +28,7 @@ class CustomCustomer(Customer):
         else:
             new_doc = frappe.new_doc("User")
             new_doc.email = self.email
+            new_doc.cumulative_invoice = self.ccumulative_invoice
             new_doc.first_name = self.customer_name
             new_doc.enabled = True
             new_doc.module_profile = ""
