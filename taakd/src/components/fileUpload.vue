@@ -2,7 +2,7 @@
 <template>
   <div class="p-5">
     <div class="bg-info/15 rounded-xl border-mid_gray border-[1px] border-dashed p-5 flex flex-col gap-5 items-center">
-      <div class="h-8 w-8 bg-dark_gray"></div>
+      <div class="h-12 w-12 border-none"> <StyledIcon  scalse=2 icon="ri-upload-cloud-line"/></div>
       <div v-if="!modelValue" class="font-semibold text-sm text-darkest_gray">Choose a file</div>
       <div v-if="!modelValue" class="font-normal text-[10px] text-darkest_gray text-center leading-4">
         JPEG, PNG, PDF, and MP4 formats up to 20MB
@@ -53,6 +53,7 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
+import StyledIcon from './styledIcon.vue';
 
 // تعريف الخصائص (Props)
 const props = defineProps({
