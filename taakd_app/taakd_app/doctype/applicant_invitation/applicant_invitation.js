@@ -7,6 +7,7 @@ frappe.ui.form.on("Applicant Invitation", {
     },
     onload: function(frm){
         frm.trigger('package');
+        add_company_information(frm);
 	},
     package: function(frm){
         item_list = [];
@@ -33,7 +34,8 @@ frappe.ui.form.on("Applicant Invitation", {
         // حدث عند إضافة صف جديد إلى Child Table
         let row = locals[cdt][cdn]; 
         row.service_price = 0;
-    }
+    },
+    
 
 });
 frappe.ui.form.on('Other Services', {
@@ -65,3 +67,26 @@ frappe.ui.form.on('Other Services', {
         }
     }
 });
+
+
+function add_company_information(frm) {
+    // استدعاء دالة سيرفرية للحصول على بيانات الشركة
+
+    frappe.call({
+        doc: frm.doc,
+        method: 'add_company_information',
+        callback: function(response) {
+            if (response.message) {
+                // تحديث الحقول في النموذج بناءً على معلومات الشركة
+                frm.set_value('company_name', response.message.company_name);
+                frm.set_value('company_email', response.message.company_email);
+                frm.set_value('cumulative_invoice', response.message.cumulative_invoice);
+                if(response.message.cumulative_invoice)
+                {
+                    frm.set_value('payd_from', 'Company'); 
+                    frm.set_df_property('payd_from', 'read_only', true);
+                }
+            }
+        }
+    });
+}

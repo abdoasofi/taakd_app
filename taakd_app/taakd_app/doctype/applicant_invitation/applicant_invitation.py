@@ -6,8 +6,8 @@ from frappe.model.document import Document
 from frappe import _
 
 class ApplicantInvitation(Document):
+  
     def before_save(self):
-        self.add_company_information()
         self.add_full_name()
         self.package_price = self.get_item_price(self.package)
         self.other_services_price = self.sum_other_services_price()
@@ -55,16 +55,8 @@ class ApplicantInvitation(Document):
              
     def add_full_name(self):
         middle_name = self.middle_name or ""
-        self._full_name = f"{self.first_name} {middle_name} {self.last_name}"  
-
-    def add_company_information(self):
-        user = frappe.get_doc("User", frappe.session.user)
-        self.company_name = user.full_name
-        if user.full_name == "Administrator":
-            self.company_email = "administrator" 
-        else:
-            self.company_email = user.email
-
+        self._full_name = f"{self.first_name} {middle_name} {self.last_name}" 
+         
     def create_user(self):
         if frappe.db.exists("User", {"email": self.email}):
             return frappe.get_doc("User", {"email": self.email})
@@ -123,8 +115,8 @@ class ApplicantInvitation(Document):
         if not customer:
             frappe.throw(_("Customer is not set. Cannot create Sales Invoice."))   
 
-        # التحقق من قيمة cumulative_invoice و payd_from
-        if self.cumulative_invoice == 1 and self.payd_from == "Company":
+        # التحقق من قيمة ccumulative_invoice و payd_from
+        if self.ccumulative_invoice == 1 and self.payd_from == "Company":
             existing_invoice = self.get_existing_draft_invoice(customer)
             if existing_invoice:
                 # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة مع تجديع الأصناف المتشابهة
@@ -257,6 +249,14 @@ class ApplicantInvitation(Document):
         package_price = self.get_item_price(self.package) or 0.0
         self.total_price = other_services_price + package_price
 
+    @frappe.whitelist()
+    def add_company_information(self):
+        user = frappe.get_doc("User", frappe.session.user)
+        return {
+            "company_name": user.full_name,
+            "cumulative_invoice": user.cumulative_invoice,
+            "company_email": user.email if user.full_name != "Administrator" else "administrator"
+        }
     @frappe.whitelist()
     def get_filtered_item_codes(self):
         try:
