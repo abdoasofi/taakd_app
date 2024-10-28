@@ -551,8 +551,8 @@ const removePhoneNumber = (index) => {
   phoneNumbers.value.splice(index, 1);
 };
 
-const updatePhoneNumber = (index, value) => {
-  store.updatePhoneNumber(index, value);
+const updatePhoneNumber = (index, phone) => {
+  store.updatePhoneNumber(index,phone);
 };
 
 const addAliasName = () => {
@@ -567,18 +567,17 @@ const updateAliasName = (index, alias) => {
   store.updateAliasName(index, alias);
 };
 
-const save = async () => {
-  console.log("*-*-**-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*",store.step1)
-  try {
-    loading.value = true;
-    await store.saveStep1();
-  } catch (error) {
-    const toast = useToast();
-    toast.error("حدث خطأ أثناء الحفظ.");
-  } finally {
-    loading.value = false;
-  }
-};
+// const save = async () => {
+//   try {
+//     loading.value = true;
+//     await store.saveStep1();
+//   } catch (error) {
+//     const toast = useToast();
+//     toast.error("حدث خطأ أثناء الحفظ.");
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 </script>
 
 <style scoped>
