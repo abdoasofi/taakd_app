@@ -12,7 +12,7 @@
       <div v-if="employmentHistory.length > 0" class="[&>*:nth-child(5n)]:break-before-page [&>*:nth-child(5n)]:py-8 py-5">
         <div
           v-for="(employment, index) in employmentHistory"
-          :key="employment.id"
+          :key="employment.employment_id"
           class="mb-6 report-employment"
         >
           <!-- عنوان كل وظيفة -->
