@@ -253,10 +253,18 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      */
     validateStep2(): boolean {
       let isValid = true;
-      this.step2.educationInformation.forEach(education => {
-        if (!education.name_of_school_or_college_university || !education.field_of_study_or_major) {
+      this.step2.educationInformation.forEach((education, index) => {
+        if (
+          !education.name_of_school_or_college_university ||
+          !education.country ||
+          !education.city ||
+          !education.governorate ||
+          !education.from_date ||
+          !education.end_date ||
+          !education.phone 
+        ) {
           isValid = false;
-          // يمكنك إضافة رسائل تحقق خاصة بكل حقل إذا لزم الأمر
+          // يمكنك إضافة رسائل تحقق خاصة لكل حقل إذا لزم الأمر
         }
       });
       return isValid;
@@ -405,6 +413,9 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const aliasNameToSubmit: UpdateFields = {
         alias_name: this.step1.alias_name, 
       };
+      const phoneToSubmit: UpdateFields = {
+        phone: this.step1.phone, 
+      };
       const dataToSubmit: UpdateFields = {};
     
       for (const key in this.step1) {
@@ -417,6 +428,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       try {
         await this.updateDocumentFields(dataToSubmit);
         await this.updateDocumentFields(aliasNameToSubmit);
+        await this.updateDocumentFields(phoneToSubmit);
         toast.success('تم حفظ البيانات بنجاح.');
       } catch (error) {
         throw error;
