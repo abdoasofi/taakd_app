@@ -20,7 +20,8 @@ import {
 	MdPhoneOutlined,
 	HiLockClosed,
 	MdLanguageOutlined,
-	FaSearch
+	FaSearch,
+	RiUploadCloudLine
 
 } from "oh-vue-icons/icons";
 addIcons(
@@ -35,7 +36,8 @@ addIcons(
 	MdPhoneOutlined,
 	HiLockClosed,
 	MdLanguageOutlined,
-	FaSearch
+	FaSearch,
+	RiUploadCloudLine
 
 );
 import {
