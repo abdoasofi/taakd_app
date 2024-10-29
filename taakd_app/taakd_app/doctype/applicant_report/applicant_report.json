@@ -1,6 +1,7 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": " Applicant-Report-.{verification_instructions_request}.-.#",
  "creation": "2024-09-14 10:17:12.035145",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -8,22 +9,65 @@
   "personal_information_tab",
   "personal_information_section",
   "employer_name",
-  "first_name",
   "last_name",
+  "first_name",
   "this_is_my_name_column",
-  "from_time",
-  "to_time",
-  "date_of_birth",
   "column_break_knme",
+  "middle_name",
+  "dont_middle_name",
+  "suffix",
+  "country",
   "amended_from",
   "verification_instructions_request",
-  "middle_name",
-  "country",
+  "section_break_wlpy",
+  "aliases_column",
+  "alias_name",
+  "id_card_information_section",
+  "date_of_birth",
+  "contact_information_tab",
+  "contact_information_section",
   "email",
+  "column_break_rauo",
+  "is_degree_or_diploma",
+  "mobile_number",
+  "section_break_xggu",
+  "phone",
+  "section_break_bkwx",
+  "from_time",
+  "column_break_zqpn",
+  "to_time",
+  "current_mailing_address_tab",
+  "current_mailing_address_section",
+  "country_now",
   "city",
   "governorate",
-  "section_break_vyxs",
-  "education_information"
+  "zip_code",
+  "location_text",
+  "column_break_izev",
+  "street_address",
+  "date_living_address",
+  "education_information_tab",
+  "education_information_section",
+  "donot_employer",
+  "education_information",
+  "tab_5_tab",
+  "professional_qualification_verification_section",
+  "table_mfni",
+  "tab_4_tab",
+  "employment_history_section",
+  "employment_history",
+  "tab_6_tab",
+  "screening_disclosure_and_authorization_section",
+  "full_name",
+  "email_address",
+  "i_agree_to_the_electronic_signature",
+  "column_break_zydr",
+  "electronic_signature",
+  "i_acknowledge_the_above",
+  "tab_7_tab",
+  "sales_invoice",
+  "column_break_higr",
+  "payment_status"
  ],
  "fields": [
   {
@@ -38,7 +82,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fetch_from": "verification_instructions_request.first_name",
    "fieldname": "first_name",
    "fieldtype": "Data",
    "label": "First Name"
@@ -119,10 +162,6 @@
    "options": "Location"
   },
   {
-   "fieldname": "section_break_vyxs",
-   "fieldtype": "Section Break"
-  },
-  {
    "fieldname": "education_information",
    "fieldtype": "Table",
    "label": "Education Information",
@@ -132,15 +171,240 @@
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
    "label": "Date of Birth"
+  },
+  {
+   "fieldname": "contact_information_tab",
+   "fieldtype": "Tab Break",
+   "label": "Contact Information"
+  },
+  {
+   "fieldname": "education_information_tab",
+   "fieldtype": "Tab Break",
+   "label": "Education Information"
+  },
+  {
+   "fieldname": "education_information_section",
+   "fieldtype": "Section Break",
+   "label": "Education Information"
+  },
+  {
+   "fieldname": "tab_4_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employment History"
+  },
+  {
+   "fieldname": "employment_history_section",
+   "fieldtype": "Section Break",
+   "label": "Employment History"
+  },
+  {
+   "fieldname": "employment_history",
+   "fieldtype": "Table",
+   "label": "Employment History",
+   "options": "Employment History"
+  },
+  {
+   "fieldname": "tab_5_tab",
+   "fieldtype": "Tab Break",
+   "label": "Professional qualification verification"
+  },
+  {
+   "fieldname": "professional_qualification_verification_section",
+   "fieldtype": "Section Break",
+   "label": "Professional qualification verification"
+  },
+  {
+   "fieldname": "table_mfni",
+   "fieldtype": "Table",
+   "options": "Professional Qualification"
+  },
+  {
+   "fieldname": "tab_6_tab",
+   "fieldtype": "Tab Break",
+   "label": "Screening Disclosure and Authorization"
+  },
+  {
+   "fieldname": "screening_disclosure_and_authorization_section",
+   "fieldtype": "Section Break",
+   "label": "Screening Disclosure and Authorization"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "email_address",
+   "fieldtype": "Data",
+   "label": "E-Mail Address"
+  },
+  {
+   "fieldname": "column_break_zydr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "electronic_signature",
+   "fieldtype": "Signature",
+   "label": "Electronic signature"
+  },
+  {
+   "default": "0",
+   "fieldname": "i_acknowledge_the_above",
+   "fieldtype": "Check",
+   "label": "I certify that I am the person identified "
+  },
+  {
+   "fieldname": "tab_7_tab",
+   "fieldtype": "Tab Break",
+   "label": "Financial Details"
+  },
+  {
+   "fieldname": "sales_invoice",
+   "fieldtype": "Link",
+   "label": "Sales Invoice",
+   "options": "Sales Invoice"
+  },
+  {
+   "fieldname": "column_break_higr",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "sales_invoice.status",
+   "fieldname": "payment_status",
+   "fieldtype": "Data",
+   "label": "Payment Status"
+  },
+  {
+   "fieldname": "section_break_wlpy",
+   "fieldtype": "Section Break",
+   "label": "Aliases"
+  },
+  {
+   "fieldname": "aliases_column",
+   "fieldtype": "Column Break",
+   "label": "Aliases"
+  },
+  {
+   "fieldname": "alias_name",
+   "fieldtype": "Table",
+   "label": "Alias Name",
+   "options": "Alias Name"
+  },
+  {
+   "fieldname": "id_card_information_section",
+   "fieldtype": "Section Break",
+   "label": "ID Card Information"
+  },
+  {
+   "default": "0",
+   "fieldname": "dont_middle_name",
+   "fieldtype": "Check",
+   "label": "I don't have a middle name"
+  },
+  {
+   "fieldname": "suffix",
+   "fieldtype": "Select",
+   "label": "Suffix",
+   "options": "\nJr.\nSr.\nIII\nPhD\nMD\nEsq"
+  },
+  {
+   "fieldname": "contact_information_section",
+   "fieldtype": "Section Break",
+   "label": "Contact Information"
+  },
+  {
+   "fieldname": "column_break_rauo",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_degree_or_diploma",
+   "fieldtype": "Check",
+   "label": "Did you obtain the degree or diploma? *"
+  },
+  {
+   "fieldname": "mobile_number",
+   "fieldtype": "Data",
+   "label": "Mobile Number"
+  },
+  {
+   "fieldname": "section_break_xggu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Table",
+   "label": "Phone",
+   "options": "Employer Phone"
+  },
+  {
+   "fieldname": "section_break_bkwx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_zqpn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "current_mailing_address_tab",
+   "fieldtype": "Tab Break",
+   "label": "Current Mailing Address"
+  },
+  {
+   "fieldname": "current_mailing_address_section",
+   "fieldtype": "Section Break",
+   "label": "Current Mailing Address"
+  },
+  {
+   "fieldname": "country_now",
+   "fieldtype": "Select",
+   "label": "Country"
+  },
+  {
+   "fieldname": "column_break_izev",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "street_address",
+   "fieldtype": "Long Text",
+   "label": "Street Address"
+  },
+  {
+   "fieldname": "date_living_address",
+   "fieldtype": "Date",
+   "label": "Date you started living at this address"
+  },
+  {
+   "fieldname": "zip_code",
+   "fieldtype": "Data",
+   "label": "Zip Code"
+  },
+  {
+   "fieldname": "location_text",
+   "fieldtype": "Data",
+   "label": "Location Text"
+  },
+  {
+   "default": "0",
+   "fieldname": "donot_employer",
+   "fieldtype": "Check",
+   "label": "I do not have a current employer to report"
+  },
+  {
+   "default": "0",
+   "fieldname": "i_agree_to_the_electronic_signature",
+   "fieldtype": "Check",
+   "label": "I understand that I am using electronic means to sign this document"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-27 23:18:53.043386",
+ "modified": "2024-10-29 16:52:18.523446",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Report",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
