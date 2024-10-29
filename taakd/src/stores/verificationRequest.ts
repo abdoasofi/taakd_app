@@ -406,10 +406,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
       const toast = useToast();
     
       // تحقق من صلاحية البيانات
-      if (!this.validateStep1()) {
-        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-        throw new Error('Validation failed');
-      }
+      // if (!this.validateStep1()) {
+      //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+      //   throw new Error('Validation failed');
+      // }
       const aliasNameToSubmit: UpdateFields = {
         alias_name: this.step1.alias_name, 
       };
@@ -440,10 +440,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      */
     async saveStep2() {
       const toast = useToast();
-      if (!this.validateStep2()) {
-        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-        throw new Error('Validation failed');
-      }
+      // if (!this.validateStep2()) {
+      //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+      //   throw new Error('Validation failed');
+      // }
 
       const dataToSubmit: UpdateFields = {
         education_information: this.step2.educationInformation,
@@ -464,11 +464,11 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     async saveStep3() {
       this.isLoding = true;
       const toast = useToast();
-      if (!this.validateStep3()) {
-        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-        this.isLoding = false;
-        throw new Error('Validation failed');
-      }
+      // if (!this.validateStep3()) {
+      //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+      //   this.isLoding = false;
+      //   throw new Error('Validation failed');
+      // }
 
       // معالجة رفع الملفات أولاً
       const uploadPromises = this.step3.employment_history.map(async (employment, index) => {
@@ -541,10 +541,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
      */
     async saveStep4() {
       const toast = useToast();
-      if (!this.validateStep4()) {
-        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-        throw new Error('Validation failed');
-      }
+      // if (!this.validateStep4()) {
+      //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+      //   throw new Error('Validation failed');
+      // }
 
       const dataToSubmit: UpdateFields = {
         professional_qualification: this.step4.professional_qualification,
@@ -566,10 +566,10 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
     async saveStep6() {
       const toast = useToast();
       // التحقق من صحة البيانات
-      if (!this.validateStep6()) {
-        toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-        throw new Error('Validation failed');
-      }
+      // if (!this.validateStep6()) {
+      //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+      //   throw new Error('Validation failed');
+      // }
 
       // تجهيز البيانات للإرسال
       const dataToSubmit: UpdateFields = {};
