@@ -8,8 +8,8 @@ class VerificationInstructionsRequest(Document):
     """Document class for Verification Instructions Request."""
     
     def before_save(self):
-        create_applicant_report(self)
-
+        # create_applicant_report(self)
+            pass
     #     """Hook that runs before saving the document."""
     #     self.add_full_name()
 
@@ -91,7 +91,6 @@ def upload_verification_file():
         return {"status": "error", "message": _("An error occurred while uploading the file. Please try again.")}
         
 def create_applicant_report(doc):
-    print("*"*50)
     """Create a new applicant report based on the verification instructions request."""
     applicant_report = frappe.get_doc({
         "doctype": "Applicant Report",
@@ -100,16 +99,49 @@ def create_applicant_report(doc):
         "first_name": doc.first_name,
         "last_name": doc.last_name,
         "middle_name": doc.middle_name,
-        "country": doc.country,
-        "city": doc.city,
-        "governorate": doc.governorate,
+        "dont_middle_name": doc.dont_middle_name,
+        "suffix": doc.suffix,
+        "email": doc.email,
         "from_time": doc.from_time,
         "to_time": doc.to_time,
-        "email": doc.email,
+        "middle_name": doc.middle_name,
+        "country": doc.country,
         "date_of_birth": doc.date_of_birth,
-        "education_information": []  # List to hold child records
+        "country_now": doc.country_now,
+        "city": doc.city,
+        "governorate": doc.governorate,
+        "zip_code": doc.zip_code,
+        "location_text": doc.location_text,
+        "street_address": doc.street_address,
+        "date_living_address": doc.date_living_address,
+        "full_name": doc.full_name,
+        "email_address": doc.email_address,
+        "sales_invoice": doc.sales_invoice,
+        "payment_status": doc.payment_status,
+        "aliases_section": [],
+        "phone": [],
+        "education_information": [],
+        "employment_history": [],
+        "professional_qualification": [],
+         
     })
 
+    # Copying data from child table `aliases_section`
+    for aliases in doc.alias_name:
+        child_aliases = {
+            "first_name": aliases.first_name,
+            "middle_name": aliases.middle_name,
+            "middle_name": aliases.middle_name,
+        }
+        applicant_report.append("alias_name", child_aliases)
+        
+    # Copying data from child table `phone`
+    for ph in doc.phone:
+        child_ph = {
+            "phone": ph.phone,
+        }
+        applicant_report.append("phone", child_ph) 
+               
     # Copying data from child table `education_information`
     for entry in doc.education_information:
         child_entry = {
@@ -126,7 +158,49 @@ def create_applicant_report(doc):
             "another_name": entry.another_name
         }
         applicant_report.append("education_information", child_entry)
-    print("#"*50,applicant_report.education_information)
+        
+    # Copying data from child table `employment_history`
+    for ei in doc.employment_history:
+        child_ei = {
+            "company": ei.company,
+            "continuous": ei.continuous,
+            "country": ei.country,
+            "city": ei.city,
+            "governorate": ei.governorate,
+            "location_text": ei.location_text,
+            "from_date": ei.from_date,
+            "end_date": ei.end_date,
+            "name_of_your_employer": ei.name_of_your_employer,
+            "phone": ei.phone,
+            "Ext": ei.ext,
+            "type_of_employment": ei.type_of_employment,
+            "contact_the_employer,": ei.contact_the_employer,
+            "issuing_salary,": ei.issuing_salary,
+            "activity_has_stopped,": ei.activity_has_stopped,
+            "the_company_has_different_names,": ei.the_company_has_different_names,
+            "different_company_names,": ei.different_company_names,
+            "official_job_title_held_currently,": ei.official_job_title_held_currently,
+            "you_have_a_nicknamecx,": ei.you_have_a_nicknamecx,
+            "nickname,": ei.nickname,
+            "file,": ei.file,
+            "employment_id,": ei.employment_id
+        }
+        applicant_report.append("employment_history", child_ei)                
+            
+    # Copying data from child table `professional_qualification`
+    for pq in doc.professional_qualification:
+        child_pq = {
+            "awarding_body": pq.awarding_body,
+            "license_or_certificate_number": pq.license_or_certificate_number,
+            "date_awarded": pq.date_awarded,
+            "your_name_varies": pq.your_name_varies,
+            "award_name_description": pq.award_name_description,
+            "issuing_country": pq.issuing_country,
+            "is_an_expiration_date": pq.is_an_expiration_date,
+            "expiration_date": pq.expiration_date
+        }
+        applicant_report.append("professional_qualification", child_pq)
+        
     # Insert the new applicant report
     applicant_report.insert()
     frappe.db.commit()  # Ensure the record is saved

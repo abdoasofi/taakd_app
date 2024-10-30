@@ -52,7 +52,7 @@
   "education_information",
   "tab_5_tab",
   "professional_qualification_verification_section",
-  "table_mfni",
+  "professional_qualification",
   "tab_4_tab",
   "employment_history_section",
   "employment_history",
@@ -212,11 +212,6 @@
    "fieldname": "professional_qualification_verification_section",
    "fieldtype": "Section Break",
    "label": "Professional qualification verification"
-  },
-  {
-   "fieldname": "table_mfni",
-   "fieldtype": "Table",
-   "options": "Professional Qualification"
   },
   {
    "fieldname": "tab_6_tab",
@@ -395,12 +390,18 @@
    "fieldname": "i_agree_to_the_electronic_signature",
    "fieldtype": "Check",
    "label": "I understand that I am using electronic means to sign this document"
+  },
+  {
+   "fieldname": "professional_qualification",
+   "fieldtype": "Table",
+   "label": "Professional Qualification",
+   "options": "Professional Qualification"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-29 16:52:18.523446",
+ "modified": "2024-10-30 02:05:23.537209",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Report",
