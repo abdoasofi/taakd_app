@@ -1,28 +1,32 @@
 <!-- src/components/StepIcon.vue -->
 <template>
 	<div
-	  :class="['p-2 flex flex-col lg:flex-row lg:gap-2 lg:justify-start justify-center items-center', processClass]"
+	  :class="[
+		'p-2 flex flex-col lg:flex-row lg:gap-2 lg:justify-start justify-center items-center transition-colors duration-300',
+		processClass,
+		{ 'bg-green-100': isHovered }
+	  ]"
 	  @click="handleClick"
 	>
 	  <!-- الدائرة مع تقدم النسبة المئوية -->
-	  <div class="relative h-10 w-10">
+	  <div class="relative h-12 w-12">
 		<!-- الدائرة الخلفية -->
 		<svg class="absolute top-0 left-0 w-full h-full">
 		  <circle
 			cx="50%"
 			cy="50%"
-			r="16" 
+			r="18" 
 			stroke="#e4e4e4" 
-			stroke-width="4"
+			stroke-width="2"
 			fill="none"
 		  />
 		  <!-- دائرة التقدم -->
 		  <circle
 			cx="50%"
 			cy="50%"
-			r="16"
+			r="18" 
 			stroke="#81C045" 
-			stroke-width="4"
+			stroke-width="2"
 			fill="none"
 			:stroke-dasharray="circumference"
 			:stroke-dashoffset="offset"
@@ -37,7 +41,7 @@
 			{{ percentageCompleted }}%
 		  </span>
 		  <span
-			class="border-[1px] border-white rounded-full w-[80%] h-[80%] flex justify-center items-center bg-secondary"
+			class="border-[1px] border-white rounded-full w-[90%] h-[90%] flex justify-center items-center bg-secondary"
 			v-else
 		  >
 			<svg
@@ -57,7 +61,11 @@
 	  </div>
   
 	  <!-- تفاصيل المرحلة -->
-	  <div class="ml-4 lg:flex lg:flex-col justify-center mt-2 lg:mt-0">
+	  <div
+		class="ml-4 lg:flex lg:flex-col justify-center mt-2 lg:mt-0"
+		@mouseenter="onMouseEnter"
+		@mouseleave="onMouseLeave"
+	  >
 		<span class="block text-center lg:text-left">{{ label }}</span>
 		<span class="hidden lg:block text-center lg:text-left text-sm text-primary font-semibold">
 		  {{ desc }}
@@ -67,7 +75,7 @@
   </template>
   
   <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   
   // تعريف الأحداث المرسلة
   const emit = defineEmits(['click']);
@@ -97,21 +105,40 @@
 	}
   });
   
-  // معامل محيط الدائرة (r = 16, ليكون مناسباً للدائرة بحجم h-10 w-10)
-  const radius = 16;
+  // معامل محيط الدائرة (r = 18, ليكون مناسباً للدائرة بحجم h-12 w-12)
+  const radius = 18;
   const circumference = 2 * Math.PI * radius;
   
   // حساب الإزاحة بناءً على النسبة المئوية
   const offset = computed(() => circumference - (props.percentageCompleted / 100) * circumference);
   
-  // تحديد الكلاس بناءً على حالة `process`
-  const processClass = computed(() => {
-	return props.process ? 'border-2 border-secondary ' : '';
+  // تحديد لون التقدم (ثابت للأخضر كما طلبت)
+  const progressColor = computed(() => {
+	if (props.complete) return '#10B981'; // أخضر للمكتملة
+	if (props.process) return '#10B981'; // استخدام الأخضر للمرحلة الحالية بدل الأزرق
+	return '#6B7280'; // رمادي للمراحل التي لم تبدأ بعد
   });
+  
+  // تحديد كلاس الحاوية بناءً على حالة `process`
+  const processClass = computed(() => {
+	return props.process ? 'border-2 border-secondary rounded-lg' : '';
+  });
+  
+  // حالات التحويم
+  const isHovered = ref(false);
   
   // دالة التعامل مع النقر
   const handleClick = () => {
 	emit('click');
+  };
+  
+  // دوال التحويم
+  const onMouseEnter = () => {
+	isHovered.value = true;
+  };
+  
+  const onMouseLeave = () => {
+	isHovered.value = false;
   };
   </script>
   
