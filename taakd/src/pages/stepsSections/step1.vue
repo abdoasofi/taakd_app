@@ -371,7 +371,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, onUpdated, reactive, ref } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import CheckBox from '../../components/checkBox.vue';
 import FieldContainer from '../../components/fieldContainer.vue';
@@ -394,7 +394,9 @@ const location = locations.getLocation();
 const loading = ref(false);
 const phoneNumbers = ref([{id: uuidv4(), phone: '' }]);
 const aliasNames = ref([{ id: uuidv4(), first_name: '', last_name: '', middle_name: '' }]);
-
+// onUpdated(async () => {
+//    store.loadStep1Fields();
+// });
 const suffixOptions =reactive([
   { label: 'Jr.', value: 'Jr.' },
   { label: 'Sr.', value: 'Sr.' },

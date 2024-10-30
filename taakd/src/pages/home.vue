@@ -1,3 +1,4 @@
+<!-- home.vue -->
 <template>
   <BackgroundLayout class="relative ">
     
@@ -46,7 +47,7 @@
                 Fill the Form Now <span class="mx-2">-&gt;</span>
               </Button>
               <!-- </router-link> -->
-              
+
               <Button v-if="process['report']" type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
                 View Report<span class=""></span>
               </Button>
@@ -114,6 +115,7 @@ import { createRequestList } from '../data/request';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import BackgroundLayout from '../layouts/backgroundLayout.vue';
 import bg1 from '@/assets/bg1.svg';
+import printJS from 'print-js';
 
 
 const store = useVerificationRequestStore();
@@ -252,14 +254,16 @@ function fill_the_form_now() {
   // مالم اعرض الرت او عالج الفاليديشن
 
   // console.log(" ******* data  ********** ",data)
-
   let validateRes = validateInputContact(data)
   if (validateRes !== true) {
     triggerAlert("يرجى تصحيح الأخطاء في النموذج.");
     return;
   } else {
     // router.replace({ name: 'steps', query: { fullName: userFullName.value } });
+    
     router.replace({ name: 'steps' });
+    // const docName = store.documentName;
+    // router.push({ name: 'steps', params: { docName } });
   }
 }
 
@@ -291,7 +295,13 @@ watch(
   },
   { immediate: true } // تنفيذ المراقبة فور التهيئة
 );
-
+const printDiv = () => {
+  printJS({ 
+    printable: 'yourDivId', 
+    type: 'html', 
+    targetStyles: ['*'] // Includes styles from your Tailwind CSS
+  });
+};
 </script>
 
 <style scoped>

@@ -1,4 +1,3 @@
-
 <!-- src/pages/steps.vue -->
 <template>
   <Header />
@@ -7,8 +6,9 @@
     <div class="col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
         <div class="pb-3 font-medium text-primary text-base">
-          <p>اسم المستند: {{ documentName }}</p>
-          Model steps instructions of Job Request ({{ percentageCompleted }}% Completed)
+          <p>اسم المستند: {{ docName }}</p>
+          <!-- عرض النسبة الكلية للإنجاز -->
+          <p v-if="docName"> Model steps instructions of Job Request {{ overallCompletion }}% Completed</p>
         </div>
         <div class="py-3 grid grid-cols-6 lg:flex lg:flex-col lg:gap-4 w-full">
           <StepIcon
@@ -18,8 +18,8 @@
             :complete="currentStepIndex > index"
             :label="'Step ' + (index + 1)"
             :desc="step.description"
-            :percentageCompleted="percentageCompleted"
-            @click="goToStep(index) " 
+            :percentageCompleted="stepsCompletionPercentages[index + 1]" 
+            @click="goToStep(index)"
           />
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-base">
@@ -31,7 +31,7 @@
     </div>
 
     <!-- Main Content -->
-    <div class="  col-span-8">
+    <div class="col-span-8">
       <component 
         :is="currentStepComponent" 
         :stepData="currentStepData" 
@@ -57,9 +57,9 @@
       </div>
 
       <!-- Navigation Buttons -->
-      <div   v-if="!isLastStep"  class="flex gap-2">
+      <div v-if="!isLastStep" class="flex gap-2">
         <button 
-          class="flex items-center justify-center px-4 py-2 text-white bg-secondary rounded-[100px]  hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300" 
+          class="flex items-center justify-center px-4 py-2 text-white bg-secondary rounded-[100px] hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300" 
           @click="previousStep" 
           :disabled="currentStepIndex === 0" 
           v-if="currentStepIndex > 0"
@@ -71,7 +71,6 @@
         </button>
         
         <Button 
-        
           level="primary" 
           @clicked="handleStep" 
         >
@@ -93,7 +92,6 @@
           {{ 'Step ' + currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
-
         <Button level="other" @clicked="reject"> Reject </Button>
         <Button level="other" @clicked="accept" >
           Accept
@@ -115,10 +113,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, onUpdated } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
-import StepIcon from './stepsSections/components/stepIcon.vue';
+import StepIcon from '../pages/stepsSections/components/stepIcon.vue';
 import Step1 from './stepsSections/step1.vue';
 import Step2 from './stepsSections/step2.vue';
 import Step3 from './stepsSections/step3.vue';
@@ -129,43 +128,26 @@ import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
 import { createRequestList } from '../data/request';
 
+// استيراد route
+const route = useRoute();
+
 // استيراد الستور
 const store = useVerificationRequestStore();
 const toast = useToast();
 
-// المرحلة الحالية
+// الحصول على documentName من route params
+const documentNameFromRoute = computed(() => route.params.documentName as string);
+const docName = computed(() => store.documentName);
+// // استقبال documentName كـ prop
+// const props = defineProps({
+//   docName: {
+//     type: String,
+//     required: true,
+//   },
+// });
 const currentStepIndex = ref(0);
 const totalSteps = 6;
 
-
-const requestList = createRequestList(['name', 'user_id','application_status']); 
-const verificationStore = useVerificationRequestStore();
-
-const documentNameValue = ref('');
-
-const updateDocumentName = (newName) => {
-  documentNameValue.value = newName;
-};
-
-// استخدام watch لمراقبة تغيير قيمة name في requestList
-watch(
-  () => {
-    // افترض أن البيانات موجودة في requestList.value.data[0].name
-    // تحقق من وجود البيانات قبل الوصول إليها لتجنب الأخطاء
-    
-    return requestList && requestList.data && requestList.data.length > 0
-      ? requestList.data[0]
-      : null;
-  },
-  (newName) => {
-    if(newName)
-   { 
-    updateDocumentName(newName.name);
-  
-    verificationStore.setDocumentName(newName.name);}
-  },
-  { immediate: true } // تنفيذ المراقبة فور التهيئة
-);
 // تعريف المراحل مع المكونات والوصف ودوال التحقق
 const steps = [
   {
@@ -202,27 +184,30 @@ const steps = [
 const currentStepComponent = computed(() => steps[currentStepIndex.value].component);
 
 const currentStepData = computed(() => {
-  return store[`step${currentStepIndex.value + 1}` as keyof typeof store];
+  return (store as any)[`step${currentStepIndex.value + 1}`];
 });
 
-// حساب نسبة الإنجاز
-const percentageCompleted = computed(() => {
-  return Math.round((100 / totalSteps) * (currentStepIndex.value + 1));
-});
+// حساب نسب الإنجاز لكل مرحلة باستخدام الـ getter
+const stepsCompletionPercentages = computed(() => store.stepsCompletionPercentage);
+
+// حساب النسبة الكلية للإنجاز
+const overallCompletion = computed(() => store.overallCompletionPercentage);
 
 // تحقق من كون المرحلة الحالية هي الأخيرة
 const isLastStep = computed(() => currentStepIndex.value === totalSteps - 1);
 
+// تعريف متغير التحميل للتحكم في حالة الزر "Step"
+const loading = ref(false);
+
 // دالة التنقل للخلف
 const previousStep = () => {
-
   if (currentStepIndex.value > 0) {
     currentStepIndex.value--;
   }
 };
 
 // دالة الانتقال إلى خطوة معينة
-const goToStep = async(index) => {
+const goToStep = async(index: number) => {
   currentStepIndex.value = index;
   try {
     loading.value = true;
@@ -247,35 +232,28 @@ const goToStep = async(index) => {
     console.error("خطأ أثناء الحفظ:", error);
   } finally {
     loading.value = false;
-  }
-   // تحديث الفهرس الحالي
-};
+  }};
 
 // دالة التنقل للأمام (زر "Step")
 const handleStep = async () => {
   try {
     loading.value = true;
     
-    if(currentStepIndex.value===0){
+    if(currentStepIndex.value === 0){
       await store.saveStep1();
     }
-    else if(currentStepIndex.value===1){
+    else if(currentStepIndex.value === 1){
       await store.saveStep2();
-    }else if(currentStepIndex.value===2){
+    }
+    else if(currentStepIndex.value === 2){
       await store.saveStep3();
     }
-    else if(currentStepIndex.value===3){
+    else if(currentStepIndex.value === 3){
       await store.saveStep4();
     }
-    else if(currentStepIndex.value===5){
+    else if(currentStepIndex.value === 5){
       await store.saveStep6();
     }
-    // تحقق مما إذا كانت الخطوة الحالية تحتوي على دالة save
-    // const step = steps[currentStepIndex.value];
-    // if (step.save) {
-    //   await step.save();
-    //   toast.success("تم حفظ البيانات بنجاح.");
-    // }
 
     // الانتقال إلى الخطوة التالية
     if (currentStepIndex.value < totalSteps - 1) {
@@ -309,17 +287,26 @@ const toggleAllStepsModal = () => {
 // مراقبة تغييرات اسم المستند
 const documentName = computed(() => store.documentName);
 
-// تعريف متغير التحميل للتحكم في حالة الزر "Step"
-const loading = ref(false);
-
 // تحميل الوثيقة عند بدء المكون
 onMounted(async () => {
-  loading.value = true;
-  await store.loadDocument();
-  loading.value = false;
+  if(docName.value){
+    store.setDocumentName(docName.value);
+    loading.value = true;
+    await store.loadDocument();
+    loading.value = false;
+  }
+  else{
+    toast.error('لم يتم تحديد اسم المستند.');
+  }
 });
-onUpdated(async () => {
-  await store.loadDocument();
+
+// لو كنت تريد إعادة تحميل البيانات عندما يتغير documentName, استخدم watcher:
+watch(documentName, async (newName) => {
+  if(newName){
+    loading.value = true;
+    await store.loadDocument();
+    loading.value = false;
+  }
 });
 </script>
 
