@@ -17,7 +17,7 @@
 			cy="50%"
 			r="18" 
 			stroke="#e4e4e4" 
-			stroke-width="2"
+			stroke-width="4"
 			fill="none"
 		  />
 		  <!-- دائرة التقدم -->
@@ -26,7 +26,7 @@
 			cy="50%"
 			r="18" 
 			stroke="#81C045" 
-			stroke-width="2"
+			stroke-width="4"
 			fill="none"
 			:stroke-dasharray="circumference"
 			:stroke-dashoffset="offset"
@@ -36,7 +36,8 @@
 		</svg>
 		
 		<!-- محتوى الدائرة (النسبة أو علامة الصح) -->
-		<div class="absolute inset-0 flex items-center justify-center">
+		<div class="absolute inset-0 flex items-center justify-center ">
+			<div class=" rounded-full w-[75%] h-[75%] flex justify-center items-center ">
 		  <span v-if="!complete" class="text-xs font-medium text-mid_gray">
 			{{ percentageCompleted }}%
 		  </span>
@@ -57,6 +58,7 @@
 			  />
 			</svg>
 		  </span>
+		</div>
 		</div>
 	  </div>
   
