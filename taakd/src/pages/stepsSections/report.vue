@@ -343,23 +343,19 @@
 <script setup lang="ts">
 import { AcademicCapIcon, BriefcaseIcon, CheckBadgeIcon } from '@heroicons/vue/24/solid';
 import { useVerificationRequestStore } from '../../stores/verificationRequest'
+import { onUpdated } from 'vue';
 
 const store = useVerificationRequestStore()
 const educationInformation = store.step2.educationInformation
 const employmentHistory = store.step3.employment_history
 const professionalQualification = store.step4.professional_qualification
+
+onUpdated(async () => {
+    await store.loadDocument();
+});
+
 </script>
 
 <style scoped>
-/* @media screen {
-  .printOnly {
-    visibility: hidden !important;
-  }
-}
 
-@media print {
-  .printOnly {
-    visibility: visible !important; 
-  }
-} */
 </style>
