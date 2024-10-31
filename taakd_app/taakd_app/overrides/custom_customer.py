@@ -9,6 +9,7 @@ class CustomCustomer(Customer):
 
     def on_update(self):
         self.manage_user_permissions()
+        self.update_cumulative_invoice_on_user()
         
     def validate(self):
         super(CustomCustomer, self).validate()
@@ -28,14 +29,19 @@ class CustomCustomer(Customer):
         else:
             new_doc = frappe.new_doc("User")
             new_doc.email = self.email
-            new_doc.cumulative_invoice = self.ccumulative_invoice
+            new_doc.cumulative_invoice = self.cumulative_invoice
             new_doc.first_name = self.customer_name
             new_doc.enabled = True
             new_doc.module_profile = ""
             new_doc.role_profile_name = "Company"
             new_doc.insert(ignore_permissions=True)
             return new_doc
-
+        
+    def update_cumulative_invoice_on_user(self):
+        user = self.get_user()
+        user.cumulative_invoice = self.cumulative_invoice
+        user.save()
+        
     def manage_user_permissions(self):
         """
         تدير User Permissions بناءً على Product Bundles الموجودة في Customer Packages.

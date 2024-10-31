@@ -4,6 +4,7 @@
 frappe.ui.form.on("Applicant Invitation", {
     refresh(frm) {
         frm.trigger('package');
+        add_company_information(frm);
     },
     onload: function(frm){
         frm.trigger('package');

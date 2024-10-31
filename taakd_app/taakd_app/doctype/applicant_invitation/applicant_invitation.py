@@ -116,7 +116,7 @@ class ApplicantInvitation(Document):
             frappe.throw(_("Customer is not set. Cannot create Sales Invoice."))   
 
         # التحقق من قيمة ccumulative_invoice و payd_from
-        if self.ccumulative_invoice == 1 and self.payd_from == "Company":
+        if self.cumulative_invoice == 1 and self.payd_from == "Company":
             existing_invoice = self.get_existing_draft_invoice(customer)
             if existing_invoice:
                 # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة مع تجديع الأصناف المتشابهة
@@ -130,6 +130,7 @@ class ApplicantInvitation(Document):
                 sales_invoice = frappe.get_doc({
                     "doctype": "Sales Invoice",
                     "customer": customer,
+                    "docstatus": 0
                 })
                 self.preparing_the_sales_invoice(self.other_services, sales_invoice)
                 sales_invoice.save(ignore_permissions=True)
@@ -140,6 +141,7 @@ class ApplicantInvitation(Document):
             sales_invoice = frappe.get_doc({
                 "doctype": "Sales Invoice",
                 "customer": customer,
+                "docstatus": 1
             })
             self.preparing_the_sales_invoice(self.other_services, sales_invoice)
             sales_invoice.save(ignore_permissions=True)
@@ -159,7 +161,7 @@ class ApplicantInvitation(Document):
             "Sales Invoice",
             {
                 "customer": customer,
-                "docstatus": 0  # 0 تعني المسودة
+                "docstatus":  0
             },
             "name",
             order_by="creation desc"  # للحصول على أحدث فاتورة
