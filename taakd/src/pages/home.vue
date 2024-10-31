@@ -48,7 +48,7 @@
               </Button>
               <!-- </router-link> -->
 
-              <Button v-if="process['report']" type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
+              <Button @click="printDiv"  class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
                 View Report<span class=""></span>
               </Button>
              
@@ -67,6 +67,11 @@
         </BaseContainer>
       </div>
       <JobRequest />
+      <div class="hidden">
+        <div id="yourDivId"  >
+          <Report/>
+        </div>
+      </div>
       <!-- <Review />
       <Verification />
       <Contact :location="location"/> -->
@@ -100,7 +105,7 @@
 
 <script setup>
 import router from '@/router';
-import { ref, watch, reactive, onMounted, onUpdated } from 'vue';
+import { ref, watch, reactive, onMounted, onUpdated,computed } from 'vue';
 import { Button } from 'frappe-ui';
 import BaseContainer from '../components/baseContainer.vue';
 import ProcessItem from './homeSections/processItem.vue';
@@ -116,7 +121,24 @@ import { useVerificationRequestStore } from '../stores/verificationRequest';
 import BackgroundLayout from '../layouts/backgroundLayout.vue';
 import bg1 from '@/assets/bg1.svg';
 import printJS from 'print-js';
+import Report from './stepsSections/report.vue';
+import { useToast } from 'vue-toastification';
 
+// استخدام Pinia store
+// const router = useRouter();
+// const docName = computed(() => store.documentName);
+const toast = useToast();
+
+// دالة العودة
+const goBack = () => {
+  router.push('/steps');
+};
+
+// إضافة المرجع للمحتوى
+const reportContent = ref<null | HTMLElement>(null);
+
+// حالة التحميل
+const isLoading = ref(false);
 
 const store = useVerificationRequestStore();
 
@@ -159,12 +181,22 @@ const alerts = reactive([]);
 
 // تحميل الوثيقة عند بدء المكون
 onMounted(async () => {
-  await store.loadDocument();
+  if(docName.value){
+    store.setDocumentName(docName.value);
+    await store.loadDocument();
+  }
+  else{
+    toast.error('لم يتم تحديد اسم المستند.');
+  }
 });
-
 onUpdated(async () => {
-   store.loadDocument();
-});
+  if(docName.value){
+    store.setDocumentName(docName.value);
+    await store.loadDocument();
+  }
+  else{
+    toast.error('لم يتم تحديد اسم المستند.');
+  }});
 const triggerAlert = function(message) {
   alerts.push({ message });
   setTimeout(() => {
@@ -253,22 +285,18 @@ function fill_the_form_now() {
   // data["اسم الحقل"]["value"]
   // مالم اعرض الرت او عالج الفاليديشن
 
-  // console.log(" ******* data  ********** ",data)
   let validateRes = validateInputContact(data)
   if (validateRes !== true) {
     triggerAlert("يرجى تصحيح الأخطاء في النموذج.");
     return;
   } else {
-    // router.replace({ name: 'steps', query: { fullName: userFullName.value } });
     
     router.replace({ name: 'steps' });
-    // const docName = store.documentName;
-    // router.push({ name: 'steps', params: { docName } });
   }
 }
 
 const requestList = createRequestList(['name', 'user_id','application_status']); 
-const verificationStore = useVerificationRequestStore();
+// const verificationStore = useVerificationRequestStore();
 
 const documentNameValue = ref('');
 
@@ -291,11 +319,12 @@ watch(
    { 
     updateDocumentName(newName.name);
    if(newName.application_status){ getStatusOrder(newName.application_status);}
-    verificationStore.setDocumentName(newName.name);}
+   store.setDocumentName(newName.name);}
   },
   { immediate: true } // تنفيذ المراقبة فور التهيئة
 );
 const printDiv = () => {
+  // store.loadDocument();
   printJS({ 
     printable: 'yourDivId', 
     type: 'html', 
