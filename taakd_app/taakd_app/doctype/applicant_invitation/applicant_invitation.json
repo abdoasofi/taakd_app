@@ -24,10 +24,8 @@
   "company_name",
   "service_package_section",
   "package",
-  "file_image",
-  "description",
   "column_break_kwfj",
-  "d_file_image",
+  "packages",
   "section_break_yslk",
   "other_services",
   "section_break_ovyy",
@@ -178,31 +176,12 @@
    "label": "Total Price"
   },
   {
-   "fetch_from": "package.custom__file_image",
-   "fieldname": "file_image",
-   "fieldtype": "Attach Image",
-   "hidden": 1,
-   "label": " File Image"
-  },
-  {
    "fieldname": "column_break_kwfj",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "d_file_image",
-   "fieldtype": "Image",
-   "label": " D File Image",
-   "options": "file_image"
-  },
-  {
    "fieldname": "section_break_yslk",
    "fieldtype": "Section Break"
-  },
-  {
-   "fetch_from": "package.description",
-   "fieldname": "description",
-   "fieldtype": "Text Editor",
-   "label": "Description"
   },
   {
    "default": "0",
@@ -211,12 +190,18 @@
    "fieldtype": "Check",
    "label": "Cumulative invoice",
    "read_only": 1
+  },
+  {
+   "fieldname": "packages",
+   "fieldtype": "HTML",
+   "label": "Packages",
+   "options": "<div class=\"swiper-container\">\n  <div class=\"swiper-wrapper\" id=\"packages-container\">\n    <!-- \u0633\u064a\u062a\u0645 \u0625\u0636\u0627\u0641\u0629 \u0634\u0631\u0627\u0626\u062d \u0627\u0644\u0633\u0644\u0627\u064a\u062f\u0631 \u0647\u0646\u0627 \u062f\u064a\u0646\u0627\u0645\u064a\u0643\u064a\u064b\u0627 \u0628\u0648\u0627\u0633\u0637\u0629 JavaScript -->\n  </div>\n  <!-- \u0623\u0632\u0631\u0627\u0631 \u0627\u0644\u062a\u0646\u0642\u0644 -->\n  <div class=\"swiper-button-next\"></div>\n  <div class=\"swiper-button-prev\"></div>\n  <!-- \u0634\u0631\u064a\u0637 \u0627\u0644\u062a\u0642\u062f\u0645 -->\n  </div>"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-28 00:56:00.073937",
+ "modified": "2024-11-02 12:25:03.695828",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",

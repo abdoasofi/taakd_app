@@ -1,3 +1,5 @@
+# applicant_invitation.py
+
 # Copyright (c) 2024, Asofi and contributors
 # For license information, please see license.txt
 
@@ -119,7 +121,7 @@ class ApplicantInvitation(Document):
         if self.cumulative_invoice == 1 and self.payd_from == "Company":
             existing_invoice = self.get_existing_draft_invoice(customer)
             if existing_invoice:
-                # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة مع تجديع الأصناف المتشابهة
+                # إذا وجدت فاتورة مسودة، نضيف إليها الأصناف الجديدة مع تجميع الأصناف المتشابهة
                 sales_invoice = frappe.get_doc("Sales Invoice", existing_invoice)
                 self.preparing_the_sales_invoice(self.other_services, sales_invoice)
                 sales_invoice.save(ignore_permissions=True)
@@ -257,8 +259,9 @@ class ApplicantInvitation(Document):
         return {
             "company_name": user.full_name,
             "cumulative_invoice": user.cumulative_invoice,
-            "company_email": user.email if user.full_name != "Administrator" else "administrator"
+            "company_email": user.email if user.full_name != "Administrator" else "administrator@example.com"
         }
+
     @frappe.whitelist()
     def get_filtered_item_codes(self):
         try:
@@ -274,3 +277,14 @@ class ApplicantInvitation(Document):
         except Exception as e:
             frappe.log_error(frappe.get_traceback(), "Error in get_filtered_item_codes")
             return []  # Return an empty list on error
+
+    @frappe.whitelist()
+    def get_packages(self):
+        packages = frappe.get_list("Product Bundle", fields=["name", "file_image", "description"])
+        # تحويل المسارات إلى روابط كاملة إذا كانت مسارات نسبية
+        for pkg in packages:
+            if pkg.file_image:
+                # تحقق مما إذا كانت الصورة تبدأ بـ "/"
+                if not pkg.file_image.startswith("/"):
+                    pkg.file_image = "/" + pkg.file_image
+        return packages
