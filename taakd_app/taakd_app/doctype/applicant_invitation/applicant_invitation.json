@@ -23,10 +23,9 @@
   "column_break_oowb",
   "company_name",
   "service_package_section",
-  "package",
-  "column_break_kwfj",
   "packages",
   "section_break_yslk",
+  "package",
   "other_services",
   "section_break_ovyy",
   "package_price",
@@ -176,10 +175,6 @@
    "label": "Total Price"
   },
   {
-   "fieldname": "column_break_kwfj",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "section_break_yslk",
    "fieldtype": "Section Break"
   },
@@ -201,7 +196,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-11-02 12:25:03.695828",
+ "modified": "2024-11-02 23:16:49.474755",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Invitation",

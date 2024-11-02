@@ -1,6 +1,5 @@
 // applicant_invitation.js
-// // Copyright (c) 2024, Asofi and contributors
-// // For license information, please see license.txt
+
 frappe.ui.form.on("Applicant Invitation", {
     refresh(frm) {
         frm.trigger('package');
@@ -8,8 +7,8 @@ frappe.ui.form.on("Applicant Invitation", {
         if (!frm.slider_initialized) {
             frm.slider_initialized = true;
 
-            // تحميل Swiper CSS و JS إذا لم يتم تحميله مسبقًا
-            load_swiper_assets(frm);
+            // تهيئة السلايدر بعد تحميل النموذج
+            initialize_slider(frm);
         }
     },
     onload: function(frm){
@@ -95,34 +94,6 @@ function add_company_information(frm) {
     });
 }
 
-function load_swiper_assets(frm) {
-    // تحميل Swiper CSS إذا لم يتم تحميله مسبقًا
-    if (!document.querySelector('link[href="https://unpkg.com/swiper/swiper-bundle.min.css"]')) {
-        let swiperCSS = document.createElement('link');
-        swiperCSS.rel = 'stylesheet';
-        swiperCSS.href = 'https://unpkg.com/swiper/swiper-bundle.min.css';
-        document.head.appendChild(swiperCSS);
-    }
-
-    // تحميل Swiper JS إذا لم يتم تحميله مسبقًا
-    if (!document.querySelector('script[src="https://unpkg.com/swiper/swiper-bundle.min.js"]')) {
-        let swiperJS = document.createElement('script');
-        swiperJS.src = 'https://unpkg.com/swiper/swiper-bundle.min.js';
-        swiperJS.onload = function() {
-            initialize_slider(frm);
-        };
-        document.body.appendChild(swiperJS);
-    } else {
-        if (typeof Swiper !== 'undefined') {
-            initialize_slider(frm);
-        } else {
-            document.querySelector('script[src="https://unpkg.com/swiper/swiper-bundle.min.js"]').addEventListener('load', function() {
-                initialize_slider(frm);
-            });
-        }
-    }
-}
-
 function initialize_slider(frm) {
     // التأكد من وجود حقل HTML
     let html_field = frm.get_field('packages');
@@ -171,7 +142,7 @@ function initialize_slider(frm) {
 
                 packages.forEach(pkg => {
                     // استخدام الرابط الكامل للصورة
-                    let image_src = pkg.file_image ? frappe.utils.get_file_link(pkg.file_image) : '/assets/your_app_name/images/default.png'; // تأكد من استبدال 'your_app_name' باسم تطبيقك
+                    let image_src = pkg.file_image ? frappe.utils.get_file_link(pkg.file_image) : '/assets/your_app/images/default.png'; // تأكد من استبدال 'your_app' باسم التطبيق الخاص بك
 
                     const slide = `
                         <div class="swiper-slide">
