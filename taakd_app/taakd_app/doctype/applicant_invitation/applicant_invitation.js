@@ -153,8 +153,15 @@ function load_packages(frm) {
 function initialize_swiper(frm) {
     const html_field = frm.get_field('packages');
     var swiperInstance = new Swiper(html_field.$wrapper.find('.swiper-container')[0], {
-        slidesPerView: 1,
+        slidesPerView: 1, // عرض بطاقة واحدة فقط
         spaceBetween: 30,
+        effect: 'cube',
+        cubeEffect: {
+          shadow: true,
+          slideShadows: true,
+          shadowOffset: 20,
+          shadowScale: 0.94,
+        },
         loop: true,
         pagination: {
             el: html_field.$wrapper.find('.swiper-pagination')[0],
@@ -164,6 +171,13 @@ function initialize_swiper(frm) {
             nextEl: html_field.$wrapper.find('.swiper-button-next')[0],
             prevEl: html_field.$wrapper.find('.swiper-button-prev')[0],
         },
+        keyboard: {
+            enabled: true,          // تمكين التحكم باللوحة المفاتيح
+            onlyInViewport: true,   // السماح بالتحكم فقط عندما يكون السلايدر في العرض
+          },
+          mousewheel: {
+            invert: false,            // عكس اتجاه التمرير إذا لزم الأمر
+          },
     });
 
     html_field.$wrapper.find('.select-package').off('click').on('click', function() {
@@ -176,9 +190,12 @@ function initialize_swiper(frm) {
         let style = document.createElement('style');
         style.id = 'slider-styles';
         style.innerHTML = `
+            /* توحيد مقاسات البطاقات */
             .card {
-                width: 300px;  
-                height: 400px; 
+                width: 100%; /* استخدام 100% ضمن السلايدر */
+                max-width: 400px; /* أقصى عرض للبطاقة */
+                height: 100%; /* استخدام 100% لضمان التناسب */
+                min-height: 450px; /* ارتفاع أدنى */
                 border: none;
                 border-radius: 15px; 
                 overflow: hidden;
@@ -208,16 +225,18 @@ function initialize_swiper(frm) {
             }
             .card-title {
                 font-family: 'Arial', sans-serif;
-                font-size: 1.25rem;
+                font-size: 1.5rem; /* حجم أكبر للعناوين */
                 color: #333;
+                margin-bottom: 10px;
             }
             .card-text {
-                font-size: 0.9rem;
+                font-size: 1rem;
                 color: #666;
+                flex-grow: 1;
             }
             .select-package {
                 width: 100%;
-                margin-top: 10px;
+                margin-top: 20px;
                 background-color: #28a745; 
                 color: white;
                 border: none;
@@ -225,6 +244,7 @@ function initialize_swiper(frm) {
                 padding: 10px;
                 transition: background-color 0.3s; 
                 font-weight: bold; 
+                cursor: pointer;
             }
             .select-package:hover {
                 background-color: #218838; 
@@ -238,6 +258,52 @@ function initialize_swiper(frm) {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+            }
+            .swiper-button-next {
+            background-color: #00b64a00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            }
+            .swiper-button-prev {
+            background-color: #00b64a00;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            }  
+            /* تحسين التجاوب */
+            @media (max-width: 768px) {
+                .card {
+                    max-width: 90%;
+                    min-height: 400px;
+                }
+                .card-title {
+                    font-size: 1.3rem;
+                }
+                .card-text {
+                    font-size: 0.95rem;
+                }
+                .select-package {
+                    padding: 8px;
+                    margin-top: 15px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .card {
+                    max-width: 100%;
+                    min-height: 350px;
+                }
+                .card-title {
+                    font-size: 1.1rem;
+                }
+                .card-text {
+                    font-size: 0.9rem;
+                }
+                .select-package {
+                    padding: 6px;
+                    margin-top: 10px;
+                }
             }
         `;
         document.head.appendChild(style);
