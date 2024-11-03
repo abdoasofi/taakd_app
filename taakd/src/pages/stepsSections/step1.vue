@@ -2,25 +2,25 @@
 <!-- /pages/stepsSections/step1.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">Personal Information</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('personal_information') }}</h1>
     <ul>
-      <li>All fields marked with an asterisk ( * ) are required.</li>
-      <li>Providing your information as completely and accurately as possible will help speed up the completion of your Background Verification</li>
+      <li>{{ $t('required_fields') }}</li>
+      <li>{{ $t('provide_information') }}</li>
     </ul>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">Name</h1>
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('name_label') }}</h1>
       <Info
-        text="Please provide your name exactly as it appears on your current government-issued identification document such as your Passport, Driver’s License or National Identification Document"
+        :text="$t('name_info')"
       />
     </div>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          labelText="Employer Name"
+          :labelText="$t('employer_name')"
           :isMandatory="true"
-          infoText="Employer Name"
+          :infoText="$t('employer_info')"
           inputType="text"
           v-model="employerName"
           :isValid="store.step1.employer_name.isValid"
@@ -28,13 +28,13 @@
           name="employer_name"
           id="EmployerName"
         />
-        <SupportingText>Supporting text</SupportingText>
+        <SupportingText>{{ $t('supporting_text') }}</SupportingText>
       </FieldContainer>
       <FieldContainer>
         <StyledInput
-          labelText="First Name"
+          :labelText="$t('first_name')"
           :isMandatory="true"
-          infoText="First Name"
+          :infoText="$t('first_name_info')"
           inputType="text"
           v-model="firstName"
           :isValid="store.step1.first_name.isValid"
@@ -51,14 +51,14 @@
         id="dont_middle_name"
         v-model="dontMiddleName" 
       >
-        I certify that I do not have a Middle Name on my official identification document
+        {{ $t('certify_no_middle_name') }}
       </CheckBox>
     </FieldContainer>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer v-if="!dontMiddleName">
         <StyledInput
-          labelText="Middle Name"
+          :labelText="$t('middle_name')"
           inputType="text"
           v-model="middleName"
           :isValid="store.step1.middle_name.isValid"
@@ -72,9 +72,9 @@
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          labelText="Last Name"
+          :labelText="$t('last_name')"
           :isMandatory="true"
-          infoText="Last Name"
+          :infoText="$t('last_name')"
           inputType="text"
           v-model="lastName"
           :isValid="store.step1.last_name.isValid"
@@ -84,7 +84,7 @@
         />
       </FieldContainer>
       <FieldContainer>
-        <!-- <Autocomp
+      <!-- <Autocomp
           id="suffix"
           name="suffix"
           labelText="Suffix"
@@ -97,9 +97,9 @@
           :validationMessage="store.step1.suffix.validationMessage"
         /> -->
         <Select
-              labelText="Suffix"
+              :labelText="$t('suffix')"
               :isMandatory="true"
-              infoText="Select your suffix"
+              :infoText="$t('select_suffix')"
               id="suffix"
               name="suffix"
               :options="suffixOptions"
@@ -116,8 +116,8 @@
         <Autocomp
           name="country_now"
           id="country"
-          labelText="Country"
-          infoText="Select your country"
+          :labelText="$t('country')"
+          :infoText="$t('select_country')"
           inputType="text"
           :options="optionCountry"
           @input-change="handleCountryChange"
@@ -130,9 +130,8 @@
         <Textarea
           id="street_address"
           name="street_address"
-          labelText="Street Address"
-          labelColor="blue"
-          infoText="Street Address"
+          :labelText="$t('street_address')"
+          :infoText="$t('street_address_info')"
           size="xl"
           v-model="streetAddress"
           :isValid="store.step1.street_address.isValid"
@@ -144,8 +143,8 @@
         <Autocomp
           name="city"
           id="city"
-          labelText="City"
-          infoText="City"
+          :labelText="$t('city')"
+          :infoText="$t('select_city')"
           inputType="text"
           :options="optionCity"
           @input-change="handleCityChange"
@@ -158,8 +157,8 @@
         <Autocomp
           name="governorate"
           id="governorate"
-          labelText="Governorate"
-          infoText="Governorate"
+          :labelText="$t('governorate')"
+          :infoText="$t('select_governorate')"
           inputType="text"
           :options="optionGovernorate"
           @input-change="handleGovernorateChange"
@@ -171,9 +170,9 @@
 
       <FieldContainer>
         <StyledInput
-          labelText="Location Text"
+          :labelText="$t('location_text')"
           :isMandatory="true"
-          infoText="Location Text"
+          :infoText="$t('location_text')"
           inputType="text"
           v-model="locationText"
           :isValid="store.step1.location_text.isValid"
@@ -184,9 +183,9 @@
       </FieldContainer>
       <FieldContainer>
         <StyledInput
-          labelText="Zip Code"
+          :labelText="$t('zip_code')"
           :isMandatory="true"
-          infoText="Zip Code"
+          :infoText="$t('zip_code')"
           inputType="text"
           v-model="zipCode"
           :isValid="store.step1.zip_code.isValid"
@@ -200,9 +199,9 @@
         <StyledInput 
           id="date_living_address" 
           name="date_living_address" 
-          labelText="Date you started living at this address" 
+          :labelText="$t('date_living_address')" 
           :isMandatory="true" 
-          infoText="End date of your education." 
+          :infoText="$t('date_living_address_info')" 
           inputType="date" 
           v-model="dateLivingAddress"
           :isValid="store.step1.zip_code.isValid"
@@ -217,31 +216,27 @@
         id="this_is_my_name_column" 
         v-model="thisIsMyNameColumn"
       >
-        I certify this is my current legal name, exactly as it is displayed on my government-issued identification document *
+        {{ $t('certify_current_name') }}
       </CheckBox>
     </FieldContainer>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium text-black">Alias Name</h1>
+      <h1 class="text-lg font-medium text-black">{{ $t('alias_name') }}</h1>
       <Info
-        text="Skip this section if you do not have any alias names.        
-        Please provide:
-        Any other names appearing on government-issued identity documents where that name differs from your primary identity document; or
-        A prior legal name which can include your birth surname or any official change to a legal name; or
-        A name that you use in an “official” capacity."
+        :text="$t('alias_info')"
       />    
     </div>
 
     <!-- إضافة قسم Alias Name -->
     <div class="lg:grid grid-cols-1 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">Alias Name</h1>
-      <Info text="Please provide your alias name." />
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('alias_name') }}</h1>
+      <Info :text="$t('provide_alias_name')" />
 
       <!-- جدول فرعي لAlias Name -->
       <div v-for="(alias, index) in aliasNames" :key="alias.id" class="flex items-center mb-2">
         <FieldContainer>
           <StyledInput
-            labelText="Full Name"
+            :labelText="$t('full_name')"
             inputType="text"
             v-model="aliasNames[index].first_name"
             :isValid="true"
@@ -253,7 +248,7 @@
         </FieldContainer>
         <FieldContainer>
           <StyledInput
-            labelText="Middle Name"
+            :labelText="$t('middle_name')"
             inputType="text"
             v-model="aliasNames[index].middle_name"
             :isValid="true"
@@ -265,7 +260,7 @@
         </FieldContainer>
         <FieldContainer>
           <StyledInput
-            labelText="Last Name"
+            :labelText="$t('last_name')"
             inputType="text"
             v-model="aliasNames[index].last_name"
             :isValid="true"
@@ -278,22 +273,22 @@
 
         <!-- زر حذف Alias Name -->
         <Button @click="removeAliasName(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          Remove
+          {{ $t('remove') }}
         </Button>
       </div>
 
       <!-- زر إضافة Alias Name جديد -->
       <Button @click="addAliasName" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Add Alias Name
+        {{ $t('add_alias_name') }}
       </Button>
     </div>
 
     <div class="lg:grid grid-cols-1 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          labelText="Email"
+          :labelText="$t('email')"
           :isMandatory="true"
-          infoText="Please enter your email address"
+          :infoText="$t('email_info')"
           inputType="email"
           name="email"
           id="email"
@@ -303,20 +298,20 @@
         />
       </FieldContainer>
       <Info
-        text="Taakd may occasionally need to contact you for clarification of items on your Background Verification. We will never share or sell your email address."
+        :text="$t('email_privacy_info')"
       />    
     </div>
 
     <!-- إضافة قسم أرقام الهواتف -->
     <div class="lg:grid grid-cols-1 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">Phone Numbers</h1>
-      <Info text="Please provide your phone numbers. You can add multiple phone numbers." />
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('phone_numbers') }}</h1>
+      <Info :text="$t('provide_phone_numbers')" />
 
       <!-- جدول فرعي لأرقام الهواتف -->
       <div v-for="(phone, index) in phoneNumbers" :key="index" class="flex items-center mb-2">
         <FieldContainer>
           <StyledInput
-            labelText="Phone"
+            :labelText="$t('phone')"
             inputType="text"
             v-model="phoneNumbers[index].phone"
             :isValid="true"
@@ -328,31 +323,30 @@
         </FieldContainer>
         <!-- زر حذف رقم الهاتف -->
         <Button @click="removePhoneNumber(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          Remove
+          {{ $t('remove') }}
         </Button>
       </div>
 
       <!-- زر إضافة رقم هاتف جديد -->
       <Button @click="addPhoneNumber" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        Add Phone Number
+        {{ $t('add_phone_number') }}
       </Button>
     </div>
 
     <div class="lg:grid grid-ows-2 lg:gap-2">
-      <h1 class="text-lg font-medium text-black">Identification</h1>
+      <h1 class="text-lg font-medium text-black">{{ $t('identification') }}</h1>
       <Info
-        text="Most public records are stored using your name and birth date, so providing this information allows us to accurately search these sources."
+        :text="$t('identification_info')"
       />
     </div>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
-      <!-- Date of Birth -->
       <FieldContainer>
         <StyledInput 
           id="date_of_birth" 
           name="date_of_birth" 
-          labelText="Date of Birth" 
-          infoText="Start date of your education." 
+          :labelText="$t('date_of_birth')" 
+          :infoText="$t('date_of_birth_info')" 
           inputType="date" 
           v-model="dateOfBirth"
           :isValid="store.step1.date_of_birth.isValid"
@@ -363,8 +357,8 @@
 
     <!-- <div class="pt-5 flex w-full justify-center">
       <Button level="other" @click="save" :disabled="loading" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        <span v-if="loading">جاري الحفظ...</span>
-        <span v-else>save -></span>
+        <span v-if="loading">{{ $t('saving') }}</span>
+        <span v-else>{{ $t('save') }}</span>
       </Button>
     </div> -->
   </div>
@@ -385,26 +379,30 @@ import Textarea from '../../components/textarea.vue';
 import { useLocation } from '../../stores/locations';
 import { v4 as uuidv4 } from 'uuid';
 import Select from '../../components/select.vue';
+import { useI18n } from 'vue-i18n'; // قمنا بإضافة استيراد useI18n
 
 const store = useVerificationRequestStore();
 const toast = useToast();
 const locations = useLocation();
 const location = locations.getLocation();
 
+// استخدام i18n
+const { t } = useI18n();
+
 const loading = ref(false);
 const phoneNumbers = ref([{id: uuidv4(), phone: '' }]);
 const aliasNames = ref([{ id: uuidv4(), first_name: '', last_name: '', middle_name: '' }]);
 // onUpdated(async () => {
 //    store.loadStep1Fields();
-// });
-const suffixOptions =reactive([
+// });s
+const suffixOptions = reactive([
   { label: 'Jr.', value: 'Jr.' },
   { label: 'Sr.', value: 'Sr.' },
   { label: 'III', value: 'III' },
   { label: 'PhD', value: 'PhD' },
   { label: 'MD', value: 'MD' },
   { label: 'Esq.', value: 'Esq.' },
-])
+]);
 
 const optionCountry = computed(() => {
   if (location && location.data) {
@@ -442,6 +440,7 @@ const optionGovernorate = computed(() => {
   return [];
 });
 
+// تعريف الحقول مع استخدام الدالة t للترجمة
 const employerName = computed({
   get: () => store.step1.employer_name.value,
   set: (val: string) => store.updateStep1('employer_name', { value: val }),
@@ -524,29 +523,24 @@ const dateOfBirth = computed({
 
 //Funciones for handling user inputs
 
-
-// معالجة تغيير اختيار الدولة
 const handleCountryChange = (value) => {
-  // store.step1.country_now.value=value.value
   store.updateStep1('country_now', { value: value.value });
 };
 
 const handleCityChange = (value) => {
-  // store.step1.city.value=value.value
   store.updateStep1('city', { value: value.value });
 };
 
 const handleGovernorateChange = (value) => {
-  // store.step1.governorate.value=value.value
   store.updateStep1('governorate', { value: value.value });
 };
 
 const handleSuffix  = (value) => {
-  // store.step1.suffix.value=value.value
   store.updateStep1('suffix', { value: value.value });
 };
+
 const addPhoneNumber = () => {
-  phoneNumbers.value.push({ id: uuidv4(), phone: '' } );
+  phoneNumbers.value.push({ id: uuidv4(), phone: '' });
 };
 
 const removePhoneNumber = (index) => {
@@ -554,7 +548,7 @@ const removePhoneNumber = (index) => {
 };
 
 const updatePhoneNumber = (index, phone) => {
-  store.updatePhoneNumber(index,phone);
+  store.updatePhoneNumber(index, phone);
 };
 
 const addAliasName = () => {

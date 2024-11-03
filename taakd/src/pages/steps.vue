@@ -6,9 +6,8 @@
     <div class="col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
         <div class="pb-3 font-medium text-primary text-base">
-          <p>اسم المستند: {{ docName }}</p>
-          <!-- عرض النسبة الكلية للإنجاز -->
-          <p v-if="docName"> Model steps instructions of Job Request {{ overallCompletion }}% Completed</p>
+          <p>{{ $t('document_name') }}: {{ docName }}</p>
+          <p v-if="docName">{{ $t('model_steps_instructions') }} {{ overallCompletion }}% {{ $t('completed') }}</p>
         </div>
         <div class="py-3 grid grid-cols-6 lg:flex lg:flex-col lg:gap-4 w-full">
           <StepIcon
@@ -16,15 +15,15 @@
             :key="index"
             :process="currentStepIndex === index"
             :complete="currentStepIndex > index"
-            :label="'Step ' + (index + 1)"
+            :label="`${$t('step')} ${index + 1}`"
             :desc="step.description"
-            :percentageCompleted="stepsCompletionPercentages[index + 1]" 
+            :percentageCompleted="stepsCompletionPercentages[index + 1]"
             @click="goToStep(index)"
           />
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-base">
           <button @click="toggleAllStepsModal">
-            All Steps ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
+            {{ $t('all_steps') }} ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
           </button>
         </div>
       </div>
@@ -53,7 +52,7 @@
             <rect x="14.0365" y="40.5166" width="37.449" height="37.449" transform="rotate(-45 14.0365 40.5166)" stroke="#81C045" stroke-width="5"/>
           </g>
         </svg>
-        <div class="text-xs text-[#1D1B20]">Auto Saving</div> 
+        <div class="text-xs text-[#1D1B20]">{{ $t('auto_saving') }}</div> 
       </div>
 
       <!-- Navigation Buttons -->
@@ -67,14 +66,14 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-          {{ 'Step ' + currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+          {{ $t('step') }} {{ currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
         <Button 
           level="primary" 
           @clicked="handleStep" 
         >
-          Step {{ currentStepIndex + 1 }} &rarr; <!-- عرض رقم المرحلة الحالية -->
+          {{ $t('step') }} {{ currentStepIndex + 1 }} &rarr; <!-- عرض رقم المرحلة الحالية -->
         </Button>
       </div>
 
@@ -89,13 +88,11 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-          {{ 'Step ' + currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+          {{ $t('step') }} {{ currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
-        <Button level="other" @clicked="reject"> Reject </Button>
-        <Button level="other" @clicked="accept" >
-          Accept
-        </Button>
+        <Button level="other" @clicked="reject">{{ $t('reject') }}</Button>
+        <Button level="other" @clicked="accept">{{ $t('accept') }}</Button>
       </div>
     </div>
   </div>
@@ -213,7 +210,6 @@ const goToStep = async(index: number) => {
     loading.value = true;
     
     if(currentStepIndex.value===1){
-      store.validateStep1
       await store.saveStep1();
     }
     else if(currentStepIndex.value===2){
@@ -227,12 +223,13 @@ const goToStep = async(index: number) => {
     else if(currentStepIndex.value===6){
       await store.saveStep6();
     }
- 
+
   } catch (error) {
     console.error("خطأ أثناء الحفظ:", error);
   } finally {
     loading.value = false;
-  }};
+  }
+};
 
 // دالة التنقل للأمام (زر "Step")
 const handleStep = async () => {
@@ -269,7 +266,6 @@ const handleStep = async () => {
 // دالة قبول الطلب في خطوة 6
 const accept = async () => {
   toast.success("تم قبول الطلب بنجاح.");
-  // يمكن تنفيذ منطق إضافي هنا إذا لزم الأمر
 };
 
 // دالة رفض الطلب

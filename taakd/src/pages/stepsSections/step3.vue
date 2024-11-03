@@ -1,11 +1,11 @@
 <!-- src/pages/stepsSections/step3.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">Employment History</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('employment_history') }}</h1>
     <ul>
-      <li>All fields marked with an asterisk ( * ) are required.</li>
+      <li>{{ $t('required_fields') }}</li>
       <li>
-        Please provide your employment history, beginning with the most recent. To add additional employers, click the "Add" icon.
+        {{ $t('provide_employment_info') }}
       </li>
     </ul>
   </div>
@@ -15,36 +15,36 @@
     <FieldsToggleContainer
       v-for="(employment, index) in employmentHistory"
       :key="employment.employment_id"
-      :title="employment.company || `Employment ${index + 1}`"
+      :title="employment.company || `${$t('employment')} ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Company Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Company"
+            :labelText="$t('company')"
             :isMandatory="true"
-            infoText="Company"
+            :infoText="$t('company')"
             inputType="text"
             name="company"
             :id="`company-${employment.employment_id}`"
             v-model="employment.company"
             :isValid="validateCompany(employment.company)"
-            validationMessage="Company name is required."
+            :validationMessage="$t('required_company')"
           />
         </FieldContainer> 
 
         <!-- Name of Employer Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Name of Your Employer"
+            :labelText="$t('name_of_your_employer')"
             :isMandatory="true"
-            infoText="Name of Your Employer"
+            :infoText="$t('name_of_your_employer')"
             inputType="text"
             name="name_of_your_employer"
             :id="`name_of_your_employer-${employment.employment_id}`"
             v-model="employment.name_of_your_employer"
             :isValid="validateNameOfYourEmployer(employment.name_of_your_employer)"
-            validationMessage="Name of Your Employer is required."
+            :validationMessage="$t('required_name_of_your_employer')"
           />
         </FieldContainer> 
       </div>
@@ -57,7 +57,7 @@
             :id="`contact_the_employer-${employment.employment_id}`" 
             v-model="employment.contact_the_employer"
           >
-            Do we have permission to contact this current employer?
+            {{ $t('permission_to_contact') }}
           </CheckBox>
         </FieldContainer>
 
@@ -68,7 +68,7 @@
             :id="`issuing_salary-${employment.employment_id}`" 
             v-model="employment.issuing_salary"
           >
-            Does this employer issue your paycheck? 
+            {{ $t('issuing_salary') }}
           </CheckBox>
         </FieldContainer>
       </div>
@@ -78,9 +78,9 @@
         <!-- Country Autocomplete -->
         <FieldContainer>
           <Autocomp
-            labelText="Country"
+            :labelText="$t('country')"
             :isMandatory="true"
-            infoText="Country"
+            :infoText="$t('country')"
             inputType="text"
             name="country"
             :id="`country-${employment.employment_id}`"
@@ -88,16 +88,16 @@
             v-model="employment.country"
             @input-change="(value) => handleCountryChange(index, value)"
             :isValid="validateCountry(employment.country)"
-            validationMessage="Country is required."
+            :validationMessage="$t('required_country')"
           />
         </FieldContainer>  
 
         <!-- City Autocomplete -->
         <FieldContainer>
           <Autocomp
-            labelText="City"
+            :labelText="$t('city')"
             :isMandatory="true"
-            infoText="City"
+            :infoText="$t('city')"
             inputType="text"
             name="city"
             :id="`city-${employment.employment_id}`"
@@ -105,16 +105,16 @@
             v-model="employment.city"
             @input-change="(value) => handleCityChange(index, value)"
             :isValid="validateCity(employment.city)"
-            validationMessage="City is required."
+            :validationMessage="$t('required_city')"
           />
         </FieldContainer>
 
         <!-- Governorate Autocomplete -->
         <FieldContainer>
           <Autocomp
-            labelText="Governorate"
+            :labelText="$t('governorate')"
             :isMandatory="true"
-            infoText="Governorate"
+            :infoText="$t('governorate')"
             inputType="text"
             name="governorate"
             :id="`governorate-${employment.employment_id}`"
@@ -122,21 +122,21 @@
             v-model="employment.governorate"
             @input-change="(value) => handleGovernorateChange(index, value)"
             :isValid="validateGovernorate(employment.governorate)"
-            validationMessage="Governorate is required."
+            :validationMessage="$t('required_governorate')"
           />
         </FieldContainer>
 
         <!-- Location Text of Employer Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Location Text"
+            :labelText="$t('location_text')"
             :isMandatory="false"
-            infoText="Location Text"
+            :infoText="$t('location_text')"
             inputType="text"
             name="location_text"
             :id="`location_text-${employment.employment_id}`"
             v-model="employment.location_text"
-            validationMessage="You can edit the message."
+            :validationMessage="$t('edit_message')"
           />
         </FieldContainer> 
       </div>
@@ -150,7 +150,7 @@
             :id="`continuous-${employment.employment_id}`" 
             v-model="employment.continuous"
           >
-            Continuous
+            {{ $t('continuous') }}
           </CheckBox>
         </FieldContainer>   
 
@@ -161,7 +161,7 @@
             :id="`activity_has_stopped-${employment.employment_id}`" 
             v-model="employment.activity_has_stopped"
           >
-            Activity Has Stopped
+            {{ $t('activity_has_stopped') }}
           </CheckBox>
         </FieldContainer> 
       </div>
@@ -172,9 +172,9 @@
           <StyledInput 
             id="from_date" 
             name="from_date" 
-            labelText="From" 
+            :labelText="$t('from_date')" 
             :isMandatory="true" 
-            infoText="From Date" 
+            :infoText="$t('from_date_info')" 
             inputType="date" 
             v-model="employment.from_date" 
             :isValid="validateFromDate(employment.from_date)"
@@ -186,9 +186,9 @@
           <StyledInput 
             id="end_date" 
             name="end_date" 
-            labelText="End" 
+            :labelText="$t('end_date')" 
             :isMandatory="true" 
-            infoText="End Date" 
+            :infoText="$t('end_date_info')" 
             inputType="date" 
             v-model="employment.end_date"
             :isValid="validateEndDate(employment.end_date)" 
@@ -200,29 +200,29 @@
         <!-- Phone Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Phone"
+            :labelText="$t('phone')"
             :isMandatory="true"
-            infoText="+999-77885951"
+            :infoText="$t('phone_example')"
             inputType="text"
             name="phone"
             :id="`phone-${employment.employment_id}`"
             v-model="employment.phone"
             :isValid="validatePhone(employment.phone)" 
-            validationMessage="Valid phone number is required."
+            :validationMessage="$t('valid_phone_required')"
           />
         </FieldContainer>
 
         <!-- Ext Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Ext"
-            :isMandatory="false"
-            infoText="Ext"
-            inputType="text"
-            name="ext"
-            :id="`ext-${employment.employment_id}`"
-            v-model="employment.ext"
-            validationMessage="You can edit the message."
+            :labelText="$t('ext')" 
+            :isMandatory="false" 
+            :infoText="$t('extension_optional')" 
+            inputType="text" 
+            name="ext" 
+            :id="`ext-${employment.employment_id}`" 
+            v-model="employment.ext" 
+            :validationMessage="$t('edit_message')"
           />
         </FieldContainer>      
       </div>
@@ -231,31 +231,31 @@
         <!-- Official Job Title Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Official Job Title Held Currently"
+            :labelText="$t('official_job_title_held_currently')"
             :isMandatory="true"
-            infoText="Official Job Title Held Currently"
+            :infoText="$t('official_job_title_info')"
             inputType="text"
             name="official_job_title_held_currently"
             :id="`official_job_title_held_currently-${employment.employment_id}`"
             v-model="employment.official_job_title_held_currently"
             :isValid="validateOfficialJobTitleHeldCurrently(employment.official_job_title_held_currently)" 
-            validationMessage="Official Job Title is required."
+            :validationMessage="$t('required_official_job_title')"
           />
         </FieldContainer> 
 
         <!-- Type of Employment Select -->
         <FieldContainer>
           <Autocomp
-            labelText="Type of Employment"
+            :labelText="$t('type_of_employment')"
             :isMandatory="false"
-            infoText="Type of Employment"
+            :infoText="$t('type_of_employment_info')"
             inputType="text"
             name="type_of_employment"
             :id="`type_of_employment-${employment.employment_id}`"
             v-model="employment.type_of_employment"
             @input-change="(value) => handleTypeOfEmployment(index, value)"
             :isValid="validateTypeOfEmployment(employment.type_of_employment)"
-            validationMessage="Type of Employment is required."
+            :validationMessage="$t('required_type_of_employment')"
           />
         </FieldContainer>  
       </div>
@@ -268,7 +268,7 @@
             :id="`the_company_has_different_names-${employment.employment_id}`" 
             v-model="employment.the_company_has_different_names"
           >
-            The Company has Different Names
+            {{ $t('the_company_has_different_names') }}
           </CheckBox>
         </FieldContainer> 
 
@@ -279,7 +279,7 @@
             :id="`nickname_checkbox-${employment.employment_id}`" 
             v-model="employment.you_have_a_nicknamecx"
           >
-            You Have a Nickname?
+            {{ $t('you_have_a_nickname') }}
           </CheckBox>
         </FieldContainer> 
       </div>
@@ -288,30 +288,30 @@
         <!-- Different Company Names Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Different Company Names"
+            :labelText="$t('different_company_names')"
             :isMandatory="false"
-            infoText="Different Company Names"
+            :infoText="$t('different_company_names_info')"
             inputType="text"
             name="different_company_names"
             :id="`different_company_names-${employment.employment_id}`"
             v-model="employment.different_company_names"
             :isValid="false"
-            validationMessage="You can edit the message."
+            :validationMessage="$t('edit_message')"
           />
         </FieldContainer>  
 
         <!-- Nickname Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Nickname"
+            :labelText="$t('nickname')"
             :isMandatory="false" 
-            infoText="Nickname"
+            :infoText="$t('nickname_info')"
             inputType="text"
             name="nickname"
             :id="`nickname-${employment.employment_id}`"
             v-model="employment.nickname"
             :isValid="false"
-            validationMessage="You can edit the message."
+            :validationMessage="$t('edit_message')"
           />
         </FieldContainer>         
       </div>
@@ -323,7 +323,7 @@
             v-model="employment.file"
             :id="`file-${employment.employment_id}`"
             :name="employment.employment_id" 
-            validationMessage="Please select a valid file."
+            :validationMessage="$t('valid_file_required')"
           />
         </FieldContainer>
       </div>
@@ -336,7 +336,7 @@
 
     <!-- Add Employment Button -->
     <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addEmployment">+ Add Employment History</Button>
+      <Button level="secondary" @clicked="addEmployment">+ {{ $t('add_employment_history') }}</Button>
     </div>
   </div>
 </template>
@@ -507,7 +507,7 @@ const validateOfficialJobTitleHeldCurrently = (official_job_title_held_currently
 
 // دالة لإضافة سجل توظيف جديد
 const addEmployment = () => {
-  const newEmployment: EmploymentHistory = {
+  const newEmployment : EmploymentHistory = {
     employment_id: uuidv4(), // مُعرف فريد
     company: '',
     name_of_your_employer: '',
@@ -544,10 +544,10 @@ const saveEmployment = async (index) => {
   }
   try {
     await store.saveStep3()
-    toast.success(`Employment ${index + 1} has been saved successfully!`)
+    toast.success(`تم حفظ بيانات العمل ${index + 1} بنجاح!`)
   } catch (error) {
-    console.error(`Failed to save employment ${index + 1}:`, error)
-    toast.error(`Failed to save employment ${index + 1}.`)
+    console.error(`فشل في حفظ بيانات العمل ${index + 1}:`, error)
+    toast.error(`فشل في حفظ بيانات العمل ${index + 1}.`)
   }
 }
 </script>

@@ -1,212 +1,209 @@
-<!-- المكون الفرعي: -->
-<!-- /pages/stepsSections/step2.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">Education Information</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('education_information') }}</h1>
     <ul>
-      <li>All fields marked with an asterisk ( * ) are required.</li>
-      <li>Please provide your education and training information beginning with the most recent</li>
+      <li>{{ $t('required_fields') }}</li>
+      <li>{{ $t('provide_education_info') }}</li>
     </ul>
   </div>
-    <div class="space-y-2 mt-3">
-      <FieldsToggleContainer
-        v-for="(education, index) in educationInformation"
-        :key="education.id"
-        :title="education.name_of_school_or_college_university || `Education ${index + 1}`"
-      >
-        <div class="lg:grid grid-cols-2 lg:gap-2">
+  <div class="space-y-2 mt-3">
+    <FieldsToggleContainer
+      v-for="(education, index) in educationInformation"
+      :key="education.id"
+      :title="education.name_of_school_or_college_university || `${$t('education')} ${index + 1}`"
+    >
+      <div class="lg:grid grid-cols-2 lg:gap-2">
 
-          <!-- Name of School/College/University Field -->
-          <FieldContainer>
-            <StyledInput
-              labelText="Name of School/College/University"
-              :isMandatory="true"
-              infoText="Enter the name of your educational institution."
-              inputType="text"
-              name="name_of_school_or_college_university"
-              :id="`name_of_school_or_college_university-${education.id}`"
-              v-model="education.name_of_school_or_college_university"
-              :isValid="validateNameOfSchool(education.name_of_school_or_college_university)"
-              validationMessage="Name of School/College/University is required."
-            />
-          </FieldContainer> 
+        <!-- Name of School/College/University Field -->
+        <FieldContainer>
+          <StyledInput
+            :labelText="$t('name_of_school')"
+            :isMandatory="true"
+            :infoText="$t('enter_name_of_school')"
+            inputType="text"
+            name="name_of_school_or_college_university"
+            :id="`name_of_school_or_college_university-${education.id}`"
+            v-model="education.name_of_school_or_college_university"
+            :isValid="validateNameOfSchool(education.name_of_school_or_college_university)"
+            :validationMessage="$t('required_name_of_school')"
+          />
+        </FieldContainer>
 
-          <!-- Field of Study/Major Field -->
-          <FieldContainer>
-            <StyledInput
-              labelText="Field of Study/Major"
-              :isMandatory="true"
-              infoText="Enter your field of study or major."
-              inputType="text"
-              name="field_of_study_or_major"
-              :id="`field_of_study_or_major-${education.id}`"
-              v-model="education.field_of_study_or_major"
-              :isValid="validateFieldOfStudy(education.field_of_study_or_major)"
-              validationMessage="Field of Study/Major is required."
-            />
-          </FieldContainer> 
-        </div>
-
-        <div class="lg:grid grid-cols-2 lg:gap-2">
-          <FieldContainer>
-            <Autocomp
-              labelText="Country"
-              :isMandatory="true"
-              infoText="Select your country."
-              inputType="text"
-              name="country"
-              :id="`country-${education.id}`"
-              :options="getOptionCountry(education)"
-              v-model="education.country"
-              @input-change="(value) => handleCountryChange(index, value)"
-              :isValid="validateCountry(education.country)"
-              validationMessage="Country is required."
-            />
-          </FieldContainer>  
-
-          <FieldContainer>
-            <Autocomp
-              labelText="City"
-              :isMandatory="true"
-              infoText="Select your city."
-              inputType="text"
-              name="city"
-              :id="`city-${education.id}`"
-              :options="getOptionCity(education)"
-              v-model="education.city"
-              @input-change="(value) => handleCityChange(index, value)"
-              :isValid="validateCity(education.city)"
-              validationMessage="City is required."
-            />
-          </FieldContainer>
-
-          <FieldContainer>
-            <Autocomp
-              labelText="Governorate"
-              :isMandatory="true"
-              infoText="Select your governorate."
-              inputType="text"
-              name="governorate"
-              :id="`governorate-${education.id}`"
-              :options="getOptionGovernorate(education)"
-              v-model="education.governorate"
-              @input-change="(value) => handleGovernorateChange(index, value)"
-              :isValid="validateGovernorate(education.governorate)"
-              validationMessage="Governorate is required."
-            />
-          </FieldContainer>
-
-          <FieldContainer>
-            <StyledInput
-              labelText="Location Text"
-              :isMandatory="false"
-              infoText="Additional location details (optional)."
-              inputType="text"
-              name="location_text"
-              :id="`location_text-${education.id}`"
-              v-model="education.location_text"
-              validationMessage="You can edit the message."
-            />
-          </FieldContainer> 
-        </div>
-
-        <div class="lg:grid grid-cols-2 lg:gap-2">
-          <FieldContainer>
-            <StyledInput 
-              id="from_date" 
-              name="from_date" 
-              labelText="From Date" 
-              :isMandatory="true" 
-              infoText="Start date of your education." 
-              inputType="date" 
-              v-model="education.from_date" 
-              :isValid="validateFromDate(education.from_date)"
-            />
-          </FieldContainer>
-
-          <FieldContainer>
-            <StyledInput 
-              id="to_date" 
-              name="to_date" 
-              labelText="To Date" 
-              :isMandatory="true" 
-              infoText="End date of your education." 
-              inputType="date" 
-              v-model="education.to_date"
-              :isValid="validateToDate(education.to_date)" 
-              validationMessage="To Date is required."
-            />
-          </FieldContainer>
-        </div>
-
-        <div class="lg:grid grid-cols-2 lg:gap-2">
-          <FieldContainer>
-            <StyledInput
-              labelText="Phone"
-              :isMandatory="true"
-              infoText="+999-77885951"
-              inputType="phone"
-              name="phone"
-              :id="`phone-${education.id}`"
-              v-model="education.phone"
-              :isValid="validatePhone(education.phone)" 
-              validationMessage="Valid phone number is required."
-            />
-          </FieldContainer>
-          
-          <FieldContainer>
-            <StyledInput
-              labelText="Ext"
-              :isMandatory="false"
-              infoText="Extension (optional)"
-              inputType="text"
-              name="ext"
-              :id="`ext-${education.id}`"
-              v-model="education.ext"
-              validationMessage="You can edit the message."
-            />
-          </FieldContainer>      
-        </div>
-
-        <div class="lg:grid grid-cols-2 lg:gap-2">
-          <FieldContainer>
-            <Select
-              labelText="Diploma"
-              :isMandatory="true"
-              infoText="Select your highest diploma."
-              name="diploma"
-              :id="`diploma-${education.id}`"
-              :options="optionsDiploma"
-              v-model="education.diploma"
-              :isValid="validateDiploma(education.diploma)"
-              validationMessage="Diploma is required."
-            />
-          </FieldContainer>
-
-          <FieldContainer>
-            <Select
-              labelText="Another Name"
-              :isMandatory="false"
-              infoText="Do you have another name used during your education?"
-              name="another_name"
-              :id="`another_name-${education.id}`"
-              :options="optionsAnotherName"
-              v-model="education.another_name"
-              validationMessage="You can edit the message."
-            />
-          </FieldContainer>
-        </div>
-
-        <!-- <div class="flex justify-end py-2">
-          <Button level="primary" @clicked="saveEducation(index)">Save</Button>
-        </div> -->
-      </FieldsToggleContainer>
-
-      <div class="flex justify-center py-3">
-        <Button level="secondary" @clicked="addEducation">+ Add Education Information</Button>
+        <!-- Field of Study/Major Field -->
+        <FieldContainer>
+          <StyledInput
+            :labelText="$t('field_of_study')"
+            :isMandatory="true"
+            :infoText="$t('enter_field_of_study')"
+            inputType="text"
+            name="field_of_study_or_major"
+            :id="`field_of_study_or_major-${education.id}`"
+            v-model="education.field_of_study_or_major"
+            :isValid="validateFieldOfStudy(education.field_of_study_or_major)"
+            :validationMessage="$t('required_field_of_study')"
+          />
+        </FieldContainer>
       </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <FieldContainer>
+          <Autocomp
+            :labelText="$t('country')"
+            :isMandatory="true"
+            :infoText="$t('select_country')"
+            inputType="text"
+            name="country"
+            :id="`country-${education.id}`"
+            :options="getOptionCountry(education)"
+            v-model="education.country"
+            @input-change="(value) => handleCountryChange(index, value)"
+            :isValid="validateCountry(education.country)"
+            :validationMessage="$t('required_country')"
+          />
+        </FieldContainer>
+
+        <FieldContainer>
+          <Autocomp
+            :labelText="$t('city')"
+            :isMandatory="true"
+            :infoText="$t('select_city')"
+            inputType="text"
+            name="city"
+            :id="`city-${education.id}`"
+            :options="getOptionCity(education)"
+            v-model="education.city"
+            @input-change="(value) => handleCityChange(index, value)"
+            :isValid="validateCity(education.city)"
+            :validationMessage="$t('required_city')"
+          />
+        </FieldContainer>
+
+        <FieldContainer>
+          <Autocomp
+            :labelText="$t('governorate')"
+            :isMandatory="true"
+            :infoText="$t('select_governorate')"
+            inputType="text"
+            name="governorate"
+            :id="`governorate-${education.id}`"
+            :options="getOptionGovernorate(education)"
+            v-model="education.governorate"
+            @input-change="(value) => handleGovernorateChange(index, value)"
+            :isValid="validateGovernorate(education.governorate)"
+            :validationMessage="$t('required_governorate')"
+          />
+        </FieldContainer>
+
+        <FieldContainer>
+          <StyledInput
+            :labelText="$t('location_text')"
+            :isMandatory="false"
+            :infoText="$t('location_text_info')"
+            inputType="text"
+            name="location_text"
+            :id="`location_text-${education.id}`"
+            v-model="education.location_text"
+            :validationMessage="$t('edit_message')"
+          />
+        </FieldContainer>
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <FieldContainer>
+          <StyledInput 
+            id="from_date" 
+            name="from_date" 
+            :labelText="$t('from_date')" 
+            :isMandatory="true" 
+            :infoText="$t('education_start_date')" 
+            inputType="date" 
+            v-model="education.from_date" 
+            :isValid="validateFromDate(education.from_date)"
+          />
+        </FieldContainer>
+
+        <FieldContainer>
+          <StyledInput 
+            id="to_date" 
+            name="to_date" 
+            :labelText="$t('to_date')" 
+            :isMandatory="true" 
+            :infoText="$t('education_end_date')" 
+            inputType="date" 
+            v-model="education.to_date"
+            :isValid="validateToDate(education.to_date)" 
+            :validationMessage="$t('required_to_date')"
+          />
+        </FieldContainer>
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <FieldContainer>
+          <StyledInput
+            :labelText="$t('phone')"
+            :isMandatory="true"
+            :infoText="$t('phone_example')"
+            inputType="phone"
+            name="phone"
+            :id="`phone-${education.id}`"
+            v-model="education.phone"
+            :isValid="validatePhone(education.phone)" 
+            :validationMessage="$t('valid_phone_required')"
+          />
+        </FieldContainer>
+        
+        <FieldContainer>
+          <StyledInput
+            :labelText="$t('ext')"
+            :isMandatory="false"
+            :infoText="$t('extension_optional')"
+            inputType="text"
+            name="ext"
+            :id="`ext-${education.id}`"
+            v-model="education.ext"
+            :validationMessage="$t('edit_message')"
+          />
+        </FieldContainer>      
+      </div>
+
+      <div class="lg:grid grid-cols-2 lg:gap-2">
+        <FieldContainer>
+          <Select
+            :labelText="$t('diploma')"
+            :isMandatory="true"
+            :infoText="$t('select_highest_diploma')"
+            name="diploma"
+            :id="`diploma-${education.id}`"
+            :options="optionsDiploma"
+            v-model="education.diploma"
+            :isValid="validateDiploma(education.diploma)"
+            :validationMessage="$t('required_diploma')"
+          />
+        </FieldContainer>
+
+        <FieldContainer>
+          <Select
+            :labelText="$t('another_name')"
+            :isMandatory="false"
+            :infoText="$t('another_name_info')"
+            name="another_name"
+            :id="`another_name-${education.id}`"
+            :options="optionsAnotherName"
+            v-model="education.another_name"
+            :validationMessage="$t('edit_message')"
+          />
+        </FieldContainer>
+      </div>
+
+      <!-- <div class="flex justify-end py-2">
+        <Button level="primary" @clicked="saveEducation(index)">Save</Button>
+      </div> -->
+    </FieldsToggleContainer>
+
+    <div class="flex justify-center py-3">
+      <Button level="secondary" @clicked="addEducation">+ {{ $t('add_education_information') }}</Button>
     </div>
-  
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -225,13 +222,11 @@ import Select from '../../components/select.vue'
 
 import { location } from '../../data/useAddressLogic'
 
+
 // استيراد الستور
 const store = useVerificationRequestStore()
 const toast = useToast()
-// onMounted(async () => {
-//   await store.loadStep2Fields();
-// });
-// ربط بيانات التعليم مع المخزن
+
 const educationInformation = computed({
   get: () => store.step2.educationInformation,
   set: val => store.updateStep2('educationInformation', val)
@@ -311,6 +306,8 @@ const getOptionGovernorate = (education) => {
   return options
 }
 
+// Handler functions for changes
+
 const handleCountryChange = (index, value) => {
   const education = educationInformation.value[index]
   education.country = value.value
@@ -328,6 +325,8 @@ const handleGovernorateChange = (index, value) => {
   const education = educationInformation.value[index]
   education.governorate = value.value
 }
+
+// Validation functions
 
 const validateNameOfSchool = (name) => {
   return typeof name === 'string' && name.trim() !== '';
@@ -367,10 +366,10 @@ const validateDiploma = (diploma) => {
 }
 
 const validateAnotherName = () => {
-  return true; // اعتبر الحقل دائما صحيحا لكونه اختياري.
+  return true; // اعتبار الحقل دائمًا صحيحًا كونه اختياري.
 }
 
-// الدالة لإضافة سجل تعليمي جديد
+// Adding new education record
 const addEducation = () => {
   const newEducation = {
     id: uuidv4(),
