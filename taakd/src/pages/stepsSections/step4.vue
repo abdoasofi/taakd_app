@@ -1,14 +1,10 @@
 <!-- src/pages/stepsSections/step4.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">Additional Professional Qualifications</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('additional_professional_qualifications') }}</h1>
     <ul>
-      <li>
-        All fields marked with an asterisk ( * ) are required.
-      </li>
-      <li>
-        Please provide any additional professional qualifications or certifications.
-      </li>
+      <li>{{ $t('required_fields') }}</li>
+      <li>{{ $t('provide_additional_professional_qualifications') }}</li>
     </ul>
   </div>
 
@@ -17,36 +13,36 @@
     <FieldsToggleContainer
       v-for="(qualification, index) in additionalProfessionalQualifications"
       :key="qualification.id"
-      :title="qualification.awarding_body || `Qualification ${index + 1}`"
+      :title="qualification.awarding_body || `${$t('qualification')} ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Awarding Body Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Awarding Body"
+            :labelText="$t('awarding_body')"
             :isMandatory="true"
-            infoText="Enter the name of the awarding body."
+            :infoText="$t('enter_awarding_body')"
             inputType="text"
             name="awarding_body"
             :id="`awarding_body-${qualification.id}`"
             v-model="qualification.awarding_body"
             :isValid="validateAwardingBody(qualification.awarding_body)"
-            validationMessage="Awarding Body is required."
+            :validationMessage="$t('required_awarding_body')"
           />
         </FieldContainer> 
 
         <!-- License or Certificate Number Field -->
         <FieldContainer>
           <StyledInput
-            labelText="License or Certificate Number"
+            :labelText="$t('license_or_certificate_number')"
             :isMandatory="true"
-            infoText="Enter your license or certificate number."
+            :infoText="$t('enter_license_or_certificate_number')"
             inputType="text"
             name="license_or_certificate_number"
             :id="`license_or_certificate_number-${qualification.id}`"
             v-model="qualification.license_or_certificate_number"
             :isValid="validateLicenseNumber(qualification.license_or_certificate_number)"
-            validationMessage="License or Certificate Number is required."
+            :validationMessage="$t('required_license_or_certificate_number')"
           />
         </FieldContainer> 
       </div>
@@ -55,9 +51,9 @@
         <!-- Issuing Country Autocomplete -->
         <FieldContainer>
           <Autocomp
-            labelText="Issuing Country"
+            :labelText="$t('issuing_country')"
             :isMandatory="true"
-            infoText="Select the country where the qualification was issued."
+            :infoText="$t('select_issuing_country')"
             inputType="text"
             name="issuing_country"
             :id="`issuing_country-${qualification.id}`"
@@ -65,7 +61,7 @@
             v-model="qualification.issuing_country"
             @input-change="(value) => handleIssuingCountryChange(index, value)"
             :isValid="validateIssuingCountry(qualification.issuing_country)"
-            validationMessage="Issuing Country is required."
+            :validationMessage="$t('required_issuing_country')"
           />
         </FieldContainer>  
       </div>
@@ -76,14 +72,14 @@
           <StyledInput 
             id="expiration_date" 
             name="expiration_date" 
-            labelText="Expiration Date" 
+            :labelText="$t('expiration_date')" 
             :isMandatory="qualification.is_an_expiration_date" 
-            infoText="Expiration date of the qualification (if applicable)." 
+            :infoText="$t('expiration_date_info')" 
             inputType="date" 
             v-model="qualification.expiration_date"
             :isValid="validateExpirationDate(qualification.expiration_date)" 
             :disabled="!qualification.is_an_expiration_date"
-            validationMessage="Expiration Date is required."
+            :validationMessage="$t('required_expiration_date')"
           />
         </FieldContainer>
         
@@ -92,12 +88,13 @@
           <StyledInput 
             id="date_awarded" 
             name="date_awarded" 
-            labelText="Date Awarded" 
+            :labelText="$t('date_awarded')" 
             :isMandatory="true" 
-            infoText="Date when the qualification was awarded." 
+            :infoText="$t('date_awarded_info')" 
             inputType="date" 
             v-model="qualification.date_awarded" 
             :isValid="validateDateAwarded(qualification.date_awarded)"
+            :validationMessage="$t('required_date_awarded')"
           />
         </FieldContainer>
       </div>
@@ -106,15 +103,15 @@
         <!-- Award Name/Description Field -->
         <FieldContainer>
           <StyledInput
-            labelText="Award Name/Description"
+            :labelText="$t('award_name_description')"
             :isMandatory="true"
-            infoText="Provide the name or description of the award."
-            inputType="date"
+            :infoText="$t('provide_award_name_description')"
+            inputType="text"
             name="award_name_description"
             :id="`award_name_description-${qualification.id}`"
             v-model="qualification.award_name_description"
             :isValid="validateAwardNameDescription(qualification.award_name_description)"
-            validationMessage="Award Name/Description is required."
+            :validationMessage="$t('required_award_name_description')"
           />
         </FieldContainer> 
       </div>
@@ -128,7 +125,7 @@
             :id="`is_an_expiration_date-${qualification.id}`" 
             v-model="qualification.is_an_expiration_date"
           >
-            Does this qualification have an expiration date?
+            {{ $t('does_this_qualification_have_an_expiration_date') }}
           </CheckBox>
         </FieldContainer>
 
@@ -139,7 +136,7 @@
             :id="`your_name_varies-${qualification.id}`" 
             v-model="qualification.your_name_varies"
           >
-            Does your name vary in this qualification?
+            {{ $t('does_your_name_vary') }}
           </CheckBox>
         </FieldContainer>        
       </div>
@@ -152,7 +149,7 @@
 
     <!-- Add Qualification Button -->
     <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addQualification">+ Add Additional Professional Qualification</Button>
+      <Button level="secondary" @clicked="addQualification">+ {{ $t('add_additional_professional_qualification') }}</Button>
     </div>
   </div>
 </template>
@@ -163,7 +160,7 @@ import { useVerificationRequestStore } from '../../stores/verificationRequest'
 import { useToast } from 'vue-toastification'
 import { v4 as uuidv4 } from 'uuid'
 
-// المكونات
+// Components
 import Button from '../../components/button.vue'
 import FieldContainer from '../../components/fieldContainer.vue'
 import FieldsToggleContainer from '../../components/fieldsToggleContainer.vue'
@@ -195,7 +192,6 @@ const getOptionCountry = (qualification) => {
       value: loc.location_name
     }))
 
-  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
   if (qualification.issuing_country && !options.some(opt => opt.value === qualification.issuing_country)) {
     options.push({
       label: qualification.issuing_country,
@@ -206,13 +202,12 @@ const getOptionCountry = (qualification) => {
   return options
 }
 
-// التعامل مع تغيير Issuing Country
+// Handle Issuing Country Change
 const handleIssuingCountryChange = (index, value) => {
   additionalProfessionalQualifications.value[index].issuing_country = value.value
-  // إذا كان هناك حقول تعتمد على البلد، يمكنك إعادة تعيينها هنا إذا لزم الأمر
 }
 
-// دوال التحقق من الصحة
+// Validation Functions
 const validateAwardingBody = (awarding_body) => {
   return typeof awarding_body === 'string' && awarding_body.trim() !== ''
 }
@@ -252,12 +247,11 @@ const addQualification = () => {
   }
   additionalProfessionalQualifications.value.push(newQualification)
   nextTick(() => {
-    // إذا كنت تستخدم مكون FieldsToggleContainer مع إمكانية فتح الأقسام، يمكنك فتح القسم الجديد هنا
-    // مثال: openSections[newQualification.id] = true
+    // Ackopen the new section if needed
   })
 }
 
-// دالة حفظ المؤهل المهني الفردي
+// دالة لحفظ المؤهل المهني
 const saveQualification = async (index) => {
   try {
     await store.saveStep4()

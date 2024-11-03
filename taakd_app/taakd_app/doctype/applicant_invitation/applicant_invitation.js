@@ -130,7 +130,7 @@ function load_packages(frm) {
                                 <div class="card-body">
                                     <h5 class="card-title">${pkg.name}</h5>
                                     <p class="card-text">${pkg.description}</p>
-                                    <button class="btn select-package" data-package="${pkg.name}">اختيار الصنف</button>
+                                    <button class="btn select-package" data-package="${pkg.name}">اختيار الباقة</button>
                                 </div>
                             </div>
                         </div>
@@ -183,7 +183,7 @@ function initialize_swiper(frm) {
     html_field.$wrapper.find('.select-package').off('click').on('click', function() {
         const packageName = $(this).data('package');
         frm.set_value('package', packageName);
-        frappe.msgprint(__("تم اختيار الصنف: " + packageName));
+        frappe.msgprint(__("تم اختيار الباقة: " + packageName));
     });
 
     if (!document.getElementById('slider-styles')) {
