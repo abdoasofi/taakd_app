@@ -280,7 +280,7 @@ class ApplicantInvitation(Document):
 
     @frappe.whitelist()
     def get_packages(self):
-        packages = frappe.get_list("Product Bundle", fields=["name", "file_image", "description"])
+        packages = frappe.get_list("Product Bundle", fields=["name", "file_image", "custom_package_description"])
         # تحويل المسارات إلى روابط كاملة إذا كانت مسارات نسبية
         for pkg in packages:
             if pkg.file_image:

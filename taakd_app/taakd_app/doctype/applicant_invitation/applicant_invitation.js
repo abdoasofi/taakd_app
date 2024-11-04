@@ -129,7 +129,7 @@ function load_packages(frm) {
                                 <img src="${image_src}" class="card-img-top" alt="${pkg.name}">
                                 <div class="card-body">
                                     <h5 class="card-title">${pkg.name}</h5>
-                                    <p class="card-text">${pkg.description}</p>
+                                    <p class="card-text">${pkg.custom_package_description}</p>
                                     <button class="btn select-package" data-package="${pkg.name}">اختيار الباقة</button>
                                 </div>
                             </div>
