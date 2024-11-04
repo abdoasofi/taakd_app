@@ -1,8 +1,9 @@
 <template>
     <div class="py-6">
-        <div class="flex gap-2 mb-2">
-            <div class="w-10">
-                <StyledIcon/>
+        <div class="flex gap-2 mb-2 items-center">
+            <div class="w-10 lg:w-14 shrink-0">
+                <StyledIcon status=1 scalse=1 icon="io-document-text-outline"/>
+                
             </div>
             <Heading level="secondary" class="text-black" tag="h2">review for Verifying Basic Information:</Heading>
         </div>

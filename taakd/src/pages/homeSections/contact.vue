@@ -4,6 +4,7 @@
     <div class="flex gap-2 mb-2 items-center">
       <div class="w-10 lg:w-14 shrink-0 ">
         <StyledIcon status=1 scalse=1 icon="md-verified-outlined" />
+        
       </div>
       <Heading level="secondary" class="text-black" tag="h2">
         Here you can follow the progress of your report and communicate with Taakd

@@ -43,18 +43,18 @@
             </div>
             <div class="flex justify-center">
               <!-- <router-link to="/steps">  -->
-              <Button v-if="process['request']" @click="fill_the_form_now" type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
+              <Button v-if="process['request'] && !process['verf']" @click="fill_the_form_now" type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
                 Fill the Form Now <span class="mx-2">-&gt;</span>
               </Button>
               <!-- </router-link> -->
 
-              <Button @click="printDiv"  class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
+              <Button v-if="process['request'] == 2 && process['verf'] ==2 && process['report'] ==2" @click="printDiv"  class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white" >
                 View Report<span class=""></span>
               </Button>
              
             </div>
             
-            <div v-if="process['verf']" class="gap-3 w-full flex flex-col justify-center items-center">
+            <div v-if="process['request'] == 2 && process['verf'] ==1 && process['report'] ==0" class="gap-3 w-full flex flex-col justify-center items-center">
               <span class="text-primary font-bold text-lg block">Thanks for your information</span>
               <span class="text-sm font-medium block">Thanks for your information</span>
               <span class="text-xs font-medium block">Your order ID: GA-06564-gh71</span>
@@ -66,36 +66,18 @@
           </div>
         </BaseContainer>
       </div>
-      <JobRequest />
+      <JobRequest v-if="process['request'] == 1 && process['verf'] ==0 && process['report'] ==0"/>
       <div class="hidden">
         <div id="yourDivId"  >
           <Report/>
         </div>
       </div>
-      <!-- <Review />
-      <Verification />
-      <Contact :location="location"/> -->
+      <Review v-if="!process['request']"/>
+      <Verification v-if="process['request'] == 2 && process['verf'] ==2 && process['report'] ==1"/>
+      <Contact :location="location" v-if="process['request'] == 2 && process['verf'] ==1 && process['report'] ==0"/>
     
     </BackgroundLayout>
 
-  <!--
-  <button class="fixed z-30 bottom-0 bg-red-700 rounded-xl text-white p-2" @click="triggerAlert('Your Contact details has been saved!')">
-    زر تجربة الألرت
-  </button>
-  -->
-  <!--
-  انسخ الدفة مع الكمبونتت مع دوال الألرت والمتغير من تحت في أي مكان تريد عرض الرت
-  -->
-  <!--
-  <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
-    <div v-for="(alert, index) in alerts" :key="index">
-      <SnackBar :message="alert.message" @close="removeAlert(index)" />
-    </div>
-    <div v-for="(alert, index) in alerts" :key="index">
-      <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
-    </div>
-  </div>
-  -->
   <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
     <div v-for="(alert, index) in alerts" :key="index">
       <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
