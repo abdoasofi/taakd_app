@@ -1,23 +1,47 @@
 <!-- src/components/CustomSignaturePad.vue -->
 <template>
-  <div>
-    <canvas ref="canvas" width="400" height="200" class="border"></canvas>
-    <div class="mt-2">
-      <button @click="clear" class="px-4 py-2 bg-gray-300 rounded">Clear</button>
-      <button @click="save" class="px-4 py-2 bg-blue-500 text-white rounded ml-2">Save</button>
-    </div>
+  <div class="relative w-full max-w-md">
+    <canvas
+      ref="canvas"
+      :width="canvasWidth"
+      :height="canvasHeight"
+      class="w-full h-auto border border-gray-300 rounded shadow-sm"
+    ></canvas>
+    <button
+      @click="clear"
+      class="absolute top-2 right-2 bg-white bg-opacity-70 hover:bg-opacity-100 text-red-500 rounded-full p-2 shadow-md transition-opacity duration-200"
+      aria-label="Clear Signature"
+      title="مسح التوقيع"
+    >
+      <!-- أيقونة مسح التوقيع باستخدام SVG -->
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 
-const emit = defineEmits(['save-signature']);
+// تعريف الأحداث المسموعة من المكون الأب
+const emit = defineEmits(['update-signature']);
 
+// المراجع
 const canvas = ref<HTMLCanvasElement | null>(null);
 let ctx: CanvasRenderingContext2D | null = null;
 let drawing = false;
 
+// إعدادات الـ canvas الديناميكية
+const canvasWidth = computed(() => 400); // يمكنك جعلها ديناميكية أو تعتمد على props
+const canvasHeight = computed(() => 200);
+
+// دالة بدء الرسم
 const startDrawing = (e: MouseEvent | TouchEvent) => {
   drawing = true;
   if (ctx && canvas.value) {
@@ -27,6 +51,7 @@ const startDrawing = (e: MouseEvent | TouchEvent) => {
   }
 };
 
+// دالة الرسم المستمر
 const draw = (e: MouseEvent | TouchEvent) => {
   if (drawing && ctx && canvas.value) {
     const { offsetX, offsetY } = getEventPosition(e);
@@ -35,13 +60,18 @@ const draw = (e: MouseEvent | TouchEvent) => {
   }
 };
 
+// دالة إنهاء الرسم
 const stopDrawing = () => {
-  drawing = false;
-  if (ctx) {
-    ctx.closePath();
+  if (drawing) {
+    drawing = false;
+    if (ctx) {
+      ctx.closePath();
+      emitSignature(); // إرسال التوقيع بعد إنهاء الرسم
+    }
   }
 };
 
+// الحصول على موقع الحدث على اللوحة
 const getEventPosition = (e: MouseEvent | TouchEvent) => {
   if (e instanceof MouseEvent) {
     return { offsetX: e.offsetX, offsetY: e.offsetY };
@@ -54,20 +84,23 @@ const getEventPosition = (e: MouseEvent | TouchEvent) => {
   }
 };
 
+// دالة لمسح التوقيع
 const clear = () => {
   if (ctx && canvas.value) {
     ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
-    emit('save-signature', ''); // إرسال توقيع فارغ عند المسح
+    emit('update-signature', ''); // إرسال توقيع فارغ عند المسح
   }
 };
 
-const save = () => {
+// دالة لإرسال التوقيع
+const emitSignature = () => {
   if (canvas.value) {
     const dataUrl = canvas.value.toDataURL('image/png');
-    emit('save-signature', dataUrl);
+    emit('update-signature', dataUrl);
   }
 };
 
+// إعداد الـ canvas عند تحميل المكون
 onMounted(() => {
   if (canvas.value) {
     ctx = canvas.value.getContext('2d');
@@ -91,6 +124,7 @@ onMounted(() => {
   }
 });
 
+// إزالة المستمعين عند إزالة المكون
 onBeforeUnmount(() => {
   if (canvas.value) {
     canvas.value.removeEventListener('mousedown', startDrawing);
@@ -109,8 +143,5 @@ onBeforeUnmount(() => {
 <style scoped>
 canvas {
   cursor: crosshair;
-}
-button {
-  margin-right: 10px;
 }
 </style>

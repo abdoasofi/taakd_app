@@ -58,12 +58,9 @@
         <label class="block text-sm font-medium text-gray-700">
           {{ $t('electronic_signature') }}<span class="text-red-500">*</span>
         </label>
-        <CustomSignaturePad @save-signature="saveSignature" />
+        <CustomSignaturePad @update-signature="saveSignature" />
         <p class="text-sm text-gray-500 mt-2">{{ $t('signature_instruction') }}</p>
-        <div v-if="electronicSignature" class="mt-4">
-          <h4 class="font-medium">{{ $t('your_signature') }}:</h4>
-          <img :src="electronicSignature" alt="Electronic Signature" class="mt-2 border p-2 max-w-full h-auto" />
-        </div>
+        <!-- تم إزالة عرض التوقيع المحفوظ -->
       </FieldContainer>
     </div>
 
@@ -167,16 +164,6 @@ const loading = ref(true);
 const languages = useLanguage();
 const language = languages.getLanguage();
 
-
-// استيراد النوع Step6Data
-
-// // تحميل البيانات عند تحميل الصفحة
-// onMounted(async () => {
-//   loading.value = true;
-//   await store.loadDocument();
-//   loading.value = false;
-// });
-
 // خيارات اللغات الأخرى
 const languageOptions = ref([]);
 const getOptionLanguage = () => {
@@ -184,9 +171,10 @@ const getOptionLanguage = () => {
     .map(loc => ({
       label: loc.language_name,
       value: loc.language_name
-    }))
-  return options
-}
+    }));
+  return options;
+};
+
 // تعريف computed properties لربط v-model مع مخزن Pinia
 const otherLanguages = computed<string[]>({
   get: () => store.step6.other_languages.value,
@@ -224,7 +212,7 @@ const acknowledgeTheAbove = computed<boolean>({
   set: (val: boolean) => store.updateStep6('i_acknowledge_the_above', { value: val }),
 });
 
-// دالة لحفظ التوقيع الإلكتروني
+// دالة لحفظ التوقيع الإلكتروني عند تحديثه
 const saveSignature = (signature: string) => {
   store.updateStep6('electronic_signature', { value: signature });
 };
