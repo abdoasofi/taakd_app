@@ -3,7 +3,7 @@
   <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
     <!-- ترويسة الخطوة -->
     <div class="flex items-center mb-6">
-      <BriefcaseIcon class="h-6 w-6 text-yellow-600 mr-2" />
+      <BriefcaseIcon class="h-6 w-6 text-yellow-600 ltr:mr-2 rtl:ml-2" />
       <h2 class="text-2xl font-semibold text-yellow-600">{{ $t('step3_employment_history') }}</h2>
     </div>
 
@@ -16,7 +16,7 @@
       >
         <!-- عنوان كل وظيفة -->
         <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
-          <BriefcaseIcon class="h-5 w-5 text-yellow-500 mr-2" />
+          <BriefcaseIcon class="h-5 w-5 text-yellow-500 ltr:mr-2 rtl:ml-2" />
           {{ $t('employment') }} {{ index + 1 }}
         </h3>
 

@@ -5,10 +5,24 @@
     <!-- Sidebar -->
     <div class="col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
-        <div class="pb-3 font-medium text-primary text-base">
-          <p>{{ $t('document_name') }}: {{ docName }}</p>
-          <p v-if="docName">{{ $t('model_steps_instructions') }} {{ overallCompletion }}% {{ $t('completed') }}</p>
-        </div>
+      
+        
+        <div
+          :class="[
+        'flex gap-2 px-4 items-center ',
+
+      ]"
+          > 
+          <button @click="closeModal">
+              <span>O-</span>
+                    </button>
+            <div class="pb-3 font-medium text-primary text-base">
+              <p>{{ $t('document_name') }}: {{ docName }}</p>
+              <p >{{ $t('model_steps_instructions') }} {{ overallCompletion }}% {{ $t('completed') }}</p>
+            
+            </div>
+           
+          </div>
         <div class="py-3 grid grid-cols-6 lg:flex lg:flex-col lg:gap-4 w-full">
           <StepIcon
             v-for="(step, index) in steps"
@@ -22,9 +36,10 @@
           />
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-base">
-          <button @click="toggleAllStepsModal">
+          <button @click="toggleModal">
             {{ $t('all_steps') }} ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
           </button>
+          
         </div>
       </div>
     </div>
@@ -58,15 +73,15 @@
       <!-- Navigation Buttons -->
       <div v-if="!isLastStep" class="flex gap-2">
         <button 
-          class="flex items-center justify-center px-4 py-2 text-white bg-secondary rounded-[100px] hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300" 
+          class="bg-light_gray border-2 border-secondary hover:bg-hover text-mid_gray px-4 py-2 text-sm font-medium rounded-[100px]" 
           @click="previousStep" 
           :disabled="currentStepIndex === 0" 
           v-if="currentStepIndex > 0"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2 transform rotate-180">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="ltr:mr-2 rtl:ml-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-          {{ $t('step') }} {{ currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+           <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
         <Button 
@@ -80,15 +95,16 @@
       <!-- Accept/Reject Buttons for Last Step -->
       <div class="lg:flex justify-end grow lg:gap-2" v-if="isLastStep">
         <button 
-          class="flex items-center justify-center px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300" 
+          class="bg-light_gray border-2 border-secondary hover:bg-hover text-mid_gray px-4 py-2 text-sm font-medium rounded-[100px]" 
           @click="previousStep" 
           :disabled="currentStepIndex === 0" 
           v-if="currentStepIndex > 0"
         >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-2 transform rotate-180">
+        
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="ltr:mr-2 rtl:ml-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-          {{ $t('step') }} {{ currentStepIndex }} <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+           <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
         <Button level="other" @clicked="reject">{{ $t('reject') }}</Button>
@@ -107,6 +123,36 @@
       @close="removeAlert(index)" 
     />
   </div> -->
+  <div v-if="stepsModal" class="  bg-white w-screen h-screen inset-0    p-10 items-center fixed z-[60] ">
+    <div
+          :class="[
+        'flex gap-2 px-4 items-center ',
+
+      ]"
+          > 
+          <button @click="closeModal">
+              <span>O-</span>
+                    </button>
+            <div class="pb-3 font-medium text-primary text-base">
+              <p>{{ $t('document_name') }}: {{ docName }}</p>
+              <p >{{ $t('model_steps_instructions') }} {{ overallCompletion }}% {{ $t('completed') }}</p>
+            
+            </div>
+           
+          </div>
+    <div class="py-3 lg:hidden flex flex-col gap-4 w-full  ">
+            <StepsToggle
+              v-for="(step, index) in steps"
+              :key="index"
+              :process="currentStepIndex === index"
+              :complete="currentStepIndex > index"
+              :label="`${$t('step')} ${index + 1}`"
+              :desc="step.description"
+              :percentageCompleted="stepsCompletionPercentages[index + 1]"
+              @click="goToStep(index)"
+            />
+          </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -124,7 +170,8 @@ import Step6 from './stepsSections/step6.vue';
 import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
 import { createRequestList } from '../data/request';
-
+import StepsToggle from './stepsSections/components/stepsToggle.vue';
+import {useRouter } from 'vue-router';
 // استيراد route
 const route = useRoute();
 
@@ -275,10 +322,7 @@ const reject = () => {
   currentStepIndex.value = 0;
 };
 
-// دالة فتح نموذج عرض جميع المراحل (إذا كنت ستستخدمه)
-const toggleAllStepsModal = () => {
-  // Implement modal toggle logic
-};
+
 
 // مراقبة تغييرات اسم المستند
 const documentName = computed(() => store.documentName);
@@ -304,6 +348,60 @@ watch(documentName, async (newName) => {
     loading.value = false;
   }
 });
+
+ 
+ 
+    const router = useRouter(); // Get the router instance
+
+    // Ref to control the modal visibility
+    const stepsModal = ref(false);
+
+    // Computed property to check query parameter
+    const modalFromQuery = computed(() => route.query.modal === 'true');
+
+    // Watch for changes in the query parameter and update the modal state
+    watch(
+      () => route.query.modal,
+      (newModalState) => {
+        stepsModal.value = newModalState === 'true'; // Update stepsModal based on query parameter
+      },
+      { immediate: true } // Run immediately on mount to initialize modal state
+    );
+
+    // Method to toggle the modal
+    const toggleModal = () => {
+      stepsModal.value = !stepsModal.value;
+      updateQuery(); // Update the query parameter when toggling
+    };
+
+    // Method to close the modal
+    const closeModal = () => {
+      if(stepsModal.value===false){
+        router.push("/home");
+      }
+     else{
+       stepsModal.value = false;
+      updateQuery();
+    }
+    
+       // Update the query parameter when closing
+    };
+
+    // Method to update the URL query string based on the modal state
+    const updateQuery = () => {
+      const query = { ...route.query };
+      if (stepsModal.value) {
+        query.modal = 'true';
+      } else {
+        delete query.modal;
+         // Remove the modal query parameter if it's false
+      }
+
+      // Push new query into the history without reloading the page
+      router.push({ query });
+    
+    }
+ 
 </script>
 
 <style scoped>

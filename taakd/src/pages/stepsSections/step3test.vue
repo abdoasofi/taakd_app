@@ -109,7 +109,7 @@
 
                   <!-- Continuous -->
                   <div class="flex items-center">
-                    <label class="mr-2 text-dark_gray">Continuous</label>
+                    <label class="ltr:mr-2 rtl:ml-2 text-dark_gray">Continuous</label>
                     <input 
                       type="checkbox" 
                       v-model="employment.continuous" 
@@ -227,7 +227,7 @@
 
                   <!-- Do We Have Permission To Contact This Current Employer -->
                   <div class="flex items-center">
-                    <label class="mr-2 text-dark_gray">Do we have permission to contact this current employer?</label>
+                    <label class="ltr:mr-2 rtl:ml-2 text-dark_gray">Do we have permission to contact this current employer?</label>
                     <input 
                       type="checkbox" 
                       v-model="employment.do_we_have_permission_to_contact_this_current_employer" 
@@ -237,7 +237,7 @@
 
                   <!-- Issuing Salary -->
                   <div class="flex items-center">
-                    <label class="mr-2 text-dark_gray">Issuing Salary</label>
+                    <label class="ltr:mr-2 rtl:ml-2 text-dark_gray">Issuing Salary</label>
                     <input 
                       type="checkbox" 
                       v-model="employment.issuing_salary" 
@@ -247,7 +247,7 @@
 
                   <!-- Activity Has Stopped -->
                   <div class="flex items-center">
-                    <label class="mr-2 text-dark_gray">Activity Has Stopped</label>
+                    <label class="ltr:mr-2 rtl:ml-2 text-dark_gray">Activity Has Stopped</label>
                     <input 
                       type="checkbox" 
                       v-model="employment.activity_has_stopped" 
@@ -257,7 +257,7 @@
 
                   <!-- The Company Has Different Names -->
                   <div class="flex items-center">
-                    <label class="mr-2 text-dark_gray">The company has different names</label>
+                    <label class="ltr:mr-2 rtl:ml-2 text-dark_gray">The company has different names</label>
                     <input 
                       type="checkbox" 
                       v-model="employment.the_company_has_different_names" 
@@ -291,7 +291,7 @@
 
                   <!-- You Have a Nickname -->
                   <div class="flex items-center">
-                    <label class="mr-2 text-dark_gray">You have a nickname?</label>
+                    <label class="ltr:mr-2 rtl:ml-2 text-dark_gray">You have a nickname?</label>
                     <input 
                       type="checkbox" 
                       v-model="employment.you_have_a_nicknamecx" 

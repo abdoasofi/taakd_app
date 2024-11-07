@@ -5,7 +5,7 @@
       <div class="pb-6">
         <BaseContainer>
 
-          <div :style="{ backgroundImage: `url(${bg1})` }" class=" z-0 bg-no-repeat bg-cover aspect-[1] h-60 lg:h-90 absolute -top-2 -right-2  "></div>
+          <div :style="{ backgroundImage: `url(${bg1})` }" class=" z-0 bg-no-repeat bg-cover aspect-[1] h-60 lg:h-90 absolute -top-2 -right-2"></div>
           
           <div class="z-10 relative">
             <div class="w-full py-3 pb-20 ">
@@ -313,6 +313,8 @@ const printDiv = () => {
     targetStyles: ['*'] // Includes styles from your Tailwind CSS
   });
 };
+
+
 </script>
 
 <style scoped>

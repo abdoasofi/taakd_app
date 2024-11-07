@@ -3,7 +3,7 @@
   <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
     <!-- ترويسة الخطوة -->
     <div class="flex items-center mb-6">
-      <CheckBadgeIcon class="h-6 w-6 text-purple-600 mr-2" />
+      <CheckBadgeIcon class="h-6 w-6 text-purple-600 ltr:mr-2 rtl:ml-2" />
       <h2 class="text-2xl font-semibold text-purple-600">{{ $t('step4_professional_qualification') }}</h2>
     </div>
 
@@ -16,7 +16,7 @@
       >
         <!-- عنوان كل مؤهل -->
         <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
-          <CheckBadgeIcon class="h-5 w-5 text-purple-500 mr-2" />
+          <CheckBadgeIcon class="h-5 w-5 text-purple-500 ltr:mr-2 rtl:ml-2" />
           {{ $t('qualification') }} {{ index + 1 }}
         </h3>
 

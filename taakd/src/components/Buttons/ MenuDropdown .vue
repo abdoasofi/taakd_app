@@ -28,7 +28,7 @@
           </button>
           <div
             v-show="dropdownOpen"
-            class="absolute right-0 top-full w-[240px] divide-y divide-stroke overflow-hidden rounded-lg bg-white dark:divide-dark-3 dark:bg-dark-2"
+            class="absolute end-0 top-full w-[240px] divide-y divide-stroke overflow-hidden rounded-lg bg-white dark:divide-dark-3 dark:bg-dark-2"
           >
             <div class="px-4 py-3">
               <p class="text-sm font-semibold text-dark dark:text-white">Account menu</p>

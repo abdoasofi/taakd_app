@@ -2,7 +2,7 @@
     <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
       <div class="grid max-w-2xl mx-auto">
         <div class="flex">
-          <div class="flex flex-col items-center mr-6">
+          <div class="flex flex-col items-center ltr:mr-6 rtl:ml-6">
             <div class="w-px h-10 opacity-0 sm:h-full"></div>
             <div>
               <div class="flex items-center justify-center w-8 h-8 text-xs font-medium border rounded-full">
@@ -12,7 +12,7 @@
             <div class="w-px h-full bg-gray-300"></div>
           </div>
           <div class="flex flex-col pb-6 sm:items-center sm:flex-row sm:pb-0">
-            <div class="sm:mr-5">
+            <div class=" sm:ltr:mr-5 sm:rtl:ml-5">
               <div class="flex items-center justify-center w-16 h-16 my-3 rounded-full bg-indigo-50 sm:w-24 sm:h-24">
                 <svg class="w-12 h-12 text-deep-purple-accent-400 sm:w-16 sm:h-16" stroke="currentColor" viewBox="0 0 52 52">
                   <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
@@ -28,7 +28,7 @@
           </div>
         </div>
         <div class="flex">
-          <div class="flex flex-col items-center mr-6">
+          <div class="flex flex-col items-center ltr:mr-6 rtl:ml-6">
             <div class="w-px h-10 bg-gray-300 sm:h-full"></div>
             <div>
               <div class="flex items-center justify-center w-8 h-8 text-xs font-medium border rounded-full">
@@ -38,7 +38,7 @@
             <div class="w-px h-full bg-gray-300"></div>
           </div>
           <div class="flex flex-col pb-6 sm:items-center sm:flex-row sm:pb-0">
-            <div class="sm:mr-5">
+            <div class="sm:ltr:mr-5 sm:rtl:ml-5">
               <div class="flex items-center justify-center w-16 h-16 my-3 rounded-full bg-indigo-50 sm:w-24 sm:h-24">
                 <svg class="w-12 h-12 text-deep-purple-accent-400 sm:w-16 sm:h-16" stroke="currentColor" viewBox="0 0 52 52">
                   <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
@@ -54,7 +54,7 @@
           </div>
         </div>
         <div class="flex">
-          <div class="flex flex-col items-center mr-6">
+          <div class="flex flex-col items-center  ltr:mr-6 rtl:ml-6">
             <div class="w-px h-10 bg-gray-300 sm:h-full"></div>
             <div>
               <div class="flex items-center justify-center w-8 h-8 text-xs font-medium border rounded-full">
@@ -64,7 +64,7 @@
             <div class="w-px h-full opacity-0"></div>
           </div>
           <div class="flex flex-col pb-6 sm:items-center sm:flex-row sm:pb-0">
-            <div class="sm:mr-5">
+            <div class="sm:ltr:mr-5 sm:rtl:ml-5">
               <div class="flex items-center justify-center w-16 h-16 my-3 rounded-full bg-indigo-50 sm:w-24 sm:h-24">
                 <svg class="w-12 h-12 text-deep-purple-accent-400 sm:w-16 sm:h-16" stroke="currentColor" viewBox="0 0 52 52">
                   <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>

@@ -3,7 +3,7 @@
   <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
     <!-- ترويسة الخطوة -->
     <div class="flex items-center mb-6">
-      <AcademicCapIcon class="h-6 w-6 text-green-600 mr-2" />
+      <AcademicCapIcon class="h-6 w-6 text-green-600 ltr:mr-2 rtl:ml-2" />
       <h2 class="text-2xl font-semibold text-green-600">{{ $t('step2_education_info') }}</h2>
     </div>
 
@@ -17,7 +17,7 @@
       
         <!-- عنوان كل تعليم -->
         <h3 class="flex items-center text-xl font-semibold mb-3 text-gray-700">
-          <AcademicCapIcon class="h-5 w-5 text-green-500 mr-2" />
+          <AcademicCapIcon class="h-5 w-5 text-green-500  ltr:mr-2 rtl:ml-2" />
           {{ $t('education') }} {{ index + 1 }}
         </h3>
 

@@ -9,7 +9,7 @@
     ></canvas>
     <button
       @click="clear"
-      class="absolute top-2 right-2 bg-white bg-opacity-70 hover:bg-opacity-100 text-red-500 rounded-full p-2 shadow-md transition-opacity duration-200"
+      class="absolute top-2 end-2 bg-white bg-opacity-70 hover:bg-opacity-100 text-red-500 rounded-full p-2 shadow-md transition-opacity duration-200"
       aria-label="Clear Signature"
       title="مسح التوقيع"
     >

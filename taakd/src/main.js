@@ -6,7 +6,7 @@ import router from './router';
 import App from './App.vue';
 import { createI18n } from 'vue-i18n';
 import translationPlugin from './translation';
-
+import Cookies from 'js-cookie';
 import { createPinia } from 'pinia';
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 // استيراد الأيقونات
@@ -48,14 +48,25 @@ import { Button, Card, Input, setConfig, frappeRequest, resourcesPlugin } from '
 import en from './locales/en.json';
 import ar from './locales/ar.json';
 
-// إعداد i18n
+let locale = Cookies.get('locale') || "en";
+
+if (locale === 'ar') {
+    document.documentElement.dir ='rtl';
+  }
+  else{
+    document.documentElement.dir ='ltr';
+  }
+
+document.documentElement.lang =locale;
+
 const i18n = createI18n({
-    locale: 'ar', // اللغة الافتراضية
+    locale: locale, // اللغة الافتراضية
     messages: {
         en,
         ar,
     }
 });
+
 
 let app = createApp(App);
 

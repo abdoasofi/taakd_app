@@ -25,13 +25,13 @@
   const notificationClasses = computed(() => {
     switch(props.type) {
       case 'success':
-        return 'fixed top-4 right-4 p-4 rounded shadow-lg bg-green-100 text-green-700'
+        return 'fixed top-4 end-4 p-4 rounded shadow-lg bg-green-100 text-green-700'
       case 'error':
-        return 'fixed top-4 right-4 p-4 rounded shadow-lg bg-red-100 text-red-700'
+        return 'fixed top-4 end-4 p-4 rounded shadow-lg bg-red-100 text-red-700'
       case 'warning':
-        return 'fixed top-4 right-4 p-4 rounded shadow-lg bg-yellow-100 text-yellow-700'
+        return 'fixed top-4 end-4 p-4 rounded shadow-lg bg-yellow-100 text-yellow-700'
       default:
-        return 'fixed top-4 right-4 p-4 rounded shadow-lg bg-blue-100 text-blue-700'
+        return 'fixed top-4 end-4 p-4 rounded shadow-lg bg-blue-100 text-blue-700'
     }
   })
   

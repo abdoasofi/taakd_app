@@ -272,7 +272,7 @@
         </FieldContainer>
 
         <!-- زر حذف Alias Name -->
-        <Button @click="removeAliasName(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        <Button @click="removeAliasName(index)" class="ltr:ml-2 rtl:mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
           {{ $t('remove') }}
         </Button>
       </div>

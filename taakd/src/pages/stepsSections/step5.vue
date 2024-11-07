@@ -20,7 +20,7 @@
       <Step4ProfessionalQualification />
     </section>
     <!-- تذييل PDF -->
-    <div class="text-right text-sm text-gray-500 mt-8">
+    <div class="text-right rtl:text-left text-sm text-gray-500 mt-8">
       <span class="page-number"></span>
     </div>
   </div>
@@ -114,7 +114,9 @@ h3 {
   color: #969696;
   margin-top: 10px;
 }
-
+html[dir='rtl'] .footer-pdf {
+  text-align: left;
+}
 /* تحسين تنسيقات InfoRow */
 .info-row {
   display: flex;
@@ -163,7 +165,19 @@ h3 {
   justify-content: center;
   z-index: 50;
 }
-
+html[dir='rtl'] .loading-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
 .spinner {
   border: 8px solid #f3f3f3;
   border-top: 8px solid #2c5282;
@@ -204,6 +218,12 @@ h3 {
   width: 100%;
 }
 
+html[dir='rtl'].footer-pdf {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100%;
+}
 /* تنسيق الإشعارات */
 
 </style>

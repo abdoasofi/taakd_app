@@ -8,7 +8,7 @@
     <ol class="my-1 list-decimal">
       <li>
         {{ $t('process_personal_data') }}
-        <ul class="ml-6 list-disc">
+        <ul class="ltr:ml-6 rtl:mr-6 list-disc">
           <li>
             <strong>{{ $t('global_education') }}:</strong> {{ $t('global_education_description') }}
           </li>

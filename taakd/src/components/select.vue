@@ -10,14 +10,14 @@
     >
       {{ labelText }}
       <!-- Mandatory indicator -->
-      <span v-if="isMandatory" class="ml-1 text-red-500">*</span>
+      <span v-if="isMandatory" class="ltr:ml-1 rtl:mr-1 text-red-500">*</span>
       <!-- Info icon -->
-      <span v-if="infoText" class="ml-2 cursor-pointer relative" @mouseover="showInfo = true" @mouseleave="showInfo = false">
+      <span v-if="infoText" class="ltr:ml-2 rtl:mr-2 cursor-pointer relative" @mouseover="showInfo = true" @mouseleave="showInfo = false">
         <svg class="w-5 h-5 text-mid_gray text-[10px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h1m0-4h-1v1h-1v1h1v2h1v-2h1v-1h-1V9zm-1-6a9 9 0 100 18 9 9 0 000-18z"/>
         </svg>
         <!-- Info tooltip -->
-        <div v-if="showInfo" class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 left-1/2 transform -translate-x-1/2">
+        <div v-if="showInfo" class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 start-1/2 transform -translate-x-1/2">
           {{ infoText }}
         </div>
       </span>

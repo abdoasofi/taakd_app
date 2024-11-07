@@ -7,7 +7,7 @@
             <Heading level="secondary" class="text-black" tag="h2">Background Verification Instructions:</Heading>
         </div>
         <div class="my-2">
-        <ul class="list-disc list-outside ml-2 mt-2 space-y-3 text-black">
+        <ul class="list-disc list-outside ltr:ml-2 rtl:mr-2 mt-2 space-y-3 text-black">
             <li>Welcome to Applicant Center! This is your personal site which will assist you through the Background Verification process. To begin please provide the information required to complete your Background Verification for TAAKD.</li>
             <li>This is the first of three distinct phases of the Background Verification process. 
                 You can save your work and exit the application by clicking the ‘Save’ button. This application must be completed and submitted within 7 days of receiving the Background Verification request email. Once you submit your application you will not be able to make any modifications, and Taakd will start working on your Background Verifications.</li>
@@ -17,7 +17,7 @@
         <Heading level="secondary" class="text-black" tag="h2">Additinal instructions</Heading>
 
         <div class="my-2">
-        <ul class="list-disc list-outside ml-2 mt-2 space-y-3 text-black">
+        <ul class="list-disc list-outside ltr:ml-2 rtl:mr-2  mt-2 space-y-3 text-black">
             <li>Please list the best phone number and email address for Taakd to contact you for questions regarding your information.</li>
             <li>Have a copy of your resume or CV handy when completing the information.</li>
             <li>Research your own history, including employment dates, job titles and salaries, so that you are able to provide complete and accurate information to Taakd if asked.</li>

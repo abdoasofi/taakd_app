@@ -16,6 +16,7 @@
     "frappe-ui": "^0.1.62",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.1",
+    "js-cookie": "^3.0.5",
     "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.0.0",
     "print-js": "^1.6.0",

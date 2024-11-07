@@ -21,8 +21,8 @@
 
           <!-- قائمة اختيار اللغة -->
           <div v-if="languageMenuVisible" class="absolute bg-white border border-gray-200 rounded mt-2 shadow-lg z-50">
-            <button @click="changeLanguage('en')" class="block px-4 py-2 hover:bg-gray-100 w-full text-left">English</button>
-            <button @click="changeLanguage('ar')" class="block px-4 py-2 hover:bg-gray-100 w-full text-left">العربية</button>
+            <button @click="changeLanguage('en')" class="block px-4 py-2 hover:bg-gray-100 w-full text-start">English</button>
+            <button @click="changeLanguage('ar')" class="block px-4 py-2 hover:bg-gray-100 w-full text-start">العربية</button>
           </div>
 
           <button @click="router.replace({ name: 'reset' });" class="flex gap-3 items-center border-b-[1px] border-b-light_gray hover:bg-gray-50">
@@ -49,12 +49,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup >
 import router from '@/router';
 import { computed, ref } from 'vue';
 import { session } from '../data/session';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import { useI18n } from 'vue-i18n';
+import Cookies from 'js-cookie';
 
 const store = useVerificationRequestStore();
 const { t, locale } = useI18n();
@@ -71,9 +72,14 @@ const toggleLanguageMenu = () => {
 };
 
 const changeLanguage = (lang) => {
-    locale.value = lang; // تغيير اللغة
-    languageMenuVisible.value = false; // إخفاء القائمة بعد اختيار اللغة
+     setCookie(lang);
+     location.reload();
+
 };
+
+const setCookie=(lang) =>{
+      Cookies.set('locale', lang, { path: '' });
+  }
 
 </script>
 

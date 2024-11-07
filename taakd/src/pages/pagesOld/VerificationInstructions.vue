@@ -93,7 +93,7 @@
       <Button @click="addEducation" type="primary">
         إضافة سجل تعليمي
       </Button>
-      <Button @click="saveRequest" type="success" style="margin-left: 10px;">
+      <Button @click="saveRequest" type="success" class="rtl:mr-2 ltr:ml-2">
         حفظ الطلب
       </Button>
     </div>

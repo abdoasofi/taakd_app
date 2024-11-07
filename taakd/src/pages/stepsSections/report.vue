@@ -70,7 +70,7 @@
       <div id="table-body" class="space-y-3 mt-3 font-bold">
         <div class="grid grid-cols-3 p-4 border-[1px] border-black">
           <div class="flex items-center gap-1 place-self-start">
-            <div><span class="relative top-1 left-1 block"><AcademicCapIcon class="h-10 w-10 text-secondary  " /></span></div>
+            <div><span class="relative top-1 start-1 block"><AcademicCapIcon class="h-10 w-10 text-secondary  " /></span></div>
             <div class="underline">global education</div>
           </div>
           <div>
@@ -93,7 +93,7 @@
         </div>
         <div class="grid grid-cols-3 p-4 border-[1px] border-black">
           <div class="flex items-center gap-1 place-self-start">
-            <div><span class="relative top-1 left-1 block"><BriefcaseIcon class="h-10 w-10 text-secondary  " /></span></div>
+            <div><span class="relative top-1 start-1 block"><BriefcaseIcon class="h-10 w-10 text-secondary  " /></span></div>
             <div class="underline">Global Employment</div>
           </div>
           <div>
@@ -116,7 +116,7 @@
         </div>
         <div class="grid grid-cols-3 p-4 border-[1px] border-black">
           <div class="flex items-center gap-1 place-self-start ">
-            <div><span class="relative top-1 left-1  block"><CheckBadgeIcon class="h-10 w-10 text-secondary  " /></span></div>
+            <div><span class="relative top-1 start-1  block"><CheckBadgeIcon class="h-10 w-10 text-secondary  " /></span></div>
 
             <div class="underline">Additional Professional Qualifications
             </div>
@@ -147,9 +147,9 @@
         <div class="bg-secondary flex gap-12 p-4 text-white">
           <div>
             <div
-              class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-secondary -left-5"
+              class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-secondary -start-5"
             >
-              <span class="relative top-1 left-1 block"><AcademicCapIcon class="h-10 w-10 text-white  " /></span>
+              <span class="relative top-1 start-1 block"><AcademicCapIcon class="h-10 w-10 text-white  " /></span>
             </div>
           </div>
           <div class="text-xl font-bold">Global Education</div>
@@ -167,9 +167,9 @@
             <div class="bg-black flex gap-12 p-4 text-white">
               <div>
                 <div
-                  class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-black -left-5"
+                  class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-black -start-5"
                 >
-                  <span class="relative top-3 left-1 block">[icon]</span>
+                  <span class="relative top-3 start-1 block">[icon]</span>
                 </div>
               </div>
               <div class="text-xl font-bold">Global Education</div>
@@ -212,9 +212,9 @@
         <div class="bg-secondary flex gap-12 p-4 text-white">
           <div>
             <div
-              class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-secondary -left-5"
+              class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-secondary -start-5"
             >
-            <span class="relative top-1 left-1 block"><BriefcaseIcon class="h-10 w-10 text-white  " /></span>
+            <span class="relative top-1 start-1 block"><BriefcaseIcon class="h-10 w-10 text-white  " /></span>
             </div>
           </div>
           <div class="text-xl font-bold">Global Employment</div>
@@ -232,9 +232,9 @@
             <div class="bg-black flex gap-12 p-4 text-white">
               <div>
                 <div
-                  class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-black -left-5"
+                  class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-black -start-5"
                 >
-                  <span class="relative top-3 left-1 block">[icon]</span>
+                  <span class="relative top-3 start-1 block">[icon]</span>
                 </div>
               </div>
               <div class="text-xl font-bold">Global Employment</div>
@@ -277,9 +277,9 @@
         <div class="bg-secondary flex gap-12 p-4 text-white">
           <div>
             <div
-              class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-secondary -left-5"
+              class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-secondary -start-5"
             >
-              <span class="relative top-1 left-1 block"><CheckBadgeIcon class="h-10 w-10 text-white  " /></span>
+              <span class="relative top-1 start-1 block"><CheckBadgeIcon class="h-10 w-10 text-white  " /></span>
             </div>
           </div>
           <div class="text-xl font-bold">Additional Professional Qualifications</div>
@@ -297,9 +297,9 @@
             <div class="bg-black flex gap-12 p-4 text-white">
               <div>
                 <div
-                  class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-black -left-5"
+                  class="rounded-full border-white border-4 h-14 w-14 absolute -top-[2px] bg-black -start-5"
                 >
-                  <span class="relative top-3 left-1 block">[icon]</span>
+                  <span class="relative top-3 start-1 block">[icon]</span>
                 </div>
               </div>
               <div class="text-xl font-bold">Global Education</div>

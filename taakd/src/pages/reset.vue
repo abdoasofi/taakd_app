@@ -7,7 +7,7 @@
           Let’s set up your account. All fields below are required.
         </Heading>
       </div>
-      <p class="my-5" :class="{'text-right': isArabic(userFullName), 'text-left': !isArabic(userFullName)}" >{{ userFullName}}</p>
+      <p class="my-5" :class="{'text-right rtl:text-left': isArabic(userFullName), 'text-left': !isArabic(userFullName)}" >{{ userFullName}}</p>
       <form @submit.prevent="confirmData">
         <div class="py-5">
           <Heading class="my-1" tag="h3" level="secondary-2">Create New Password</Heading>

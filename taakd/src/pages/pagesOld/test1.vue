@@ -54,7 +54,7 @@
                   />
                 </div>
                 <div class="flex items-center">
-                  <label class="text-gray-700 mr-2">مستمر:</label>
+                  <label class="text-gray-700 ltr:mr-2 rtl:ml-2">مستمر:</label>
                   <input 
                     type="checkbox" 
                     v-model="education.continuous" 

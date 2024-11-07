@@ -64,12 +64,12 @@
   
 	  <!-- تفاصيل المرحلة -->
 	  <div
-		class="ml-4 lg:flex lg:flex-col justify-center mt-2 lg:mt-0"
+		class="ltr:ml-4 rtl:mr-4 lg:flex lg:flex-col justify-center mt-2 lg:mt-0"
 		@mouseenter="onMouseEnter"
 		@mouseleave="onMouseLeave"
 	  >
-		<span class="block text-center lg:text-left">{{ label }}</span>
-		<span class="hidden lg:block text-center lg:text-left text-sm text-primary font-semibold">
+		<span class="block text-center lg:text-left rtl:lg:text-right">{{ label }}</span>
+		<span class="hidden lg:block text-center lg:text-left rtl:lg:text-right text-sm text-primary font-semibold">
 		  {{ desc }}
 		</span>
 	  </div>

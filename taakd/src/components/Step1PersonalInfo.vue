@@ -2,7 +2,7 @@
 <template>
   <div class="bg-white p-4 py-6 shadow-sm rounded-sm">
     <div class="flex items-center mb-6">
-      <UserIcon class="h-6 w-6 text-blue-600 mr-2" />
+      <UserIcon class="h-6 w-6 text-blue-600 ltr:mr-2 rtl:ml-2" />
       <h2 class="text-2xl font-semibold text-blue-600">{{ $t('step1_personal_information') }}</h2>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">

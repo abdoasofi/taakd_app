@@ -33,7 +33,7 @@
           <a
             :href="modelValue"
             target="_blank"
-            class="ml-2 text-blue-600 underline"
+            class="ltr:ml-2 rtl:mr-2 text-blue-600 underline"
           >
             View File
           </a>

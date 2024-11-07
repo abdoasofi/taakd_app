@@ -372,7 +372,7 @@
           <div class="flex items-center justify-between">
             <label class="flex items-center">
               <input type="checkbox" class="form-checkbox" />
-              <span class="block ml-2 text-xs font-medium text-gray-700 cursor-pointer">Remember me</span>
+              <span class="block ltr:ml-2 rtl:mr-2 text-xs font-medium text-gray-700 cursor-pointer">Remember me</span>
             </label>
             <input type="submit" class="btn btn-primary" value="Login" />
           </div>

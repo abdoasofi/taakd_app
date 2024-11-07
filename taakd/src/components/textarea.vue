@@ -10,11 +10,11 @@
     >
       {{ labelText }}
       <!-- مؤشر إلزامي -->
-      <span v-if="isMandatory" class="ml-1 text-red-500">*</span>
+      <span v-if="isMandatory" class="ltr:ml-1 rtl:mr-1 text-red-500">*</span>
       <!-- أيقونة معلومات -->
       <span
         v-if="infoText"
-        class="ml-2 cursor-pointer relative"
+        class="ltr:ml-2 rtl:mr-2 cursor-pointer relative"
         @mouseover="showInfo = true"
         @mouseleave="showInfo = false"
       >
@@ -34,7 +34,7 @@
         <!-- تلميح المعلومات -->
         <div
           v-if="showInfo"
-          class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 left-1/2 transform -translate-x-1/2"
+          class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 start-1/2 transform -translate-x-1/2"
         >
           {{ infoText }}
         </div>
