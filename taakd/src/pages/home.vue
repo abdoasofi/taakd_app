@@ -1,17 +1,20 @@
 <!-- home.vue -->
 <template>
-  <BackgroundLayout class="relative ">
-    
-      <div class="pb-6">
-        <BaseContainer>
+  <BackgroundLayout class="relative">
+    <div class="pb-6">
+      <BaseContainer>
+        <div
+          :style="{ backgroundImage: `url(${bg1})` }"
+          class="z-0 bg-no-repeat bg-cover aspect-[1] h-60 lg:h-90 absolute -top-2 -right-2"
+        ></div>
 
-          <div :style="{ backgroundImage: `url(${bg1})` }" class=" z-0 bg-no-repeat bg-cover aspect-[1] h-60 lg:h-90 absolute -top-2 -right-2"></div>
-          
-          <div class="z-10 relative">
-            <div class="w-full py-3 pb-20 ">
-              <div class="aspect-[1.376] h-10  mb-2 m-auto">
-                          <svg width="150" height="150" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_944_13802)">
+        <div class="z-10 relative">
+          <div class="w-full py-3 pb-20">
+            <div class="aspect-[1.376] h-10 mb-2 m-auto">
+              <!-- شعار أو أيقونة هنا -->
+              <!-- ... (SVG أو أي مكون آخر) -->
+              <svg width="150" height="150" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g clip-path="url(#clip0_944_13802)">
                             <path d="M55.9662 21.9149V24.1236L62.7031 21.8174V25.0489L53.3271 28.1221V22.8374L55.9662 21.9149Z" fill="#81C045"/>
                             <mask id="mask0_944_13802" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-15" y="-15" width="102" height="102">
                             <path d="M86.625 -14.625H-14.625V86.625H86.625V-14.625Z" fill="white"/>
@@ -32,62 +35,105 @@
                             <rect width="72" height="72" fill="white"/>
                             </clipPath>
                             </defs>
-                            </svg>
-              </div>
+                                        </svg>
             </div>
-            <h1 class="text-sm text-secondary font-bold my-2 text-center w-full pt-5">Trust. Verify. Succeed</h1>
-            <div class="my-8 grid grid-cols-3 lg:py-10 lg:px-40">
-              <ProcessItem label="Job Request" :status="process['request']" icon="io-document-text-outline" />
-              <ProcessItem label="Verification of Basic Information" :status="process['verf']" icon="md-verified-outlined"  />
-              <ProcessItem label="Review and Report Writing" :status="process['report']" icon="md-ratereview-outlined" />
-            </div>
-            <div class="flex justify-center">
-              <!-- <router-link to="/steps">  -->
-              <Button v-if="process['request'] && !process['verf']" @click="fill_the_form_now" type="submit" class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white">
-                Fill the Form Now <span class="mx-2">-&gt;</span>
-              </Button>
-              <!-- </router-link> -->
-
-              <Button v-if="process['request'] == 2 && process['verf'] ==2 && process['report'] ==2" @click="printDiv"  class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white" >
-                View Report<span class=""></span>
-              </Button>
-             
-            </div>
-            
-            <div v-if="process['request'] == 2 && process['verf'] ==1 && process['report'] ==0" class="gap-3 w-full flex flex-col justify-center items-center">
-              <span class="text-primary font-bold text-lg block">Thanks for your information</span>
-              <span class="text-sm font-medium block">Thanks for your information</span>
-              <span class="text-xs font-medium block">Your order ID: GA-06564-gh71</span>
-              <Button class="w-fit" type="submit">
-                <i class="inline-block w-4 h-4 rounded-full bg-mid_gray"></i> Rate
-              </Button>
-            </div>
-           
           </div>
-        </BaseContainer>
-      </div>
-      <JobRequest v-if="process['request'] == 1 && process['verf'] ==0 && process['report'] ==0"/>
-      <div class="hidden">
-        <div id="yourDivId"  >
-          <Report/>
-        </div>
-      </div>
-      <Review v-if="!process['request']"/>
-      <Verification v-if="process['request'] == 2 && process['verf'] ==2 && process['report'] ==1"/>
-      <Contact :location="location" v-if="process['request'] == 2 && process['verf'] ==1 && process['report'] ==0"/>
-    
-    </BackgroundLayout>
+          <h1 class="text-sm text-secondary font-bold my-2 text-center w-full pt-5">
+            Trust. Verify. Succeed
+          </h1>
+          
+          <!-- إضافة سلايدر Swiper هنا -->
+          <Swiper
+            v-if="requestList.data && requestList.data.length > 0"
+            @swiper="onSwiper"
+            :modules="[Navigation, Pagination]"
+            navigation
+            :pagination="{ clickable: true }"
+            :spaceBetween="50"
+            :slidesPerView="1"
+            @slideChange="onSlideChange"
+            class="my-8 lg:py-10 lg:px-40"
+          >
+            <SwiperSlide v-for="(request, index) in requestList.data" :key="request.name|| index">
+              <div class="grid grid-cols-3">
+                <ProcessItem
+                  label="Job Request"
+                  :status="getStatusOrder(request.application_status).request"
+                  icon="io-document-text-outline"
+                />
+                <ProcessItem
+                  label="Verification of Basic Information"
+                  :status="getStatusOrder(request.application_status).verf"
+                  icon="md-verified-outlined"
+                />
+                <ProcessItem
+                  label="Review and Report Writing"
+                  :status="getStatusOrder(request.application_status).report"
+                  icon="md-ratereview-outlined"
+                />
+              </div>
+            </SwiperSlide>
+          </Swiper>
+          <div v-else class="text-center text-gray-500">No requests available.</div>
 
-  <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
-    <div v-for="(alert, index) in alerts" :key="index">
-      <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
+          <!-- الأزرار والشروط المعتمدة على السجل الحالي -->
+          <div class="flex justify-center mt-4">
+            <Button
+              v-if="currentProcess.request && !currentProcess.verf"
+              @click="fill_the_form_now"
+              type="submit"
+              class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white"
+            >
+              Fill the Form Now <span class="mx-2">-&gt;</span>
+            </Button>
+
+            <Button
+              v-if="currentProcess.request == 2 && currentProcess.verf == 2 && currentProcess.report == 2"
+              @click="printDiv"
+              class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white"
+            >
+              View Report<span class=""></span>
+            </Button>
+          </div>
+
+          <div
+            v-if="currentProcess.request == 2 && currentProcess.verf == 1 && currentProcess.report == 0"
+            class="gap-3 w-full flex flex-col justify-center items-center mt-4"
+          >
+            <span class="text-primary font-bold text-lg block">Thanks for your information</span>
+            <span class="text-sm font-medium block">Thanks for your information</span>
+            <span class="text-xs font-medium block">Your order ID: GA-06564-gh71</span>
+            <Button class="w-fit" type="submit">
+              <i class="inline-block w-4 h-4 rounded-full bg-mid_gray"></i> Rate
+            </Button>
+          </div>
+        </div>
+      </BaseContainer>
     </div>
-  </div> 
+
+    <!-- مكونات بناءً على الحالة الحالية -->
+    <JobRequest v-if="currentProcess.request == 1 && currentProcess.verf == 0 && currentProcess.report == 0" />
+    <div class="hidden">
+      <div id="yourDivId">
+        <Report />
+      </div>
+    </div>
+    <Review v-if="!currentProcess.request" />
+    <Verification v-if="currentProcess.request == 2 && currentProcess.verf == 2 && currentProcess.report == 1" />
+    <Contact :location="location" v-if="currentProcess.request == 2 && currentProcess.verf == 1 && currentProcess.report == 0" />
+
+    <!-- التنبيهات -->
+    <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
+      <div v-for="(alert, index) in alerts" :key="index">
+        <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
+      </div>
+    </div>
+  </BackgroundLayout>
 </template>
 
 <script setup>
 import router from '@/router';
-import { ref, watch, reactive, onMounted, onUpdated,computed } from 'vue';
+import { ref, watch, reactive, onMounted, computed } from 'vue';
 import { Button } from 'frappe-ui';
 import BaseContainer from '../components/baseContainer.vue';
 import ProcessItem from './homeSections/processItem.vue';
@@ -98,7 +144,7 @@ import Review from './homeSections/review.vue';
 import Verification from './homeSections/verification.vue';
 import { location } from '../data/useAddressLogic';
 import validateInputContact from '../data/validate/validateInputContact';
-import { createRequestList } from '../data/request';
+import { createAllRequestsList } from '../data/request';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import BackgroundLayout from '../layouts/backgroundLayout.vue';
 import bg1 from '@/assets/bg1.svg';
@@ -106,27 +152,22 @@ import printJS from 'print-js';
 import Report from './stepsSections/report.vue';
 import { useToast } from 'vue-toastification';
 
-// استخدام Pinia store
-// const router = useRouter();
-// const docName = computed(() => store.documentName);
+// استيراد مكونات Swiper من 'swiper/vue'
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination } from 'swiper/modules';
+
+// استيراد أنماط Swiper الأساسية والخاصة بالوحدات
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
 const toast = useToast();
-
-// دالة العودة
-const goBack = () => {
-  router.push('/steps');
-};
-
-// إضافة المرجع للمحتوى
-const reportContent = ref<null | HTMLElement>(null);
-
-// حالة التحميل
-const isLoading = ref(false);
-
 const store = useVerificationRequestStore();
 
-const documentName = ref('');
+const alerts = reactive([]);
 
-// ===== 2 =====
+const isLoading = ref(false);
+
 const data = reactive({
   mobile_number: {
     value: true,
@@ -153,170 +194,155 @@ const data = reactive({
     isValid: null,
     validationMessage: null,
   },
-  
 });
 
-// ===============
-const alerts = reactive([]);
+// دالة العودة
+const goBack = () => {
+  router.push('/steps');
+};
 
-// Methods
+// إضافة المرجع للمحتوى
+const reportContent = ref(null);
 
-// تحميل الوثيقة عند بدء المكون
-onMounted(async () => {
-  if(docName.value){
-    store.setDocumentName(docName.value);
-    await store.loadDocument();
-  }
-  else{
-    toast.error('لم يتم تحديد اسم المستند.');
-  }
-});
-onUpdated(async () => {
-  if(docName.value){
-    store.setDocumentName(docName.value);
-    await store.loadDocument();
-  }
-  else{
-    toast.error('لم يتم تحديد اسم المستند.');
-  }});
+// مرجع لسلايدر Swiper
+const swiperRef = ref(null);
+
 const triggerAlert = function(message) {
   alerts.push({ message });
   setTimeout(() => {
-    alerts.shift(); // Automatically remove the alert after some time
+    alerts.shift(); // إزالة التنبيه تلقائيًا بعد مدة
   }, 3000);
-}
+};
 
 const removeAlert = function(index) {
   alerts.splice(index, 1);
-}
+};
 
-watch(() => documentName.value, (newName) => {
-  console.log("Current Document Name:", newName);
-});
-
-
-const process = ref({  "request":0,
-    "verf":0,
-    "report":0});
-
-
-
-function getStatusOrder(processStr){
-
-  if(processStr=='New Request'){
-    process.value= {
-    "request":0,
-    "verf":0,
-    "report":0
-  };
-  }
-  else if(processStr=='In Progress'){
-    process.value=  {
-    "request":1,
-    "verf":0,
-    "report":0
-  };
-  }
-  
-  else if(processStr=='Submitted'){
-    process.value=  {
-    "request":2,
-    "verf":1,
-    "report":0
-  };
-  } 
-
-
-  else if(processStr=='Verification Started' || processStr=='More Info Needed'){
-    process.value=  {
-    "request":2,
-    "verf":2,
-    "report":0
-  };
-  }
-  
-
-
-  else if(processStr=='Writing report'){
-    process.value=  {
-    "request":2,
-    "verf":2,
-    "report":1
-  };
-  }
-  else if(processStr=='Report is ready'){
-    process.value=  {
-    "request":2,
-    "verf":2,
-    "report":2
-  };
-  }
-
-else{
-  process.value=  {
-    "request":-1,
-    "verf":-1,
-    "report":-1
-  };
-}
-}
-
-
+// دالة لمعالجة التعديلات عند ملء النموذج
 function fill_the_form_now() {
-  // اذا حفظت بنجاح
-  // data["اسم الحقل"]["value"]
-  // مالم اعرض الرت او عالج الفاليديشن
-
-  let validateRes = validateInputContact(data)
+  let validateRes = validateInputContact(data);
   if (validateRes !== true) {
     triggerAlert("يرجى تصحيح الأخطاء في النموذج.");
     return;
   } else {
-    
     router.replace({ name: 'steps' });
   }
 }
 
-const requestList = createRequestList(['name', 'user_id','application_status']); 
-// const verificationStore = useVerificationRequestStore();
+// جلب السجلات
+const requestList = createAllRequestsList(['name', 'user_id', 'application_status', 'company_name', 'creation']);
 
-const documentNameValue = ref('');
+// عملية الطلب الحالية
+const currentIndex = ref(0);
 
-const updateDocumentName = (newName) => {
-  documentNameValue.value = newName;
-};
+// الحصول على السجل الحالي بناءً على الفهرس
+const currentRequest = computed(() => requestList.data[currentIndex.value]);
 
-// استخدام watch لمراقبة تغيير قيمة name في requestList
-watch(
-  () => {
-    // افترض أن البيانات موجودة في requestList.value.data[0].name
-    // تحقق من وجود البيانات قبل الوصول إليها لتجنب الأخطاء
-    
-    return requestList && requestList.data && requestList.data.length > 0
-      ? requestList.data[0]
-      : null;
-  },
-  (newName) => {
-    if(newName)
-   { 
-    updateDocumentName(newName.name);
-   if(newName.application_status){ getStatusOrder(newName.application_status);}
-   store.setDocumentName(newName.name);}
-  },
-  { immediate: true } // تنفيذ المراقبة فور التهيئة
-);
+// الحصول على الحالة الحالية بناءً على السجل الحالي
+const currentProcess = computed(() => {
+  if (!currentRequest.value) {
+    console.log('لا يوجد طلب حالي.');
+    return { request: -1, verf: -1, report: -1 };
+  }
+  const process = getStatusOrder(currentRequest.value.application_status);
+  console.log('تم حساب currentProcess:', process);
+  return process;
+});
+
+// دالة لتحويل application_status إلى عمليات
+function getStatusOrder(processStr) {
+  switch (processStr) {
+    case 'New Request':
+      return { request: 0, verf: 0, report: 0 };
+    case 'In Progress':
+      return { request: 1, verf: 0, report: 0 };
+    case 'Submitted':
+      return { request: 2, verf: 1, report: 0 };
+    case 'Verification Started':
+    case 'More Info Needed':
+      return { request: 2, verf: 2, report: 0 };
+    case 'Writing report':
+      return { request: 2, verf: 2, report: 1 };
+    case 'Report is ready':
+      return { request: 2, verf: 2, report: 2 };
+    default:
+      console.warn('حالة التطبيق غير معروفة:', processStr);
+      return { request: -1, verf: -1, report: -1 };
+  }
+}
+
+// تعريف مرجع جديد لسلايدر Swiper
+const swiperInstance = ref(null);
+
+// دالة للحصول على مرجع السلايدر عند تهيئته
+function onSwiper(swiper) {
+  swiperInstance.value = swiper;
+  console.log('Swiper initialized:', swiper);
+}
+
+// تحديث دالة تغيير السلايد لاستخدام مرجع السلايدر الجديد
+function onSlideChange() {
+  if (swiperInstance.value) {
+    currentIndex.value = swiperInstance.value.activeIndex;
+    console.log('تم تغيير السلايد. الفهرس الحالي:', currentIndex.value);
+    if (currentRequest.value && currentRequest.value.application_status) {
+      store.setDocumentName(currentRequest.value.name);
+      console.log('اسم المستند الحالي:', currentRequest.value.name);
+      console.log('الحالة الحالية:', currentProcess.value);
+    } else {
+      console.log('لا يوجد طلب حالي أو حالة التطبيق غير موجودة.');
+    }
+  } else {
+    console.log('مرجع السلايدر غير موجود أو Swiper غير مهيأ.');
+  }
+}
+
+// دالة الطباعة
 const printDiv = () => {
-  // store.loadDocument();
-  printJS({ 
-    printable: 'yourDivId', 
-    type: 'html', 
-    targetStyles: ['*'] // Includes styles from your Tailwind CSS
+  printJS({
+    printable: 'yourDivId',
+    type: 'html',
+    targetStyles: ['*'], // يتضمن الأنماط من Tailwind CSS
   });
 };
 
+// تحميل الوثيقة عند بدء المكون
+onMounted(async () => {
+  if (currentRequest.value && currentRequest.value.name) {
+    store.setDocumentName(currentRequest.value.name);
+    await store.loadDocument();
+    console.log('تم تحميل المستند:', currentRequest.value.name);
+  } else {
+    toast.error('لم يتم تحديد اسم المستند.');
+    console.log('لم يتم تحديد اسم المستند أثناء التحميل.');
+  }
+});
 
+// مراقبة تغييرات السجلات
+watch(
+  () => requestList.data,
+  (newList) => {
+    if (newList && newList.length > 0) {
+      currentIndex.value = 0;
+      store.setDocumentName(newList[0].name);
+      console.log('تم تعيين الفهرس إلى 0 بناءً على البيانات الجديدة.');
+      // currentProcess سيُحسب تلقائيًا عبر computed
+    }
+  },
+  { immediate: true }
+);
 </script>
 
 <style scoped>
 /* أي أنماط إضافية إذا لزم الأمر */
+
+/* تخصيص Swiper إذا لزم الأمر */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #3F4457; /* مثال على تخصيص لون الأزرار */
+}
+
+.swiper-pagination-bullet {
+  background: #3F4457; /* لون النقاط */
+}
 </style>

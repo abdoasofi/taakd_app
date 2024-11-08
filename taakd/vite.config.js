@@ -17,6 +17,6 @@ export default defineConfig({
     target: 'es2018',
   },
   optimizeDeps: {
-    include: ['frappe-ui > feather-icons', 'showdown', 'engine.io-client'],
+    include: ['frappe-ui > feather-icons', 'showdown', 'engine.io-client' ,'swiper/vue', 'swiper'],
   },
 })
