@@ -217,70 +217,70 @@ const save = async () => {
   let isValid = true;
 
   // تحقق من رقم الهاتف
-  validateMobileNumber();
-  if (!home.mobile_number.isValid) {
-    isValid = false;
-  }
+  // validateMobileNumber();
+  // if (!home.mobile_number.isValid) {
+  //   isValid = false;
+  // }
 
-  // تحقق من التوقيت
-  if (!home.from_time.value) {
+  // // تحقق من التوقيت
+  // if (!home.from_time.value) {
     store.updateHome('from_time', {
       isValid: false,
       validationMessage: 'يرجى تحديد الوقت.',
     });
-    isValid = false;
-  } else {
+  //   isValid = false;
+  // } else {
     store.updateHome('from_time', {
       isValid: true,
       validationMessage: '',
     });
-  }
+  // }
 
-  if (!home.to_time.value) {
+  // if (!home.to_time.value) {
     store.updateHome('to_time', {
       isValid: false,
       validationMessage: 'يرجى تحديد الوقت.',
     });
-    isValid = false;
-  } else {
+  //   isValid = false;
+  // } else {
     store.updateHome('to_time', {
       isValid: true,
       validationMessage: '',
     });
-  }
+  // }
 
-  // تحقق من البلد
-  if (!home.country.value) {
+  // // تحقق من البلد
+  // if (!home.country.value) {
     store.updateHome('country', {
       isValid: false,
       validationMessage: 'يرجى اختيار بلد.',
     });
-    isValid = false;
-  } else {
+  //   isValid = false;
+  // } else {
     store.updateHome('country', {
       isValid: true,
       validationMessage: '',
     });
-  }
+  // }
 
   // تحقق من الدرجة أو الدبلوم
   if (home.is_degree_or_diploma.value === null || home.is_degree_or_diploma.value === undefined) {
     store.updateHome('is_degree_or_diploma', {
-      isValid: false,
+      // isValid: false,
       validationMessage: 'يرجى اختيار ما إذا كنت حصلت على درجة أو دبلوم.',
     });
     isValid = false;
   } else {
     store.updateHome('is_degree_or_diploma', {
-      isValid: true,
+      // isValid: true,
       validationMessage: '',
     });
   }
 
-  if (!isValid) {
-    toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
-    return;
-  }
+  // if (!isValid) {
+  //   toast.error('يرجى تصحيح الأخطاء قبل الحفظ.');
+  //   return;
+  // }
 
   try {
     loading.value = true;
