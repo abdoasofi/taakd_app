@@ -34,7 +34,6 @@
               <span class="block text-secondary"><</span>
               <span class="block text-secondary">></span>
             </div>
-            <input class="lg:block hidden border-[1px] border-mid_gray rounded-lg w-80 p-1"/>
           </div>
       
             <div class="flex justify-around items-center gap-7 ">
