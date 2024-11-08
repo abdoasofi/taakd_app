@@ -14,7 +14,7 @@
       ]"
           > 
           <button @click="closeModal">
-              <span><StyledIcon status=1 scalse=1 icon="bi-arrow-left"/></span>
+              <span><StyledIcon status=0 scalse=0 icon="bi-arrow-left"/></span>
                     </button>
             <div class="pb-3 font-medium text-primary text-base">
               <p>{{ $t('document_name') }}: {{ docName }}</p>
@@ -132,7 +132,7 @@
           > 
           <button @click="closeModal">
             
-              <span><StyledIcon status=1 scalse=1 icon="bi-arrow-left"/></span>
+              <span><StyledIcon status=0 scalse=0 icon="bi-arrow-left"/></span>
                     </button>
             <div class="pb-3 font-medium text-primary text-base">
               <p>{{ $t('document_name') }}: {{ docName }}</p>
