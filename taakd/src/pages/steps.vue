@@ -14,7 +14,7 @@
       ]"
           > 
           <button @click="closeModal">
-              <span>O-</span>
+              <span><StyledIcon status=1 scalse=1 icon="bi-arrow-left"/></span>
                     </button>
             <div class="pb-3 font-medium text-primary text-base">
               <p>{{ $t('document_name') }}: {{ docName }}</p>
@@ -131,7 +131,8 @@
       ]"
           > 
           <button @click="closeModal">
-              <span>O-</span>
+            
+              <span><StyledIcon status=1 scalse=1 icon="bi-arrow-left"/></span>
                     </button>
             <div class="pb-3 font-medium text-primary text-base">
               <p>{{ $t('document_name') }}: {{ docName }}</p>
@@ -172,6 +173,7 @@ import { useToast } from 'vue-toastification';
 import { createRequestList } from '../data/request';
 import StepsToggle from './stepsSections/components/stepsToggle.vue';
 import {useRouter } from 'vue-router';
+import StyledIcon from '../components/styledIcon.vue';
 // استيراد route
 const route = useRoute();
 

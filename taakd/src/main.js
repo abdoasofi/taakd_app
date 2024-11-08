@@ -23,7 +23,9 @@ import {
     HiLockClosed,
     MdLanguageOutlined,
     FaSearch,
-    RiUploadCloudLine
+    RiUploadCloudLine,
+    BiArrowLeft,
+    BiArrowRight
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -39,7 +41,9 @@ addIcons(
     HiLockClosed,
     MdLanguageOutlined,
     FaSearch,
-    RiUploadCloudLine
+    RiUploadCloudLine,
+    BiArrowLeft,
+    BiArrowRight
 );
 
 import { Button, Card, Input, setConfig, frappeRequest, resourcesPlugin } from 'frappe-ui';
