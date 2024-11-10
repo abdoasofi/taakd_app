@@ -1,10 +1,10 @@
 <!-- src/pages/stepsSections/step4.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('additional_professional_qualifications') }}</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('step4.additional_professional_qualifications') }}</h1>
     <ul>
-      <li>{{ $t('required_fields') }}</li>
-      <li>{{ $t('provide_additional_professional_qualifications') }}</li>
+      <li>{{ $t('step4.required_fields') }}</li>
+      <li>{{ $t('step4.provide_additional_professional_qualifications') }}</li>
     </ul>
   </div>
 
@@ -13,36 +13,36 @@
     <FieldsToggleContainer
       v-for="(qualification, index) in additionalProfessionalQualifications"
       :key="qualification.id"
-      :title="qualification.awarding_body || `${$t('qualification')} ${index + 1}`"
+      :title="qualification.awarding_body || `${$t('step4.qualification')} ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Awarding Body Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('awarding_body')"
+            :labelText="$t('step4.awarding_body')"
             :isMandatory="true"
-            :infoText="$t('enter_awarding_body')"
+            :infoText="$t('step4.enter_awarding_body')"
             inputType="text"
             name="awarding_body"
             :id="`awarding_body-${qualification.id}`"
             v-model="qualification.awarding_body"
             :isValid="validateAwardingBody(qualification.awarding_body)"
-            :validationMessage="$t('required_awarding_body')"
+            :validationMessage="$t('step4.required_awarding_body')"
           />
         </FieldContainer> 
 
         <!-- License or Certificate Number Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('license_or_certificate_number')"
+            :labelText="$t('step4.license_or_certificate_number')"
             :isMandatory="true"
-            :infoText="$t('enter_license_or_certificate_number')"
+            :infoText="$t('step4.enter_license_or_certificate_number')"
             inputType="text"
             name="license_or_certificate_number"
             :id="`license_or_certificate_number-${qualification.id}`"
             v-model="qualification.license_or_certificate_number"
             :isValid="validateLicenseNumber(qualification.license_or_certificate_number)"
-            :validationMessage="$t('required_license_or_certificate_number')"
+            :validationMessage="$t('step4.required_license_or_certificate_number')"
           />
         </FieldContainer> 
       </div>
@@ -51,9 +51,9 @@
         <!-- Issuing Country Autocomplete -->
         <FieldContainer>
           <Autocomp
-            :labelText="$t('issuing_country')"
+            :labelText="$t('step4.issuing_country')"
             :isMandatory="true"
-            :infoText="$t('select_issuing_country')"
+            :infoText="$t('step4.select_issuing_country')"
             inputType="text"
             name="issuing_country"
             :id="`issuing_country-${qualification.id}`"
@@ -61,7 +61,7 @@
             v-model="qualification.issuing_country"
             @input-change="(value) => handleIssuingCountryChange(index, value)"
             :isValid="validateIssuingCountry(qualification.issuing_country)"
-            :validationMessage="$t('required_issuing_country')"
+            :validationMessage="$t('step4.required_issuing_country')"
           />
         </FieldContainer>  
       </div>
@@ -72,14 +72,14 @@
           <StyledInput 
             id="expiration_date" 
             name="expiration_date" 
-            :labelText="$t('expiration_date')" 
+            :labelText="$t('step4.expiration_date')" 
             :isMandatory="qualification.is_an_expiration_date" 
-            :infoText="$t('expiration_date_info')" 
+            :infoText="$t('step4.expiration_date_info')" 
             inputType="date" 
             v-model="qualification.expiration_date"
             :isValid="validateExpirationDate(qualification.expiration_date)" 
             :disabled="!qualification.is_an_expiration_date"
-            :validationMessage="$t('required_expiration_date')"
+            :validationMessage="$t('step4.required_expiration_date')"
           />
         </FieldContainer>
         
@@ -88,13 +88,13 @@
           <StyledInput 
             id="date_awarded" 
             name="date_awarded" 
-            :labelText="$t('date_awarded')" 
+            :labelText="$t('step4.date_awarded')" 
             :isMandatory="true" 
-            :infoText="$t('date_awarded_info')" 
+            :infoText="$t('step4.date_awarded_info')" 
             inputType="date" 
             v-model="qualification.date_awarded" 
             :isValid="validateDateAwarded(qualification.date_awarded)"
-            :validationMessage="$t('required_date_awarded')"
+            :validationMessage="$t('step4.required_date_awarded')"
           />
         </FieldContainer>
       </div>
@@ -103,15 +103,15 @@
         <!-- Award Name/Description Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('award_name_description')"
+            :labelText="$t('step4.award_name_description')"
             :isMandatory="true"
-            :infoText="$t('provide_award_name_description')"
+            :infoText="$t('step4.provide_award_name_description')"
             inputType="text"
             name="award_name_description"
             :id="`award_name_description-${qualification.id}`"
             v-model="qualification.award_name_description"
             :isValid="validateAwardNameDescription(qualification.award_name_description)"
-            :validationMessage="$t('required_award_name_description')"
+            :validationMessage="$t('step4.required_award_name_description')"
           />
         </FieldContainer> 
       </div>
@@ -125,7 +125,7 @@
             :id="`is_an_expiration_date-${qualification.id}`" 
             v-model="qualification.is_an_expiration_date"
           >
-            {{ $t('does_this_qualification_have_an_expiration_date') }}
+            {{ $t('step4.does_this_qualification_have_an_expiration_date') }}
           </CheckBox>
         </FieldContainer>
 
@@ -136,9 +136,9 @@
             :id="`your_name_varies-${qualification.id}`" 
             v-model="qualification.your_name_varies"
           >
-            {{ $t('does_your_name_vary') }}
+            {{ $t('step4.does_your_name_vary') }}
           </CheckBox>
-        </FieldContainer>        
+        </FieldContainer>      
       </div>
 
       <!-- Save Qualification Button -->
@@ -149,13 +149,13 @@
 
     <!-- Add Qualification Button -->
     <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addQualification">+ {{ $t('add_additional_professional_qualification') }}</Button>
+      <Button level="secondary" @clicked="addQualification">+ {{ $t('step4.add_additional_professional_qualification') }}</Button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, reactive, nextTick } from 'vue'
+import { ref, computed, reactive, nextTick } from 'vue'
 import { useVerificationRequestStore } from '../../stores/verificationRequest'
 import { useToast } from 'vue-toastification'
 import { v4 as uuidv4 } from 'uuid'
@@ -167,23 +167,22 @@ import FieldsToggleContainer from '../../components/fieldsToggleContainer.vue'
 import StyledInput from '../../components/styledInput.vue'
 import Autocomp from '../../components/autocomp.vue'
 import CheckBox from '../../components/checkBox.vue'
+import FileUpload from '../../components/fileUpload.vue'
 
-// استيراد البيانات (البلديات والمحافظات)
+// Import location data (cities and governorates)
 import { location } from '../../data/useAddressLogic'
 
-// استيراد الستور
+// Import store
 const store = useVerificationRequestStore()
 const toast = useToast()
-// onMounted(async () => {
-//   await store.loadStep4Fields();
-// });
-// ربط بيانات المؤهلات المهنية الإضافية مع المخزن
+
+// Bind additional professional qualifications data with the store
 const additionalProfessionalQualifications = computed({
   get: () => store.step4.professional_qualification,
-  set: (val) => store.updateStep4('professional_qualification', val)
+  set: val => store.updateStep4('professional_qualification', val)
 })
 
-// الحصول على خيارات الدولة
+// Functions to get country options
 const getOptionCountry = (qualification) => {
   const options = location.data
     .filter(loc => loc.location_type === 'Country')
@@ -192,6 +191,7 @@ const getOptionCountry = (qualification) => {
       value: loc.location_name
     }))
 
+  // Add current value if not present
   if (qualification.issuing_country && !options.some(opt => opt.value === qualification.issuing_country)) {
     options.push({
       label: qualification.issuing_country,
@@ -232,7 +232,7 @@ const validateAwardNameDescription = (award_name_description) => {
   return typeof award_name_description === 'string' && award_name_description.trim() !== ''
 }
 
-// دالة لإضافة مؤهل مهني إضافي جديد
+// Adding new professional qualification record
 const addQualification = () => {
   const newQualification = {
     id: uuidv4(), // معرف فريد
@@ -251,7 +251,7 @@ const addQualification = () => {
   })
 }
 
-// دالة لحفظ المؤهل المهني
+// Save qualification data
 const saveQualification = async (index) => {
   try {
     await store.saveStep4()
@@ -264,5 +264,5 @@ const saveQualification = async (index) => {
 </script>
 
 <style scoped>
-/* أضف أي تنسيقات خاصة بالمكون هنا */
+/* Add any component-specific styles here */
 </style>

@@ -1,11 +1,11 @@
 <!-- header.vue -->
 <template>
-    <div>
-      <header class="header w-full overflow-x-hidden z-10 relative">
-        <div class="container flex justify-between items-center ">
-          <div class="logo py-4 lg:flex lg:gap-6">
-            <div class="h-6  lg:h-9 aspect-[1.376] flex justify-center items-center">
-              <svg width="72" height="68" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <div>
+    <header class="header w-full overflow-x-hidden z-10 relative">
+      <div class="container flex justify-between items-center ">
+        <div class="logo py-4 lg:flex lg:gap-6">
+          <div class="h-6 lg:h-9 aspect-[1.376] flex justify-center items-center">
+            <svg width="72" height="68" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_944_13802)">
                 <path d="M55.9662 21.9149V24.1236L62.7031 21.8174V25.0489L53.3271 28.1221V22.8374L55.9662 21.9149Z" fill="#81C045"/>
                 <mask id="mask0_944_13802" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="-15" y="-15" width="102" height="102">
@@ -27,61 +27,73 @@
                 <rect width="72" height="72" fill="white"/>
                 </clipPath>
                 </defs>
-                </svg>
-            </div>
-            <span class=" h-9 w-[2px] bg-light_gray hidden lg:block" />
-            <div class="gap-2 hidden lg:flex text-3xl">
-              <span class="block text-secondary"><</span>
-              <span class="block text-secondary">></span>
-            </div>
-          </div>
-      
-            <div class="flex justify-around items-center gap-7 ">
-            <Button class="hidden lg:block "  level="secondary">
-              Contact Us
-            </Button>
-              <div class="min-h-4 max-h-7 aspect-square bg-dark_gray lg:hidden"></div>
-              <button  :onclick="toggleOpenOn" class=" text-dark_gray text-3xl font-bold block">...</button>
-      
-            </div>
+                </svg>                       
+              </div>
+          <span class="h-9 w-[2px] bg-light_gray hidden lg:block" />
+          <!-- <div class="gap-2 hidden lg:flex text-3xl">
+            <span class="block text-secondary"><</span>
+            <span class="block text-secondary">></span>
+          </div> -->
         </div>
-        
-      </header>
-      <SubMenu v-if="menuToggle==true" :closeFunc=toggleOpenOff  />
-    </div>
-  </template>
-  
-  <script setup>
+    
+        <div class="flex justify-around items-center gap-7">
+          <!-- زر "Contact Us" مترجم -->
+          <Button class="hidden lg:block" level="secondary" @click="openContactDialog">
+            {{ t('contactUs') }} <v-icon scale="1" name="md-phone-outlined" />
+          </Button>
+          <div class="min-h-4 max-h-7 aspect-square bg-dark_gray lg:hidden"></div>
+          <button @click="toggleOpenOn" class="text-dark_gray text-3xl font-bold block">...</button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- مكون مربع الحوار -->
+    <ContactDialog :visible="isContactDialogVisible" :closeFunc="closeContactDialog" />
+    
+    <SubMenu v-if="menuToggle" :closeFunc="toggleOpenOff" />
+  </div>
+</template>
+
+<script setup>
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import Button from './button.vue';
 import SubMenu from './subMenu.vue';
+import ContactDialog from './contactDialog.vue'; 
 
-const menuToggle=ref(false);
+const { t } = useI18n();
+const menuToggle = ref(false);
+const isContactDialogVisible = ref(false);
 
-function toggleOpenOn(){
-  menuToggle.value=true;
-  console.log("********",menuToggle.value);
+function toggleOpenOn() {
+  menuToggle.value = true;
 }
 
-function toggleOpenOff(){
-  menuToggle.value=false;
-  console.log("********",menuToggle.value);
+function toggleOpenOff() {
+  menuToggle.value = false;
 }
-  </script>
-  
-  <style scoped>
-  .header {
-    background-color: #fff;
-    box-shadow: 0px 1px 6px 0px #00000052;
-  }
-  
-  .nav a {
-    text-decoration: none;
-    color: #343a40;
-  }
-  
-  .nav a:hover {
-    text-decoration: underline;
-  }
-  </style>
-  
+
+function openContactDialog() {
+  isContactDialogVisible.value = true;
+}
+
+function closeContactDialog() {
+  isContactDialogVisible.value = false;
+}
+</script>
+
+<style scoped>
+.header {
+  background-color: #fff;
+  box-shadow: 0px 1px 6px 0px #00000052;
+}
+
+.nav a {
+  text-decoration: none;
+  color: #343a40;
+}
+
+.nav a:hover {
+  text-decoration: underline;
+}
+</style>

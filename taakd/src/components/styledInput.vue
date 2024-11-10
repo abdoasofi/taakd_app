@@ -49,32 +49,25 @@
       :value="modelValue"
       @input="onInput"
       @focus="isFocused = true"
-      @blur="isFocused = false"
+      @blur="handleBlur"
       :placeholder="placeholder"
       :aria-describedby="infoText ? `${id}-tooltip` : null"
     />
 
     <!-- رسائل التحقق من الصحة -->
     <FadeInOut>
-      <p v-if="isValid === false" class="text-warn text-[10px] ">
-        <template v-if="Array.isArray(validationMessages)">
-          <div v-for="(msg, index) in validationMessages" :key="index">{{ msg }}</div>
-        </template>
-        <template v-else>
-          {{ validationMessages }}
-        </template>
+      <p v-if="shouldShowError" class="text-red-500 text-xs mt-1">
+        {{ errorMessage }}
       </p>
-    </FadeInOut>
-    <FadeInOut>
-      <p v-if="isValid === true" class="text-mid_gray text-[10px]">
-        {{ validationMessages }}
+      <p v-else-if="successMessage" class="text-green-500 text-xs mt-1">
+        {{ successMessage }}
       </p>
     </FadeInOut>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import FadeInOut from './fadeInOut.vue';
 
 // تعريف props لدعم v-model
@@ -101,21 +94,21 @@ const props = defineProps({
     type: String,
     default: 'text',
   },
-  isValid: {
-    type: [Boolean, null],
-    default: null,
-  }, // حالة صلاحية الإدخال (true, false, أو null)
-  validationMessages: {
-    type: [String, Array],
-    default: '',
-  },
   modelValue: {
     type: [String, Number],
     default: '',
   },
   placeholder: {
     type: String,
-    default: 'Enter at least 3 characters',
+    default: '',
+  },
+  errorMessage: {
+    type: String,
+    default: 'هذا الحقل مطلوب.',
+  },
+  successMessage: {
+    type: String,
+    default: '',
   },
 });
 
@@ -128,6 +121,16 @@ const showInfo = ref(false);
 // إدارة حالة التركيز
 const isFocused = ref(false);
 
+// تعريف حالة الخطأ
+const isError = computed(() => {
+  return props.isMandatory && !props.modelValue;
+});
+
+// تحديد متى يجب إظهار رسالة الخطأ
+const shouldShowError = computed(() => {
+  return isError.value && !isFocused.value;
+});
+
 // خاصية محسوبة لتحديد فئة لون التسمية
 const labelColorClass = computed(() => {
   const colorMap = {
@@ -138,16 +141,15 @@ const labelColorClass = computed(() => {
   return colorMap[props.labelColor] || 'text-dark_gray';
 });
 
-// خاصية محسوبة لتحديد فئات الإدخال بناءً على حالة الصلاحية والتركيز
+// خاصية محسوبة لتحديد فئات الإدخال بناءً على حالة التركيز والخطأ
 const inputClasses = computed(() => {
   return [
     'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-dashed',
+    'border',
     {
-      'border border-mid_gray': !isFocused.value && props.isValid === null,
-      'border border-warn': !isFocused.value && props.isValid === false,
-      'border border-mid_gray': !isFocused.value && props.isValid === true,
-      'border border-green': isFocused.value, // الإطار الأخضر عند التركيز
-      // يمكنك إضافة المزيد من الفئات بناءً على الحاجة
+      'border-green-500': isFocused.value,
+      'border-red-500': shouldShowError.value,
+      'border-gray-300': !isFocused.value && !shouldShowError.value,
     },
   ];
 });
@@ -155,6 +157,11 @@ const inputClasses = computed(() => {
 // معالجة الإدخال بدون استخدام الديبونس
 const onInput = (event) => {
   emit('update:modelValue', event.target.value);
+};
+
+// التعامل مع فقدان التركيز
+const handleBlur = () => {
+  isFocused.value = false;
 };
 </script>
 

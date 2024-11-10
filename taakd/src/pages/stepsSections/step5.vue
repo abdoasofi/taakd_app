@@ -4,7 +4,7 @@
     <!-- ترويسة PDF -->
     <div>
       <img src="@/assets/logo.png" alt="Logo" class="h-16 mx-auto mb-4" />
-      <h2 class="text-3xl font-semibold text-center text-gray-700">{{ $t('information_review_report') }}</h2>
+      <h2 class="text-3xl font-semibold text-center text-gray-700">{{ $t('step5.information_review_report') }}</h2>
     </div>
     <!-- مكونات الخطوات المنفصلة -->
     <section class="my-5">
@@ -63,7 +63,6 @@ const printDiv = () => {
     targetStyles: ['*'] // Includes styles from your Tailwind CSS
   });
 };
-
 </script>
 
 <style scoped>
@@ -114,10 +113,110 @@ h3 {
   color: #969696;
   margin-top: 10px;
 }
+
 html[dir='rtl'] .footer-pdf {
   text-align: left;
 }
-/* تحسين تنسيقات InfoRow */
+
+/* تحسين تنسيق التقرير */
+.report-section {
+  margin-bottom: 20px;
+}
+
+/* تنسيقات الجنس للتقرير */
+.bg-white {
+  background-color: #ffffff;
+}
+
+/* تحسين تنسيق التذييل */
+.footer-pdf {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 100%;
+}
+
+html[dir='rtl'].footer-pdf {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100%;
+}
+
+/* إضافة تنسيقات خاصة للفصول */
+
+/* تحسين تنسيق الإشعارات */
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+html[dir='rtl'] .loading-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.spinner {
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #2c5282;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  margin-top: 16px;
+  font-size: 1rem;
+  color: #2d3748;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* تحسين تنسيق الترويسة والتذييل */
+.header-pdf {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.footer-pdf {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 100%;
+}
+
+html[dir='rtl'] .footer-pdf {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 100%;
+}
+
+/* تحسين تنسيق InfoRow */
 .info-row {
   display: flex;
   flex-direction: column;
@@ -151,7 +250,7 @@ html[dir='rtl'] .footer-pdf {
   color: #2d3748;
 }
 
-/* تنسيقات مؤشر التحميل */
+/* تحسين تنسيق الإشعارات */
 .loading-overlay {
   position: absolute;
   top: 0;
@@ -165,6 +264,7 @@ html[dir='rtl'] .footer-pdf {
   justify-content: center;
   z-index: 50;
 }
+
 html[dir='rtl'] .loading-overlay {
   position: absolute;
   top: 0;
@@ -178,6 +278,7 @@ html[dir='rtl'] .loading-overlay {
   justify-content: center;
   z-index: 50;
 }
+
 .spinner {
   border: 8px solid #f3f3f3;
   border-top: 8px solid #2c5282;
@@ -203,12 +304,16 @@ html[dir='rtl'] .loading-overlay {
   margin-bottom: 20px;
 }
 
-/* تنسيقات الجنس للتقرير */
 .bg-white {
   background-color: #ffffff;
 }
 
-/* إضافة تنسيقات خاصة للفصول */
+/* تحسين تنسيق الفصول */
+.section-heading {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
 
 /* تحسين تنسيق التذييل */
 .footer-pdf {
@@ -224,6 +329,4 @@ html[dir='rtl'].footer-pdf {
   left: 10px;
   width: 100%;
 }
-/* تنسيق الإشعارات */
-
 </style>

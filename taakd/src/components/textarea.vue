@@ -5,8 +5,9 @@
     <label
       :class="[
         'mb-2 text-sm flex items-center',
-        { [`text-${labelColor}`]: true }
+        labelColorClass
       ]"
+      :for="id"
     >
       {{ labelText }}
       <!-- مؤشر إلزامي -->
@@ -34,24 +35,17 @@
         <!-- تلميح المعلومات -->
         <div
           v-if="showInfo"
-          class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 start-1/2 transform -translate-x-1/2"
+          class="absolute bg-gray-700 text-white text-xs rounded py-1 px-2 mt-1 left-1/2 transform -translate-x-1/2 z-10"
+          role="tooltip"
+          :id="`${id}-tooltip`"
         >
           {{ infoText }}
         </div>
       </span>
     </label>
 
-    <!-- حقل النصarea -->
-    <div
-      :class="[
-        'bg-transparent w-full p-2 rounded-lg transition-all duration-300 ease-in-out focus:outline-none',
-        {
-          'border-1 border-mid_gray focus:border-black focus:ring-0': isValid === null,
-          'border-1 border-warn focus:ring-warn': isValid === false,
-          'border-3 border-secondary focus:ring-secondary': isValid === true
-        }
-      ]"
-    >
+    <!-- حقل الـTextarea مع التحكم في فئة الإطار -->
+    <div :class="textareaContainerClasses">
       <Textarea
         :variant="'outline'"
         :size="size"
@@ -59,29 +53,29 @@
         :disabled="disabled"
         v-model="textareaValue"
         @input="handleInput"
-        :class="['w-full text-black focus:ring-0 focus:outline-none focus:border-none']"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        :class="['w-full text-black focus:ring-0 focus:outline-none']"
       />
     </div>
 
     <!-- رسائل التحقق من الصحة -->
     <FadeInOut>
-      <p v-if="isValid === false" class="text-warn text-[10px]">
-        {{ validationMessage }}
+      <p v-if="shouldShowError" class="text-red-500 text-xs mt-1">
+        {{ errorMessage }}
       </p>
-    </FadeInOut>
-    <FadeInOut>
-      <p v-if="isValid === true" class="text-secondary text-[10px]">
-        {{ validationMessage }}
+      <p v-else-if="isSuccess" class="text-green-500 text-xs mt-1">
+        {{ successMessage }}
       </p>
     </FadeInOut>
   </div>
 </template>
 
 <script setup>
+import { ref, computed, watch } from 'vue';
 import FadeInOut from './fadeInOut.vue';
-import { ref } from 'vue';
-import { defineEmits, defineProps } from 'vue';
 import Textarea from 'frappe-ui/src/components/Textarea.vue';  
+import { defineEmits, defineProps } from 'vue';
 
 // تعريف الخصائص التي يقبلها المكون
 const props = defineProps({
@@ -89,7 +83,7 @@ const props = defineProps({
   name: { type: String, required: true },
   placeholder: {
     type: String,
-    default: 'Placeholder',
+    default: 'أدخل نصًا هنا',
   },
   labelText: {
     type: String,
@@ -107,11 +101,12 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  isValid: {
-    type: Boolean,
-    default: null,
-  },
+  // إزالة isValid كمكون داخلي، سنقوم بإدارته داخلياً
   validationMessage: {
+    type: String,
+    default: '',
+  },
+  successMessage: { // رسالة النجاح
     type: String,
     default: '',
   },
@@ -135,19 +130,75 @@ const emit = defineEmits(['update:modelValue', 'input-change']);
 // إدارة الحالة الداخلية
 const textareaValue = ref(props.modelValue || '');
 const showInfo = ref(false);
+const isFocused = ref(false);
 
-// دالة التعامل مع إدخال البيانات وإصدار الحدث المخصص
-const handleInput = (event) => {
-  textareaValue.value = event.target.value;
-  
-  // إصدار الحدث الافتراضي لـ v-model
-  emit('update:modelValue', textareaValue.value);
-  
-  // إصدار الحدث المخصص إذا كنت بحاجة إليه
+// تحديث القيمة الخارجية عند تغيّر الإدخال الداخلي
+watch(textareaValue, (newVal) => {
+  emit('update:modelValue', newVal);
   emit('input-change', {
     name: props.name,
-    value: textareaValue.value,
+    value: newVal,
   });
+});
+
+// تحديث الاختيار الداخلي عند تغيّر القيمة الخارجية
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    textareaValue.value = newVal;
+  }
+);
+
+// دوال للتعامل مع التركيز وفقدان التركيز
+const handleFocus = () => {
+  isFocused.value = true;
+};
+
+const handleBlur = () => {
+  isFocused.value = false;
+};
+
+// خاصية محسوبة لتحديد فئة لون التسمية
+const labelColorClass = computed(() => {
+  const colorMap = {
+    dark_gray: 'text-gray-700',
+    blue: 'text-blue-500',
+    // أضف المزيد من الخريطة اللونية حسب الحاجة
+  };
+  return colorMap[props.labelColor] || 'text-gray-700';
+});
+
+// خاصية محسوبة لتحديد ما إذا كان هناك خطأ
+const isError = computed(() => {
+  return props.isMandatory && !textareaValue.value.trim();
+});
+
+// خاصية محسوبة لتحديد متى يجب إظهار رسالة الخطأ
+const shouldShowError = computed(() => {
+  return isError.value && !isFocused.value;
+});
+
+// خاصية محسوبة لتحديد ما إذا كان الحقل صحيحًا
+const isSuccess = computed(() => {
+  return !isError.value && textareaValue.value.trim();
+});
+
+// خاصية محسوبة لتحديد فئات الـTextarea Container بناءً على الحالات المختلفة
+const textareaContainerClasses = computed(() => {
+  return [
+    'w-full p-2 rounded-lg transition-all duration-300 ease-in-out',
+    'border',
+    {
+      'border-green-500': isFocused.value,
+      'border-red-500': shouldShowError.value,
+      'border-gray-300': !isFocused.value && !shouldShowError.value,
+    },
+  ];
+});
+
+// دالة لمعالجة إدخال البيانات وإصدار الحدث المخصص
+const handleInput = (event) => {
+  textareaValue.value = event.target.value;
 };
 </script>
 
@@ -159,5 +210,22 @@ const handleInput = (event) => {
 .border-3 {
   border-width: 3px;
 }
-/* يمكنك إضافة أنماط إضافية حسب الحاجة */
+.text-gray-700 {
+  color: #4B5563; /* مثال على لون رمادي داكن */
+}
+.text-mid_gray {
+  color: #6B7280; /* مثال على لون رمادي متوسط */
+}
+.text-warn {
+  color: #F87171; /* مثال على لون أحمر للتحذير */
+}
+.text-secondary {
+  color: #3B82F6; /* مثال على لون ثانوي */
+}
+.border-mid_gray {
+  border-color: #6B7280;
+}
+.border-secondary {
+  border-color: #3B82F6;
+}
 </style>

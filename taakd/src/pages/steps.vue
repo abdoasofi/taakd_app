@@ -5,31 +5,26 @@
     <!-- Sidebar -->
     <div class="col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
-      
-        
         <div
           :class="[
-        'flex gap-2 px-4 items-center ',
-
-      ]"
-          > 
+            'flex gap-2 px-4 items-center',
+          ]"
+        > 
           <button @click="closeModal">
-              <span><StyledIcon status=0 scalse=0 icon="bi-arrow-left"/></span>
-                    </button>
-            <div class="pb-3 font-medium text-primary text-base">
-              <p>{{ $t('document_name') }}: {{ docName }}</p>
-              <p >{{ $t('model_steps_instructions') }} {{ overallCompletion }}% {{ $t('completed') }}</p>
-            
-            </div>
-           
+            <span><StyledIcon :status="0" :scale="0" icon="bi-arrow-left"/></span>
+          </button>
+          <div class="pb-3 font-medium text-primary text-base">
+            <p>{{ $t('steps.documentName') }}: {{ docName }}</p>
+            <p>{{ $t('steps.modelStepsInstructions') }} {{ overallCompletion }}% {{ $t('steps.completed') }}</p>
           </div>
+        </div>
         <div class="py-3 grid grid-cols-6 lg:flex lg:flex-col lg:gap-4 w-full">
           <StepIcon
             v-for="(step, index) in steps"
             :key="index"
             :process="currentStepIndex === index"
             :complete="currentStepIndex > index"
-            :label="`${$t('step')} ${index + 1}`"
+            :label="`${$t('steps.step')} ${index + 1}`"
             :desc="step.description"
             :percentageCompleted="stepsCompletionPercentages[index + 1]"
             @click="goToStep(index)"
@@ -37,9 +32,8 @@
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-base">
           <button @click="toggleModal">
-            {{ $t('all_steps') }} ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
+            {{ $t('steps.allSteps') }} ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
           </button>
-          
         </div>
       </div>
     </div>
@@ -67,7 +61,7 @@
             <rect x="14.0365" y="40.5166" width="37.449" height="37.449" transform="rotate(-45 14.0365 40.5166)" stroke="#81C045" stroke-width="5"/>
           </g>
         </svg>
-        <div class="text-xs text-[#1D1B20]">{{ $t('auto_saving') }}</div> 
+        <div class="text-xs text-[#1D1B20]">{{ $t('steps.autoSaving') }}</div> 
       </div>
 
       <!-- Navigation Buttons -->
@@ -81,14 +75,14 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="ltr:mr-2 rtl:ml-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-           <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+          <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
         <Button 
           level="primary" 
           @clicked="handleStep" 
         >
-          {{ $t('step') }} {{ currentStepIndex + 1 }} &rarr; <!-- عرض رقم المرحلة الحالية -->
+          {{ $t('steps.currentStep') }} {{ currentStepIndex + 1 }} &rarr; <!-- عرض رقم المرحلة الحالية -->
         </Button>
       </div>
 
@@ -100,15 +94,14 @@
           :disabled="currentStepIndex === 0" 
           v-if="currentStepIndex > 0"
         >
-        
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="ltr:mr-2 rtl:ml-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-           <!-- اسم المرحلة التي سيتم الرجوع إليها -->
+          <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
-        <Button level="other" @clicked="reject">{{ $t('reject') }}</Button>
-        <Button level="other" @clicked="accept">{{ $t('accept') }}</Button>
+        <Button level="other" @clicked="reject">{{ $t('steps.reject') }}</Button>
+        <Button level="other" @clicked="accept">{{ $t('steps.accept') }}</Button>
       </div>
     </div>
   </div>
@@ -123,42 +116,38 @@
       @close="removeAlert(index)" 
     />
   </div> -->
-  <div v-if="stepsModal" class="  bg-white w-screen h-screen inset-0    p-10 items-center fixed z-[60] ">
+  <div v-if="stepsModal" class="bg-white w-screen h-screen inset-0 p-10 items-center fixed z-[60]">
     <div
-          :class="[
-        'flex gap-2 px-4 items-center ',
-
+      :class="[
+        'flex gap-2 px-4 items-center',
       ]"
-          > 
-          <button @click="closeModal">
-            
-              <span><StyledIcon status=0 scalse=0 icon="bi-arrow-left"/></span>
-                    </button>
-            <div class="pb-3 font-medium text-primary text-base">
-              <p>{{ $t('document_name') }}: {{ docName }}</p>
-              <p >{{ $t('model_steps_instructions') }} {{ overallCompletion }}% {{ $t('completed') }}</p>
-            
-            </div>
-           
-          </div>
-    <div class="py-3 lg:hidden flex flex-col gap-4 w-full  ">
-            <StepsToggle
-              v-for="(step, index) in steps"
-              :key="index"
-              :process="currentStepIndex === index"
-              :complete="currentStepIndex > index"
-              :label="`${$t('step')} ${index + 1}`"
-              :desc="step.description"
-              :percentageCompleted="stepsCompletionPercentages[index + 1]"
-              @click="goToStep(index)"
-            />
-          </div>
+    > 
+      <button @click="closeModal">
+        <span><StyledIcon :status="0" :scale="0" icon="bi-arrow-left"/></span>
+      </button>
+      <div class="pb-3 font-medium text-primary text-base">
+        <p>{{ $t('steps.documentName') }}: {{ docName }}</p>
+        <p>{{ $t('steps.modelStepsInstructions') }} {{ overallCompletion }}% {{ $t('steps.completed') }}</p>
+      </div>
+    </div>
+    <div class="py-3 lg:hidden flex flex-col gap-4 w-full">
+      <StepsToggle
+        v-for="(step, index) in steps"
+        :key="index"
+        :process="currentStepIndex === index"
+        :complete="currentStepIndex > index"
+        :label="`${$t('steps.step')} ${index + 1}`"
+        :desc="step.description"
+        :percentageCompleted="stepsCompletionPercentages[index + 1]"
+        @click="goToStep(index)"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
 import StepIcon from '../pages/stepsSections/components/stepIcon.vue';
@@ -172,57 +161,56 @@ import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
 import { createRequestList } from '../data/request';
 import StepsToggle from './stepsSections/components/stepsToggle.vue';
-import {useRouter } from 'vue-router';
 import StyledIcon from '../components/styledIcon.vue';
-// استيراد route
-const route = useRoute();
+import { useI18n } from 'vue-i18n';
 
-// استيراد الستور
+// استيراد مسبق للملفات الضرورية
+
+const { t } = useI18n();
+
+// تعريف المتغيرات والمراجع
+const route = useRoute();
+const router = useRouter();
 const store = useVerificationRequestStore();
 const toast = useToast();
 
 // الحصول على documentName من route params
 const documentNameFromRoute = computed(() => route.params.documentName as string);
 const docName = computed(() => store.documentName);
-// // استقبال documentName كـ prop
-// const props = defineProps({
-//   docName: {
-//     type: String,
-//     required: true,
-//   },
-// });
+
+// تعريف المراحل والخطوات
 const currentStepIndex = ref(0);
 const totalSteps = 6;
 
-// تعريف المراحل مع المكونات والوصف ودوال التحقق
+// تعريف المراحل مع المكونات والوصف ودوال التحقق (ستحتاج إلى ترجمة الوصف)
 const steps = [
   {
     component: Step1,
-    description: "Personal Information",
+    description: t('steps.stepOneDescription'),
     save: store.saveStep1,
   },
   {
     component: Step2,
-    description: "Education Information",
+    description: t('steps.stepTwoDescription'),
     save: store.saveStep2,
   },
   {
     component: Step3,
-    description: "Employment History",
+    description: t('steps.stepThreeDescription'),
     save: store.saveStep3,
   },
   {
     component: Step4,
-    description: "Professional Qualifications",
+    description: t('steps.stepFourDescription'),
     save: store.saveStep4,
   },
   {
     component: Step5,
-    description: "Review Information"
+    description: t('steps.stepFiveDescription')
   },
   {
     component: Step6,
-    description: "Final Verification",
+    description: t('steps.stepSixDescription'),
     save: store.saveStep6,
   },
 ];
@@ -230,7 +218,7 @@ const steps = [
 const currentStepComponent = computed(() => steps[currentStepIndex.value].component);
 
 const currentStepData = computed(() => {
-  return (store as any)[`step${currentStepIndex.value + 1}`];
+  return store[`step${currentStepIndex.value + 1}`];
 });
 
 // حساب نسب الإنجاز لكل مرحلة باستخدام الـ getter
@@ -242,91 +230,74 @@ const overallCompletion = computed(() => store.overallCompletionPercentage);
 // تحقق من كون المرحلة الحالية هي الأخيرة
 const isLastStep = computed(() => currentStepIndex.value === totalSteps - 1);
 
-// تعريف متغير التحميل للتحكم في حالة الزر "Step"
+// متغير التحميل للتحكم في حالة الزر "Step"
 const loading = ref(false);
 
-// دالة التنقل للخلف
+// دوال التنقل
 const previousStep = () => {
   if (currentStepIndex.value > 0) {
     currentStepIndex.value--;
   }
 };
 
-// دالة الانتقال إلى خطوة معينة
 const goToStep = async(index: number) => {
   currentStepIndex.value = index;
   try {
     loading.value = true;
     
-    if(currentStepIndex.value===1){
-      await store.saveStep1();
+    // حفظ البيانات للمرحلة المحددة
+    const step = steps[index];
+    if(step.save){
+      await step.save();
     }
-    else if(currentStepIndex.value===2){
-      await store.saveStep2();
-    }else if(currentStepIndex.value===3){
-      await store.saveStep3();
-    }
-    else if(currentStepIndex.value===4){
-      await store.saveStep4();
-    }
-    else if(currentStepIndex.value===6){
-      await store.saveStep6();
-    }
-
+    
   } catch (error) {
     console.error("خطأ أثناء الحفظ:", error);
+    toast.error(t('steps.saveError'));
   } finally {
     loading.value = false;
   }
 };
 
-// دالة التنقل للأمام (زر "Step")
+// دالة الانتقال للأمام (زر "Step")
 const handleStep = async () => {
   try {
     loading.value = true;
     
-    if(currentStepIndex.value === 0){
-      await store.saveStep1();
-    }
-    else if(currentStepIndex.value === 1){
-      await store.saveStep2();
-    }
-    else if(currentStepIndex.value === 2){
-      await store.saveStep3();
-    }
-    else if(currentStepIndex.value === 3){
-      await store.saveStep4();
-    }
-    else if(currentStepIndex.value === 5){
-      await store.saveStep6();
+    // حفظ البيانات للمرحلة الحالية
+    const step = steps[currentStepIndex.value];
+    if(step.save){
+      await step.save();
     }
 
     // الانتقال إلى الخطوة التالية
     if (currentStepIndex.value < totalSteps - 1) {
       currentStepIndex.value++;
     }
+    else{
+      // منطق إنهاء العملية أو إرسال البيانات
+      toast.success(t('steps.processCompleted'));
+    }
   } catch (error) {
     console.error("خطأ أثناء الحفظ:", error);
+    toast.error(t('steps.saveError'));
   } finally {
     loading.value = false;
   }
 };
 
-// دالة قبول الطلب في خطوة 6
+// دوال قبول ورفض الطلب في الخطوات الأخيرة
 const accept = async () => {
-  toast.success("تم قبول الطلب بنجاح.");
+  toast.success(t('steps.acceptSuccess'));
 };
 
-// دالة رفض الطلب
 const reject = () => {
-  toast.info("تم رفض الطلب.");
+  toast.info(t('steps.rejectInfo'));
   store.resetStore();
   currentStepIndex.value = 0;
 };
 
-
-
-// مراقبة تغييرات اسم المستند
+// مراقبة اسم المستند
 const documentName = computed(() => store.documentName);
 
 // تحميل الوثيقة عند بدء المكون
@@ -338,11 +309,11 @@ onMounted(async () => {
     loading.value = false;
   }
   else{
-    toast.error('لم يتم تحديد اسم المستند.');
+    toast.error(t('steps.loadDocumentError'));
   }
 });
 
-// لو كنت تريد إعادة تحميل البيانات عندما يتغير documentName, استخدم watcher:
+// مراقبة تغييرات اسم المستند
 watch(documentName, async (newName) => {
   if(newName){
     loading.value = true;
@@ -351,61 +322,55 @@ watch(documentName, async (newName) => {
   }
 });
 
- 
- 
-    const router = useRouter(); // Get the router instance
+// التحكم في عرض المودال
+const stepsModal = ref(false);
 
-    // Ref to control the modal visibility
-    const stepsModal = ref(false);
+// مراقبة حالة المودال من query params
+const modalFromQuery = computed(() => route.query.modal === 'true');
 
-    // Computed property to check query parameter
-    const modalFromQuery = computed(() => route.query.modal === 'true');
+// Watch لتحديث حالة المودال بناءً على query params
+watch(
+  () => route.query.modal,
+  (newModalState) => {
+    stepsModal.value = newModalState === 'true';
+  },
+  { immediate: true }
+);
 
-    // Watch for changes in the query parameter and update the modal state
-    watch(
-      () => route.query.modal,
-      (newModalState) => {
-        stepsModal.value = newModalState === 'true'; // Update stepsModal based on query parameter
-      },
-      { immediate: true } // Run immediately on mount to initialize modal state
-    );
+// دوال للتحكم في المودال
+const toggleModal = () => {
+  stepsModal.value = !stepsModal.value;
+  updateQuery();
+};
 
-    // Method to toggle the modal
-    const toggleModal = () => {
-      stepsModal.value = !stepsModal.value;
-      updateQuery(); // Update the query parameter when toggling
-    };
+const closeModal = () => {
+  if(stepsModal.value === false){
+    router.push("/home");
+  }
+  else{
+    stepsModal.value = false;
+    updateQuery();
+  }
+};
 
-    // Method to close the modal
-    const closeModal = () => {
-      if(stepsModal.value===false){
-        router.push("/home");
-      }
-     else{
-       stepsModal.value = false;
-      updateQuery();
-    }
-    
-       // Update the query parameter when closing
-    };
-
-    // Method to update the URL query string based on the modal state
-    const updateQuery = () => {
-      const query = { ...route.query };
-      if (stepsModal.value) {
-        query.modal = 'true';
-      } else {
-        delete query.modal;
-         // Remove the modal query parameter if it's false
-      }
-
-      // Push new query into the history without reloading the page
-      router.push({ query });
-    
-    }
- 
+// تحديث الـ query params بناءً على حالة المودال
+const updateQuery = () => {
+  const query = { ...route.query };
+  if (stepsModal.value) {
+    query.modal = 'true';
+  } else {
+    delete query.modal;
+  }
+  router.push({ query });
+};
 </script>
 
 <style scoped>
-/* أضف أي تنسيقات إضافية هنا إذا لزم الأمر */
+.steps-navigation {
+  /* أنماط مخصصة لمكون خطوات التنقل */
+}
+
+.step-content {
+  /* أنماط مخصصة لمحتوى الخطوة الحالية */
+}
 </style>

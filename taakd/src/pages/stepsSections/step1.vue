@@ -1,26 +1,25 @@
-<!-- المكون الفرعي: -->
 <!-- /pages/stepsSections/step1.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('personal_information') }}</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('step1.personal_information') }}</h1>
     <ul>
-      <li>{{ $t('required_fields') }}</li>
-      <li>{{ $t('provide_information') }}</li>
+      <li>{{ $t('step1.required_fields') }}</li>
+      <li>{{ $t('step1.provide_information') }}</li>
     </ul>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('name_label') }}</h1>
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('step1.name_label') }}</h1>
       <Info
-        :text="$t('name_info')"
+        :text="$t('step1.name_info')"
       />
     </div>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          :labelText="$t('employer_name')"
+          :labelText="$t('step1.employer_name')"
           :isMandatory="true"
-          :infoText="$t('employer_info')"
+          :infoText="$t('step1.employer_info')"
           inputType="text"
           v-model="employerName"
           :isValid="store.step1.employer_name.isValid"
@@ -28,13 +27,13 @@
           name="employer_name"
           id="EmployerName"
         />
-        <SupportingText>{{ $t('supporting_text') }}</SupportingText>
+        <SupportingText>{{ $t('step1.supporting_text') }}</SupportingText>
       </FieldContainer>
       <FieldContainer>
         <StyledInput
-          :labelText="$t('first_name')"
+          :labelText="$t('step1.first_name')"
           :isMandatory="true"
-          :infoText="$t('first_name_info')"
+          :infoText="$t('step1.first_name_info')"
           inputType="text"
           v-model="firstName"
           :isValid="store.step1.first_name.isValid"
@@ -51,14 +50,14 @@
         id="dont_middle_name"
         v-model="dontMiddleName" 
       >
-        {{ $t('certify_no_middle_name') }}
+        {{ $t('step1.certify_no_middle_name') }}
       </CheckBox>
     </FieldContainer>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer v-if="!dontMiddleName">
         <StyledInput
-          :labelText="$t('middle_name')"
+          :labelText="$t('step1.middle_name')"
           inputType="text"
           v-model="middleName"
           :isValid="store.step1.middle_name.isValid"
@@ -72,9 +71,9 @@
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          :labelText="$t('last_name')"
+          :labelText="$t('step1.last_name')"
           :isMandatory="true"
-          :infoText="$t('last_name')"
+          :infoText="$t('step1.last_name_info')"
           inputType="text"
           v-model="lastName"
           :isValid="store.step1.last_name.isValid"
@@ -84,30 +83,18 @@
         />
       </FieldContainer>
       <FieldContainer>
-      <!-- <Autocomp
+        <Select
+          :labelText="$t('step1.suffix')"
+          :isMandatory="true"
+          :infoText="$t('step1.select_suffix')"
           id="suffix"
           name="suffix"
-          labelText="Suffix"
-          infoText="Select your suffix"
-          inputType="text"
           :options="suffixOptions"
           @input-change="handleSuffix"
           v-model="suffix"
           :isValid="store.step1.suffix.isValid"
           :validationMessage="store.step1.suffix.validationMessage"
-        /> -->
-        <Select
-              :labelText="$t('suffix')"
-              :isMandatory="true"
-              :infoText="$t('select_suffix')"
-              id="suffix"
-              name="suffix"
-              :options="suffixOptions"
-              @input-change="handleSuffix"
-              v-model="suffix"
-              :isValid="store.step1.suffix.isValid"
-              :validationMessage="store.step1.suffix.validationMessage"
-            />
+        />
       </FieldContainer>
     </div>
 
@@ -116,8 +103,8 @@
         <Autocomp
           name="country_now"
           id="country"
-          :labelText="$t('country')"
-          :infoText="$t('select_country')"
+          :labelText="$t('step1.country')"
+          :infoText="$t('step1.select_country')"
           inputType="text"
           :options="optionCountry"
           @input-change="handleCountryChange"
@@ -130,21 +117,21 @@
         <Textarea
           id="street_address"
           name="street_address"
-          :labelText="$t('street_address')"
-          :infoText="$t('street_address_info')"
+          :labelText="$t('step1.street_address')"
+          :infoText="$t('step1.street_address_info')"
           size="xl"
           v-model="streetAddress"
           :isValid="store.step1.street_address.isValid"
           :validationMessage="store.step1.street_address.validationMessage"
         />
       </FieldContainer>
-      
+
       <FieldContainer>
         <Autocomp
           name="city"
           id="city"
-          :labelText="$t('city')"
-          :infoText="$t('select_city')"
+          :labelText="$t('step1.city')"
+          :infoText="$t('step1.select_city')"
           inputType="text"
           :options="optionCity"
           @input-change="handleCityChange"
@@ -157,8 +144,8 @@
         <Autocomp
           name="governorate"
           id="governorate"
-          :labelText="$t('governorate')"
-          :infoText="$t('select_governorate')"
+          :labelText="$t('step1.governorate')"
+          :infoText="$t('step1.select_governorate')"
           inputType="text"
           :options="optionGovernorate"
           @input-change="handleGovernorateChange"
@@ -170,9 +157,9 @@
 
       <FieldContainer>
         <StyledInput
-          :labelText="$t('location_text')"
+          :labelText="$t('step1.location_text')"
           :isMandatory="true"
-          :infoText="$t('location_text')"
+          :infoText="$t('step1.location_text_info')"
           inputType="text"
           v-model="locationText"
           :isValid="store.step1.location_text.isValid"
@@ -183,9 +170,9 @@
       </FieldContainer>
       <FieldContainer>
         <StyledInput
-          :labelText="$t('zip_code')"
+          :labelText="$t('step1.zip_code')"
           :isMandatory="true"
-          :infoText="$t('zip_code')"
+          :infoText="$t('step1.zip_code_info')"
           inputType="text"
           v-model="zipCode"
           :isValid="store.step1.zip_code.isValid"
@@ -199,13 +186,13 @@
         <StyledInput 
           id="date_living_address" 
           name="date_living_address" 
-          :labelText="$t('date_living_address')" 
+          :labelText="$t('step1.date_living_address')"
           :isMandatory="true" 
-          :infoText="$t('date_living_address_info')" 
+          :infoText="$t('step1.date_living_address_info')" 
           inputType="date" 
           v-model="dateLivingAddress"
-          :isValid="store.step1.zip_code.isValid"
-          :validationMessage="store.step1.zip_code.validationMessage"
+          :isValid="store.step1.date_living_address.isValid"
+          :validationMessage="store.step1.date_living_address.validationMessage"
         />
       </FieldContainer>
     </div>
@@ -216,27 +203,27 @@
         id="this_is_my_name_column" 
         v-model="thisIsMyNameColumn"
       >
-        {{ $t('certify_current_name') }}
+        {{ $t('step1.certify_current_name') }}
       </CheckBox>
     </FieldContainer>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium text-black">{{ $t('alias_name') }}</h1>
+      <h1 class="text-lg font-medium text-black">{{ $t('step1.alias_name') }}</h1>
       <Info
-        :text="$t('alias_info')"
+        :text="$t('step1.alias_info')"
       />    
     </div>
 
     <!-- إضافة قسم Alias Name -->
     <div class="lg:grid grid-cols-1 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('alias_name') }}</h1>
-      <Info :text="$t('provide_alias_name')" />
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('step1.alias_name') }}</h1>
+      <Info :text="$t('step1.provide_alias_name')" />
 
       <!-- جدول فرعي لAlias Name -->
       <div v-for="(alias, index) in aliasNames" :key="alias.id" class="flex items-center mb-2">
         <FieldContainer>
           <StyledInput
-            :labelText="$t('full_name')"
+            :labelText="$t('step1.full_name')"
             inputType="text"
             v-model="aliasNames[index].first_name"
             :isValid="true"
@@ -248,7 +235,7 @@
         </FieldContainer>
         <FieldContainer>
           <StyledInput
-            :labelText="$t('middle_name')"
+            :labelText="$t('step1.middle_name')"
             inputType="text"
             v-model="aliasNames[index].middle_name"
             :isValid="true"
@@ -260,7 +247,7 @@
         </FieldContainer>
         <FieldContainer>
           <StyledInput
-            :labelText="$t('last_name')"
+            :labelText="$t('step1.last_name')"
             inputType="text"
             v-model="aliasNames[index].last_name"
             :isValid="true"
@@ -273,22 +260,22 @@
 
         <!-- زر حذف Alias Name -->
         <Button @click="removeAliasName(index)" class="ltr:ml-2 rtl:mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          {{ $t('remove') }}
+          {{ $t('step1.remove') }}
         </Button>
       </div>
 
       <!-- زر إضافة Alias Name جديد -->
       <Button @click="addAliasName" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ $t('add_alias_name') }}
+        {{ $t('step1.add_alias_name') }}
       </Button>
     </div>
 
     <div class="lg:grid grid-cols-1 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          :labelText="$t('email')"
+          :labelText="$t('step1.email')"
           :isMandatory="true"
-          :infoText="$t('email_info')"
+          :infoText="$t('step1.email_info')"
           inputType="email"
           name="email"
           id="email"
@@ -298,20 +285,20 @@
         />
       </FieldContainer>
       <Info
-        :text="$t('email_privacy_info')"
+        :text="$t('step1.email_privacy_info')"
       />    
     </div>
 
     <!-- إضافة قسم أرقام الهواتف -->
     <div class="lg:grid grid-cols-1 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('phone_numbers') }}</h1>
-      <Info :text="$t('provide_phone_numbers')" />
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('step1.phone_numbers') }}</h1>
+      <Info :text="$t('step1.provide_phone_numbers')" />
 
       <!-- جدول فرعي لأرقام الهواتف -->
       <div v-for="(phone, index) in phoneNumbers" :key="index" class="flex items-center mb-2">
         <FieldContainer>
           <StyledInput
-            :labelText="$t('phone')"
+            :labelText="$t('step1.phone')"
             inputType="text"
             v-model="phoneNumbers[index].phone"
             :isValid="true"
@@ -323,20 +310,20 @@
         </FieldContainer>
         <!-- زر حذف رقم الهاتف -->
         <Button @click="removePhoneNumber(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          {{ $t('remove') }}
+          {{ $t('step1.remove') }}
         </Button>
       </div>
 
       <!-- زر إضافة رقم هاتف جديد -->
       <Button @click="addPhoneNumber" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ $t('add_phone_number') }}
+        {{ $t('step1.add_phone_number') }}
       </Button>
     </div>
 
-    <div class="lg:grid grid-ows-2 lg:gap-2">
-      <h1 class="text-lg font-medium text-black">{{ $t('identification') }}</h1>
+    <div class="lg:grid grid-rows-2 lg:gap-2">
+      <h1 class="text-lg font-medium text-black">{{ $t('step1.identification') }}</h1>
       <Info
-        :text="$t('identification_info')"
+        :text="$t('step1.identification_info')"
       />
     </div>
 
@@ -345,8 +332,8 @@
         <StyledInput 
           id="date_of_birth" 
           name="date_of_birth" 
-          :labelText="$t('date_of_birth')" 
-          :infoText="$t('date_of_birth_info')" 
+          :labelText="$t('step1.date_of_birth')" 
+          :infoText="$t('step1.date_of_birth_info')" 
           inputType="date" 
           v-model="dateOfBirth"
           :isValid="store.step1.date_of_birth.isValid"
@@ -357,8 +344,8 @@
 
     <!-- <div class="pt-5 flex w-full justify-center">
       <Button level="other" @click="save" :disabled="loading" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        <span v-if="loading">{{ $t('saving') }}</span>
-        <span v-else>{{ $t('save') }}</span>
+        <span v-if="loading">{{ $t('step1.saving') }}</span>
+        <span v-else>{{ $t('step1.save') }}</span>
       </Button>
     </div> -->
   </div>
@@ -392,16 +379,14 @@ const { t } = useI18n();
 const loading = ref(false);
 const phoneNumbers = ref([{id: uuidv4(), phone: '' }]);
 const aliasNames = ref([{ id: uuidv4(), first_name: '', last_name: '', middle_name: '' }]);
-// onUpdated(async () => {
-//    store.loadStep1Fields();
-// });s
-const suffixOptions = reactive([
-  { label: 'Jr.', value: 'Jr.' },
-  { label: 'Sr.', value: 'Sr.' },
-  { label: 'III', value: 'III' },
-  { label: 'PhD', value: 'PhD' },
-  { label: 'MD', value: 'MD' },
-  { label: 'Esq.', value: 'Esq.' },
+
+const suffixOptions = computed(() => [
+  { label: t('step1.suffix_jr'), value: 'Jr.' },
+  { label: t('step1.suffix_sr'), value: 'Sr.' },
+  { label: t('step1.suffix_iii'), value: 'III' },
+  { label: t('step1.suffix_phd'), value: 'PhD' },
+  { label: t('step1.suffix_md'), value: 'MD' },
+  { label: t('step1.suffix_esq'), value: 'Esq.' },
 ]);
 
 const optionCountry = computed(() => {
@@ -521,8 +506,7 @@ const dateOfBirth = computed({
   set: (val: string) => store.updateStep1('date_of_birth', { value: val }),
 });
 
-//Funciones for handling user inputs
-
+// وظائف للتعامل مع مدخلات المستخدم
 const handleCountryChange = (value) => {
   store.updateStep1('country_now', { value: value.value });
 };

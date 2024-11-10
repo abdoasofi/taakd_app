@@ -1,11 +1,11 @@
 <!-- src/pages/stepsSections/step3.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('employment_history') }}</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('step3.employment_history') }}</h1>
     <ul>
-      <li>{{ $t('required_fields') }}</li>
+      <li>{{ $t('step3.required_fields') }}</li>
       <li>
-        {{ $t('provide_employment_info') }}
+        {{ $t('step3.provide_employment_info') }}
       </li>
     </ul>
   </div>
@@ -15,36 +15,36 @@
     <FieldsToggleContainer
       v-for="(employment, index) in employmentHistory"
       :key="employment.employment_id"
-      :title="employment.company || `${$t('employment')} ${index + 1}`"
+      :title="employment.company || `${$t('step3.employment')} ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Company Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('company')"
+            :labelText="$t('step3.company')"
             :isMandatory="true"
-            :infoText="$t('company')"
+            :infoText="$t('step3.company')"
             inputType="text"
             name="company"
             :id="`company-${employment.employment_id}`"
             v-model="employment.company"
             :isValid="validateCompany(employment.company)"
-            :validationMessage="$t('required_company')"
+            :validationMessage="$t('step3.required_company')"
           />
         </FieldContainer> 
 
         <!-- Name of Employer Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('name_of_your_employer')"
+            :labelText="$t('step3.name_of_your_employer')"
             :isMandatory="true"
-            :infoText="$t('name_of_your_employer')"
+            :infoText="$t('step3.name_of_your_employer')"
             inputType="text"
             name="name_of_your_employer"
             :id="`name_of_your_employer-${employment.employment_id}`"
             v-model="employment.name_of_your_employer"
             :isValid="validateNameOfYourEmployer(employment.name_of_your_employer)"
-            :validationMessage="$t('required_name_of_your_employer')"
+            :validationMessage="$t('step3.required_name_of_your_employer')"
           />
         </FieldContainer> 
       </div>
@@ -57,7 +57,7 @@
             :id="`contact_the_employer-${employment.employment_id}`" 
             v-model="employment.contact_the_employer"
           >
-            {{ $t('permission_to_contact') }}
+            {{ $t('step3.permission_to_contact') }}
           </CheckBox>
         </FieldContainer>
 
@@ -68,7 +68,7 @@
             :id="`issuing_salary-${employment.employment_id}`" 
             v-model="employment.issuing_salary"
           >
-            {{ $t('issuing_salary') }}
+            {{ $t('step3.issuing_salary') }}
           </CheckBox>
         </FieldContainer>
       </div>
@@ -78,9 +78,9 @@
         <!-- Country Autocomplete -->
         <FieldContainer>
           <Autocomp
-            :labelText="$t('country')"
+            :labelText="$t('step3.country')"
             :isMandatory="true"
-            :infoText="$t('country')"
+            :infoText="$t('step3.country')"
             inputType="text"
             name="country"
             :id="`country-${employment.employment_id}`"
@@ -88,16 +88,16 @@
             v-model="employment.country"
             @input-change="(value) => handleCountryChange(index, value)"
             :isValid="validateCountry(employment.country)"
-            :validationMessage="$t('required_country')"
+            :validationMessage="$t('step3.required_country')"
           />
         </FieldContainer>  
 
         <!-- City Autocomplete -->
         <FieldContainer>
           <Autocomp
-            :labelText="$t('city')"
+            :labelText="$t('step3.city')"
             :isMandatory="true"
-            :infoText="$t('city')"
+            :infoText="$t('step3.city')"
             inputType="text"
             name="city"
             :id="`city-${employment.employment_id}`"
@@ -105,16 +105,16 @@
             v-model="employment.city"
             @input-change="(value) => handleCityChange(index, value)"
             :isValid="validateCity(employment.city)"
-            :validationMessage="$t('required_city')"
+            :validationMessage="$t('step3.required_city')"
           />
         </FieldContainer>
 
         <!-- Governorate Autocomplete -->
         <FieldContainer>
           <Autocomp
-            :labelText="$t('governorate')"
+            :labelText="$t('step3.governorate')"
             :isMandatory="true"
-            :infoText="$t('governorate')"
+            :infoText="$t('step3.governorate')"
             inputType="text"
             name="governorate"
             :id="`governorate-${employment.employment_id}`"
@@ -122,21 +122,21 @@
             v-model="employment.governorate"
             @input-change="(value) => handleGovernorateChange(index, value)"
             :isValid="validateGovernorate(employment.governorate)"
-            :validationMessage="$t('required_governorate')"
+            :validationMessage="$t('step3.required_governorate')"
           />
         </FieldContainer>
 
         <!-- Location Text of Employer Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('location_text')"
+            :labelText="$t('step3.location_text')"
             :isMandatory="false"
-            :infoText="$t('location_text')"
+            :infoText="$t('step3.location_text')"
             inputType="text"
             name="location_text"
             :id="`location_text-${employment.employment_id}`"
             v-model="employment.location_text"
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step3.edit_message')"
           />
         </FieldContainer> 
       </div>
@@ -150,7 +150,7 @@
             :id="`continuous-${employment.employment_id}`" 
             v-model="employment.continuous"
           >
-            {{ $t('continuous') }}
+            {{ $t('step3.continuous') }}
           </CheckBox>
         </FieldContainer>   
 
@@ -161,7 +161,7 @@
             :id="`activity_has_stopped-${employment.employment_id}`" 
             v-model="employment.activity_has_stopped"
           >
-            {{ $t('activity_has_stopped') }}
+            {{ $t('step3.activity_has_stopped') }}
           </CheckBox>
         </FieldContainer> 
       </div>
@@ -172,9 +172,9 @@
           <StyledInput 
             id="from_date" 
             name="from_date" 
-            :labelText="$t('from_date')" 
+            :labelText="$t('step3.from_date')" 
             :isMandatory="true" 
-            :infoText="$t('from_date_info')" 
+            :infoText="$t('step3.from_date_info')" 
             inputType="date" 
             v-model="employment.from_date" 
             :isValid="validateFromDate(employment.from_date)"
@@ -186,9 +186,9 @@
           <StyledInput 
             id="end_date" 
             name="end_date" 
-            :labelText="$t('end_date')" 
+            :labelText="$t('step3.end_date')" 
             :isMandatory="true" 
-            :infoText="$t('end_date_info')" 
+            :infoText="$t('step3.end_date_info')" 
             inputType="date" 
             v-model="employment.end_date"
             :isValid="validateEndDate(employment.end_date)" 
@@ -200,29 +200,29 @@
         <!-- Phone Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('phone')"
+            :labelText="$t('step3.phone')"
             :isMandatory="true"
-            :infoText="$t('phone_example')"
+            :infoText="$t('step3.phone_example')"
             inputType="text"
             name="phone"
             :id="`phone-${employment.employment_id}`"
             v-model="employment.phone"
             :isValid="validatePhone(employment.phone)" 
-            :validationMessage="$t('valid_phone_required')"
+            :validationMessage="$t('step3.valid_phone_required')"
           />
         </FieldContainer>
 
         <!-- Ext Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('ext')" 
+            :labelText="$t('step3.ext')" 
             :isMandatory="false" 
-            :infoText="$t('extension_optional')" 
+            :infoText="$t('step3.extension_optional')" 
             inputType="text" 
             name="ext" 
             :id="`ext-${employment.employment_id}`" 
             v-model="employment.ext" 
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step3.edit_message')"
           />
         </FieldContainer>      
       </div>
@@ -231,31 +231,32 @@
         <!-- Official Job Title Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('official_job_title_held_currently')"
+            :labelText="$t('step3.official_job_title_held_currently')"
             :isMandatory="true"
-            :infoText="$t('official_job_title_info')"
+            :infoText="$t('step3.official_job_title_info')"
             inputType="text"
             name="official_job_title_held_currently"
             :id="`official_job_title_held_currently-${employment.employment_id}`"
             v-model="employment.official_job_title_held_currently"
             :isValid="validateOfficialJobTitleHeldCurrently(employment.official_job_title_held_currently)" 
-            :validationMessage="$t('required_official_job_title')"
+            :validationMessage="$t('step3.required_official_job_title')"
           />
         </FieldContainer> 
 
         <!-- Type of Employment Select -->
         <FieldContainer>
           <Autocomp
-            :labelText="$t('type_of_employment')"
+            :labelText="$t('step3.type_of_employment')"
             :isMandatory="false"
-            :infoText="$t('type_of_employment_info')"
+            :infoText="$t('step3.type_of_employment_info')"
             inputType="text"
             name="type_of_employment"
             :id="`type_of_employment-${employment.employment_id}`"
+            :options="optionsTypeEmployment"
             v-model="employment.type_of_employment"
             @input-change="(value) => handleTypeOfEmployment(index, value)"
             :isValid="validateTypeOfEmployment(employment.type_of_employment)"
-            :validationMessage="$t('required_type_of_employment')"
+            :validationMessage="$t('step3.required_type_of_employment')"
           />
         </FieldContainer>  
       </div>
@@ -268,7 +269,7 @@
             :id="`the_company_has_different_names-${employment.employment_id}`" 
             v-model="employment.the_company_has_different_names"
           >
-            {{ $t('the_company_has_different_names') }}
+            {{ $t('step3.the_company_has_different_names') }}
           </CheckBox>
         </FieldContainer> 
 
@@ -279,7 +280,7 @@
             :id="`nickname_checkbox-${employment.employment_id}`" 
             v-model="employment.you_have_a_nicknamecx"
           >
-            {{ $t('you_have_a_nickname') }}
+            {{ $t('step3.you_have_a_nickname') }}
           </CheckBox>
         </FieldContainer> 
       </div>
@@ -288,30 +289,30 @@
         <!-- Different Company Names Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('different_company_names')"
+            :labelText="$t('step3.different_company_names')"
             :isMandatory="false"
-            :infoText="$t('different_company_names_info')"
+            :infoText="$t('step3.different_company_names_info')"
             inputType="text"
             name="different_company_names"
             :id="`different_company_names-${employment.employment_id}`"
             v-model="employment.different_company_names"
             :isValid="false"
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step3.edit_message')"
           />
         </FieldContainer>  
 
         <!-- Nickname Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('nickname')"
+            :labelText="$t('step3.nickname')"
             :isMandatory="false" 
-            :infoText="$t('nickname_info')"
+            :infoText="$t('step3.nickname_info')"
             inputType="text"
             name="nickname"
             :id="`nickname-${employment.employment_id}`"
             v-model="employment.nickname"
             :isValid="false"
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step3.edit_message')"
           />
         </FieldContainer>         
       </div>
@@ -323,7 +324,7 @@
             v-model="employment.file"
             :id="`file-${employment.employment_id}`"
             :name="employment.employment_id" 
-            :validationMessage="$t('valid_file_required')"
+            :validationMessage="$t('step3.valid_file_required')"
           />
         </FieldContainer>
       </div>
@@ -336,7 +337,7 @@
 
     <!-- Add Employment Button -->
     <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addEmployment">+ {{ $t('add_employment_history') }}</Button>
+      <Button level="secondary" @clicked="addEmployment">+ {{ $t('step3.add_employment_history') }}</Button>
     </div>
   </div>
 </template>
@@ -356,21 +357,21 @@ import Autocomp from '../../components/autocomp.vue'
 import CheckBox from '../../components/checkBox.vue'
 import FileUpload from '../../components/fileUpload.vue'
 
-// استيراد البيانات (البلديات والمحافظات)
+// Import location data (cities and governorates)
 import { location } from '../../data/useAddressLogic'
 import { EmploymentHistory } from '../../data/types'
 
-// استيراد الستور
+// Import store
 const store = useVerificationRequestStore()
 const toast = useToast()
 
-// ربط بيانات التوظيف مع المخزن
+// Bind employment data with the store
 const employmentHistory = computed({
   get: () => store.step3.employment_history,
-  set: (val) => store.updateStep3('employment_history', val)
+  set: val => store.updateStep3('employment_history', val)
 })
 
-// خيارات نوع التوظيف
+// Employment Type options
 const optionsTypeEmployment = reactive([
   { value: "Full-Time", label: "Full-Time" },
   { value: "Part-Time", label: "Part-Time" },
@@ -378,10 +379,10 @@ const optionsTypeEmployment = reactive([
   { value: "Internship", label: "Internship" },
 ])
 
-// إدارة الأقسام المفتوحة
+// Manage open sections
 const openSections = ref<{ [key: string]: boolean }>({})
 
-// دوال الحصول على خيارات البلد، المدينة والمحافظة
+// Functions to get country, city, governorate options
 const getOptionCountry = (employment) => {
   const options = location.data
     .filter(loc => loc.location_type === 'Country')
@@ -390,7 +391,7 @@ const getOptionCountry = (employment) => {
       value: loc.location_name
     }))
 
-  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
+  // Add current value if not present
   if (employment.country && !options.some(opt => opt.value === employment.country)) {
     options.push({
       label: employment.country,
@@ -411,7 +412,7 @@ const getOptionCity = (employment) => {
       value: loc.location_name
     }))
 
-  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
+  // Add current value if not present
   if (employment.city && !options.some(opt => opt.value === employment.city)) {
     options.push({
       label: employment.city,
@@ -432,7 +433,7 @@ const getOptionGovernorate = (employment) => {
       value: loc.location_name
     }))
 
-  // إضافة القيمة الحالية إذا لم تكن موجودة في الخيارات
+  // Add current value if not present
   if (employment.governorate && !options.some(opt => opt.value === employment.governorate)) {
     options.push({
       label: employment.governorate,
@@ -443,16 +444,16 @@ const getOptionGovernorate = (employment) => {
   return options
 }
 
-// دوال التعامل مع تغييرات البلد، المدينة والمحافظة
+// Handler functions for changes
 const handleCountryChange = (index, value) => {
   employmentHistory.value[index].country = value.value
-  employmentHistory.value[index].city = '' // إعادة تعيين المدينة عند تغيير البلد
-  employmentHistory.value[index].governorate = '' // إعادة تعيين المحافظة عند تغيير البلد
+  employmentHistory.value[index].city = '' // Reset city when country changes
+  employmentHistory.value[index].governorate = '' // Reset governorate when country changes
 }
 
 const handleCityChange = (index, value) => {
   employmentHistory.value[index].city = value.value
-  employmentHistory.value[index].governorate = '' // إعادة تعيين المحافظة عند تغيير المدينة
+  employmentHistory.value[index].governorate = '' // Reset governorate when city changes
 }
 
 const handleGovernorateChange = (index, value) => {
@@ -463,7 +464,7 @@ const handleTypeOfEmployment = (index, value) => {
   employmentHistory.value[index].type_of_employment = value.value
 }
 
-// دوال التحقق
+// Validation functions
 const validateCompany = (company) => {
   return typeof company === 'string' && company.trim() !== ''
 }
@@ -505,10 +506,10 @@ const validateOfficialJobTitleHeldCurrently = (official_job_title_held_currently
   return typeof official_job_title_held_currently === 'string' && official_job_title_held_currently.trim() !== ''
 }
 
-// دالة لإضافة سجل توظيف جديد
+// Adding new employment record
 const addEmployment = () => {
   const newEmployment : EmploymentHistory = {
-    employment_id: uuidv4(), // مُعرف فريد
+    employment_id: uuidv4(), // Unique identifier
     company: '',
     name_of_your_employer: '',
     contact_the_employer: false,
@@ -537,7 +538,7 @@ const addEmployment = () => {
   })
 }
 
-// دالة حفظ بيانات التوظيف
+// Save employment data
 const saveEmployment = async (index) => {
   if (store.isLoding) {
     return

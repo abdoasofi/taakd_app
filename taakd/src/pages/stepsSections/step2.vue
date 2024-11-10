@@ -1,56 +1,58 @@
+<!-- /pages/stepsSections/step2.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('education_information') }}</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('step2.education_information') }}</h1>
     <ul>
-      <li>{{ $t('required_fields') }}</li>
-      <li>{{ $t('provide_education_info') }}</li>
+      <li>{{ $t('step2.required_fields') }}</li>
+      <li>{{ $t('step2.provide_education_info') }}</li>
     </ul>
   </div>
   <div class="space-y-2 mt-3">
     <FieldsToggleContainer
       v-for="(education, index) in educationInformation"
       :key="education.id"
-      :title="education.name_of_school_or_college_university || `${$t('education')} ${index + 1}`"
+      :title="education.name_of_school_or_college_university || `${$t('step2.education')} ${index + 1}`"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
 
         <!-- Name of School/College/University Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('name_of_school')"
+            :labelText="$t('step2.name_of_school')"
             :isMandatory="true"
-            :infoText="$t('enter_name_of_school')"
+            :infoText="$t('step2.enter_name_of_school')"
             inputType="text"
             name="name_of_school_or_college_university"
             :id="`name_of_school_or_college_university-${education.id}`"
             v-model="education.name_of_school_or_college_university"
             :isValid="validateNameOfSchool(education.name_of_school_or_college_university)"
-            :validationMessage="$t('required_name_of_school')"
+            :validationMessage="$t('step2.required_name_of_school')"
           />
         </FieldContainer>
 
         <!-- Field of Study/Major Field -->
         <FieldContainer>
           <StyledInput
-            :labelText="$t('field_of_study')"
+            :labelText="$t('step2.field_of_study')"
             :isMandatory="true"
-            :infoText="$t('enter_field_of_study')"
+            :infoText="$t('step2.enter_field_of_study')"
             inputType="text"
             name="field_of_study_or_major"
             :id="`field_of_study_or_major-${education.id}`"
             v-model="education.field_of_study_or_major"
             :isValid="validateFieldOfStudy(education.field_of_study_or_major)"
-            :validationMessage="$t('required_field_of_study')"
+            :validationMessage="$t('step2.required_field_of_study')"
           />
         </FieldContainer>
       </div>
 
       <div class="lg:grid grid-cols-2 lg:gap-2">
+
         <FieldContainer>
           <Autocomp
-            :labelText="$t('country')"
+            :labelText="$t('step2.country')"
             :isMandatory="true"
-            :infoText="$t('select_country')"
+            :infoText="$t('step2.select_country')"
             inputType="text"
             name="country"
             :id="`country-${education.id}`"
@@ -58,15 +60,15 @@
             v-model="education.country"
             @input-change="(value) => handleCountryChange(index, value)"
             :isValid="validateCountry(education.country)"
-            :validationMessage="$t('required_country')"
+            :validationMessage="$t('step2.required_country')"
           />
         </FieldContainer>
 
         <FieldContainer>
           <Autocomp
-            :labelText="$t('city')"
+            :labelText="$t('step2.city')"
             :isMandatory="true"
-            :infoText="$t('select_city')"
+            :infoText="$t('step2.select_city')"
             inputType="text"
             name="city"
             :id="`city-${education.id}`"
@@ -74,15 +76,15 @@
             v-model="education.city"
             @input-change="(value) => handleCityChange(index, value)"
             :isValid="validateCity(education.city)"
-            :validationMessage="$t('required_city')"
+            :validationMessage="$t('step2.required_city')"
           />
         </FieldContainer>
 
         <FieldContainer>
           <Autocomp
-            :labelText="$t('governorate')"
+            :labelText="$t('step2.governorate')"
             :isMandatory="true"
-            :infoText="$t('select_governorate')"
+            :infoText="$t('step2.select_governorate')"
             inputType="text"
             name="governorate"
             :id="`governorate-${education.id}`"
@@ -90,20 +92,20 @@
             v-model="education.governorate"
             @input-change="(value) => handleGovernorateChange(index, value)"
             :isValid="validateGovernorate(education.governorate)"
-            :validationMessage="$t('required_governorate')"
+            :validationMessage="$t('step2.required_governorate')"
           />
         </FieldContainer>
 
         <FieldContainer>
           <StyledInput
-            :labelText="$t('location_text')"
+            :labelText="$t('step2.location_text')"
             :isMandatory="false"
-            :infoText="$t('location_text_info')"
+            :infoText="$t('step2.location_text_info')"
             inputType="text"
             name="location_text"
             :id="`location_text-${education.id}`"
             v-model="education.location_text"
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step2.edit_message')"
           />
         </FieldContainer>
       </div>
@@ -113,9 +115,9 @@
           <StyledInput 
             id="from_date" 
             name="from_date" 
-            :labelText="$t('from_date')" 
+            :labelText="$t('step2.from_date')" 
             :isMandatory="true" 
-            :infoText="$t('education_start_date')" 
+            :infoText="$t('step2.education_start_date')" 
             inputType="date" 
             v-model="education.from_date" 
             :isValid="validateFromDate(education.from_date)"
@@ -126,13 +128,13 @@
           <StyledInput 
             id="to_date" 
             name="to_date" 
-            :labelText="$t('to_date')" 
+            :labelText="$t('step2.to_date')" 
             :isMandatory="true" 
-            :infoText="$t('education_end_date')" 
+            :infoText="$t('step2.education_end_date')" 
             inputType="date" 
             v-model="education.to_date"
             :isValid="validateToDate(education.to_date)" 
-            :validationMessage="$t('required_to_date')"
+            :validationMessage="$t('step2.required_to_date')"
           />
         </FieldContainer>
       </div>
@@ -140,28 +142,28 @@
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <FieldContainer>
           <StyledInput
-            :labelText="$t('phone')"
+            :labelText="$t('step2.phone')"
             :isMandatory="true"
-            :infoText="$t('phone_example')"
+            :infoText="$t('step2.phone_example')"
             inputType="phone"
             name="phone"
             :id="`phone-${education.id}`"
             v-model="education.phone"
             :isValid="validatePhone(education.phone)" 
-            :validationMessage="$t('valid_phone_required')"
+            :validationMessage="$t('step2.valid_phone_required')"
           />
         </FieldContainer>
         
         <FieldContainer>
           <StyledInput
-            :labelText="$t('ext')"
+            :labelText="$t('step2.ext')"
             :isMandatory="false"
-            :infoText="$t('extension_optional')"
+            :infoText="$t('step2.extension_optional')"
             inputType="text"
             name="ext"
             :id="`ext-${education.id}`"
             v-model="education.ext"
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step2.edit_message')"
           />
         </FieldContainer>      
       </div>
@@ -169,28 +171,28 @@
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <FieldContainer>
           <Select
-            :labelText="$t('diploma')"
+            :labelText="$t('step2.diploma')"
             :isMandatory="true"
-            :infoText="$t('select_highest_diploma')"
+            :infoText="$t('step2.select_highest_diploma')"
             name="diploma"
             :id="`diploma-${education.id}`"
             :options="optionsDiploma"
             v-model="education.diploma"
             :isValid="validateDiploma(education.diploma)"
-            :validationMessage="$t('required_diploma')"
+            :validationMessage="$t('step2.required_diploma')"
           />
         </FieldContainer>
 
         <FieldContainer>
           <Select
-            :labelText="$t('another_name')"
+            :labelText="$t('step2.another_name')"
             :isMandatory="false"
-            :infoText="$t('another_name_info')"
+            :infoText="$t('step2.another_name_info')"
             name="another_name"
             :id="`another_name-${education.id}`"
             :options="optionsAnotherName"
             v-model="education.another_name"
-            :validationMessage="$t('edit_message')"
+            :validationMessage="$t('step2.edit_message')"
           />
         </FieldContainer>
       </div>
@@ -201,7 +203,7 @@
     </FieldsToggleContainer>
 
     <div class="flex justify-center py-3">
-      <Button level="secondary" @clicked="addEducation">+ {{ $t('add_education_information') }}</Button>
+      <Button level="secondary" @clicked="addEducation">+ {{ $t('step2.add_education_information') }}</Button>
     </div>
   </div>
 </template>
@@ -221,7 +223,6 @@ import Autocomp from '../../components/autocomp.vue'
 import Select from '../../components/select.vue'
 
 import { location } from '../../data/useAddressLogic'
-
 
 // استيراد الستور
 const store = useVerificationRequestStore()
@@ -402,3 +403,7 @@ const saveEducation = async (index) => {
   }
 }
 </script>
+
+<style scoped>
+/* أضف تنسيقات إضافية إذا لزم الأمر */
+</style>

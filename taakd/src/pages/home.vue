@@ -35,13 +35,13 @@
                             <rect width="72" height="72" fill="white"/>
                             </clipPath>
                             </defs>
-                                        </svg>
+              </svg>
             </div>
           </div>
           <h1 class="text-sm text-secondary font-bold my-2 text-center w-full pt-5">
-            Trust. Verify. Succeed
+            {{ $t('home.trustVerifySucceed') }}
           </h1>
-          
+
           <!-- إضافة سلايدر Swiper هنا -->
           <Swiper
             v-if="requestList.data && requestList.data.length > 0"
@@ -54,27 +54,29 @@
             @slideChange="onSlideChange"
             class="my-8 lg:py-10 lg:px-40"
           >
-            <SwiperSlide v-for="(request, index) in requestList.data" :key="request.name|| index">
+            <SwiperSlide v-for="(request, index) in requestList.data" :key="request.name || index">
               <div class="grid grid-cols-3">
                 <ProcessItem
-                  label="Job Request"
+                  :label="$t('home.processItem.jobRequest')"
                   :status="getStatusOrder(request.application_status).request"
                   icon="io-document-text-outline"
                 />
                 <ProcessItem
-                  label="Verification of Basic Information"
+                  :label="$t('home.processItem.verification')"
                   :status="getStatusOrder(request.application_status).verf"
                   icon="md-verified-outlined"
                 />
                 <ProcessItem
-                  label="Review and Report Writing"
+                  :label="$t('home.processItem.reviewReportWriting')"
                   :status="getStatusOrder(request.application_status).report"
                   icon="md-ratereview-outlined"
                 />
               </div>
             </SwiperSlide>
           </Swiper>
-          <div v-else class="text-center text-gray-500">No requests available.</div>
+          <div v-else class="text-center text-gray-500">
+            {{ $t('home.noRequestsAvailable') }}
+          </div>
 
           <!-- الأزرار والشروط المعتمدة على السجل الحالي -->
           <div class="flex justify-center mt-4">
@@ -84,7 +86,7 @@
               type="submit"
               class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white"
             >
-              Fill the Form Now <span class="mx-2">-&gt;</span>
+              {{ $t('home.fillTheFormNow') }} <span class="mx-2">-&gt;</span>
             </Button>
 
             <Button
@@ -92,7 +94,7 @@
               @click="printDiv"
               class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white"
             >
-              View Report<span class=""></span>
+              {{ $t('home.viewReport') }}
             </Button>
           </div>
 
@@ -100,13 +102,17 @@
             v-if="currentProcess.request == 2 && currentProcess.verf == 1 && currentProcess.report == 0"
             class="gap-3 w-full flex flex-col justify-center items-center mt-4"
           >
-            <span class="text-primary font-bold text-lg block">Thanks for your information</span>
-            <span class="text-sm font-medium block">Thanks for your information</span>
-            <span class="text-xs font-medium block">Your order ID: GA-06564-gh71</span>
+            <span class="text-primary font-bold text-lg block">{{ $t('home.thanksForInformation') }}</span>
+            <span class="text-sm font-medium block">{{ $t('home.thanksForInformation') }}</span>
+            <span class="text-xs font-medium block">{{ $t('home.orderId') }}</span>
             <Button class="w-fit" type="submit">
-              <i class="inline-block w-4 h-4 rounded-full bg-mid_gray"></i> Rate
+              <i class="inline-block w-4 h-4 rounded-full bg-mid_gray"></i> {{ $t('home.rate') }}
             </Button>
           </div>
+          <!-- <Rating
+            size="md"
+            label="Rating"
+          /> -->
         </div>
       </BaseContainer>
     </div>
@@ -134,7 +140,7 @@
 <script setup>
 import router from '@/router';
 import { ref, watch, reactive, onMounted, computed } from 'vue';
-import { Button } from 'frappe-ui';
+import { Button, Rating } from 'frappe-ui';
 import BaseContainer from '../components/baseContainer.vue';
 import ProcessItem from './homeSections/processItem.vue';
 import Contact from './homeSections/contact.vue';
@@ -222,7 +228,7 @@ const removeAlert = function(index) {
 function fill_the_form_now() {
   let validateRes = validateInputContact(data);
   if (validateRes !== true) {
-    triggerAlert("يرجى تصحيح الأخطاء في النموذج.");
+    triggerAlert($t('home.validation.fillErrors'));
     return;
   } else {
     router.replace({ name: 'steps' });
@@ -313,7 +319,7 @@ onMounted(async () => {
     await store.loadDocument();
     console.log('تم تحميل المستند:', currentRequest.value.name);
   } else {
-    toast.error('لم يتم تحديد اسم المستند.');
+    toast.error($t('home.loadDocumentError'));
     console.log('لم يتم تحديد اسم المستند أثناء التحميل.');
   }
 });

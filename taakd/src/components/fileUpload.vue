@@ -1,11 +1,13 @@
-<!-- src/components/fileUpload.vue -->
+<!-- src/components/FileUpload.vue -->
 <template>
   <div class="p-5">
     <div class="bg-info/15 rounded-xl border-mid_gray border-[1px] border-dashed p-5 flex flex-col gap-5 items-center">
-      <div class="h-12 w-12 border-none"> <StyledIcon  scalse=2 icon="ri-upload-cloud-line"/></div>
-      <div v-if="!modelValue" class="font-semibold text-sm text-darkest_gray">Choose a file</div>
+      <div class="h-12 w-12 border-none"> 
+        <StyledIcon scale=2 icon="ri-upload-cloud-line"/>
+      </div>
+      <div v-if="!modelValue" class="font-semibold text-sm text-darkest_gray">{{ $t('fileUpload.choose_a_file') }}</div>
       <div v-if="!modelValue" class="font-normal text-[10px] text-darkest_gray text-center leading-4">
-        JPEG, PNG, PDF, and MP4 formats up to 20MB
+        {{ $t('fileUpload.file_types') }}
       </div>
       
       <!-- Input File (Uncommented) -->
@@ -22,8 +24,9 @@
       <label :for="id" class="cursor-pointer">
         <slot v-if="!modelValue">
           <div class="be-white border-[0.8px] hover:bg-hover border-primary px-4 py-2 text-primary text-sm font-medium rounded-[100px]">
-            Select File
+            {{ $t('fileUpload.select_file') }}
           </div>
+          <div class="text-sm text-gray-500 mt-1">{{ $t('fileUpload.or_drag_and_drop') }}</div>
         </slot>
       </label>
       
@@ -35,7 +38,7 @@
             target="_blank"
             class="ltr:ml-2 rtl:mr-2 text-blue-600 underline"
           >
-            View File
+            {{ $t('fileUpload.view_file') }}
           </a>
         </template>
         <template v-else>
@@ -94,5 +97,5 @@ const onFileChange = (event: Event) => {
 </script>
 
 <style scoped>
-/* يمكنك إضافة أنماط إضافية هنا إذا لزم الأمر */
+/* يمكنك إضافة تنسيقات إضافية هنا إذا لزم الأمر */
 </style>
