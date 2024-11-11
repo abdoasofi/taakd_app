@@ -20,7 +20,7 @@
     </ol>
     
     <div class="lg:grid grid-cols-2 lg:gap-2">
-      <Button class="my-2" level="secondary">{{ $t('step6.print_unsigned_document') }}</Button>
+      <Button @click="printDiv" class="my-2" level="secondary">{{ $t('step6.print_unsigned_document') }}</Button>
     </div>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
@@ -136,6 +136,11 @@
       </Button>
     </div>
   </div>
+  <div class="hidden">
+      <div id="yourDivId">
+        <Report />
+      </div>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -152,6 +157,9 @@ import { ref, computed } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import { useToast } from 'vue-toastification';
 import { useLanguage } from '../../stores/language';
+import printJS from 'print-js';
+import Report from './report.vue';
+
 
 // استيراد الستور
 const store = useVerificationRequestStore();
@@ -226,6 +234,14 @@ const save = async () => {
   } finally {
     loading.value = false;
   }
+};
+
+const printDiv = () => {
+  printJS({
+    printable: 'yourDivId',
+    type: 'html',
+    targetStyles: ['*'], // يتضمن الأنماط من Tailwind CSS
+  });
 };
 </script>
 

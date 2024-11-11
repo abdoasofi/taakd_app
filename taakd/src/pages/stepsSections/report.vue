@@ -180,7 +180,7 @@
           :key="education.id"
           class="p-1"
         >
-          <div v-if="index % 4 === 0 && index !== 0" class="relative printOnly">
+          <div v-if="index % 2 === 0 && index !== 0" class="relative printOnly">
             <div class="bg-black flex gap-12 p-4 text-white">
               <div>
                 <div
@@ -200,24 +200,44 @@
             <div class="flex justify-end">{{ $t('report.completeDataVerified') }}</div>
             <span class="block border-b-2 border-b-black my-3"></span>
             <div class="space-y-3 font-bold">
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.location') }}</div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.country') }}</div>
+                <div class="font-normal">{{ education.country }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.city') }}</div>
+                <div class="font-normal">{{ education.city }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.governorate') }}</div>
+                <div class="font-normal">{{ education.governorate }}</div>
+              </div>
+
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.location_text') }}</div>
+                <div class="font-normal">{{ education.location_text }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.from_date') }}</div>
+                <div class="font-normal">{{ education.from_date }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.to_date') }}</div>
+                <div class="font-normal">{{ education.to_date }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.field_of_study_or_major') }}</div>
+                <div class="font-normal">{{ education.field_of_study_or_major }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.phone') }}</div>
                 <div class="font-normal">{{ education.phone }}</div>
               </div>
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.school') }}</div>
-                <div class="font-normal">[{{ $t('report.schoolPlaceholder') }}]</div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600" >
+                <div>{{ $t('report.ext') }}</div>
+                <div class="font-normal">{{ education.ext }}</div>
               </div>
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.school') }}</div>
-                <div class="font-normal">[{{ $t('report.schoolPlaceholder') }}]</div>
-              </div>
+
             </div>
           </div>
         </div>
@@ -264,27 +284,83 @@
               <div>{{ $t('report.party') }}</div>
               <div>{{ employment.company }}</div>
             </div>
+
             <div class="flex justify-end">{{ $t('report.completeDataVerified') }}</div>
             <span class="block border-b-2 border-b-black my-3"></span>
             <div class="space-y-3 font-bold">
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.location') }}</div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.name_of_your_employer') }}</div>
+                <div class="font-normal">{{ employment.name_of_your_employer }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.contact_the_employer') }}</div>
+                <div class="font-normal">{{ employment.contact_the_employer }}</div>
+              </div>
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.issuing_salary') }}</div>
+                <div class="font-normal">{{ employment.issuing_salary }}</div>
+              </div> -->
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.country') }}</div>
+                <div class="font-normal">{{ employment.country }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.city') }}</div>
+                <div class="font-normal">{{ employment.city }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.location_text') }}</div>
+                <div class="font-normal">{{ employment.location_text }}</div>
+              </div>
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.continuous') }}</div>
+                <div class="font-normal">{{ employment.continuous }}</div>
+              </div> -->
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.activity_has_stopped') }}</div>
+                <div class="font-normal">{{ employment.activity_has_stopped }}</div>
+              </div> -->
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.from_date') }}</div>
+                <div class="font-normal">{{ employment.from_date }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.end_date') }}</div>
+                <div class="font-normal">{{ employment.end_date }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.phone') }}</div>
                 <div class="font-normal">{{ employment.phone }}</div>
               </div>
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.school') }}</div>
-                <div class="font-normal">[{{ $t('report.schoolPlaceholder') }}]</div>
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.ext') }}</div>
+                <div class="font-normal">{{ employment.ext }}</div>
+              </div> -->
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.official_job_title_held_currently') }}</div>
+                <div class="font-normal">{{ employment.official_job_title_held_currently }}</div>
               </div>
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.school') }}</div>
-                <div class="font-normal">[{{ $t('report.schoolPlaceholder') }}]</div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.type_of_employment') }}</div>
+                <div class="font-normal">{{ employment.type_of_employment }}</div>
               </div>
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.the_company_has_different_names') }}</div>
+                <div class="font-normal">{{ employment.the_company_has_different_names }}</div>
+              </div> -->
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.different_company_names') }}</div>
+                <div class="font-normal">{{ employment.different_company_names }}</div>
+              </div> -->
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.you_have_a_nicknamecx') }}</div>
+                <div class="font-normal">{{ employment.you_have_a_nicknamecx }}</div>
+              </div> -->
+              <!-- <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.nickname') }}</div>
+                <div class="font-normal">{{ employment.nickname }}</div>
+              </div> -->
+
             </div>
           </div>
         </div>
@@ -333,23 +409,33 @@
             <div class="flex justify-end">{{ $t('report.dateAwarded') }}: {{ professional_qualification.date_awarded }}</div>
             <span class="block border-b-2 border-b-black my-3"></span>
             <div class="space-y-3 font-bold">
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
                 <div>{{ $t('report.licenseOrCertificateNumber') }}</div>
                 <div class="font-normal">{{ professional_qualification.license_or_certificate_number }}</div>
               </div>
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.school') }}</div>
-                <div class="font-normal">[{{ $t('report.schoolPlaceholder') }}]</div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.issuing_country') }}</div>
+                <div class="font-normal">{{ professional_qualification.issuing_country }}</div>
               </div>
-              <div
-                class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600"
-              >
-                <div>{{ $t('report.school') }}</div>
-                <div class="font-normal">[{{ $t('report.schoolPlaceholder') }}]</div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.date_awarded') }}</div>
+                <div class="font-normal">{{ professional_qualification.date_awarded }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.expiration_date') }}</div>
+                <div class="font-normal">{{ professional_qualification.expiration_date }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.award_name_description') }}</div>
+                <div class="font-normal">{{ professional_qualification.award_name_description }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.is_an_expiration_date') }}</div>
+                <div class="font-normal">{{ professional_qualification.is_an_expiration_date }}</div>
+              </div>
+              <div class="grid grid-cols-2 border-b-2 border-dotted border-b-gray-600">
+                <div>{{ $t('report.your_name_varies') }}</div>
+                <div class="font-normal">{{ professional_qualification.your_name_varies }}</div>
               </div>
             </div>
           </div>
