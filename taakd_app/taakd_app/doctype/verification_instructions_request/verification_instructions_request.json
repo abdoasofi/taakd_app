@@ -123,11 +123,6 @@
    "label": "I don't have a middle name"
   },
   {
-   "fieldname": "full_name",
-   "fieldtype": "Data",
-   "label": "Full Name"
-  },
-  {
    "fieldname": "suffix",
    "fieldtype": "Select",
    "label": "Suffix",
@@ -523,6 +518,11 @@
    "label": "Applicant Report",
    "options": "Applicant Report",
    "report_hide": 1
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -534,7 +534,7 @@
    "link_fieldname": "verification_instructions_request"
   }
  ],
- "modified": "2024-11-11 22:21:38.307386",
+ "modified": "2024-11-11 23:54:38.171561",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",

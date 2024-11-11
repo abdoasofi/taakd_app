@@ -288,3 +288,28 @@ class ApplicantInvitation(Document):
                 if not pkg.file_image.startswith("/"):
                     pkg.file_image = "/" + pkg.file_image
         return packages
+    
+    @frappe.whitelist()
+    def get_package_details(self, package):
+        """
+        جلب تفاصيل الحزمة بناءً على اسم الحزمة.
+
+        Args:
+            package (str): اسم الحزمة.
+
+        Returns:
+            dict: تفاصيل الحزمة مثل الاسم، الصورة، والوصف.
+        """
+        if not package:
+            return {}
+        
+        try:
+            package_doc = frappe.get_doc("Product Bundle", package)
+            return {
+                "name": package_doc.name,
+                "file_image": frappe.utils.get_url(package_doc.file_image),
+                "custom_package_description": package_doc.custom_package_description
+            }
+        except Exception as e:
+            frappe.log_error(_("Package '{0}' not found. Error: {1}").format(package, str(e)), "get_package_details")
+            return {}

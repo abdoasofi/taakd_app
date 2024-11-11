@@ -11,12 +11,8 @@ class VerificationInstructionsRequest(Document):
         self.add_full_name()
 
     def add_full_name(self) -> None:
-        """Constructs the full name from individual name fields."""
-        parts = [self.first_name]
-        if self.middle_name:
-            parts.append(self.middle_name)
-        parts.append(self.last_name)
-        self.full_name = " ".join(parts)
+        middle_name = self.middle_name or ""
+        self.full_name = f"{self.first_name} {middle_name} {self.last_name}" 
 
     def on_submit(self):
         """Hook that runs when the document is submitted."""

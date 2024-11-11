@@ -8,6 +8,11 @@ frappe.ui.form.on("Applicant Invitation", {
             frm.slider_initialized = true;
             initialize_slider(frm);
         }
+
+        // التحقق من حالة المستند
+        // if (frm.doc.docstatus === 1) { // المستند معتمد
+        //     make_slider_readonly(frm);
+        // }
     },
     onload: function(frm) {
         frm.trigger('package');
@@ -115,30 +120,74 @@ function load_packages(frm) {
                 const container = frm.get_field('packages').$wrapper.find('#packages-container');
                 container.empty();
 
-                if (r.message.length === 0) {
-                    container.html("<p>لا توجد حزم متاحة.</p>");
-                    return;
-                }
+                if (frm.doc.docstatus === 1) { // إذا كان المستند معتمدًا
+                    const selected_package = frm.doc.package;
+                    if (!selected_package) {
+                        container.html("<p>لم يتم اختيار حزمة.</p>");
+                        return;
+                    }
 
-                r.message.forEach(pkg => {
-                    let image_src = pkg.file_image ? frappe.utils.get_file_link(pkg.file_image) : '/assets/your_app/images/default.png';
+                    // جلب تفاصيل الحزمة المختارة
+                    frappe.call({
+                        doc: frm.doc,
+                        method: "get_package_details",
+                        args: {
+                            package: selected_package
+                        },
+                        callback: function(res) {
+                            if (res.message && Object.keys(res.message).length > 0) {
+                                let pkg = res.message;
+                                let image_src = pkg.file_image ? frappe.utils.get_file_link(pkg.file_image) : '/assets/your_app/images/default.png';
 
-                    const slide = `
-                        <div class="swiper-slide">
-                            <div class="card">
-                                <img src="${image_src}" class="card-img-top" alt="${pkg.name}">
-                                <div class="card-body">
-                                    <h5 class="card-title">${pkg.name}</h5>
-                                    <p class="card-text">${pkg.custom_package_description}</p>
-                                    <button class="btn select-package" data-package="${pkg.name}">اختيار الباقة</button>
+                                const slide = `
+                                    <div class="swiper-slide">
+                                        <div class="card">
+                                            <img src="${image_src}" class="card-img-top" alt="${pkg.name}">
+                                            <div class="card-body">
+                                                <h5 class="card-title">${pkg.name}</h5>
+                                                <p class="card-text">${pkg.custom_package_description}</p>
+                                                <button class="btn btn-success" disabled>تم اختيار الباقة</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                                container.append(slide);
+                                initialize_swiper(frm, true); // تمرير true لوضع القراءة
+                            } else {
+                                container.html("<p>الحزمة المختارة غير موجودة.</p>");
+                            }
+                        },
+                        error: function(error) {
+                            container.html("<p>حدث خطأ أثناء جلب تفاصيل الحزمة.</p>");
+                            console.error(error);
+                        }
+                    });
+                } else { // إذا كان المستند غير معتمدًا
+                    if (r.message.length === 0) {
+                        container.html("<p>لا توجد حزم متاحة.</p>");
+                        return;
+                    }
+
+                    r.message.forEach(pkg => {
+                        let image_src = pkg.file_image ? frappe.utils.get_file_link(pkg.file_image) : '/assets/your_app/images/default.png';
+
+                        const slide = `
+                            <div class="swiper-slide">
+                                <div class="card">
+                                    <img src="${image_src}" class="card-img-top" alt="${pkg.name}">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${pkg.name}</h5>
+                                        <p class="card-text">${pkg.custom_package_description}</p>
+                                        <button class="btn select-package" data-package="${pkg.name}">اختيار الباقة</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    `;
-                    container.append(slide);
-                });
+                        `;
+                        container.append(slide);
+                    });
 
-                initialize_swiper(frm);
+                    initialize_swiper(frm, false); // تمرير false لوضع التحرير
+                }
             } else {
                 frappe.msgprint(__("لم يتم العثور على حزم لعرضها."));
             }
@@ -150,9 +199,17 @@ function load_packages(frm) {
     });
 }
 
-function initialize_swiper(frm) {
+function initialize_swiper(frm, read_only) {
     const html_field = frm.get_field('packages');
-    var swiperInstance = new Swiper(html_field.$wrapper.find('.swiper-container')[0], {
+    let swiperElement = html_field.$wrapper.find('.swiper-container')[0];
+
+    // تأكد من تدمير السلايدر السابق إذا كان موجودًا
+    if (html_field.swiper_instance) {
+        html_field.swiper_instance.destroy(true, true);
+    }
+
+    // تهيئة السلايدر بناءً على الحالة (قراءة أو تحرير)
+    html_field.swiper_instance = new Swiper(swiperElement, {
         slidesPerView: 1, // عرض بطاقة واحدة فقط
         spaceBetween: 30,
         effect: 'cube',
@@ -162,7 +219,7 @@ function initialize_swiper(frm) {
           shadowOffset: 20,
           shadowScale: 0.94,
         },
-        loop: true,
+        loop: !read_only, // السماح بالتكرار إذا كان الوضع تحرير
         pagination: {
             el: html_field.$wrapper.find('.swiper-pagination')[0],
             clickable: true,
@@ -170,21 +227,34 @@ function initialize_swiper(frm) {
         navigation: {
             nextEl: html_field.$wrapper.find('.swiper-button-next')[0],
             prevEl: html_field.$wrapper.find('.swiper-button-prev')[0],
+            enabled: !read_only // تمكين التنقل إذا كان الوضع تحرير
         },
         keyboard: {
-            enabled: true,          // تمكين التحكم باللوحة المفاتيح
+            enabled: !read_only,          // تمكين التحكم باللوحة المفاتيح إذا كان الوضع تحرير
             onlyInViewport: true,   // السماح بالتحكم فقط عندما يكون السلايدر في العرض
-          },
-          mousewheel: {
+        },
+        mousewheel: {
             invert: false,            // عكس اتجاه التمرير إذا لزم الأمر
-          },
+            enabled: !read_only,     // تمكين التمرير بالماوس إذا كان الوضع تحرير
+        },
     });
 
-    html_field.$wrapper.find('.select-package').off('click').on('click', function() {
-        const packageName = $(this).data('package');
-        frm.set_value('package', packageName);
-        frappe.msgprint(__("تم اختيار الباقة: " + packageName));
-    });
+    if (read_only) {
+        // إخفاء أزرار التنقل في وضع القراءة
+        html_field.$wrapper.find('.swiper-button-next, .swiper-button-prev').hide();
+    } else {
+        // إظهار أزرار التنقل في وضع التحرير
+        html_field.$wrapper.find('.swiper-button-next, .swiper-button-prev').show();
+
+        // تعيين أحداث النقر على أزرار اختيار الحزمة فقط في وضع التحرير
+        html_field.$wrapper.find('.select-package').off('click').on('click', function() {
+            const packageName = $(this).data('package');
+            frm.set_value('package', packageName);
+            frappe.msgprint(__("تم اختيار الباقة: " + packageName));
+            // إعادة تحميل السلايدر لعرض الحزمة المختارة فقط
+            load_packages(frm);
+        });
+    }
 
     if (!document.getElementById('slider-styles')) {
         let style = document.createElement('style');
@@ -307,5 +377,12 @@ function initialize_swiper(frm) {
             }
         `;
         document.head.appendChild(style);
-    }
+    } 
 }
+
+function make_slider_readonly(frm) {
+    // إعادة تحميل السلايدر ليعرض الحزمة المختارة فقط وتعطيل التنقل
+    load_packages(frm);
+    
+}
+   
