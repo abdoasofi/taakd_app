@@ -78,6 +78,7 @@
   "language",
   "application_status",
   "progress_steps",
+  "applicant_report",
   "financial_details_tab",
   "financial_details_section",
   "sales_invoice",
@@ -515,12 +516,25 @@
   {
    "fieldname": "column_break_xhnr",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "applicant_report",
+   "fieldtype": "Link",
+   "label": "Applicant Report",
+   "options": "Applicant Report",
+   "report_hide": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2024-10-14 19:06:52.058098",
+ "links": [
+  {
+   "group": "Applicant Report",
+   "link_doctype": "Applicant Report",
+   "link_fieldname": "verification_instructions_request"
+  }
+ ],
+ "modified": "2024-11-11 22:21:38.307386",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Verification Instructions Request",

@@ -24,6 +24,8 @@
   "alias_name",
   "id_card_information_section",
   "date_of_birth",
+  "personal_information_verification_notes_section",
+  "personal_information_notes",
   "contact_information_tab",
   "contact_information_section",
   "email",
@@ -36,8 +38,11 @@
   "from_time",
   "column_break_zqpn",
   "to_time",
+  "information_contact_verification_notes_section",
+  "contact_information_notes",
   "current_mailing_address_tab",
   "current_mailing_address_section",
+  "column_break_dfly",
   "country_now",
   "city",
   "governorate",
@@ -46,16 +51,25 @@
   "column_break_izev",
   "street_address",
   "date_living_address",
+  "notes_checkon_current_mailing_address_section",
+  "current_mailing_address_notes",
   "education_information_tab",
   "education_information_section",
   "donot_employer",
   "education_information",
+  "education_information_verification_notes_section",
+  "text_editor_cvll",
+  "employment_history_tab",
+  "employment_history_section",
+  "column_break_hfus",
+  "employment_history",
+  "observations_for_verification_of_employment_history_section",
+  "employment_history_notes",
   "tab_5_tab",
   "professional_qualification_verification_section",
   "professional_qualification",
-  "tab_4_tab",
-  "employment_history_section",
-  "employment_history",
+  "professional_qualification_verification_notes_section",
+  "professional_qualification_verification_notes",
   "tab_6_tab",
   "screening_disclosure_and_authorization_section",
   "full_name",
@@ -67,7 +81,14 @@
   "tab_7_tab",
   "sales_invoice",
   "column_break_higr",
-  "payment_status"
+  "payment_status",
+  "information_report_tab",
+  "information_report_section",
+  "report_status",
+  "start_reviewing_date",
+  "column_break_fost",
+  "end_reviewing_date",
+  "issue_date"
  ],
  "fields": [
   {
@@ -75,7 +96,8 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Verification Instructions Request",
-   "options": "Verification Instructions Request"
+   "options": "Verification Instructions Request",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_knme",
@@ -84,13 +106,15 @@
   {
    "fieldname": "first_name",
    "fieldtype": "Data",
-   "label": "First Name"
+   "label": "First Name",
+   "read_only": 1
   },
   {
    "fetch_from": "verification_instructions_request.last_name",
    "fieldname": "last_name",
    "fieldtype": "Data",
-   "label": "Last Name"
+   "label": "Last Name",
+   "read_only": 1
   },
   {
    "fieldname": "personal_information_tab",
@@ -115,39 +139,46 @@
   {
    "fieldname": "employer_name",
    "fieldtype": "Data",
-   "label": "Employer Name"
+   "label": "Employer Name",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "this_is_my_name_column",
    "fieldtype": "Check",
-   "label": "I certify this is my current legal name, exactly as it is displayed on my government-issued identification document "
+   "label": "I certify this is my current legal name, exactly as it is displayed on my government-issued identification document ",
+   "read_only": 1
   },
   {
    "fieldname": "middle_name",
    "fieldtype": "Data",
-   "label": "Middle Name"
+   "label": "Middle Name",
+   "read_only": 1
   },
   {
    "fieldname": "from_time",
    "fieldtype": "Time",
-   "label": "From"
+   "label": "From",
+   "read_only": 1
   },
   {
    "fieldname": "to_time",
    "fieldtype": "Time",
-   "label": "To"
+   "label": "To",
+   "read_only": 1
   },
   {
    "fieldname": "country",
    "fieldtype": "Link",
    "label": "Country",
-   "options": "Location"
+   "options": "Location",
+   "read_only": 1
   },
   {
    "fieldname": "email",
    "fieldtype": "Data",
-   "label": "Email"
+   "label": "Email",
+   "read_only": 1
   },
   {
    "fieldname": "city",
@@ -159,18 +190,21 @@
    "fieldname": "governorate",
    "fieldtype": "Link",
    "label": "Muhafazah (Governorate)",
-   "options": "Location"
+   "options": "Location",
+   "read_only": 1
   },
   {
    "fieldname": "education_information",
    "fieldtype": "Table",
    "label": "Education Information",
-   "options": "Education Information"
+   "options": "Education Information",
+   "read_only": 1
   },
   {
    "fieldname": "date_of_birth",
    "fieldtype": "Date",
-   "label": "Date of Birth"
+   "label": "Date of Birth",
+   "read_only": 1
   },
   {
    "fieldname": "contact_information_tab",
@@ -188,11 +222,6 @@
    "label": "Education Information"
   },
   {
-   "fieldname": "tab_4_tab",
-   "fieldtype": "Tab Break",
-   "label": "Employment History"
-  },
-  {
    "fieldname": "employment_history_section",
    "fieldtype": "Section Break",
    "label": "Employment History"
@@ -201,7 +230,8 @@
    "fieldname": "employment_history",
    "fieldtype": "Table",
    "label": "Employment History",
-   "options": "Employment History"
+   "options": "Employment History",
+   "read_only": 1
   },
   {
    "fieldname": "tab_5_tab",
@@ -226,12 +256,14 @@
   {
    "fieldname": "full_name",
    "fieldtype": "Data",
-   "label": "Full Name"
+   "label": "Full Name",
+   "read_only": 1
   },
   {
    "fieldname": "email_address",
    "fieldtype": "Data",
-   "label": "E-Mail Address"
+   "label": "E-Mail Address",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_zydr",
@@ -240,13 +272,15 @@
   {
    "fieldname": "electronic_signature",
    "fieldtype": "Signature",
-   "label": "Electronic signature"
+   "label": "Electronic signature",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "i_acknowledge_the_above",
    "fieldtype": "Check",
-   "label": "I certify that I am the person identified "
+   "label": "I certify that I am the person identified ",
+   "read_only": 1
   },
   {
    "fieldname": "tab_7_tab",
@@ -257,7 +291,8 @@
    "fieldname": "sales_invoice",
    "fieldtype": "Link",
    "label": "Sales Invoice",
-   "options": "Sales Invoice"
+   "options": "Sales Invoice",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_higr",
@@ -267,7 +302,8 @@
    "fetch_from": "sales_invoice.status",
    "fieldname": "payment_status",
    "fieldtype": "Data",
-   "label": "Payment Status"
+   "label": "Payment Status",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_wlpy",
@@ -283,7 +319,8 @@
    "fieldname": "alias_name",
    "fieldtype": "Table",
    "label": "Alias Name",
-   "options": "Alias Name"
+   "options": "Alias Name",
+   "read_only": 1
   },
   {
    "fieldname": "id_card_information_section",
@@ -294,13 +331,15 @@
    "default": "0",
    "fieldname": "dont_middle_name",
    "fieldtype": "Check",
-   "label": "I don't have a middle name"
+   "label": "I don't have a middle name",
+   "read_only": 1
   },
   {
    "fieldname": "suffix",
    "fieldtype": "Select",
    "label": "Suffix",
-   "options": "\nJr.\nSr.\nIII\nPhD\nMD\nEsq"
+   "options": "\nJr.\nSr.\nIII\nPhD\nMD\nEsq",
+   "read_only": 1
   },
   {
    "fieldname": "contact_information_section",
@@ -315,12 +354,14 @@
    "default": "0",
    "fieldname": "is_degree_or_diploma",
    "fieldtype": "Check",
-   "label": "Did you obtain the degree or diploma? *"
+   "label": "Did you obtain the degree or diploma? *",
+   "read_only": 1
   },
   {
    "fieldname": "mobile_number",
    "fieldtype": "Data",
-   "label": "Mobile Number"
+   "label": "Mobile Number",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_xggu",
@@ -330,7 +371,8 @@
    "fieldname": "phone",
    "fieldtype": "Table",
    "label": "Phone",
-   "options": "Employer Phone"
+   "options": "Employer Phone",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_bkwx",
@@ -338,12 +380,14 @@
   },
   {
    "fieldname": "column_break_zqpn",
-   "fieldtype": "Column Break"
+   "fieldtype": "Column Break",
+   "read_only": 1
   },
   {
    "fieldname": "current_mailing_address_tab",
    "fieldtype": "Tab Break",
-   "label": "Current Mailing Address"
+   "label": "Current Mailing Address",
+   "read_only": 1
   },
   {
    "fieldname": "current_mailing_address_section",
@@ -353,7 +397,8 @@
   {
    "fieldname": "country_now",
    "fieldtype": "Select",
-   "label": "Country"
+   "label": "Country",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_izev",
@@ -362,46 +407,162 @@
   {
    "fieldname": "street_address",
    "fieldtype": "Long Text",
-   "label": "Street Address"
+   "label": "Street Address",
+   "read_only": 1
   },
   {
    "fieldname": "date_living_address",
    "fieldtype": "Date",
-   "label": "Date you started living at this address"
+   "label": "Date you started living at this address",
+   "read_only": 1
   },
   {
    "fieldname": "zip_code",
    "fieldtype": "Data",
-   "label": "Zip Code"
+   "label": "Zip Code",
+   "read_only": 1
   },
   {
    "fieldname": "location_text",
    "fieldtype": "Data",
-   "label": "Location Text"
+   "label": "Location Text",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "donot_employer",
    "fieldtype": "Check",
-   "label": "I do not have a current employer to report"
+   "label": "I do not have a current employer to report",
+   "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "i_agree_to_the_electronic_signature",
    "fieldtype": "Check",
-   "label": "I understand that I am using electronic means to sign this document"
+   "label": "I understand that I am using electronic means to sign this document",
+   "read_only": 1
   },
   {
    "fieldname": "professional_qualification",
    "fieldtype": "Table",
    "label": "Professional Qualification",
-   "options": "Professional Qualification"
+   "options": "Professional Qualification",
+   "read_only": 1
+  },
+  {
+   "fieldname": "personal_information_verification_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Personal Information Verification Notes"
+  },
+  {
+   "fieldname": "personal_information_notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "information_contact_verification_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Information Contact Verification Notes"
+  },
+  {
+   "fieldname": "contact_information_notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "notes_checkon_current_mailing_address_section",
+   "fieldtype": "Section Break",
+   "label": "Notes Checkon Current Mailing Address"
+  },
+  {
+   "fieldname": "current_mailing_address_notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "education_information_verification_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Education Information Verification Notes"
+  },
+  {
+   "fieldname": "text_editor_cvll",
+   "fieldtype": "Text Editor"
+  },
+  {
+   "fieldname": "employment_history_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employment History"
+  },
+  {
+   "fieldname": "observations_for_verification_of_employment_history_section",
+   "fieldtype": "Section Break",
+   "label": "Observations for verification of Employment History"
+  },
+  {
+   "fieldname": "employment_history_notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "professional_qualification_verification_notes_section",
+   "fieldtype": "Section Break",
+   "label": "Professional Qualification Verification Notes"
+  },
+  {
+   "fieldname": "professional_qualification_verification_notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "information_report_tab",
+   "fieldtype": "Tab Break",
+   "label": "Information Report"
+  },
+  {
+   "fieldname": "information_report_section",
+   "fieldtype": "Section Break",
+   "label": "Information Report"
+  },
+  {
+   "fieldname": "report_status",
+   "fieldtype": "Select",
+   "label": "Report Status",
+   "options": "Request submitted\nStart reviewing\nOn hold\nWriting notes\nReview completed\nReport Submitted"
+  },
+  {
+   "fieldname": "start_reviewing_date",
+   "fieldtype": "Date",
+   "label": "Start Reviewing Date"
+  },
+  {
+   "fieldname": "column_break_fost",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "end_reviewing_date",
+   "fieldtype": "Date",
+   "label": "End Reviewing Date "
+  },
+  {
+   "fieldname": "issue_date",
+   "fieldtype": "Date",
+   "label": "Issue Date"
+  },
+  {
+   "fieldname": "column_break_dfly",
+   "fieldtype": "Column Break",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_hfus",
+   "fieldtype": "Column Break",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-10-30 02:05:23.537209",
+ "modified": "2024-11-11 22:06:14.158777",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Applicant Report",

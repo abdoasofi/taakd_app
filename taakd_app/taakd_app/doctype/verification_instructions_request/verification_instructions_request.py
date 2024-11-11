@@ -8,22 +8,17 @@ class VerificationInstructionsRequest(Document):
     """Document class for Verification Instructions Request."""
     
     def before_save(self):
-        # create_applicant_report(self)
-            pass
-    #     """Hook that runs before saving the document."""
-    #     self.add_full_name()
+        self.add_full_name()
 
-    # def add_full_name(self) -> None:
-    #     """Constructs the full name from individual name fields."""
-    #     parts = [self.first_name]
-    #     if self.middle_name:
-    #         parts.append(self.middle_name)
-    #     parts.append(self.last_name)
-    #     self.full_name = " ".join(parts)
+    def add_full_name(self) -> None:
+        """Constructs the full name from individual name fields."""
+        parts = [self.first_name]
+        if self.middle_name:
+            parts.append(self.middle_name)
+        parts.append(self.last_name)
+        self.full_name = " ".join(parts)
 
     def on_submit(self):
-        print("*-"*50)
-
         """Hook that runs when the document is submitted."""
         create_applicant_report(self)
 
@@ -62,24 +57,18 @@ def upload_verification_file():
             decode=False,
             is_private=0,
         )
-        print("************* file_doc.file_url *********************** ",file_doc.file_url)
         # الحصول على رابط الملف
         file_url = file_doc.file_url
-        print("************* file_url *********************** ",file_url)
         # الحصول على الوثيقة الرئيسية
         parent_doc = frappe.get_doc(doctype, docname)
-        print("************* parent_doc *********************** ",parent_doc)
         # العثور على السجل الفرعي بناءً على `employment_id` في حقل 'employment_id'
         child_doc = next((child for child in parent_doc.get(parentfield, []) if child.employment_id == employment_id), None)
         
-        print("************* child.employment_id == employment_id *********************** ",child_doc.employment_id, employment_id)
         if not child_doc:
             frappe.throw(_("Employment record not found."))
 
         # تحديث حقل الملف في السجل الفرعي
-        print("************* child_doc.file  *********************** ",child_doc.file )
         child_doc.file = file_url
-        print("************* child_doc.file  *********************** ",child_doc.file )
         child_doc.save()
         parent_doc.save()
         frappe.db.commit()
@@ -115,6 +104,7 @@ def create_applicant_report(doc):
         "street_address": doc.street_address,
         "date_living_address": doc.date_living_address,
         "full_name": doc.full_name,
+        "electronic_signature": doc.electronic_signature,
         "email_address": doc.email_address,
         "sales_invoice": doc.sales_invoice,
         "payment_status": doc.payment_status,
@@ -204,3 +194,4 @@ def create_applicant_report(doc):
     # Insert the new applicant report
     applicant_report.insert()
     frappe.db.commit()  # Ensure the record is saved
+    doc.db_set("applicant_report", applicant_report.name)
