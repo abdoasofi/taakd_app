@@ -232,9 +232,9 @@ const save = async () => {
   try {
     loading.value = true;
     await store.saveStep6();
-    toast.success($t('step6.save_success')); // تأكد من إضافة مفتاح 'save_success' في ملفات الترجمة
+    toast.success(('step6.save_success')); // تأكد من إضافة مفتاح 'save_success' في ملفات الترجمة
   } catch (error) {
-    toast.error($t('step6.save_error')); // تأكد من إضافة مفتاح 'save_error' في ملفات الترجمة
+    toast.error(('step6.save_error')); // تأكد من إضافة مفتاح 'save_error' في ملفات الترجمة
   } finally {
     loading.value = false;
   }

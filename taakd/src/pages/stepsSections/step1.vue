@@ -295,7 +295,7 @@
       <Info :text="$t('step1.provide_phone_numbers')" />
 
       <!-- جدول فرعي لأرقام الهواتف -->
-      <div v-for="(phone, index) in phoneNumbers" :key="index" class="flex items-center mb-2">
+      <div v-for="(phone, index) in phoneNumbers" :key="phone.id" class="flex items-center mb-2">
         <FieldContainer>
           <StyledInput
             :labelText="$t('step1.phone')"

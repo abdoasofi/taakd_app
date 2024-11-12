@@ -377,10 +377,6 @@ const STEPS_MANDATORY_FIELDS: Record<number, Array<string>> = {
         this.step1.phone.splice(index, 1);
       },
 
-      updatePhoneNumber(index: number, value: { phone: string; }) {
-        this.step1.phone[index].phone = value.phone; // تصحيح الوصول إلى حقل phone
-      },
-
       validatePhoneNumbers(): boolean {
         let isValid = true;
         this.step1.phone.forEach((phone, index) => {
@@ -393,6 +389,10 @@ const STEPS_MANDATORY_FIELDS: Record<number, Array<string>> = {
           }
         });
         return isValid;
+      },
+
+      updatePhoneNumber(index: number, value: { phone: string; }) {
+        this.step1.phone[index] = value; // تصحيح الوصول إلى حقل phone
       },
 
       updateAliasName(index: number, value: { first_name: string; last_name: string; middle_name: string }) {
