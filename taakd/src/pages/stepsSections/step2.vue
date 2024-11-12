@@ -234,12 +234,8 @@ const educationInformation = computed({
 })
 
 const optionsDiploma = reactive([
-  { value: "High School", label: "High School" },
-  { value: "Associate Degree", label: "Associate Degree" },
-  { value: "Bachelor's Degree", label: "Bachelor's Degree" },
-  { value: "Master's Degree", label: "Master's Degree" },
-  { value: "Doctorate", label: "Doctorate" },
-  { value: "Other", label: "Other" },
+  { value: "Yes", label: "Yes" },
+  { value: "No", label: "No" },
 ])
 
 const openSections = ref<{ [key: string]: boolean }>({});
