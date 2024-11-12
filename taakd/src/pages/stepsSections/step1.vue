@@ -324,7 +324,7 @@
     <!-- بقية النموذج ... -->
 
     <!-- زر حفظ البيانات -->
-    <div class="pt-5 flex w-full justify-center">
+    <!-- <div class="pt-5 flex w-full justify-center">
       <Button 
         level="other" 
         @click="save" 
@@ -334,7 +334,7 @@
         <span v-if="loading">{{ t('step1.saving') }}</span>
         <span v-else>{{ t('step1.save') }}</span>
       </Button>
-    </div>
+    </div> -->
   </div>
 </template>
 
