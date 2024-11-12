@@ -27,14 +27,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
 
 // تعريف الأحداث المسموعة من المكون الأب
 const emit = defineEmits(['update-signature']);
 
+// تعريف props
+const props = defineProps({
+  initialSignature: {
+    type: String,
+    default: '',
+  },
+});
+
 // المراجع
 const canvas = ref<HTMLCanvasElement | null>(null);
-let ctx: CanvasRenderingContext2D | null = null;
+const ctx = ref<CanvasRenderingContext2D | null>(null); // استخدم ref للـ ctx
 let drawing = false;
 
 // إعدادات الـ canvas الديناميكية
@@ -44,19 +52,19 @@ const canvasHeight = computed(() => 200);
 // دالة بدء الرسم
 const startDrawing = (e: MouseEvent | TouchEvent) => {
   drawing = true;
-  if (ctx && canvas.value) {
+  if (ctx.value && canvas.value) {
     const { offsetX, offsetY } = getEventPosition(e);
-    ctx.beginPath();
-    ctx.moveTo(offsetX, offsetY);
+    ctx.value.beginPath();
+    ctx.value.moveTo(offsetX, offsetY);
   }
 };
 
 // دالة الرسم المستمر
 const draw = (e: MouseEvent | TouchEvent) => {
-  if (drawing && ctx && canvas.value) {
+  if (drawing && ctx.value && canvas.value) {
     const { offsetX, offsetY } = getEventPosition(e);
-    ctx.lineTo(offsetX, offsetY);
-    ctx.stroke();
+    ctx.value.lineTo(offsetX, offsetY);
+    ctx.value.stroke();
   }
 };
 
@@ -64,8 +72,8 @@ const draw = (e: MouseEvent | TouchEvent) => {
 const stopDrawing = () => {
   if (drawing) {
     drawing = false;
-    if (ctx) {
-      ctx.closePath();
+    if (ctx.value) {
+      ctx.value.closePath();
       emitSignature(); // إرسال التوقيع بعد إنهاء الرسم
     }
   }
@@ -86,8 +94,8 @@ const getEventPosition = (e: MouseEvent | TouchEvent) => {
 
 // دالة لمسح التوقيع
 const clear = () => {
-  if (ctx && canvas.value) {
-    ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
+  if (ctx.value && canvas.value) {
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
     emit('update-signature', ''); // إرسال توقيع فارغ عند المسح
   }
 };
@@ -100,13 +108,25 @@ const emitSignature = () => {
   }
 };
 
+// دالة لتحميل التوقيع المبدئي إذا كانت موجودة
+const loadInitialSignature = () => {
+  if (props.initialSignature && ctx.value && canvas.value) {
+    const image = new Image();
+    image.onload = () => {
+      ctx.value!.drawImage(image, 0, 0, canvas.value!.width, canvas.value!.height);
+    };
+    image.src = props.initialSignature;
+  }
+};
+
 // إعداد الـ canvas عند تحميل المكون
 onMounted(() => {
   if (canvas.value) {
-    ctx = canvas.value.getContext('2d');
-    if (ctx) {
-      ctx.strokeStyle = '#000';
-      ctx.lineWidth = 2;
+    const context = canvas.value.getContext('2d');
+    if (context) {
+      ctx.value = context; // تحديث ref للـ ctx
+      ctx.value.strokeStyle = '#000';
+      ctx.value.lineWidth = 2;
       canvas.value.style.touchAction = 'none'; // لمنع التمرير عند استخدام اللمس
 
       // إضافة مستمعي الأحداث
@@ -120,9 +140,28 @@ onMounted(() => {
       canvas.value.addEventListener('touchmove', draw);
       canvas.value.addEventListener('touchend', stopDrawing);
       canvas.value.addEventListener('touchcancel', stopDrawing);
+
+      // تحميل التوقيع المبدئي إذا كان موجودًا
+      loadInitialSignature();
     }
   }
 });
+
+// مراقبة تغييرات الـ Prop `initialSignature` وتحميل التوقيع الجديد إذا تغير
+watch(() => props.initialSignature, (newSignature) => {
+  if (newSignature && ctx.value && canvas.value) {
+    // مسح اللوحة الحالية قبل تحميل التوقيع الجديد
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
+    const image = new Image();
+    image.onload = () => {
+      ctx.value!.drawImage(image, 0, 0, canvas.value!.width, canvas.value!.height);
+    };
+    image.src = newSignature;
+  } else if (!newSignature && ctx.value && canvas.value) {
+    // مسح اللوحة إذا لم يعد هناك توقيع
+    ctx.value.clearRect(0, 0, canvas.value.width, canvas.value.height);
+  }
+}, { immediate: true });
 
 // إزالة المستمعين عند إزالة المكون
 onBeforeUnmount(() => {

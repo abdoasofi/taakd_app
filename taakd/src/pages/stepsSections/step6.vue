@@ -53,17 +53,22 @@
       </FieldContainer>
     </div>
     
+
     <div class="lg:grid grid-cols-1 lg:gap-2">
       <FieldContainer>
         <label class="block text-sm font-medium text-gray-700">
           {{ $t('step6.electronic_signature') }}<span class="text-red-500">*</span>
         </label>
-        <CustomSignaturePad @update-signature="saveSignature" />
+        <!-- تمرير initialSignature كمُدخل إلى المكون -->
+        <CustomSignaturePad 
+          :initialSignature="electronicSignature" 
+          @update-signature="saveSignature" 
+        />
         <p class="text-sm text-gray-500 mt-2">{{ $t('step6.signature_instruction') }}</p>
-        <!-- تم إزالة عرض التوقيع المحفوظ -->
       </FieldContainer>
     </div>
 
+   
     <FieldContainer>
       <CheckBox 
         name="i_agree_to_electronic_signature" 
@@ -160,7 +165,6 @@ import { useLanguage } from '../../stores/language';
 import printJS from 'print-js';
 import Report from './report.vue';
 
-
 // استيراد الستور
 const store = useVerificationRequestStore();
 const toast = useToast();
@@ -228,9 +232,9 @@ const save = async () => {
   try {
     loading.value = true;
     await store.saveStep6();
-    toast.success($t('step6.save_success')); // Assuming you add 'save_success' key
+    toast.success($t('step6.save_success')); // تأكد من إضافة مفتاح 'save_success' في ملفات الترجمة
   } catch (error) {
-    toast.error($t('step6.save_error')); // Assuming you add 'save_error' key
+    toast.error($t('step6.save_error')); // تأكد من إضافة مفتاح 'save_error' في ملفات الترجمة
   } finally {
     loading.value = false;
   }
