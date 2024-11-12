@@ -20,7 +20,6 @@ export interface HomeData {
 export interface PhoneNumber {
   id: string;  // معرف فريد لكل رقم هاتف
   phone: string;  // رقم الهاتف
-  isValid?: boolean; // إضافة هذا الحقل للتحقق من صحة الرقم
 }
 
 export interface AliasName {

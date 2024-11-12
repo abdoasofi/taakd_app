@@ -1,25 +1,23 @@
 <!-- /pages/stepsSections/step1.vue -->
 <template>
   <div class="pt-3 container">
-    <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('step1.personal_information') }}</h1>
+    <h1 class="text-3xl font-bold mb-3 text-black">{{ t('step1.personal_information') }}</h1>
     <ul>
-      <li>{{ $t('step1.required_fields') }}</li>
-      <li>{{ $t('step1.provide_information') }}</li>
+      <li>{{ t('step1.required_fields') }}</li>
+      <li>{{ t('step1.provide_information') }}</li>
     </ul>
 
     <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('step1.name_label') }}</h1>
-      <Info
-        :text="$t('step1.name_info')"
-      />
+      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ t('step1.name_label') }}</h1>
+      <Info :text="t('step1.name_info')" />
     </div>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          :labelText="$t('step1.employer_name')"
+          :labelText="t('step1.employer_name')"
           :isMandatory="true"
-          :infoText="$t('step1.employer_info')"
+          :infoText="t('step1.employer_info')"
           inputType="text"
           v-model="employerName"
           :isValid="store.step1.employer_name.isValid"
@@ -27,13 +25,13 @@
           name="employer_name"
           id="EmployerName"
         />
-        <SupportingText>{{ $t('step1.supporting_text') }}</SupportingText>
+        <SupportingText>{{ t('step1.supporting_text') }}</SupportingText>
       </FieldContainer>
       <FieldContainer>
         <StyledInput
-          :labelText="$t('step1.first_name')"
+          :labelText="t('step1.first_name')"
           :isMandatory="true"
-          :infoText="$t('step1.first_name_info')"
+          :infoText="t('step1.first_name_info')"
           inputType="text"
           v-model="firstName"
           :isValid="store.step1.first_name.isValid"
@@ -50,14 +48,14 @@
         id="dont_middle_name"
         v-model="dontMiddleName" 
       >
-        {{ $t('step1.certify_no_middle_name') }}
+        {{ t('step1.certify_no_middle_name') }}
       </CheckBox>
     </FieldContainer>
 
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer v-if="!dontMiddleName">
         <StyledInput
-          :labelText="$t('step1.middle_name')"
+          :labelText="t('step1.middle_name')"
           inputType="text"
           v-model="middleName"
           :isValid="store.step1.middle_name.isValid"
@@ -71,9 +69,9 @@
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <StyledInput
-          :labelText="$t('step1.last_name')"
+          :labelText="t('step1.last_name')"
           :isMandatory="true"
-          :infoText="$t('step1.last_name_info')"
+          :infoText="t('step1.last_name_info')"
           inputType="text"
           v-model="lastName"
           :isValid="store.step1.last_name.isValid"
@@ -84,9 +82,9 @@
       </FieldContainer>
       <FieldContainer>
         <Select
-          :labelText="$t('step1.suffix')"
+          :labelText="t('step1.suffix')"
           :isMandatory="true"
-          :infoText="$t('step1.select_suffix')"
+          :infoText="t('step1.select_suffix')"
           id="suffix"
           name="suffix"
           :options="suffixOptions"
@@ -103,8 +101,8 @@
         <Autocomp
           name="country_now"
           id="country"
-          :labelText="$t('step1.country')"
-          :infoText="$t('step1.select_country')"
+          :labelText="t('step1.country')"
+          :infoText="t('step1.select_country')"
           inputType="text"
           :options="optionCountry"
           @input-change="handleCountryChange"
@@ -117,8 +115,8 @@
         <Textarea
           id="street_address"
           name="street_address"
-          :labelText="$t('step1.street_address')"
-          :infoText="$t('step1.street_address_info')"
+          :labelText="t('step1.street_address')"
+          :infoText="t('step1.street_address_info')"
           size="xl"
           v-model="streetAddress"
           :isValid="store.step1.street_address.isValid"
@@ -130,8 +128,8 @@
         <Autocomp
           name="city"
           id="city"
-          :labelText="$t('step1.city')"
-          :infoText="$t('step1.select_city')"
+          :labelText="t('step1.city')"
+          :infoText="t('step1.select_city')"
           inputType="text"
           :options="optionCity"
           @input-change="handleCityChange"
@@ -144,8 +142,8 @@
         <Autocomp
           name="governorate"
           id="governorate"
-          :labelText="$t('step1.governorate')"
-          :infoText="$t('step1.select_governorate')"
+          :labelText="t('step1.governorate')"
+          :infoText="t('step1.select_governorate')"
           inputType="text"
           :options="optionGovernorate"
           @input-change="handleGovernorateChange"
@@ -157,9 +155,9 @@
 
       <FieldContainer>
         <StyledInput
-          :labelText="$t('step1.location_text')"
+          :labelText="t('step1.location_text')"
           :isMandatory="true"
-          :infoText="$t('step1.location_text_info')"
+          :infoText="t('step1.location_text_info')"
           inputType="text"
           v-model="locationText"
           :isValid="store.step1.location_text.isValid"
@@ -170,9 +168,9 @@
       </FieldContainer>
       <FieldContainer>
         <StyledInput
-          :labelText="$t('step1.zip_code')"
+          :labelText="t('step1.zip_code')"
           :isMandatory="true"
-          :infoText="$t('step1.zip_code_info')"
+          :infoText="t('step1.zip_code_info')"
           inputType="text"
           v-model="zipCode"
           :isValid="store.step1.zip_code.isValid"
@@ -186,9 +184,9 @@
         <StyledInput 
           id="date_living_address" 
           name="date_living_address" 
-          :labelText="$t('step1.date_living_address')"
+          :labelText="t('step1.date_living_address')"
           :isMandatory="true" 
-          :infoText="$t('step1.date_living_address_info')" 
+          :infoText="t('step1.date_living_address_info')" 
           inputType="date" 
           v-model="dateLivingAddress"
           :isValid="store.step1.date_living_address.isValid"
@@ -203,156 +201,145 @@
         id="this_is_my_name_column" 
         v-model="thisIsMyNameColumn"
       >
-        {{ $t('step1.certify_current_name') }}
+        {{ t('step1.certify_current_name') }}
       </CheckBox>
     </FieldContainer>
 
-    <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium text-black">{{ $t('step1.alias_name') }}</h1>
-      <Info
-        :text="$t('step1.alias_info')"
-      />    
+    <div class="lg:grid grid-rows-2 lg:gap-2 mt-6">
+      <h1 class="text-lg font-medium text-black">{{ t('step1.alias_name') }}</h1>
+      <Info :text="t('step1.alias_info')" />    
     </div>
 
-    <!-- إضافة قسم Alias Name -->
-    <div class="lg:grid grid-cols-1 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('step1.alias_name') }}</h1>
-      <Info :text="$t('step1.provide_alias_name')" />
+    <!-- قسم Alias Name -->
+    <div class="lg:grid grid-cols-1 lg:gap-2 mt-4">
+      <h1 class="text-lg font-medium mb-1 text-black">{{ t('step1.alias_name') }}</h1>
+      <Info :text="t('step1.provide_alias_name')" />
 
       <!-- جدول فرعي لAlias Name -->
-      <div v-for="(alias, index) in aliasNames" :key="alias.id" class="flex items-center mb-2">
-        <FieldContainer>
+      <div v-for="(alias, index) in aliasNames" :key="alias.id" class=" items-center">
+        <FieldContainer class="flex-1">
           <StyledInput
-            :labelText="$t('step1.full_name')"
+            :labelText="t('step1.first_name')"
             inputType="text"
-            v-model="aliasNames[index].first_name"
+            v-model="alias.first_name"
             :isValid="true"
             :validationMessage="''"
             name="first_name"
-            :id="aliasNames[index].id"
-            @input="updateAliasName(index, aliasNames[index])"
+            :id="alias.id"
+            @input="updateAliasNameHandler(index, { first_name: alias.first_name })"
           />
         </FieldContainer>
-        <FieldContainer>
+        <FieldContainer class="flex-1">
           <StyledInput
-            :labelText="$t('step1.middle_name')"
+            :labelText="t('step1.middle_name')"
             inputType="text"
-            v-model="aliasNames[index].middle_name"
+            v-model="alias.middle_name"
             :isValid="true"
             :validationMessage="''"
             name="middle_name"
-            :id="aliasNames[index].id"
-            @input="updateAliasName(index, aliasNames[index])"
+            :id="alias.id"
+            @input="updateAliasNameHandler(index, { middle_name: alias.middle_name })"
           />
         </FieldContainer>
-        <FieldContainer>
+        <FieldContainer class="flex-1">
           <StyledInput
-            :labelText="$t('step1.last_name')"
+            :labelText="t('step1.last_name')"
             inputType="text"
-            v-model="aliasNames[index].last_name"
+            v-model="alias.last_name"
             :isValid="true"
             :validationMessage="''"
             name="last_name"
-            :id="aliasNames[index].id"
-            @input="updateAliasName(index, aliasNames[index])"
+            :id="alias.id"
+            @input="updateAliasNameHandler(index, { last_name: alias.last_name })"
           />
         </FieldContainer>
+        <FieldContainer class="flex-1">
+            <!-- زر حذف Alias Name -->
+          <button 
+            @click="removeAliasName(index)" 
+            class="w-full  ltr:ml-2 rtl:mr-2 bg-red-300 hover:bg-red-400 text-black font-bold py- px-4 rounded"
+            aria-label="-"
+          >
+            -
+          </button>
+        </FieldContainer>
 
-        <!-- زر حذف Alias Name -->
-        <Button @click="removeAliasName(index)" class="ltr:ml-2 rtl:mr-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          {{ $t('step1.remove') }}
-        </Button>
       </div>
 
       <!-- زر إضافة Alias Name جديد -->
-      <Button @click="addAliasName" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ $t('step1.add_alias_name') }}
-      </Button>
-    </div>
-
-    <div class="lg:grid grid-cols-1 lg:gap-2">
-      <FieldContainer>
-        <StyledInput
-          :labelText="$t('step1.email')"
-          :isMandatory="true"
-          :infoText="$t('step1.email_info')"
-          inputType="email"
-          name="email"
-          id="email"
-          v-model="email"
-          :isValid="store.step1.email.isValid"
-          :validationMessage="store.step1.email.validationMessage"
-        />
+      <FieldContainer class="flex-1">
+          <button 
+            @click="addAliasName" 
+            class="w-full  bg-info hover:bg-secondary text-black font-bold  rounded"
+          >
+            +
+          </button> 
       </FieldContainer>
-      <Info
-        :text="$t('step1.email_privacy_info')"
-      />    
+
     </div>
 
-    <!-- إضافة قسم أرقام الهواتف -->
-    <div class="lg:grid grid-cols-1 lg:gap-2">
-      <h1 class="text-lg font-medium mb-1 mt-4 text-black">{{ $t('step1.phone_numbers') }}</h1>
-      <Info :text="$t('step1.provide_phone_numbers')" />
+    <!-- قسم أرقام الهواتف -->
+    <div class="lg:grid grid-cols-1 lg:gap-2 mt-6">
+      <h1 class="text-lg font-medium mb-1 text-black">{{ t('step1.phone_numbers') }}</h1>
+      <Info :text="t('step1.provide_phone_numbers')" />
 
       <!-- جدول فرعي لأرقام الهواتف -->
-      <div v-for="(phone, index) in phoneNumbers" :key="phone.id" class="flex items-center mb-2">
-        <FieldContainer>
+      <div v-for="(phone, index) in phoneNumbers" :key="phone.id" class=" items-center ">
+        <FieldContainer class="flex-1">
           <StyledInput
-            :labelText="$t('step1.phone')"
+            :labelText="t('step1.phone')"
             inputType="text"
-            v-model="phoneNumbers[index].phone"
+            v-model="phone.phone"
             :isValid="true"
             :validationMessage="''"
             name="phone"
-            :id="phoneNumbers[index].id"
-            @input="updatePhoneNumber(index, phoneNumbers[index])"
+            :id="phone.id"
+            @input="updatePhoneNumberHandler(index, { phone: phone.phone })"
           />
         </FieldContainer>
         <!-- زر حذف رقم الهاتف -->
-        <Button @click="removePhoneNumber(index)" class="ml-2 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          {{ $t('step1.remove') }}
-        </Button>
+        <FieldContainer class="flex-1">
+          <button 
+            @click="removePhoneNumber(index)" 
+            class="w-full  ltr:ml-2 rtl:mr-2 bg-red-300 hover:bg-red-400 text-black font-bold py- px-4 rounded"
+            aria-label="-"
+          >
+            -
+          </button>        
+        </FieldContainer>
+
       </div>
-
-      <!-- زر إضافة رقم هاتف جديد -->
-      <Button @click="addPhoneNumber" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        {{ $t('step1.add_phone_number') }}
-      </Button>
-    </div>
-
-    <div class="lg:grid grid-rows-2 lg:gap-2">
-      <h1 class="text-lg font-medium text-black">{{ $t('step1.identification') }}</h1>
-      <Info
-        :text="$t('step1.identification_info')"
-      />
-    </div>
-
-    <div class="lg:grid grid-cols-2 lg:gap-2">
-      <FieldContainer>
-        <StyledInput 
-          id="date_of_birth" 
-          name="date_of_birth" 
-          :labelText="$t('step1.date_of_birth')" 
-          :infoText="$t('step1.date_of_birth_info')" 
-          inputType="date" 
-          v-model="dateOfBirth"
-          :isValid="store.step1.date_of_birth.isValid"
-          :validationMessage="store.step1.date_of_birth.validationMessage"
-        />
+      <FieldContainer class="flex-1">
+        <!-- زر إضافة رقم هاتف جديد -->
+        <button 
+          @click="addPhoneNumber" 
+          class="w-full  bg-info hover:bg-secondary text-black font-bold  rounded"
+          >
+            +
+          </button>        
       </FieldContainer>
+
     </div>
 
-    <!-- <div class="pt-5 flex w-full justify-center">
-      <Button level="other" @click="save" :disabled="loading" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-        <span v-if="loading">{{ $t('step1.saving') }}</span>
-        <span v-else>{{ $t('step1.save') }}</span>
+    <!-- بقية النموذج ... -->
+
+    <!-- زر حفظ البيانات -->
+    <div class="pt-5 flex w-full justify-center">
+      <Button 
+        level="other" 
+        @click="save" 
+        :disabled="loading" 
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      >
+        <span v-if="loading">{{ t('step1.saving') }}</span>
+        <span v-else>{{ t('step1.save') }}</span>
       </Button>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, onUpdated, reactive, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useVerificationRequestStore } from '../../stores/verificationRequest';
 import CheckBox from '../../components/checkBox.vue';
 import FieldContainer from '../../components/fieldContainer.vue';
@@ -377,9 +364,8 @@ const location = locations.getLocation();
 const { t } = useI18n();
 
 const loading = ref(false);
-const phoneNumbers = ref([{id: uuidv4(), phone: '' }]);
-const aliasNames = ref([{ id: uuidv4(), first_name: '', last_name: '', middle_name: '' }]);
 
+// تعريف الخيارات
 const suffixOptions = computed(() => [
   { label: t('step1.suffix_jr'), value: 'Jr.' },
   { label: t('step1.suffix_sr'), value: 'Sr.' },
@@ -402,9 +388,9 @@ const optionCountry = computed(() => {
 });
 
 const optionCity = computed(() => {
-  if (location && location.data && country.value) {
+  if (location && location.data && store.step1.country_now.value) {
     return location.data
-      .filter(loc => loc.location_type === 'City' && loc.parent_location === country.value)
+      .filter(loc => loc.location_type === 'City' && loc.parent_location === store.step1.country_now.value)
       .map(loc => ({
         label: loc.location_name,
         value: loc.location_name,
@@ -414,9 +400,9 @@ const optionCity = computed(() => {
 });
 
 const optionGovernorate = computed(() => {
-  if (location && location.data && city.value) {
+  if (location && location.data && store.step1.city.value) {
     return location.data
-      .filter(loc => loc.location_type === 'Governorate' && loc.parent_location === city.value)
+      .filter(loc => loc.location_type === 'Governorate' && loc.parent_location === store.step1.city.value)
       .map(loc => ({
         label: loc.location_name,
         value: loc.location_name,
@@ -425,7 +411,7 @@ const optionGovernorate = computed(() => {
   return [];
 });
 
-// تعريف الحقول مع استخدام الدالة t للترجمة
+// تعريف الحقول مع استخدام computed لربطها بالمخزن
 const employerName = computed({
   get: () => store.step1.employer_name.value,
   set: (val: string) => store.updateStep1('employer_name', { value: val }),
@@ -506,11 +492,26 @@ const dateOfBirth = computed({
   set: (val: string) => store.updateStep1('date_of_birth', { value: val }),
 });
 
-// وظائف للتعامل مع مدخلات المستخدم
+// بيانات alias_name و phone مرتبطة بالمخزن مباشرة
+const aliasNames = computed(() => store.step1.alias_name);
+const phoneNumbers = computed(() => store.step1.phone);
+
+// دوال لإضافة، إزالة، وتحديث Alias Names
+const addAliasName = () => {
+  const newAlias = { id: uuidv4(), first_name: '', last_name: '', middle_name: '' };
+  store.addAliasName(newAlias);
+};
+
+const removeAliasName = (index: number) => {
+  store.removeAliasName(index);
+};
+
+const updateAliasNameHandler = (index: number,updatedFields) => {
+  store.updateAliasName(index, updatedFields);
+};
 const handleCountryChange = (value) => {
   store.updateStep1('country_now', { value: value.value });
 };
-
 const handleCityChange = (value) => {
   store.updateStep1('city', { value: value.value });
 };
@@ -522,42 +523,37 @@ const handleGovernorateChange = (value) => {
 const handleSuffix  = (value) => {
   store.updateStep1('suffix', { value: value.value });
 };
-
+// دوال لإضافة، إزالة، وتحديث Phone Numbers
 const addPhoneNumber = () => {
-  phoneNumbers.value.push({ id: uuidv4(), phone: '' });
+  const newPhone = { id: uuidv4(), phone: '' };
+  store.addPhoneNumber(newPhone);
 };
 
-const removePhoneNumber = (index) => {
-  phoneNumbers.value.splice(index, 1);
+const removePhoneNumber = (index: number) => {
+  store.removePhoneNumber(index);
 };
 
-const updatePhoneNumber = (index, phone) => {
-  store.updatePhoneNumber(index, phone);
+const updatePhoneNumberHandler = (index: number, updatedFields) => {
+  store.updatePhoneNumber(index, updatedFields);
 };
 
-const addAliasName = () => {
-  aliasNames.value.push({ id: uuidv4(), first_name: '', last_name: '', middle_name: '' });
+// دوال الحفظ
+const save = async () => {
+  try {
+    loading.value = true;
+    await store.saveStep1();
+    // يمكنك إضافة المزيد من الحفظ للخطوات الأخرى هنا إذا لزم الأمر
+  } catch (error) {
+    toast.error("حدث خطأ أثناء الحفظ.");
+  } finally {
+    loading.value = false;
+  }
 };
 
-const removeAliasName = (index) => {
-  aliasNames.value.splice(index, 1);
-};
-
-const updateAliasName = (index, alias) => {
-  store.updateAliasName(index, alias);
-};
-
-// const save = async () => {
-//   try {
-//     loading.value = true;
-//     await store.saveStep1();
-//   } catch (error) {
-//     const toast = useToast();
-//     toast.error("حدث خطأ أثناء الحفظ.");
-//   } finally {
-//     loading.value = false;
-//   }
-// };
+// تحميل البيانات عند تحميل المكون
+onMounted(() => {
+  store.loadDocument();
+});
 </script>
 
 <style scoped>
