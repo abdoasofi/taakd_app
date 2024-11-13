@@ -247,7 +247,7 @@
       "remove": "Remove",
       "add_alias_name": "Add Alias Name",
       "email": "Email",
-      "email_info": "Your email address.",
+      "email_info": "Please enter your email address",
       "email_privacy_info": "We may occasionally need to contact you to clarify some items in your background verification process. We will not share or sell your email address.",
       "phone_numbers": "Phone Numbers",
       "provide_phone_numbers": "Please provide your phone numbers. You can add multiple numbers.",

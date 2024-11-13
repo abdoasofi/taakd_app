@@ -83,7 +83,7 @@ const props = defineProps({
   name: { type: String, required: true },
   placeholder: {
     type: String,
-    default: 'أدخل نصًا هنا',
+    default: '',
   },
   labelText: {
     type: String,

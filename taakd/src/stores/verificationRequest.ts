@@ -54,9 +54,9 @@ const getDefaultState = (): VerificationRequestStoreState => ({
     this_is_my_name_column: { value: false, isValid: false, validationMessage: '' },
     suffix: { value: '', isValid: true, validationMessage: '' },
     alias_name: [] as AliasName[], // أسماء المستعارة
-    country_now: { value: '', isValid: false, validationMessage: '' },
-    city: { value: '', isValid: false, validationMessage: '' },
-    governorate: { value: '', isValid: false, validationMessage: '' },
+    country_now: { value: '', isValid: true, validationMessage: '' },
+    city: { value: '', isValid: true, validationMessage: '' },
+    governorate: { value: '', isValid: true, validationMessage: '' },
     zip_code: { value: '', isValid: false, validationMessage: '' },
     location_text: { value: '', isValid: false, validationMessage: '' },
     street_address: { value: '', isValid: false, validationMessage: '' },

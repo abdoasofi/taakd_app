@@ -96,6 +96,88 @@
       </FieldContainer>
     </div>
 
+    <FieldContainer>
+      <CheckBox 
+        name="this_is_my_name_column" 
+        id="this_is_my_name_column" 
+        v-model="thisIsMyNameColumn"
+      >
+        {{ t('step1.certify_current_name') }}
+      </CheckBox>
+    </FieldContainer>
+
+    <div class="lg:grid grid-rows-2 lg:gap-2 ">
+      <h1 class="text-lg font-medium text-black">{{ t('step1.alias_name') }}</h1>
+      <Info :text="t('step1.alias_info')" />    
+    </div>
+
+    <!-- قسم Alias Name -->
+    <div class="lg:grid grid-cols-1 lg:gap-2 ">
+      <!-- <h1 class="text-lg font-medium mb-1 text-black">{{ t('step1.alias_name') }}</h1> -->
+      <!-- <Info :text="t('step1.provide_alias_name')" /> -->
+
+      <!-- جدول فرعي لAlias Name -->
+      <div v-for="(alias, index) in aliasNames" :key="alias.id" class=" items-center">
+        <FieldContainer class="flex-1">
+          <StyledInput
+            :labelText="t('step1.first_name')"
+            inputType="text"
+            v-model="alias.first_name"
+            :isValid="true"
+            :validationMessage="''"
+            name="first_name"
+            :id="alias.id"
+            @input="updateAliasNameHandler(index, { first_name: alias.first_name })"
+          />
+        </FieldContainer>
+        <FieldContainer class="flex-1">
+          <StyledInput
+            :labelText="t('step1.middle_name')"
+            inputType="text"
+            v-model="alias.middle_name"
+            :isValid="true"
+            :validationMessage="''"
+            name="middle_name"
+            :id="alias.id"
+            @input="updateAliasNameHandler(index, { middle_name: alias.middle_name })"
+          />
+        </FieldContainer>
+        <FieldContainer class="flex-1">
+          <StyledInput
+            :labelText="t('step1.last_name')"
+            inputType="text"
+            v-model="alias.last_name"
+            :isValid="true"
+            :validationMessage="''"
+            name="last_name"
+            :id="alias.id"
+            @input="updateAliasNameHandler(index, { last_name: alias.last_name })"
+          />
+        </FieldContainer>
+        <FieldContainer class="flex-1">
+            <!-- زر حذف Alias Name -->
+          <button 
+            @click="removeAliasName(index)" 
+            class="w-full  ltr:ml-2 rtl:mr-2 bg-red-300 hover:bg-red-400 text-black font-bold py- px-4 rounded"
+            aria-label="-"
+          >
+            -
+          </button>
+        </FieldContainer>
+
+      </div>
+
+      <!-- زر إضافة Alias Name جديد -->
+      <FieldContainer class="flex-1">
+          <button 
+            @click="addAliasName" 
+            class="w-full  bg-info hover:bg-secondary text-black font-bold  rounded"
+          >
+            +
+          </button> 
+      </FieldContainer>
+
+    </div>
     <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <Autocomp
@@ -111,6 +193,8 @@
           :validationMessage="store.step1.country_now.validationMessage"
         />
       </FieldContainer>
+    </div>
+    <div class="lg:grid grid-cols-1 lg:gap-2">
       <FieldContainer>
         <Textarea
           id="street_address"
@@ -123,7 +207,8 @@
           :validationMessage="store.step1.street_address.validationMessage"
         />
       </FieldContainer>
-
+    </div>
+    <div class="lg:grid grid-cols-2 lg:gap-2">
       <FieldContainer>
         <Autocomp
           name="city"
@@ -195,89 +280,6 @@
       </FieldContainer>
     </div>
 
-    <FieldContainer>
-      <CheckBox 
-        name="this_is_my_name_column" 
-        id="this_is_my_name_column" 
-        v-model="thisIsMyNameColumn"
-      >
-        {{ t('step1.certify_current_name') }}
-      </CheckBox>
-    </FieldContainer>
-
-    <div class="lg:grid grid-rows-2 lg:gap-2 mt-6">
-      <h1 class="text-lg font-medium text-black">{{ t('step1.alias_name') }}</h1>
-      <Info :text="t('step1.alias_info')" />    
-    </div>
-
-    <!-- قسم Alias Name -->
-    <div class="lg:grid grid-cols-1 lg:gap-2 mt-4">
-      <h1 class="text-lg font-medium mb-1 text-black">{{ t('step1.alias_name') }}</h1>
-      <Info :text="t('step1.provide_alias_name')" />
-
-      <!-- جدول فرعي لAlias Name -->
-      <div v-for="(alias, index) in aliasNames" :key="alias.id" class=" items-center">
-        <FieldContainer class="flex-1">
-          <StyledInput
-            :labelText="t('step1.first_name')"
-            inputType="text"
-            v-model="alias.first_name"
-            :isValid="true"
-            :validationMessage="''"
-            name="first_name"
-            :id="alias.id"
-            @input="updateAliasNameHandler(index, { first_name: alias.first_name })"
-          />
-        </FieldContainer>
-        <FieldContainer class="flex-1">
-          <StyledInput
-            :labelText="t('step1.middle_name')"
-            inputType="text"
-            v-model="alias.middle_name"
-            :isValid="true"
-            :validationMessage="''"
-            name="middle_name"
-            :id="alias.id"
-            @input="updateAliasNameHandler(index, { middle_name: alias.middle_name })"
-          />
-        </FieldContainer>
-        <FieldContainer class="flex-1">
-          <StyledInput
-            :labelText="t('step1.last_name')"
-            inputType="text"
-            v-model="alias.last_name"
-            :isValid="true"
-            :validationMessage="''"
-            name="last_name"
-            :id="alias.id"
-            @input="updateAliasNameHandler(index, { last_name: alias.last_name })"
-          />
-        </FieldContainer>
-        <FieldContainer class="flex-1">
-            <!-- زر حذف Alias Name -->
-          <button 
-            @click="removeAliasName(index)" 
-            class="w-full  ltr:ml-2 rtl:mr-2 bg-red-300 hover:bg-red-400 text-black font-bold py- px-4 rounded"
-            aria-label="-"
-          >
-            -
-          </button>
-        </FieldContainer>
-
-      </div>
-
-      <!-- زر إضافة Alias Name جديد -->
-      <FieldContainer class="flex-1">
-          <button 
-            @click="addAliasName" 
-            class="w-full  bg-info hover:bg-secondary text-black font-bold  rounded"
-          >
-            +
-          </button> 
-      </FieldContainer>
-
-    </div>
-
     <!-- قسم أرقام الهواتف -->
     <div class="lg:grid grid-cols-1 lg:gap-2 mt-6">
       <h1 class="text-lg font-medium mb-1 text-black">{{ t('step1.phone_numbers') }}</h1>
@@ -321,8 +323,48 @@
 
     </div>
 
-    <!-- بقية النموذج ... -->
+      <div class="lg:grid grid-ows-2 lg:gap-2">
+      <FieldContainer>
+        <StyledInput
+          id="email"
+          name="email"
+          :labelText="$t('step1.email')"
+          :infoText="$t('step1.email_info')"
+          inputType="email" 
+          v-model="email"
+          :isValid="store.step1.email.isValid"
+          :validationMessage="store.step1.email.validationMessage"          
+                 
+        />
+      </FieldContainer>
+    </div>
+    <div class="lg:grid grid-rows-2 lg:gap-2">
+      <Info
+        :text="$t('step1.email_privacy_info')"
+      />
+    </div>
 
+    <div class="lg:grid grid-rows-2 lg:gap-2">
+      <h1 class="text-lg font-medium text-black">{{ $t('step1.identification') }}</h1>
+      <Info
+        :text="$t('step1.identification_info')"
+      />
+    </div>
+
+    <div class="lg:grid grid-cols-2 lg:gap-2">
+      <FieldContainer>
+        <StyledInput 
+          id="date_of_birth" 
+          name="date_of_birth" 
+          :labelText="$t('step1.date_of_birth')" 
+          :infoText="$t('step1.date_of_birth_info')" 
+          inputType="date" 
+          v-model="dateOfBirth"
+          :isValid="store.step1.date_of_birth.isValid"
+          :validationMessage="store.step1.date_of_birth.validationMessage"
+        />
+      </FieldContainer>
+    </div>
     <!-- زر حفظ البيانات -->
     <!-- <div class="pt-5 flex w-full justify-center">
       <Button 
