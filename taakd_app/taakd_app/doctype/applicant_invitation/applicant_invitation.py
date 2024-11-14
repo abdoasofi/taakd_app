@@ -117,7 +117,7 @@ class ApplicantInvitation(Document):
         if not customer:
             frappe.throw(_("Customer is not set. Cannot create Sales Invoice."))   
 
-        # التحقق من قيمة ccumulative_invoice و payd_from
+        # التحقق من قيمة cumulative_invoice و payd_from
         if self.cumulative_invoice == 1 and self.payd_from == "Company":
             existing_invoice = self.get_existing_draft_invoice(customer)
             if existing_invoice:
