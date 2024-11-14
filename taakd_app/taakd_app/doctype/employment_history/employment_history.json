@@ -169,7 +169,7 @@
   },
   {
    "fieldname": "file",
-   "fieldtype": "Data",
+   "fieldtype": "Attach",
    "label": "File"
   },
   {
@@ -203,7 +203,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2024-10-27 00:25:29.724433",
+ "modified": "2024-11-14 00:46:49.841893",
  "modified_by": "Administrator",
  "module": "Taakd App",
  "name": "Employment History",

@@ -17,7 +17,7 @@
       :key="employment.employment_id"
       :title="employment.company || `${$t('step3.employment')} ${index + 1}`"
     >
-      <div class="lg:grid grid-cols-2 lg:gap-2">
+    <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Company Field -->
         <FieldContainer>
           <StyledInput
@@ -540,7 +540,7 @@ const addEmployment = () => {
 
 // Save employment data
 const saveEmployment = async (index) => {
-  if (store.isLoding) {
+  if (store.isLoading) { // تحديث الاسم
     return
   }
   try {

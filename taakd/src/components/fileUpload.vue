@@ -55,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits } from 'vue';
+import { defineProps, defineEmits, watch } from 'vue';
 import StyledIcon from './styledIcon.vue';
 
 // تعريف الخصائص (Props)

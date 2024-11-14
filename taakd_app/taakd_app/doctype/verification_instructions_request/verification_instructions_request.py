@@ -18,7 +18,6 @@ class VerificationInstructionsRequest(Document):
         """Hook that runs when the document is submitted."""
         create_applicant_report(self)
 
-    
 
 @frappe.whitelist()
 def upload_verification_file():
@@ -31,6 +30,8 @@ def upload_verification_file():
         employment_id = frappe.form_dict.get('employment_id')  # الحصول على معرف التوظيف
         filedata = frappe.request.files.get('filedata')
         
+        frappe.log_error(message=f"Received employment_id: {employment_id}", title="Upload Verification File")
+
         # التحقق من توفر جميع المعاملات المطلوبة
         if not all([doctype, docname, fieldname, parentfield, employment_id, filedata]):
             frappe.throw(_("Missing required parameters."))
@@ -55,11 +56,17 @@ def upload_verification_file():
         )
         # الحصول على رابط الملف
         file_url = file_doc.file_url
+        frappe.log_error(message=f"Uploaded file URL: {file_url}", title="Upload Verification File")
+
         # الحصول على الوثيقة الرئيسية
         parent_doc = frappe.get_doc(doctype, docname)
+        frappe.log_error(message=f"Parent Doc: {parent_doc.name}", title="Upload Verification File")
+
         # العثور على السجل الفرعي بناءً على `employment_id` في حقل 'employment_id'
         child_doc = next((child for child in parent_doc.get(parentfield, []) if child.employment_id == employment_id), None)
         
+        frappe.log_error(message=f"Found child_doc: {child_doc}", title="Upload Verification File")
+
         if not child_doc:
             frappe.throw(_("Employment record not found."))
 
@@ -69,12 +76,14 @@ def upload_verification_file():
         parent_doc.save()
         frappe.db.commit()
 
+        frappe.log_error(message=f"File successfully linked to employment_id: {employment_id}", title="Upload Verification File")
+
         return {"status": "success", "file_url": file_url}
 
     except Exception as e:
         frappe.log_error(message=str(e), title="File Upload Error")
         return {"status": "error", "message": _("An error occurred while uploading the file. Please try again.")}
-        
+
 def create_applicant_report(doc):
     """Create a new applicant report based on the verification instructions request."""
     applicant_report = frappe.get_doc({
@@ -89,7 +98,6 @@ def create_applicant_report(doc):
         "email": doc.email,
         "from_time": doc.from_time,
         "to_time": doc.to_time,
-        "middle_name": doc.middle_name,
         "country": doc.country,
         "date_of_birth": doc.date_of_birth,
         "country_now": doc.country_now,
@@ -116,8 +124,7 @@ def create_applicant_report(doc):
     for aliases in doc.alias_name:
         child_aliases = {
             "first_name": aliases.first_name,
-            "middle_name": aliases.middle_name,
-            "middle_name": aliases.middle_name,
+            "middle_name": aliases.middle_name
         }
         applicant_report.append("alias_name", child_aliases)
         
@@ -135,8 +142,9 @@ def create_applicant_report(doc):
             "country": entry.country,
             "city": entry.city,
             "governorate": entry.governorate,
-            "date_enrolled_from": entry.date_enrolled_from,
-            "date_enrolled_to": entry.date_enrolled_to,
+            "location_text": entry.location_text,
+            "from_date": entry.from_date,
+            "end_date": entry.to_date,  # التأكد من أسماء الحقول
             "field_of_study_or_major": entry.field_of_study_or_major,
             "phone": entry.phone,
             "Ext": entry.ext,
@@ -160,19 +168,19 @@ def create_applicant_report(doc):
             "phone": ei.phone,
             "Ext": ei.ext,
             "type_of_employment": ei.type_of_employment,
-            "contact_the_employer,": ei.contact_the_employer,
-            "issuing_salary,": ei.issuing_salary,
-            "activity_has_stopped,": ei.activity_has_stopped,
-            "the_company_has_different_names,": ei.the_company_has_different_names,
-            "different_company_names,": ei.different_company_names,
-            "official_job_title_held_currently,": ei.official_job_title_held_currently,
-            "you_have_a_nicknamecx,": ei.you_have_a_nicknamecx,
-            "nickname,": ei.nickname,
-            "file,": ei.file,
-            "employment_id,": ei.employment_id
+            "contact_the_employer": ei.contact_the_employer,  # تم إزالة الفواصل
+            "issuing_salary": ei.issuing_salary,  # تم إزالة الفواصل
+            "activity_has_stopped": ei.activity_has_stopped,  # تم إزالة الفواصل
+            "the_company_has_different_names": ei.the_company_has_different_names,  # تم إزالة الفواصل
+            "different_company_names": ei.different_company_names,  # تم إزالة الفواصل
+            "official_job_title_held_currently": ei.official_job_title_held_currently,  # تم إزالة الفواصل
+            "you_have_a_nickname": ei.you_have_a_nickname,  # تم تصحيح الاسم وإزالة الفواصل
+            "nickname": ei.nickname,  # تم إزالة الفواصل
+            "file": ei.file,  # تم إزالة الفواصل
+            "employment_id": ei.employment_id  # تم إزالة الفواصل
         }
         applicant_report.append("employment_history", child_ei)                
-            
+
     # Copying data from child table `professional_qualification`
     for pq in doc.professional_qualification:
         child_pq = {
