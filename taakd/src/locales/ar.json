@@ -77,6 +77,10 @@
         "thanksForInformation": "شكرًا لمعلوماتك",
         "orderId": "معرف طلبك: GA-06564-gh71",
         "rate": "قيم",
+        "requestDetails": "تفاصيل الطلب",
+        "companyName": "صاحب العمل",
+        "requestName": "رقم الطلب",
+        "creationDate": "تاريخ الدعوة",
         "processItem": {
           "jobRequest": "طلب الوظيفة",
           "verification": "التحقق من المعلومات الأساسية",

@@ -2,6 +2,7 @@
 import { createListResource, createDocumentResource, ResourceList, ResourceDocument } from 'frappe-ui';
 import { session } from './session';
 import { RequestData, UpdateFields } from './types';
+import axios from 'axios';
 
 /**
  * واجهة خيارات إنشاء مورد القائمة
@@ -42,23 +43,28 @@ export function createRequestList(fields: string[]): ResourceList<RequestData> {
  * @param fields - قائمة أسماء الحقول المراد جلبها.
  * @returns مورد قائمة من نوع ResourceList<RequestData>
  */
-export function createAllRequestsList(fields: string[]): ResourceList<RequestData> {
+export async function createAllRequestsList(fields: string[]): Promise<RequestData[]> {
   if (!session.user) {
     throw new Error("User session is not available.");
   }
 
-  const options: CreateListResourceOptions = {
-    doctype: 'Verification Instructions Request',
-    fields,
-    filters: { user_id: session.user },
-    auto: true,
-    orderBy: 'creation desc',
-    pageLength: 0,  // نحدد pageLength إلى 0 لجلب جميع السجلات
-  };
+  try {
+    const response = await axios.get('/api/resource/Verification Instructions Request', {
+      params: {
+        fields: JSON.stringify(fields),
+        filters: JSON.stringify({ user_id: session.user }),
+        order_by: 'creation desc',
+        page_length: 100, // تعيين إلى قيمة كبيرة لضمان جلب السجلات
+      },
+    });
 
-  return createListResource<RequestData>(options);
+    console.log("Fetched requests:", response.data.data);
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching requests:", error);
+    throw error;
+  }
 }
-
 /**
  * تحديث الحقول في مورد القائمة `Verification Instructions Request`.
  * @param requestList - مورد القائمة المراد تحديثه.

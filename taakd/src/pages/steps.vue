@@ -5,11 +5,7 @@
     <!-- Sidebar -->
     <div class="col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
-        <div
-          :class="[
-            'flex gap-2 px-4 items-center',
-          ]"
-        > 
+        <div :class="['flex gap-2 px-4 items-center']"> 
           <button @click="closeModal">
             <span><StyledIcon :status="0" :scale="0" icon="bi-arrow-left"/></span>
           </button>
@@ -81,6 +77,7 @@
         <Button 
           level="primary" 
           @clicked="handleStep" 
+          :disabled="loading"
         >
           {{ $t('steps.currentStep') }} {{ currentStepIndex + 1 }} &rarr; <!-- عرض رقم المرحلة الحالية -->
         </Button>
@@ -117,11 +114,7 @@
     />
   </div> -->
   <div v-if="stepsModal" class="bg-white w-screen h-screen inset-0 p-10 items-center fixed z-[60]">
-    <div
-      :class="[
-        'flex gap-2 px-4 items-center',
-      ]"
-    > 
+    <div :class="['flex gap-2 px-4 items-center']"> 
       <button @click="closeModal">
         <span><StyledIcon :status="0" :scale="0" icon="bi-arrow-left"/></span>
       </button>
@@ -146,7 +139,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
@@ -159,16 +152,13 @@ import Step5 from './stepsSections/step5.vue';
 import Step6 from './stepsSections/step6.vue';
 import Button from '../components/button.vue';
 import { useToast } from 'vue-toastification';
-import { createRequestList } from '../data/request';
 import StepsToggle from './stepsSections/components/stepsToggle.vue';
 import StyledIcon from '../components/styledIcon.vue';
 import { useI18n } from 'vue-i18n';
 
 // استيراد مسبق للملفات الضرورية
-
 const { t } = useI18n();
 
-// تعريف المتغيرات والمراجع
 const route = useRoute();
 const router = useRouter();
 const store = useVerificationRequestStore();
@@ -241,7 +231,6 @@ const previousStep = () => {
 };
 
 const goToStep = async(index: number) => {
-  currentStepIndex.value = index;
   try {
     loading.value = true;
     
@@ -250,7 +239,8 @@ const goToStep = async(index: number) => {
     if(step.save){
       await step.save();
     }
-    
+
+    currentStepIndex.value = index;
   } catch (error) {
     console.error("خطأ أثناء الحفظ:", error);
     toast.error(t('steps.saveError'));
@@ -303,10 +293,17 @@ const documentName = computed(() => store.documentName);
 // تحميل الوثيقة عند بدء المكون
 onMounted(async () => {
   if(docName.value){
-    store.setDocumentName(docName.value);
+    // store.setDocumentName(docName.value); // تم تعيينها بالفعل من home.vue
     loading.value = true;
-    await store.loadDocument();
-    loading.value = false;
+    try {
+      await store.loadDocument();
+      console.log('تم تحميل المستند:', docName.value);
+    } catch (error) {
+      console.error('خطأ أثناء تحميل المستند:', error);
+      toast.error(t('steps.loadDocumentError'));
+    } finally {
+      loading.value = false;
+    }
   }
   else{
     toast.error(t('steps.loadDocumentError'));
@@ -317,8 +314,15 @@ onMounted(async () => {
 watch(documentName, async (newName) => {
   if(newName){
     loading.value = true;
-    await store.loadDocument();
-    loading.value = false;
+    try {
+      await store.loadDocument();
+      console.log('تم تحديث المستند إلى:', newName);
+    } catch (error) {
+      console.error('خطأ أثناء تحديث المستند:', error);
+      toast.error(t('steps.loadDocumentError'));
+    } finally {
+      loading.value = false;
+    }
   }
 });
 
@@ -361,7 +365,11 @@ const updateQuery = () => {
   } else {
     delete query.modal;
   }
-  router.push({ query });
+  router.push({ query }).catch(err => {
+    if (err.name !== 'NavigationDuplicated') {
+      throw err;
+    }
+  });
 };
 </script>
 

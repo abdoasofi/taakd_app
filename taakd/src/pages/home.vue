@@ -1,4 +1,3 @@
-<!-- home.vue -->
 <template>
   <BackgroundLayout class="relative">
     <div class="pb-6">
@@ -11,8 +10,6 @@
         <div class="z-10 relative">
           <div class="w-full py-3 pb-20">
             <div class="aspect-[1.376] h-10 mb-2 m-auto">
-              <!-- شعار أو أيقونة هنا -->
-              <!-- ... (SVG أو أي مكون آخر) -->
               <svg width="150" height="150" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_944_13802)">
                             <path d="M55.9662 21.9149V24.1236L62.7031 21.8174V25.0489L53.3271 28.1221V22.8374L55.9662 21.9149Z" fill="#81C045"/>
@@ -42,19 +39,19 @@
             {{ $t('home.trustVerifySucceed') }}
           </h1>
 
-          <!-- إضافة سلايدر Swiper هنا -->
+          <!-- سلايدر Swiper -->
           <Swiper
-            v-if="requestList.data && requestList.data.length > 0"
+            v-if="!isLoading && requestList.length > 0"
             @swiper="onSwiper"
+            @slideChange="onSlideChange"
             :modules="[Navigation, Pagination]"
             navigation
             :pagination="{ clickable: true }"
             :spaceBetween="50"
             :slidesPerView="1"
-            @slideChange="onSlideChange"
             class="my-8 lg:py-10 lg:px-40"
           >
-            <SwiperSlide v-for="(request, index) in requestList.data" :key="request.name || index">
+            <SwiperSlide v-for="(request, index) in requestList" :key="request.name || index">
               <div class="grid grid-cols-3">
                 <ProcessItem
                   :label="$t('home.processItem.jobRequest')"
@@ -74,8 +71,29 @@
               </div>
             </SwiperSlide>
           </Swiper>
-          <div v-else class="text-center text-gray-500">
+          <div v-else-if="!isLoading" class="text-center text-gray-500">
             {{ $t('home.noRequestsAvailable') }}
+          </div>
+
+          <div v-if="currentRequest" class="mt-8">
+            <h2 class="text-lg font-semibold mb-4">{{ $t('home.requestDetails') }}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-4 border border-gray-200 rounded shadow">
+                <p class="text-sm text-gray-600">
+                  <strong>{{ $t('home.creationDate') }}:</strong> {{ formatDate(currentRequest.creation) }}
+                </p>
+              </div>              
+              <div class="p-4 border border-gray-200 rounded shadow">
+                <p class="text-sm text-gray-600">
+                  <strong>{{ $t('home.requestName') }}:</strong> {{ currentRequest.name }}
+                </p>
+              </div>             
+              <div class="p-4 border border-gray-200 rounded shadow">
+                <p class="text-sm text-gray-600 mb-2">
+                  <strong>{{ $t('home.companyName') }}:</strong> {{ currentRequest.company_name }}
+                </p>
+              </div>
+            </div>
           </div>
 
           <!-- الأزرار والشروط المعتمدة على السجل الحالي -->
@@ -83,14 +101,14 @@
             <Button
               v-if="currentProcess.request && !currentProcess.verf"
               @click="fill_the_form_now"
-              type="submit"
+              type="button" 
               class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white"
             >
               {{ $t('home.fillTheFormNow') }} <span class="mx-2">-&gt;</span>
             </Button>
 
             <Button
-              v-if="currentProcess.request == 2 && currentProcess.verf == 2 && currentProcess.report == 2"
+              v-if="currentProcess.request === 2 && currentProcess.verf === 2 && currentProcess.report === 2"
               @click="printDiv"
               class="bg-secondary hover:bg-secondary_hover px-4 py-2 text-white"
             >
@@ -99,12 +117,12 @@
           </div>
 
           <div
-            v-if="currentProcess.request == 2 && currentProcess.verf == 1 && currentProcess.report == 0"
+            v-if="currentProcess.request === 2 && currentProcess.verf === 1 && currentProcess.report === 0"
             class="gap-3 w-full flex flex-col justify-center items-center mt-4"
           >
             <span class="text-primary font-bold text-lg block">{{ $t('home.thanksForInformation') }}</span>
             <span class="text-sm font-medium block">{{ $t('home.thanksForInformation') }}</span>
-            <span class="text-xs font-medium block">{{ $t('home.orderId') }}</span>
+            <!-- <span class="text-xs font-medium block">{{ $t('home.orderId') }}</span> -->
             <Button class="w-fit" type="submit">
               <i class="inline-block w-4 h-4 rounded-full bg-mid_gray"></i> {{ $t('home.rate') }}
             </Button>
@@ -117,29 +135,31 @@
       </BaseContainer>
     </div>
 
-    <!-- مكونات بناءً على الحالة الحالية -->
-    <JobRequest v-if="currentProcess.request == 1 && currentProcess.verf == 0 && currentProcess.report == 0" />
+  <JobRequest v-if="currentProcess.request === 1 && currentProcess.verf === 0 && currentProcess.report === 0" />
     <div class="hidden">
       <div id="yourDivId">
         <Report />
       </div>
     </div>
     <Review v-if="!currentProcess.request" />
-    <Verification v-if="currentProcess.request == 2 && currentProcess.verf == 2 && currentProcess.report == 1" />
-    <Contact :location="location" v-if="currentProcess.request == 2 && currentProcess.verf == 1 && currentProcess.report == 0" />
+    <Verification v-if="currentProcess.request === 2 && currentProcess.verf === 2 && currentProcess.report === 1" />
+    <Contact :location="location" v-if="currentProcess.request === 2 && currentProcess.verf === 1 && currentProcess.report === 0" />
 
     <!-- التنبيهات -->
     <div class="fixed z-10 bottom-0 py-6 px-4 flex flex-col gap-2">
       <div v-for="(alert, index) in alerts" :key="index">
         <SnackBar :isDanger="true" :message="alert.message" @close="removeAlert(index)" />
       </div>
+  </div>
+  <div v-if="isLoading" class="flex justify-center items-center my-8">
+  <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-secondary"></div>
     </div>
   </BackgroundLayout>
 </template>
 
 <script setup>
-import router from '@/router';
-import { ref, watch, reactive, onMounted, computed } from 'vue';
+import { ref, watch, reactive, onMounted, computed, nextTick } from 'vue';
+import { useRouter } from 'vue-router';
 import { Button, Rating } from 'frappe-ui';
 import BaseContainer from '../components/baseContainer.vue';
 import ProcessItem from './homeSections/processItem.vue';
@@ -167,13 +187,114 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const toast = useToast();
+const router = useRouter();
 const store = useVerificationRequestStore();
 
 const alerts = reactive([]);
-
 const isLoading = ref(false);
 
+// تعريف requestList كمصفوفة تفاعلية
+const requestList = ref([]);
+
+// تتبع الفهرس النشط للسلايدر
+const activeIndex = ref(0);
+
+// الحصول على السجل الحالي بناءً على الفهرس النشط
+const currentRequest = computed(() => {
+  return requestList.value.length > 0 ? requestList.value[activeIndex.value] : null;
+});
+
+// الحصول على الحالة الحالية بناءً على السجل الحالي
+const currentProcess = computed(() => {
+  if (!currentRequest.value) {
+    return { request: -1, verf: -1, report: -1 };
+  }
+  const process = getStatusOrder(currentRequest.value.application_status);
+  return process;
+});
+
+// دالة لتحويل application_status إلى عمليات
+function getStatusOrder(processStr) {
+  switch (processStr) {
+    case 'New Request':
+      return { request: 0, verf: 0, report: 0 };
+    case 'In Progress':
+      return { request: 1, verf: 0, report: 0 };
+    case 'Submitted':
+      return { request: 2, verf: 1, report: 0 };
+    case 'Verification Started':
+    case 'More Info Needed':
+      return { request: 2, verf: 2, report: 0 };
+    case 'Writing report':
+      return { request: 2, verf: 2, report: 1 };
+    case 'Report is ready':
+      return { request: 2, verf: 2, report: 2 };
+    default:
+      return { request: -1, verf: -1, report: -1 };
+  }
+}
+
+// تعريف مرجع جديد لسلايدر Swiper
+const swiperInstance = ref(null);
+
+// دالة الحصول على مرجع السلايدر عند تهيئته
+function onSwiper(swiper) {
+  swiperInstance.value = swiper;
+}
+
+// دالة تغيير السلايد لتحديث الفهرس النشط
+function onSlideChange(swiper) {
+  activeIndex.value = swiper.activeIndex;
+}
+
+// دالة الطباعة
+const printDiv = () => {
+  printJS({
+    printable: 'yourDivId',
+    type: 'html',
+    targetStyles: ['*'],
+  });
+};
+
+// دالة العودة
+const goBack = () => {
+  router.push('/steps');
+};
+
+// إضافة المرجع للمحتوى
+const reportContent = ref(null);
+
+// تعريف دالة لتفعيل التنبيهات
+const triggerAlert = function(message) {
+  alerts.push({ message });
+  setTimeout(() => {
+    alerts.shift();
+  }, 3000);
+};
+
+// دالة إزالة التنبيه
+const removeAlert = function(index) {
+  alerts.splice(index, 1);
+};
+
+// دالة معالجة التعديلات عند ملء النموذج
+async function fill_the_form_now() {
+  let validateRes = validateInputContact(data);
+  if (validateRes !== true) {
+    triggerAlert($t('home.validation.fillErrors'));
+    return;
+  } else {
+    if (currentRequest.value && currentRequest.value.name) {
+      store.setDocumentName(currentRequest.value.name);
+    } else {
+    }
+
+    await nextTick(); // انتظار تحديث الحالة قبل التوجيه
+    router.push({ name: 'steps' });
+  }
+}
+
+// تعريف البيانات التفاعلية للنموذج (إذا كان هناك نموذج)
 const data = reactive({
   mobile_number: {
     value: true,
@@ -202,153 +323,49 @@ const data = reactive({
   },
 });
 
-// دالة العودة
-const goBack = () => {
-  router.push('/steps');
+// دالة تنسيق التاريخ
+const formatDate = (dateString) => {
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-// إضافة المرجع للمحتوى
-const reportContent = ref(null);
-
-// مرجع لسلايدر Swiper
-const swiperRef = ref(null);
-
-const triggerAlert = function(message) {
-  alerts.push({ message });
-  setTimeout(() => {
-    alerts.shift(); // إزالة التنبيه تلقائيًا بعد مدة
-  }, 3000);
-};
-
-const removeAlert = function(index) {
-  alerts.splice(index, 1);
-};
-
-// دالة لمعالجة التعديلات عند ملء النموذج
-function fill_the_form_now() {
-  let validateRes = validateInputContact(data);
-  if (validateRes !== true) {
-    triggerAlert($t('home.validation.fillErrors'));
-    return;
-  } else {
-    router.replace({ name: 'steps' });
-  }
-}
-
-// جلب السجلات
-const requestList = createAllRequestsList(['name', 'user_id', 'application_status', 'company_name', 'creation']);
-
-// عملية الطلب الحالية
-const currentIndex = ref(0);
-
-// الحصول على السجل الحالي بناءً على الفهرس
-const currentRequest = computed(() => requestList.data[currentIndex.value]);
-
-// الحصول على الحالة الحالية بناءً على السجل الحالي
-const currentProcess = computed(() => {
-  if (!currentRequest.value) {
-    console.log('لا يوجد طلب حالي.');
-    return { request: -1, verf: -1, report: -1 };
-  }
-  const process = getStatusOrder(currentRequest.value.application_status);
-  console.log('تم حساب currentProcess:', process);
-  return process;
-});
-
-// دالة لتحويل application_status إلى عمليات
-function getStatusOrder(processStr) {
-  switch (processStr) {
-    case 'New Request':
-      return { request: 0, verf: 0, report: 0 };
-    case 'In Progress':
-      return { request: 1, verf: 0, report: 0 };
-    case 'Submitted':
-      return { request: 2, verf: 1, report: 0 };
-    case 'Verification Started':
-    case 'More Info Needed':
-      return { request: 2, verf: 2, report: 0 };
-    case 'Writing report':
-      return { request: 2, verf: 2, report: 1 };
-    case 'Report is ready':
-      return { request: 2, verf: 2, report: 2 };
-    default:
-      console.warn('حالة التطبيق غير معروفة:', processStr);
-      return { request: -1, verf: -1, report: -1 };
-  }
-}
-
-// تعريف مرجع جديد لسلايدر Swiper
-const swiperInstance = ref(null);
-
-// دالة للحصول على مرجع السلايدر عند تهيئته
-function onSwiper(swiper) {
-  swiperInstance.value = swiper;
-  console.log('Swiper initialized:', swiper);
-}
-
-// تحديث دالة تغيير السلايد لاستخدام مرجع السلايدر الجديد
-function onSlideChange() {
-  if (swiperInstance.value) {
-    currentIndex.value = swiperInstance.value.activeIndex;
-    console.log('تم تغيير السلايد. الفهرس الحالي:', currentIndex.value);
-    if (currentRequest.value && currentRequest.value.application_status) {
-      store.setDocumentName(currentRequest.value.name);
-      console.log('اسم المستند الحالي:', currentRequest.value.name);
-      console.log('الحالة الحالية:', currentProcess.value);
-    } else {
-      console.log('لا يوجد طلب حالي أو حالة التطبيق غير موجودة.');
-    }
-  } else {
-    console.log('مرجع السلايدر غير موجود أو Swiper غير مهيأ.');
-  }
-}
-
-// دالة الطباعة
-const printDiv = () => {
-  printJS({
-    printable: 'yourDivId',
-    type: 'html',
-    targetStyles: ['*'], // يتضمن الأنماط من Tailwind CSS
-  });
-};
-
-// تحميل الوثيقة عند بدء المكون
+// تحميل البيانات عند بدء المكون
 onMounted(async () => {
-  if (currentRequest.value && currentRequest.value.name) {
-    store.setDocumentName(currentRequest.value.name);
-    await store.loadDocument();
-    console.log('تم تحميل المستند:', currentRequest.value.name);
-  } else {
-    toast.error($t('home.loadDocumentError'));
-    console.log('لم يتم تحديد اسم المستند أثناء التحميل.');
+  try {
+    const fetchedRequests = await createAllRequestsList(['name', 'user_id', 'application_status', 'company_name', 'creation']);
+
+    if (Array.isArray(fetchedRequests) && fetchedRequests.length > 0) {
+      requestList.value = fetchedRequests;
+
+      activeIndex.value = 0; 
+      store.setDocumentName(fetchedRequests[0].name);
+
+      if (fetchedRequests[0].name) {
+        store.setDocumentName(fetchedRequests[0].name);
+        try {
+          await store.loadDocument();
+        } catch (error) {
+          triggerAlert($t('home.loadDocumentError'));
+        }
+      } else {
+        triggerAlert($t('home.loadDocumentError'));
+      }
+    } else {
+      requestList.value = [];
+    }
+  } catch (error) {
+    triggerAlert($t('home.loadDocumentError'));
   }
 });
-
-// مراقبة تغييرات السجلات
-watch(
-  () => requestList.data,
-  (newList) => {
-    if (newList && newList.length > 0) {
-      currentIndex.value = 0;
-      store.setDocumentName(newList[0].name);
-      console.log('تم تعيين الفهرس إلى 0 بناءً على البيانات الجديدة.');
-      // currentProcess سيُحسب تلقائيًا عبر computed
-    }
-  },
-  { immediate: true }
-);
 </script>
 
 <style scoped>
-/* أي أنماط إضافية إذا لزم الأمر */
-
-/* تخصيص Swiper إذا لزم الأمر */
 .swiper-button-next,
 .swiper-button-prev {
-  color: #3F4457; /* مثال على تخصيص لون الأزرار */
+  color: #3F4457;
 }
 
 .swiper-pagination-bullet {
-  background: #3F4457; /* لون النقاط */
+  background: #3F4457;
 }
 </style>

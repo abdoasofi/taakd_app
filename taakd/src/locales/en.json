@@ -77,6 +77,10 @@
         "thanksForInformation": "Thanks for your information",
         "orderId": "Your order ID: GA-06564-gh71",
         "rate": "Rate",
+        "requestDetails": "Request Details",
+        "companyName": "Employer",
+        "requestName": "Request Number",
+        "creationDate": "Invitation Date",
         "processItem": {
           "jobRequest": "Job Request",
           "verification": "Verification of Basic Information",

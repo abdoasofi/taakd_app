@@ -1,18 +1,12 @@
-
+// router.js
 import { createRouter, createWebHistory } from 'vue-router'
 import { session } from './data/session'
 import { userResource } from '@/data/user'
 
-// let defaultRoute = window.default_route
-// if (!defaultRoute || defaultRoute?.includes('{{')) {
-//   defaultRoute = '/discussions'}
-let step = 1
 const routes = [
   {
     path: '/',
     name: 'Home',
-    // redirect: defaultRoute,
-
     component: () => import('@/pages/Home.vue'),
   },
   {
@@ -50,11 +44,6 @@ const routes = [
     path: '/Step_6',
     component: () => import('@/pages/pagesOld/Step_6.vue'),
   },
-  // {
-  //   name: 'Hiring',
-  //   path: '/Hiring',
-  //   component: () => import('@/pages/Hiring.vue'),
-  // },
   {
     name: 'reset',
     path: '/reset',
@@ -80,11 +69,10 @@ const routes = [
     path: '/step3test',
     component: () => import('@/pages/stepsSections/step3test.vue'),
   },  
-
 ]
 
-let router = createRouter({
-  history: createWebHistory('/taakd'),
+const router = createRouter({
+  history: createWebHistory('/taakd'), // تأكد أن هذا هو الـ base path الصحيح
   routes,
 })
 
@@ -97,7 +85,6 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (to.name === 'Login' && isLoggedIn) {
-    
     next({ name: 'Home' })
   } else if (to.name !== 'Login' && !isLoggedIn) {
     next({ name: 'Login' })
