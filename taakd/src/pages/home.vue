@@ -46,7 +46,6 @@
             @slideChange="onSlideChange"
             :modules="[Navigation, Pagination]"
             navigation
-            :pagination="{ clickable: true }"
             :spaceBetween="50"
             :slidesPerView="1"
             class="my-8 lg:py-10 lg:px-40"
@@ -133,6 +132,18 @@
           /> -->
         </div>
       </BaseContainer>
+      <div v-if="!isLoading && requestList.length > 0" class="mt-4 flex justify-center space-x-2">
+        <span
+          v-for="(request, index) in requestList"
+          :key="index"
+          class="cursor-pointer w-3 h-3 rounded-full"
+          :class="{
+            'bg-secondary': index === activeIndex,
+            'bg-gray-300': index !== activeIndex
+          }"
+          @click="goToSlide(index)"
+        ></span>
+      </div>
     </div>
 
   <JobRequest v-if="currentProcess.request === 1 && currentProcess.verf === 0 && currentProcess.report === 0" />
@@ -285,12 +296,17 @@ async function fill_the_form_now() {
     return;
   } else {
     if (currentRequest.value && currentRequest.value.name) {
-      store.setDocumentName(currentRequest.value.name);
+      router.push({ name: `steps`,query:{doc:currentRequest.value.name} });
+      // store.setDocumentName(currentRequest.value.name);
+      // store.loadDocument();
     } else {
+
+      // msg
     }
 
-    await nextTick(); // انتظار تحديث الحالة قبل التوجيه
-    router.push({ name: 'steps' });
+    // await nextTick(); // انتظار تحديث الحالة قبل التوجيه
+      // router.push({ name: `steps?doc=${currentRequest.value.name}` });
+   
   }
 }
 
@@ -357,6 +373,11 @@ onMounted(async () => {
     triggerAlert($t('home.loadDocumentError'));
   }
 });
+const goToSlide = (index) => {
+  if (swiperRef.value) {
+    swiperRef.value.slideTo(index);
+  }
+}
 </script>
 
 <style scoped>
