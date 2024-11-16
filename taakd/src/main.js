@@ -25,7 +25,12 @@ import {
     FaSearch,
     RiUploadCloudLine,
     BiArrowLeft,
-    BiArrowRight
+    BiArrowRight,
+    FcCheckmark,
+    PrArrowLeft,
+    PrArrowRight
+    
+    
 } from "oh-vue-icons/icons";
 
 addIcons(
@@ -43,7 +48,11 @@ addIcons(
     FaSearch,
     RiUploadCloudLine,
     BiArrowLeft,
-    BiArrowRight
+    BiArrowRight,
+    FcCheckmark,
+    PrArrowLeft,
+    PrArrowRight
+    
 );
 
 import { Button, Card, Input, setConfig, frappeRequest, resourcesPlugin } from 'frappe-ui';
