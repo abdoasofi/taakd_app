@@ -179,7 +179,8 @@
         "stepThreeDescription": "تاريخ التوظيف",
         "stepFourDescription": "المؤهلات المهنية",
         "stepFiveDescription": "مراجعة المعلومات",
-        "stepSixDescription": "التحقق النهائي"
+        "stepSixDescription": "التحقق النهائي",
+        "saved":"تم الحفظ"
     },
     "login": {
         "welcomeMessage": "ترحيب حار من Taakd.",

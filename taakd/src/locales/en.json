@@ -179,7 +179,8 @@
         "stepThreeDescription": "Employment History",
         "stepFourDescription": "Professional Qualifications",
         "stepFiveDescription": "Review Information",
-        "stepSixDescription": "Final Verification"
+        "stepSixDescription": "Final Verification",
+        "saved":"saved"
     },
     "login": {
         "welcomeMessage": "A warm welcome from Taakd.",

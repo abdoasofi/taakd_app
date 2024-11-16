@@ -5,9 +5,11 @@
     <!-- Sidebar -->
     <div class="col-span-4 lg:order-2 relative">
       <div class="sticky top-4">
-        <div :class="['flex gap-2 px-4 items-center']"> 
+        <div class="flex gap-2 px-4 items-center"> 
           <button @click="closeModal">
-            <span><StyledIcon :status="0" :scale="0" icon="bi-arrow-left"/></span>
+            <span>
+              <StyledIcon :status="0" :scale="0" :icon="modelStepsInstructionsIcon" />
+            </span>
           </button>
           <div class="pb-3 font-medium text-primary text-base">
             <p>{{ $t('steps.documentName') }}: {{ docName }}</p>
@@ -28,7 +30,7 @@
         </div>
         <div class="py-3 lg:hidden flex justify-end text-secondary text-base">
           <button @click="toggleModal">
-            {{ $t('steps.allSteps') }} ({{ steps.length }})<span class="inline-block mx-1">&rarr;</span>
+            {{ $t('steps.allSteps') }} ({{ steps.length }})<span class="inline-block mx-1">{{ buttonAllStep }}</span>
           </button>
         </div>
       </div>
@@ -44,20 +46,26 @@
   </div>
 
   <!-- Footer -->
-  <div class="bg-[#F0F0F0] fixed lg:static bottom-0 w-screen h-fit">
+  <div class="bg-[#F0F0F0] fixed   bottom-0 w-screen h-fit">
     <div class="container py-4 flex w-full justify-between items-center">
       <!-- Auto Saving Indicator -->
-      <div class="lg:flex justify-start grow lg:gap-2">
-        <svg width="30" height="30" viewBox="0 0 81 81" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="14.0355" y="40.5156" width="37.449" height="37.449" transform="rotate(-45 14.0355 40.5156)" stroke="#F7F7F7" stroke-width="5"/>
-          <mask id="mask0_175_7016" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="7" y="7" width="67" height="67">
-            <rect width="66.1225" height="66.1225" transform="translate(7.64355 7.23535)" fill="#DE3500"/>
-          </mask>
-          <g mask="url(#mask0_175_7016)">
-            <rect x="14.0365" y="40.5166" width="37.449" height="37.449" transform="rotate(-45 14.0365 40.5166)" stroke="#81C045" stroke-width="5"/>
-          </g>
-        </svg>
-        <div class="text-xs text-[#1D1B20]">{{ $t('steps.autoSaving') }}</div> 
+      <div v-if="saveFlag"  class="lg:flex justify-start grow  items-center lg:gap-2">
+       <div class="h-5 w-5">
+        <span>
+          <StyledIcon :status="0" :scale="0" icon="fc-checkmark"/>
+        </span>
+      </div>
+       
+        <div  class="text-xs text-[#1D1B20]">{{ $t('steps.saved') }}</div> 
+      </div>
+
+      <div v-if="!saveFlag" class="lg:flex justify-start grow  items-center lg:gap-2">
+        <div class="autosave-overlay">
+           <div class="auto-save-icon">
+            <div class="auto-save-icon-fill"></div>
+           </div>
+       </div>
+       <div  class="text-xs text-[#1D1B20]">{{ $t('steps.autoSaving') }}</div> 
       </div>
 
       <!-- Navigation Buttons -->
@@ -79,7 +87,9 @@
           @clicked="handleStep" 
           :disabled="loading"
         >
-          {{ $t('steps.currentStep') }} {{ currentStepIndex + 1 }} &rarr; <!-- عرض رقم المرحلة الحالية -->
+          <div class="flex"><span class="block">{{ $t('steps.currentStep') }} {{ currentStepIndex + 1 }}</span>
+            <span class="block"><StyledIcon :status="0" :scale="0" :icon="buttonStep" class="mx-1 "/></span>
+          </div> 
         </Button>
       </div>
 
@@ -94,7 +104,6 @@
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="ltr:mr-2 rtl:ml-2 transform rotate-180">
             <path d="M10 0L8.59 1.41L14.17 7H0V9H14.17L8.59 14.59L10 16L16 10L10 0Z" fill="currentColor"/>
           </svg>
-          <!-- اسم المرحلة التي سيتم الرجوع إليها -->
         </button>
         
         <Button level="other" @clicked="reject">{{ $t('steps.reject') }}</Button>
@@ -116,7 +125,9 @@
   <div v-if="stepsModal" class="bg-white w-screen h-screen inset-0 p-10 items-center fixed z-[60]">
     <div :class="['flex gap-2 px-4 items-center']"> 
       <button @click="closeModal">
-        <span><StyledIcon :status="0" :scale="0" icon="bi-arrow-left"/></span>
+        <span>
+          <StyledIcon :status="0" :scale="0" :icon="modelStepsInstructionsIcon" />
+        </span>
       </button>
       <div class="pb-3 font-medium text-primary text-base">
         <p>{{ $t('steps.documentName') }}: {{ docName }}</p>
@@ -136,10 +147,18 @@
       />
     </div>
   </div>
+
+  <div v-if="store.isLoading" class="fixed inset-0 w-screen h-screen flex items-center justify-center bg-white z-[100]">
+    <div class="loading-overlay">
+           <div class="loading-icon">
+            <div class="loading-icon-fill"></div>
+           </div>
+       </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch, nextTick } from 'vue';
+import { ref, computed, onMounted, watch, nextTick, } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import Header from '../components/header.vue'; 
@@ -156,8 +175,8 @@ import StepsToggle from './stepsSections/components/stepsToggle.vue';
 import StyledIcon from '../components/styledIcon.vue';
 import { useI18n } from 'vue-i18n';
 
-// استيراد مسبق للملفات الضرورية
 const { t } = useI18n();
+const { locale } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -172,7 +191,23 @@ const docName = computed(() => store.documentName);
 const currentStepIndex = ref(0);
 const totalSteps = 6;
 
-// تعريف المراحل مع المكونات والوصف ودوال التحقق (ستحتاج إلى ترجمة الوصف)
+// إنشاء خاصية محسوبة لتحديد اسم الأيقونة بناءً على locale
+const modelStepsInstructionsIcon = computed(() => {
+  return locale.value === 'ar' ? 'bi-arrow-right' : 'bi-arrow-left';
+}); 
+
+
+const buttonStep = computed(() => {
+  return locale.value === 'ar' ? 'pr-arrow-left' : 'pr-arrow-right';
+}); 
+
+const buttonAllStep = computed(() => {
+  const leftArrow = '←'
+  const rightArrow = '→'
+  return locale.value === 'ar' ? leftArrow: rightArrow;
+}); 
+
+
 const steps = [
   {
     component: Step1,
@@ -230,15 +265,24 @@ const previousStep = () => {
   }
 };
 
+const saveFlag=ref(false);
+const save = async(index: number)=>{
+  const step = steps[index];
+  if(step.save){
+      await step.save();
+      saveFlag.value=true;
+      setTimeout(()=>{
+        saveFlag.value=false;
+      },2000);
+    }
+}
+
 const goToStep = async(index: number) => {
   try {
     loading.value = true;
     
-    // حفظ البيانات للمرحلة المحددة
     const step = steps[index];
-    if(step.save){
-      await step.save();
-    }
+    await save(index);
 
     currentStepIndex.value = index;
   } catch (error) {
@@ -256,16 +300,13 @@ const handleStep = async () => {
     
     // حفظ البيانات للمرحلة الحالية
     const step = steps[currentStepIndex.value];
-    if(step.save){
-      await step.save();
-    }
+    await save(currentStepIndex.value);
 
     // الانتقال إلى الخطوة التالية
     if (currentStepIndex.value < totalSteps - 1) {
       currentStepIndex.value++;
     }
     else{
-      // منطق إنهاء العملية أو إرسال البيانات
       toast.success(t('steps.processCompleted'));
     }
   } catch (error) {
@@ -292,19 +333,12 @@ const documentName = computed(() => store.documentName);
 
 // تحميل الوثيقة عند بدء المكون
 onMounted(async () => {
-  if(docName.value){
-    // store.setDocumentName(docName.value); // تم تعيينها بالفعل من home.vue
-    loading.value = true;
-    try {
-      await store.loadDocument();
-      console.log('تم تحميل المستند:', docName.value);
-    } catch (error) {
-      console.error('خطأ أثناء تحميل المستند:', error);
-      toast.error(t('steps.loadDocumentError'));
-    } finally {
-      loading.value = false;
-    }
-  }
+  const query = { ...route.query };
+  const docId=query.doc;
+  if(docId)
+  {
+    store.setDocumentName(docId.toString());
+  await store.loadDocument();}
   else{
     toast.error(t('steps.loadDocumentError'));
   }
@@ -326,13 +360,36 @@ watch(documentName, async (newName) => {
   }
 });
 
-// التحكم في عرض المودال
+const isAutosaveDone=ref(true);
+ const intervalId=ref<number|undefined>(undefined);
+ 
+ const startAutoSave=()=> {
+       intervalId.value = setInterval(() => {
+        // Your logic here
+        if(isAutosaveDone.value){ 
+    isAutosaveDone.value=false;
+    const step=steps[currentStepIndex.value];
+    const save=step.save;
+    if(save){
+      save().then(()=>{
+        isAutosaveDone.value=true;
+      });
+    }}
+       
+      }, 10000); 
+    }
+  
+    const stopAutoSave=() =>{
+      if (intervalId.value) {
+        clearInterval(intervalId.value);
+        intervalId.value = undefined;
+      }
+    }
+
 const stepsModal = ref(false);
 
-// مراقبة حالة المودال من query params
 const modalFromQuery = computed(() => route.query.modal === 'true');
 
-// Watch لتحديث حالة المودال بناءً على query params
 watch(
   () => route.query.modal,
   (newModalState) => {
@@ -374,11 +431,63 @@ const updateQuery = () => {
 </script>
 
 <style scoped>
-.steps-navigation {
-  /* أنماط مخصصة لمكون خطوات التنقل */
+.auto-save-icon {
+  width: 20px;
+  aspect-ratio: 1;
+  
+
+  padding: 10%;
+
+  background: linear-gradient(225deg, rgb(110, 110, 110) 50%, rgb(110, 110, 110) 51%); /* Initial gradient */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  animation: smoothGradient 2s ease infinite;
 }
 
-.step-content {
-  /* أنماط مخصصة لمحتوى الخطوة الحالية */
+.auto-save-icon-fill {
+  width: 100%;
+  height: 100%;
+
+  background-color: #fff;
+}
+@keyframes smoothGradient {
+  0% {
+    background-size: 100% 100%;
+  }
+  50% {
+    background-size: 0% 0%;
+  }
+  100% {
+    background-size: 100% 100%;
+  }
+}
+.autosave-overlay{
+  background-color: rgb(199, 198, 198);
+  transform: rotate(45deg);
+}
+
+.loading-icon {
+  width: 100px;
+  aspect-ratio: 1;
+  
+
+  padding: 5%;
+
+  background: linear-gradient(225deg, rgb(88, 208, 73) 50%, rgb(88, 208, 73) 51%); /* Initial gradient */
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  animation: smoothGradient 2s ease infinite;
+}
+
+.loading-icon-fill {
+  width: 100%;
+  height: 100%;
+
+  background-color: #fff;
+}
+
+.loading-overlay{
+  background-color: rgb(199, 198, 198);
+  transform: rotate(45deg);
 }
 </style>
