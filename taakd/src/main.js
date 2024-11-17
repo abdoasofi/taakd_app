@@ -28,8 +28,8 @@ import {
     BiArrowRight,
     FcCheckmark,
     PrArrowLeft,
-    PrArrowRight
-    
+    PrArrowRight,
+    FaMinus    
     
 } from "oh-vue-icons/icons";
 
@@ -51,8 +51,8 @@ addIcons(
     BiArrowRight,
     FcCheckmark,
     PrArrowLeft,
-    PrArrowRight
-    
+    PrArrowRight,
+    FaMinus    
 );
 
 import { Button, Card, Input, setConfig, frappeRequest, resourcesPlugin } from 'frappe-ui';
