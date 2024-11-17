@@ -963,23 +963,55 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         return;
       }
       try {
-        // حذف السجل من الحالة المحلية
         this.step2.educationInformation = this.step2.educationInformation.filter(education => education.id !== id);
-
-        // تحديث الوثيقة بعد الحذف من الحالة المحلية
         const dataToSubmit: UpdateFields = {
           education_information: this.step2.educationInformation,
         };
         await this.updateDocumentFields(dataToSubmit);
-
         toast.success('تم حذف سجل التعليم بنجاح.');
       } catch (error) {
-        console.error(`فشل في حذف سجل التعليم:`, error);
         toast.error('حدث خطأ أثناء حذف سجل التعليم.');
         throw error;
       }
     },
 
+    async deleteEmploymentHistory(id: string) {
+      const toast = useToast();
+      if (!this.documentName) {
+        toast.error("لم يتم العثور على اسم الوثيقة. يرجى تعيين اسم الوثيقة أولاً.");
+        return;
+      }
+      try {
+        this.step2.employment_history = this.step2.employment_history.filter(employment => employment.id !== id);
+        const dataToSubmit: UpdateFields = {
+          employment_history: this.step2.employment_history,
+        };
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حذف سجل التعليم بنجاح.');
+      } catch (error) {
+        toast.error('حدث خطأ أثناء حذف سجل التعليم.');
+        throw error;
+      }
+    },
+
+    async deleteProfessionalQualification(id: string) {
+      const toast = useToast();
+      if (!this.documentName) {
+        toast.error("لم يتم العثور على اسم الوثيقة. يرجى تعيين اسم الوثيقة أولاً.");
+        return;
+      }
+      try {
+        this.step2.professional_qualification = this.step2.professional_qualification.filter(qualification => qualification.id !== id);
+        const dataToSubmit: UpdateFields = {
+          professional_qualification: this.step2.professional_qualification,
+        };
+        await this.updateDocumentFields(dataToSubmit);
+        toast.success('تم حذف سجل التعليم بنجاح.');
+      } catch (error) {
+        toast.error('حدث خطأ أثناء حذف سجل التعليم.');
+        throw error;
+      }
+    },
     
   },
 });

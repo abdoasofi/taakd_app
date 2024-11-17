@@ -16,6 +16,7 @@
       v-for="(employment, index) in employmentHistory"
       :key="employment.employment_id"
       :title="employment.company || `${$t('step3.employment')} ${index + 1}`"
+      @delete="deleteEmploymentHistory(index)"
     >
     <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Company Field -->
@@ -538,7 +539,11 @@ const addEmployment = () => {
   })
 }
 
-// Save employment data
+const deleteEmploymentHistory = (index) => {
+  employmentHistory.value.splice(index, 1)
+  toast.info(`تم حذف السجل .`)
+}
+
 const saveEmployment = async (index) => {
   if (store.isLoading) { // تحديث الاسم
     return

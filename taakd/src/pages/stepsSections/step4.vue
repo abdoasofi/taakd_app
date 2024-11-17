@@ -14,6 +14,7 @@
       v-for="(qualification, index) in additionalProfessionalQualifications"
       :key="qualification.id"
       :title="qualification.awarding_body || `${$t('step4.qualification')} ${index + 1}`"
+      @delete="deleteProfessionalQualification(index)"
     >
       <div class="lg:grid grid-cols-2 lg:gap-2">
         <!-- Awarding Body Field -->
@@ -251,7 +252,11 @@ const addQualification = () => {
   })
 }
 
-// Save qualification data
+const deleteProfessionalQualification = (index) => {
+  additionalProfessionalQualifications.value.splice(index, 1)
+  toast.info(`تم حذف السجل .`)
+}
+
 const saveQualification = async (index) => {
   try {
     await store.saveStep4()

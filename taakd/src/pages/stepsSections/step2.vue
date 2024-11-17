@@ -396,17 +396,14 @@ const addEducation = () => {
   }
   educationInformation.value.push(newEducation)
   nextTick(() => {
-    // يمكن إضافة أي عمليات إضافية بعد إضافة السجل الجديد
   })
 }
 
-// دالة لحذف سجل تعليم
 const deleteEducation = (index) => {
   educationInformation.value.splice(index, 1)
   toast.info(`تم حذف السجل التعليمي بنجاح.`)
 }
 
-// دالة لحفظ السجلات التعليمية (معلقة حاليًا)
 const saveEducation = async (index) => {
   try {
     await store.saveStep2();
