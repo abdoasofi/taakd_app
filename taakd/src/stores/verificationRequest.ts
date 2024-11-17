@@ -663,6 +663,7 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         await this.updateDocumentFields(dataToSubmit);
         toast.success('تم حفظ بيانات التعليم بنجاح.');
       } catch (error) {
+        toast.error('حدث خطأ أثناء حفظ بيانات التعليم.');
         throw error;
       }
     },
@@ -954,5 +955,31 @@ export const useVerificationRequestStore = defineStore('verificationRequest', {
         toast.error("حدث خطأ أثناء تحميل بيانات الخطوة السادسة.");
       }
     },
+
+    async deleteEducation(id: string) {
+      const toast = useToast();
+      if (!this.documentName) {
+        toast.error("لم يتم العثور على اسم الوثيقة. يرجى تعيين اسم الوثيقة أولاً.");
+        return;
+      }
+      try {
+        // حذف السجل من الحالة المحلية
+        this.step2.educationInformation = this.step2.educationInformation.filter(education => education.id !== id);
+
+        // تحديث الوثيقة بعد الحذف من الحالة المحلية
+        const dataToSubmit: UpdateFields = {
+          education_information: this.step2.educationInformation,
+        };
+        await this.updateDocumentFields(dataToSubmit);
+
+        toast.success('تم حذف سجل التعليم بنجاح.');
+      } catch (error) {
+        console.error(`فشل في حذف سجل التعليم:`, error);
+        toast.error('حدث خطأ أثناء حذف سجل التعليم.');
+        throw error;
+      }
+    },
+
+    
   },
 });

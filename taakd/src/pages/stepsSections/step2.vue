@@ -2,20 +2,22 @@
 <template>
   <div class="pt-3 container">
     <h1 class="text-3xl font-bold mb-3 text-black">{{ $t('step2.education_information') }}</h1>
-    <ul>
+    <ul class="list-disc list-inside mb-4">
       <li>{{ $t('step2.required_fields') }}</li>
       <li>{{ $t('step2.provide_education_info') }}</li>
     </ul>
   </div>
-  <div class="space-y-2 mt-3">
+
+  <!-- قائمة الأقسام القابلة للطي والحذف -->
+  <div class="space-y-4 mt-4">
     <FieldsToggleContainer
       v-for="(education, index) in educationInformation"
       :key="education.id"
       :title="education.name_of_school_or_college_university || `${$t('step2.education')} ${index + 1}`"
+      @delete="deleteEducation(index)"
     >
-      <div class="lg:grid grid-cols-2 lg:gap-2">
-
-        <!-- Name of School/College/University Field -->
+      <div class="lg:grid grid-cols-2 lg:gap-4">
+        <!-- حقل اسم المؤسسة التعليمية -->
         <FieldContainer>
           <StyledInput
             :labelText="$t('step2.name_of_school')"
@@ -30,7 +32,7 @@
           />
         </FieldContainer>
 
-        <!-- Field of Study/Major Field -->
+        <!-- حقل مجال الدراسة -->
         <FieldContainer>
           <StyledInput
             :labelText="$t('step2.field_of_study')"
@@ -46,8 +48,8 @@
         </FieldContainer>
       </div>
 
-      <div class="lg:grid grid-cols-2 lg:gap-2">
-
+      <div class="lg:grid grid-cols-2 lg:gap-4">
+        <!-- حقل البلد -->
         <FieldContainer>
           <Autocomp
             :labelText="$t('step2.country')"
@@ -64,6 +66,7 @@
           />
         </FieldContainer>
 
+        <!-- حقل المدينة -->
         <FieldContainer>
           <Autocomp
             :labelText="$t('step2.city')"
@@ -80,6 +83,7 @@
           />
         </FieldContainer>
 
+        <!-- حقل المحافظة -->
         <FieldContainer>
           <Autocomp
             :labelText="$t('step2.governorate')"
@@ -96,6 +100,7 @@
           />
         </FieldContainer>
 
+        <!-- حقل الموقع النصي -->
         <FieldContainer>
           <StyledInput
             :labelText="$t('step2.location_text')"
@@ -110,7 +115,8 @@
         </FieldContainer>
       </div>
 
-      <div class="lg:grid grid-cols-2 lg:gap-2">
+      <div class="lg:grid grid-cols-2 lg:gap-4">
+        <!-- حقل تاريخ البدء -->
         <FieldContainer>
           <StyledInput 
             id="from_date" 
@@ -124,6 +130,7 @@
           />
         </FieldContainer>
 
+        <!-- حقل تاريخ الانتهاء -->
         <FieldContainer>
           <StyledInput 
             id="to_date" 
@@ -139,7 +146,8 @@
         </FieldContainer>
       </div>
 
-      <div class="lg:grid grid-cols-2 lg:gap-2">
+      <div class="lg:grid grid-cols-2 lg:gap-4">
+        <!-- حقل الهاتف -->
         <FieldContainer>
           <StyledInput
             :labelText="$t('step2.phone')"
@@ -154,6 +162,7 @@
           />
         </FieldContainer>
         
+        <!-- حقل الامتداد -->
         <FieldContainer>
           <StyledInput
             :labelText="$t('step2.ext')"
@@ -168,7 +177,8 @@
         </FieldContainer>      
       </div>
 
-      <div class="lg:grid grid-cols-2 lg:gap-2">
+      <div class="lg:grid grid-cols-2 lg:gap-4">
+        <!-- حقل الدبلومة -->
         <FieldContainer>
           <Select
             :labelText="$t('step2.diploma')"
@@ -183,6 +193,7 @@
           />
         </FieldContainer>
 
+        <!-- حقل الاسم البديل -->
         <FieldContainer>
           <Select
             :labelText="$t('step2.another_name')"
@@ -197,11 +208,10 @@
         </FieldContainer>
       </div>
 
-      <!-- <div class="flex justify-end py-2">
-        <Button level="primary" @clicked="saveEducation(index)">Save</Button>
-      </div> -->
+      <!-- يمكن إضافة أزرار إضافية هنا إذا لزم الأمر -->
     </FieldsToggleContainer>
 
+    <!-- زر إضافة قسم جديد -->
     <div class="flex justify-center py-3">
       <Button level="secondary" @clicked="addEducation">+ {{ $t('step2.add_education_information') }}</Button>
     </div>
@@ -222,29 +232,32 @@ import StyledInput from '../../components/styledInput.vue'
 import Autocomp from '../../components/autocomp.vue'
 import Select from '../../components/select.vue'
 
+// الاستيراد
 import { location } from '../../data/useAddressLogic'
 
 // استيراد الستور
 const store = useVerificationRequestStore()
 const toast = useToast()
 
+// البيانات المحسوبة لمعلومات التعليم
 const educationInformation = computed({
   get: () => store.step2.educationInformation,
   set: val => store.updateStep2('educationInformation', val)
 })
 
+// خيارات الدبلومة
 const optionsDiploma = reactive([
   { value: "Yes", label: "Yes" },
   { value: "No", label: "No" },
 ])
 
-const openSections = ref<{ [key: string]: boolean }>({});
-
+// خيارات الاسم البديل
 const optionsAnotherName = reactive([
   { value: "Yes", label: "Yes" },
   { value: "No", label: "No" },
 ])
 
+// دوال الحصول على الخيارات للبلد، المدينة، والمحافظة
 const getOptionCountry = (education) => {
   const options = location.data
     .filter(loc => loc.location_type === 'Country')
@@ -303,8 +316,7 @@ const getOptionGovernorate = (education) => {
   return options
 }
 
-// Handler functions for changes
-
+// دوال لمعالجة التغيرات في البلد، المدينة، والمحافظة
 const handleCountryChange = (index, value) => {
   const education = educationInformation.value[index]
   education.country = value.value
@@ -323,8 +335,7 @@ const handleGovernorateChange = (index, value) => {
   education.governorate = value.value
 }
 
-// Validation functions
-
+// دوال التحقق من صحة الحقول
 const validateNameOfSchool = (name) => {
   return typeof name === 'string' && name.trim() !== '';
 }
@@ -363,10 +374,10 @@ const validateDiploma = (diploma) => {
 }
 
 const validateAnotherName = () => {
-  return true; // اعتبار الحقل دائمًا صحيحًا كونه اختياري.
+  return true; // دالة تحقق دائمًا صحيحة لأن الحقل اختياري
 }
 
-// Adding new education record
+// دالة لإضافة سجل تعليم جديد
 const addEducation = () => {
   const newEducation = {
     id: uuidv4(),
@@ -385,10 +396,17 @@ const addEducation = () => {
   }
   educationInformation.value.push(newEducation)
   nextTick(() => {
-    openSections.value[newEducation.id] = true; // تأكد من استخدام .value للوصول إلى كائن openSections
+    // يمكن إضافة أي عمليات إضافية بعد إضافة السجل الجديد
   })
 }
 
+// دالة لحذف سجل تعليم
+const deleteEducation = (index) => {
+  educationInformation.value.splice(index, 1)
+  toast.info(`تم حذف السجل التعليمي بنجاح.`)
+}
+
+// دالة لحفظ السجلات التعليمية (معلقة حاليًا)
 const saveEducation = async (index) => {
   try {
     await store.saveStep2();
@@ -401,5 +419,5 @@ const saveEducation = async (index) => {
 </script>
 
 <style scoped>
-/* أضف تنسيقات إضافية إذا لزم الأمر */
+/* إضافة تنسيقات إضافية إذا لزم الأمر */
 </style>
