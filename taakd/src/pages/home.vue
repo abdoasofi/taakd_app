@@ -180,7 +180,6 @@ import JobRequest from './homeSections/jobRequest.vue';
 import Review from './homeSections/review.vue';
 import Verification from './homeSections/verification.vue';
 import { location } from '../data/useAddressLogic';
-import validateInputContact from '../data/validate/validateInputContact';
 import { createAllRequestsList } from '../data/request';
 import { useVerificationRequestStore } from '../stores/verificationRequest';
 import BackgroundLayout from '../layouts/backgroundLayout.vue';
@@ -290,11 +289,7 @@ const removeAlert = function(index) {
 
 // دالة معالجة التعديلات عند ملء النموذج
 async function fill_the_form_now() {
-  let validateRes = validateInputContact(data);
-  if (validateRes !== true) {
-    triggerAlert($t('home.validation.fillErrors'));
-    return;
-  } else {
+
     if (currentRequest.value && currentRequest.value.name) {
       router.push({ name: `steps`,query:{doc:currentRequest.value.name} });
       // store.setDocumentName(currentRequest.value.name);
@@ -308,7 +303,7 @@ async function fill_the_form_now() {
       // router.push({ name: `steps?doc=${currentRequest.value.name}` });
    
   }
-}
+
 
 // تعريف البيانات التفاعلية للنموذج (إذا كان هناك نموذج)
 const data = reactive({
